@@ -21,16 +21,16 @@
   - templates: chứa các file được tích hợp template engine để render ra thêm dữ liệu trong quá trình chạy chương trình
 
 # Luồng code ra thêm một entity mới
-Bước 1: Định nghĩa model ở package: /domain/entity
+Bước 1: Định nghĩa model ở package: **/domain/entity**
 
-Bước 2: Định nghĩa data transfer object cho model vừa định nghĩa ở package: /domain/dto
+Bước 2: Định nghĩa data transfer object cho model vừa định nghĩa ở package: **/domain/dto**
 
-Bước 3: Định nghĩa mapper class thực hiện mapping từ plain pojo object -> data transfer object tại package: /domain/mapper
+Bước 3: Định nghĩa mapper class thực hiện mapping từ plain pojo object -> data transfer object tại package: **/domain/mapper**
 
-Bước 4: Định nghĩa ra các record (nếu cần) chứa request và response cần thiết cho lớp vừa tạo ở package: /domain/dto
+Bước 4: Định nghĩa ra các record (nếu cần) chứa request và response cần thiết cho lớp vừa tạo ở package: **/domain/dto**
 
-Bước 5: Định nghĩa repository interface cho model vừa tạo tại package: /repository
+Bước 5: Định nghĩa repository interface cho model vừa tạo tại package: **/repository**
 
-Bước 6: Định nghĩa service interface và lớp implements lại interface đó tại package: /service
+Bước 6: Định nghĩa service interface và lớp implements lại interface đó tại package: **/service**
 
-Bước 7: Định nghĩa controller class thực hiện bắt các request và sử dụng các xử lí nghiệp vụ đã cài đặt ở service interface
+Bước 7: Định nghĩa controller class tại package: **/controller** thực hiện bắt các request và sử dụng các xử lí nghiệp vụ đã định nghĩa ở service interface

@@ -19,7 +19,7 @@
   - i18n: chứa các message được bind tới bởi các file trong lớp constant, phục vụ cho vấn đề đa ngôn ngữ
   - static: chứa các file tĩnh như js, css, ...
   - templates: chứa các file được tích hợp template engine để render ra thêm dữ liệu trong quá trình chạy chương trình
- 
+
 # Luồng code ra thêm một entity mới
 Bước 1: Định nghĩa model ở package: **/domain/entity**
 

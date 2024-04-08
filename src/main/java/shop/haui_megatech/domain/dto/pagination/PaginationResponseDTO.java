@@ -1,4 +1,4 @@
-package shop.haui_megatech.domain.transfer.pagination;
+package shop.haui_megatech.domain.dto.pagination;
 
 import java.util.List;
 

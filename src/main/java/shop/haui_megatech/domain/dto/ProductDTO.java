@@ -1,4 +1,4 @@
-package shop.haui_megatech.domain.transfer;
+package shop.haui_megatech.domain.dto;
 
 import lombok.Builder;
 

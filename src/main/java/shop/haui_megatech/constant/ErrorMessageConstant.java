@@ -4,6 +4,6 @@ public class ErrorMessageConstant {
 	
 	
 	public static class Product {
-		public static final String NOT_FOUND = "exception.product.not.found";
+		public static final String NOT_FOUND = "product.error.not_found";
 	}
 }

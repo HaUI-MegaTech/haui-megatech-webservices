@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.sun.net.httpserver.Authenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,16 +14,17 @@ import org.springframework.stereotype.Service;
 
 import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
+import shop.haui_megatech.domain.dto.common.CommonGetByIdResponseDTO;
 import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.domain.mapper.ProductMapper;
-import shop.haui_megatech.domain.transfer.ProductDTO;
-import shop.haui_megatech.domain.transfer.common.CommonResponseDTO;
-import shop.haui_megatech.domain.transfer.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.transfer.pagination.PaginationResponseDTO;
+import shop.haui_megatech.domain.dto.ProductDTO;
+import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.repository.ProductRepository;
 
 @Service
-public class ProductSerciceImpl implements ProductService {
+public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductRepository productRepository;
 	
@@ -30,8 +32,19 @@ public class ProductSerciceImpl implements ProductService {
 	private ProductMapper mapper;
 	
 	@Override
-	public ProductDTO getProductById(Integer productId) {
-		return mapper.toProductDTO(productRepository.findById(productId).get());
+	public CommonGetByIdResponseDTO<ProductDTO> getProductById(Integer productId) {
+		Optional<Product> foundProduct = productRepository.findById(productId);
+		return foundProduct.isPresent()
+				? CommonGetByIdResponseDTO.<ProductDTO>builder()
+					.result(true)
+					.message(SuccessMessageConstant.Product.FOUND)
+					.data(mapper.toProductDTO(foundProduct.get()))
+					.build()
+				: CommonGetByIdResponseDTO.<ProductDTO>builder()
+					.result(false)
+					.message(ErrorMessageConstant.Product.NOT_FOUND)
+					.data(null)
+					.build();
 	}
 
 	@Override

@@ -1,14 +1,17 @@
 package shop.haui_megatech.service;
 
-import shop.haui_megatech.domain.transfer.ProductDTO;
-import shop.haui_megatech.domain.transfer.common.CommonResponseDTO;
-import shop.haui_megatech.domain.transfer.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.transfer.pagination.PaginationResponseDTO;
+import shop.haui_megatech.domain.dto.ProductDTO;
+import shop.haui_megatech.domain.dto.common.CommonGetByIdResponseDTO;
+import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
+
+import java.util.Optional;
 
 public interface ProductService {
-	public ProductDTO getProductById(Integer productId);
-	public ProductDTO createProduct(ProductDTO dto);
-	public CommonResponseDTO updateProduct(Integer productId, ProductDTO dto);
-	public CommonResponseDTO deleteProductById(Integer id);
-	public PaginationResponseDTO<ProductDTO> getProducts(PaginationRequestDTO request);
+	CommonGetByIdResponseDTO<ProductDTO> getProductById(Integer productId);
+	ProductDTO createProduct(ProductDTO dto);
+	CommonResponseDTO updateProduct(Integer productId, ProductDTO dto);
+	CommonResponseDTO deleteProductById(Integer id);
+	PaginationResponseDTO<ProductDTO> getProducts(PaginationRequestDTO request);
 }

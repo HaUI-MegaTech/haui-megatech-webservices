@@ -12,11 +12,14 @@ public class MessageConfig {
     @Value("${spring.messages.basename}")
     private String baseName;
 
+    @Value("${spring.messages.default-encoding}")
+    private String defaultEncoding;
+
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename(baseName);
-        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setDefaultEncoding(defaultEncoding);
         return messageSource;
     }
 }

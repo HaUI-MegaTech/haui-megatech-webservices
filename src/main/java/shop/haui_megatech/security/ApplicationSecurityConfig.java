@@ -11,17 +11,18 @@ import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 public class ApplicationSecurityConfig {
-	
-	@Bean
-	SecurityFilterChain configure(HttpSecurity http) throws Exception {
-		return http
-				.csrf(AbstractHttpConfigurer::disable)
-				.sessionManagement(management ->
-					management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(authz -> authz.anyRequest().permitAll())
-				.build();
-	}
 
+    @Bean
+    SecurityFilterChain configure(HttpSecurity http)
+            throws Exception {
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(management ->
+                                           management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authz -> authz.anyRequest()
+                                                     .permitAll())
+                .build();
+    }
 
 
 }

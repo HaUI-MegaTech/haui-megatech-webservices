@@ -27,111 +27,114 @@ import shop.haui_megatech.repository.ProductRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-	@Autowired
-	private ProductRepository productRepository;
-	
-	@Autowired
-	private ProductMapper mapper;
+    @Autowired
+    private ProductRepository productRepository;
 
-	@Autowired
-	private MessageSource messageSource;
+    @Autowired
+    private ProductMapper mapper;
 
-	@Override
-	public CommonGetByIdResponseDTO<ProductDTO> getProductById(Integer productId) {
+    @Autowired
+    private MessageSource messageSource;
 
-		Optional<Product> foundProduct = productRepository.findById(productId);
+    @Override
+    public CommonGetByIdResponseDTO<ProductDTO> getProductById(Integer productId) {
 
-		return foundProduct.isPresent()
-				? CommonGetByIdResponseDTO.<ProductDTO>builder()
-					.result(true)
-					.message(messageSource
-							.getMessage(SuccessMessageConstant.Product.FOUND, null, LocaleContextHolder.getLocale()))
-					.data(mapper.toProductDTO(foundProduct.get()))
-					.build()
-				: CommonGetByIdResponseDTO.<ProductDTO>builder()
-					.result(false)
-					.message(messageSource
-							.getMessage(ErrorMessageConstant.Product.NOT_FOUND, null, LocaleContextHolder.getLocale()))
-					.data(null)
-					.build();
-	}
+        Optional<Product> foundProduct = productRepository.findById(productId);
 
-	@Override
-	public ProductDTO createProduct(ProductDTO dto) {
+        return foundProduct.isPresent()
+                ? CommonGetByIdResponseDTO.<ProductDTO>builder()
+                                          .result(true)
+                                          .message(messageSource.getMessage(SuccessMessageConstant.Product.FOUND,
+                                                                            null,
+                                                                            LocaleContextHolder.getLocale()))
+                                          .data(mapper.toProductDTO(foundProduct.get()))
+                                          .build()
+                : CommonGetByIdResponseDTO.<ProductDTO>builder()
+                                          .result(false)
+                                          .message(messageSource.getMessage(ErrorMessageConstant.Product.NOT_FOUND,
+                                                                            null,
+                                                                            LocaleContextHolder.getLocale()))
+                                          .data(null)
+                                          .build();
+    }
 
-		return mapper.toProductDTO(productRepository.save(Product
-					.builder()
-					.name(dto.name())
-					.price(dto.price())
-					.build()
-				));
-	}
+    @Override
+    public ProductDTO createProduct(ProductDTO dto) {
 
-	@Override
-	public CommonResponseDTO updateProduct(Integer productId, ProductDTO dto) {
+        return mapper.toProductDTO(
+                productRepository.save(Product.builder()
+                                              .name(dto.name())
+                                              .price(dto.price())
+                                              .build()
+                ));
+    }
 
-		Optional<Product> found = productRepository.findById(productId);
+    @Override
+    public CommonResponseDTO updateProduct(Integer productId, ProductDTO dto) {
 
-		if (found.isEmpty()) 
-			return CommonResponseDTO
-					.builder()
-					.result(false)
-					.message(ErrorMessageConstant.Product.NOT_FOUND)
-					.build();
-		
-		Product foundProduct = found.get();
-		foundProduct.setName(dto.name());
-		foundProduct.setPrice(dto.price());
-		productRepository.save(foundProduct);
+        Optional<Product> found = productRepository.findById(productId);
 
-		return CommonResponseDTO
-				.builder()
-				.result(true)
-				.message(SuccessMessageConstant.Product.UPDATED)
-				.build();
-	}
+        if (found.isEmpty())
+            return CommonResponseDTO.builder()
+                                    .result(false)
+                                    .message(ErrorMessageConstant.Product.NOT_FOUND)
+                                    .build();
 
-	@Override
-	public CommonResponseDTO deleteProductById(Integer id) {
+        Product foundProduct = found.get();
+        foundProduct.setName(dto.name());
+        foundProduct.setPrice(dto.price());
+        productRepository.save(foundProduct);
 
-		Optional<Product> found = productRepository.findById(id);
+        return CommonResponseDTO.builder()
+                                .result(true)
+                                .message(SuccessMessageConstant.Product.UPDATED)
+                                .build();
+    }
 
-		if (found.isEmpty()) 
-			return CommonResponseDTO
-					.builder()
-					.result(false)
-					.message(ErrorMessageConstant.Product.NOT_FOUND)
-					.build();
-		
-		productRepository.deleteById(id);
-		return CommonResponseDTO
-				.builder()
-				.result(true)
-				.message(SuccessMessageConstant.Product.DELETED)
-				.build();
-	}
+    @Override
+    public CommonResponseDTO deleteProductById(Integer id) {
 
-	@Override
-	public PaginationResponseDTO<ProductDTO> getProducts(PaginationRequestDTO request) {
+        Optional<Product> found = productRepository.findById(id);
 
-		Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
-				? Sort.by(request.orderBy()).ascending()
-				: Sort.by(request.orderBy()).descending();
-		Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
+        if (found.isEmpty())
+            return CommonResponseDTO.builder()
+                                    .result(false)
+                                    .message(ErrorMessageConstant.Product.NOT_FOUND)
+                                    .build();
 
-		Page<Product> page = request.keyword() == null
-				? productRepository.findAll(pageable)
-				: productRepository.searchProducts(request.keyword(), pageable);
-		List<Product> products = page.getContent();
-		
-		return PaginationResponseDTO.<ProductDTO>builder()
-				.keyword(request.keyword())
-				.pageIndex(request.pageIndex())
-				.pageSize(request.pageSize())
-				.totalItems(page.getTotalElements())
-				.totalPages(page.getTotalPages())
-				.items(products.parallelStream().map(mapper::toProductDTO).collect(Collectors.toList()))
-				.build();
-	}
+        productRepository.deleteById(id);
+        return CommonResponseDTO.builder()
+                                .result(true)
+                                .message(SuccessMessageConstant.Product.DELETED)
+                                .build();
+    }
+
+    @Override
+    public PaginationResponseDTO<ProductDTO> getProducts(PaginationRequestDTO request) {
+
+        Sort sort = request.order()
+                           .equals(PaginationConstant.DEFAULT_ORDER)
+                ? Sort.by(request.orderBy())
+                      .ascending()
+                : Sort.by(request.orderBy())
+                      .descending();
+        Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
+
+        Page<Product> page = request.keyword() == null
+                ? productRepository.findAll(pageable)
+                : productRepository.searchProducts(request.keyword(), pageable);
+        List<Product> products = page.getContent();
+
+        return PaginationResponseDTO.<ProductDTO>builder()
+                                    .keyword(request.keyword())
+                                    .pageIndex(request.pageIndex())
+                                    .pageSize(request.pageSize())
+                                    .totalItems(page.getTotalElements())
+                                    .totalPages(page.getTotalPages())
+                                    .items(products.parallelStream()
+                                                   .map(mapper::toProductDTO)
+                                                   .collect(Collectors.toList()))
+                                    .build();
+    }
 
 }

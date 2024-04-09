@@ -37,13 +37,13 @@ public class OpenAPIConfig {
         contact.setName("HaUI MegaTech");
         contact.setUrl("http://haui-megatech.shop/contact");
 
-        Info info = new Info()
-                .title("HaUI MegaTech API Documentation")
-                .version("1.0")
-                .contact(contact)
-                .description("This document exposes endpoint APIs to manage HaUI MegaTech system");
+        Info info = new Info().title("HaUI MegaTech API Documentation")
+                              .version("1.0")
+                              .contact(contact)
+                              .description("This document exposes endpoint APIs to manage HaUI MegaTech system");
 
-        return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
+        return new OpenAPI().info(info)
+                            .servers(List.of(devServer, prodServer));
     }
 
 }

@@ -6,8 +6,6 @@ import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 
-import java.util.Optional;
-
 public interface ProductService {
 	CommonGetByIdResponseDTO<ProductDTO> getProductById(Integer productId);
 	ProductDTO createProduct(ProductDTO dto);

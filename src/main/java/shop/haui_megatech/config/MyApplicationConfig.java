@@ -17,7 +17,7 @@ public class MyApplicationConfig {
 	CommandLineRunner initDatabase() {
 		return args -> {
 			for (int i = 1; i <= 100; i++) {
-				repo.save(Product.builder().name("San pham " + i).price((float) Math.random() * 1000).build());
+				repo.save(Product.builder().name("Sản phẩm " + i).price((float) Math.random() * 1000).build());
 			}
 
 		};

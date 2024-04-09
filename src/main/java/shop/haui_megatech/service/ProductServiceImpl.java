@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import shop.haui_megatech.constant.ErrorMessageConstant;
+import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.domain.dto.common.CommonGetByIdResponseDTO;
 import shop.haui_megatech.domain.entity.Product;
@@ -113,15 +114,18 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public PaginationResponseDTO<ProductDTO> getProducts(PaginationRequestDTO request) {
 
-		Sort sort = request.order().equals("asc")
+		Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
 				? Sort.by(request.orderBy()).ascending()
 				: Sort.by(request.orderBy()).descending();
 		Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
 
-		Page<Product> page = productRepository.findAll(pageable);
+		Page<Product> page = request.keyword() == null
+				? productRepository.findAll(pageable)
+				: productRepository.searchProducts(request.keyword(), pageable);
 		List<Product> products = page.getContent();
 		
 		return PaginationResponseDTO.<ProductDTO>builder()
+				.keyword(request.keyword())
 				.pageIndex(request.pageIndex())
 				.pageSize(request.pageSize())
 				.totalItems(page.getTotalElements())

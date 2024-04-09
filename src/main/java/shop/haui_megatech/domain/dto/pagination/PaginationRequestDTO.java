@@ -2,14 +2,12 @@ package shop.haui_megatech.domain.dto.pagination;
 
 import java.util.Objects;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import shop.haui_megatech.constant.PaginationConstant;
 
 public record PaginationRequestDTO(
+        @RequestParam(name = "keyword", required = false) String keyword,
         @RequestParam(name = "pageIndex", required = false) Integer pageIndex,
         @RequestParam(name = "order", required = false) String order,
         @RequestParam(name = "orderBy", required = false) String orderBy,

@@ -126,7 +126,7 @@ public class ProductServiceImpl implements ProductService {
 				.pageSize(request.pageSize())
 				.totalItems(page.getTotalElements())
 				.totalPages(page.getTotalPages())
-				.data(products.parallelStream().map(mapper::toProductDTO).collect(Collectors.toList()))
+				.items(products.parallelStream().map(mapper::toProductDTO).collect(Collectors.toList()))
 				.build();
 	}
 

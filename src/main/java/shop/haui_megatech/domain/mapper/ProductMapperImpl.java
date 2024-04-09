@@ -13,6 +13,7 @@ public class ProductMapperImpl implements ProductMapper {
 	public ProductDTO toProductDTO(Product p) {
 		return ProductDTO
 				.builder()
+				.id(p.getId())
 				.name(p.getName())
 				.price(p.getPrice())
 				.build();

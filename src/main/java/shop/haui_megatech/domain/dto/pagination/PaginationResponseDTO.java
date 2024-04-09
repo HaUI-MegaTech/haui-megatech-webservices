@@ -10,7 +10,7 @@ public record PaginationResponseDTO<T>(
 		Short pageSize,
 		Long totalItems,
 		Integer totalPages,
-		List<T> data
+		List<T> items
 ) {
 	
 }

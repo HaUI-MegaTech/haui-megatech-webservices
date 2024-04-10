@@ -1,4 +1,4 @@
-package shop.haui_megatech.config;
+package shop.haui_megatech.configuration;
 
 
 import io.swagger.v3.oas.models.OpenAPI;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
-public class OpenAPIConfig {
+public class OpenAPIConfiguration {
     @Value("${haui-megatech.openapi.dev-url}")
     private String devUrl;
 

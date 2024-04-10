@@ -1,4 +1,4 @@
-package shop.haui_megatech.config;
+package shop.haui_megatech.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -18,7 +18,7 @@ import shop.haui_megatech.repository.ProductRepository;
 import shop.haui_megatech.repository.UserRepository;
 
 @Configuration
-public class MyApplicationConfig {
+public class ApplicationConfiguration {
     @Autowired
     private ProductRepository repo;
 

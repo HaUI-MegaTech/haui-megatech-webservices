@@ -3,7 +3,7 @@ package shop.haui_megatech.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.base.ResponseUtil;
@@ -16,19 +16,23 @@ import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.service.ProductService;
 
 @RestApiV1
+@RequiredArgsConstructor
 public class ProductRestController {
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
 
     @Operation(summary = "Get a Product by Id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
     @GetMapping(UrlConstant.Product.GET_PRODUCT)
     public ResponseEntity<?> getProductById(@PathVariable(name = "productId", required = true) Integer productId) {
         CommonGetByIdResponseDTO<ProductDTO> response = productService.getProductById(productId);
-        return response.result() ? ResponseUtil.ok(response) : ResponseUtil.notFound(response);
+        return response.result()
+                ? ResponseUtil.ok(response)
+                : ResponseUtil.notFound(response);
     }
 
     @Operation(summary = "Get Products with pagination")
@@ -46,26 +50,34 @@ public class ProductRestController {
     }
 
     @Operation(summary = "Update a Product by Id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
     @PostMapping(UrlConstant.Product.UPDATE_PRODUCT)
     public ResponseEntity<?> updateProduct(
             @PathVariable(name = "productId", required = true) Integer productId,
             @RequestBody ProductDTO dto) {
         CommonResponseDTO response = productService.updateProduct(productId, dto);
-        return response.result() ? ResponseUtil.ok(response) : ResponseUtil.notFound(response);
+        return response.result()
+                ? ResponseUtil.ok(response)
+                : ResponseUtil.notFound(response);
     }
 
     @Operation(summary = "Delete a Product by Id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "No Content"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "No Content"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
     @DeleteMapping(UrlConstant.Product.DELETE_PRODUCT)
     public ResponseEntity<?> deleteProduct(@PathVariable(name = "productId", required = true) Integer productId) {
         CommonResponseDTO response = productService.deleteProductById(productId);
-        return response.result() ? ResponseUtil.noContent(response) : ResponseUtil.notFound(response);
+        return response.result()
+                ? ResponseUtil.noContent(response)
+                : ResponseUtil.notFound(response);
     }
 }

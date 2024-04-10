@@ -1,4 +1,4 @@
-package shop.haui_megatech.config;
+package shop.haui_megatech.configuration;
 
 import com.cloudinary.Cloudinary;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class CloudinaryConfig {
+public class CloudinaryConfiguration {
     @Value("${cloudinary.cloud_name}")
     private String cloudName;
 

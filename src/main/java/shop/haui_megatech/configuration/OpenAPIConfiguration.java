@@ -1,4 +1,4 @@
-package shop.haui_megatech.config;
+package shop.haui_megatech.configuration;
 
 
 import io.swagger.v3.oas.models.OpenAPI;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
-public class OpenAPIConfig {
+public class OpenAPIConfiguration {
     @Value("${haui-megatech.openapi.dev-url}")
     private String devUrl;
 
@@ -37,13 +37,13 @@ public class OpenAPIConfig {
         contact.setName("HaUI MegaTech");
         contact.setUrl("http://haui-megatech.shop/contact");
 
-        Info info = new Info()
-                .title("HaUI MegaTech API Documentation")
-                .version("1.0")
-                .contact(contact)
-                .description("This document exposes endpoint APIs to manage HaUI MegaTech system");
+        Info info = new Info().title("HaUI MegaTech API Documentation")
+                              .version("1.0")
+                              .contact(contact)
+                              .description("This document exposes endpoint APIs to manage HaUI MegaTech system");
 
-        return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
+        return new OpenAPI().info(info)
+                            .servers(List.of(devServer, prodServer));
     }
 
 }

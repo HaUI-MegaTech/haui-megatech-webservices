@@ -1,6 +1,6 @@
 package shop.haui_megatech.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,9 +12,9 @@ import shop.haui_megatech.service.FileUploadService;
 import java.io.IOException;
 
 @RestApiV1
+@RequiredArgsConstructor
 public class FileUploadController {
-    @Autowired
-    private FileUploadService fileUploadService;
+    private final FileUploadService fileUploadService;
 
     @PostMapping("/upload-file")
     public ResponseEntity<?> uploadFile(@RequestParam("image") MultipartFile multipartFile) {

@@ -10,22 +10,20 @@ import java.util.Optional;
 @Component
 public class ProductMapperImpl implements ProductMapper {
 
-	public ProductDTO toProductDTO(Product p) {
-		return ProductDTO
-				.builder()
-				.id(p.getId())
-				.name(p.getName())
-				.price(p.getPrice())
-				.build();
-	}
+    public ProductDTO toProductDTO(Product p) {
+        return ProductDTO.builder()
+                         .id(p.getId())
+                         .name(p.getName())
+                         .price(p.getPrice())
+                         .build();
+    }
 
-	@Override
-	public Product toProduct(ProductDTO dto) {
-		return Product
-				.builder()
-				.name(dto.name())
-				.price(dto.price())
-				.build();
-	}
+    @Override
+    public Product toProduct(ProductDTO dto) {
+        return Product.builder()
+                      .name(dto.name())
+                      .price(dto.price())
+                      .build();
+    }
 
 }

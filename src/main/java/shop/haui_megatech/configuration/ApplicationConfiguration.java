@@ -1,6 +1,6 @@
 package shop.haui_megatech.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,12 +18,11 @@ import shop.haui_megatech.repository.ProductRepository;
 import shop.haui_megatech.repository.UserRepository;
 
 @Configuration
+@RequiredArgsConstructor
 public class ApplicationConfiguration {
-    @Autowired
-    private ProductRepository repo;
+    private final ProductRepository repo;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Bean
     public CommandLineRunner initDatabase() {

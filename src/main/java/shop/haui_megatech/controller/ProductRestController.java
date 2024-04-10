@@ -3,7 +3,7 @@ package shop.haui_megatech.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.base.ResponseUtil;
@@ -16,9 +16,9 @@ import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.service.ProductService;
 
 @RestApiV1
+@RequiredArgsConstructor
 public class ProductRestController {
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
 
     @Operation(summary = "Get a Product by Id")
     @ApiResponses(

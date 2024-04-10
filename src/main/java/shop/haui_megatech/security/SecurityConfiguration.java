@@ -1,7 +1,6 @@
 package shop.haui_megatech.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,14 +17,12 @@ import shop.haui_megatech.security.filter.JwtAuthenticationFilter;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    @Autowired
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Autowired
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
-    SecurityFilterChain configure(HttpSecurity http)
+    public SecurityFilterChain configure(HttpSecurity http)
             throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                    .authorizeHttpRequests(auth ->

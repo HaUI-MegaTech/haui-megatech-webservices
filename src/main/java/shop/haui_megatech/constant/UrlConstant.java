@@ -12,7 +12,7 @@ public class UrlConstant {
     }
 
     public static class Auth {
-        private static final String PREFIX   = "/auth";
+        private static final String PREFIX       = "/auth";
         public static final  String REGISTER     = PREFIX + "/register";
         public static final  String AUTHENTICATE = PREFIX + "/authenticate";
 

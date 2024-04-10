@@ -1,6 +1,6 @@
 package shop.haui_megatech.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,18 +13,16 @@ import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.util.JwtUtil;
 
 @Service
+@RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
-    @Autowired
-    private UserRepository repository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository repository;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public AuthenticationResponseDTO register(RegisterRequestDTO request) {

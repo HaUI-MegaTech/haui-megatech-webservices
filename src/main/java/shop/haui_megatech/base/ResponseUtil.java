@@ -19,4 +19,12 @@ public class ResponseUtil {
 	public static ResponseEntity<?> notFound(Object response) {
 		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 	}
+
+	public static ResponseEntity<?> badRequest(Object response) {
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	public static ResponseEntity<?> internalServerError(Object response) {
+		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

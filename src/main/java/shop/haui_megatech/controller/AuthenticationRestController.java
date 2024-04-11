@@ -8,7 +8,7 @@ import shop.haui_megatech.base.ResponseUtil;
 import shop.haui_megatech.base.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
 import shop.haui_megatech.domain.dto.authentication.AuthenticationRequestDTO;
-import shop.haui_megatech.domain.dto.authentication.RegisterRequestDTO;
+import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
 import shop.haui_megatech.service.AuthenticationService;
 
 @RestApiV1
@@ -17,7 +17,7 @@ public class AuthenticationRestController {
     private final AuthenticationService service;
 
     @PostMapping(UrlConstant.Auth.REGISTER)
-    public ResponseEntity<?> register(@RequestBody RegisterRequestDTO request) {
+    public ResponseEntity<?> register(@RequestBody CreateUserRequestDTO request) {
         return ResponseUtil.ok(service.register(request));
     }
 

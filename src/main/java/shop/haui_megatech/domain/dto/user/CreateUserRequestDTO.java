@@ -1,6 +1,6 @@
-package shop.haui_megatech.domain.dto.authentication;
+package shop.haui_megatech.domain.dto.user;
 
-public record RegisterRequestDTO(
+public record CreateUserRequestDTO(
         String firstName,
         String lastName,
         String username,

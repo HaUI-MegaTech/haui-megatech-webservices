@@ -10,7 +10,6 @@ import shop.haui_megatech.base.ResponseUtil;
 import shop.haui_megatech.base.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
 import shop.haui_megatech.domain.dto.ProductDTO;
-import shop.haui_megatech.domain.dto.common.CommonGetByIdResponseDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.service.ProductService;
@@ -27,9 +26,9 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.Product.GET_PRODUCT)
+    @GetMapping(UrlConstant.Product.GET_PRODUCT_BY_ID)
     public ResponseEntity<?> getProductById(@PathVariable(name = "productId", required = true) Integer productId) {
-        CommonGetByIdResponseDTO<ProductDTO> response = productService.getProductById(productId);
+        CommonResponseDTO<ProductDTO> response = productService.getProductById(productId);
         return response.result()
                 ? ResponseUtil.ok(response)
                 : ResponseUtil.notFound(response);
@@ -39,7 +38,7 @@ public class ProductRestController {
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(UrlConstant.Product.GET_PRODUCTS)
     public ResponseEntity<?> getProducts(PaginationRequestDTO request) {
-        return ResponseUtil.ok(productService.getProducts(request));
+        return ResponseUtil.internalServerError(productService.getProducts(request));
     }
 
     @Operation(summary = "Create a new Product")
@@ -60,7 +59,7 @@ public class ProductRestController {
     public ResponseEntity<?> updateProduct(
             @PathVariable(name = "productId", required = true) Integer productId,
             @RequestBody ProductDTO dto) {
-        CommonResponseDTO response = productService.updateProduct(productId, dto);
+        CommonResponseDTO<?> response = productService.updateProduct(productId, dto);
         return response.result()
                 ? ResponseUtil.ok(response)
                 : ResponseUtil.notFound(response);
@@ -75,7 +74,7 @@ public class ProductRestController {
     )
     @DeleteMapping(UrlConstant.Product.DELETE_PRODUCT)
     public ResponseEntity<?> deleteProduct(@PathVariable(name = "productId", required = true) Integer productId) {
-        CommonResponseDTO response = productService.deleteProductById(productId);
+        CommonResponseDTO<?> response = productService.deleteProductById(productId);
         return response.result()
                 ? ResponseUtil.noContent(response)
                 : ResponseUtil.notFound(response);

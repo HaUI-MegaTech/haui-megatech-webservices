@@ -1,10 +1,15 @@
 package shop.haui_megatech.domain.dto.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 
 @Builder
-public record CommonResponseDTO( 
+public record CommonResponseDTO<T>(
 		Boolean result,
-		String message
+
+		String message,
+
+		@JsonInclude(JsonInclude.Include.NON_NULL)
+		T item
 ) {
 }

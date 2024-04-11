@@ -14,21 +14,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import shop.haui_megatech.domain.entity.Product;
+import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.repository.ProductRepository;
 import shop.haui_megatech.repository.UserRepository;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
-    private final ProductRepository repo;
-
+    private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
     @Bean
     public CommandLineRunner initDatabase() {
         return args -> {
             for (int i = 1; i <= 100; i++) {
-                repo.save(Product.builder()
+                productRepository.save(Product.builder()
                                  .name("Sản phẩm " + i)
                                  .price((float) Math.random() * 1000)
                                  .build()
@@ -36,6 +36,9 @@ public class ApplicationConfiguration {
             }
         };
     }
+
+
+
 
     @Bean
     public UserDetailsService userDetailsService() {

@@ -1,28 +1,44 @@
 package shop.haui_megatech.domain.mapper;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import shop.haui_megatech.domain.entity.Product;
-import shop.haui_megatech.domain.dto.ProductDTO;
+import shop.haui_megatech.domain.dto.product.ProductDTO;
 
-import java.util.Optional;
+import java.text.DecimalFormat;
 
 @Component
+@RequiredArgsConstructor
 public class ProductMapperImpl implements ProductMapper {
+    private final DecimalFormat df;
 
-    public ProductDTO toProductDTO(Product p) {
+    @Override
+    public ProductDTO toProductDTO(Product product) {
         return ProductDTO.builder()
-                         .id(p.getId())
-                         .name(p.getName())
-                         .price(p.getPrice())
+                         .id(product.getId())
+                         .name(product.getName())
+                         .oldPrice(df.format(product.getOldPrice()))
+                         .newPrice(df.format(product.getNewPrice()))
+                         .display(product.getDisplay())
+                         .processor(product.getProcessor())
+                         .card(product.getCard())
+                         .battery(product.getBattery())
+                         .weight(df.format(product.getWeight()))
+                         .discountPercent(product.getDiscountPercent() == null
+                                                  ? ""
+                                                  : product.getDiscountPercent() + "%")
+                         .ram(product.getRam() + " GB")
+                         .storage(product.getStorage())
+                         .bannerImg(product.getBannerImg())
                          .build();
     }
 
     @Override
-    public Product toProduct(ProductDTO dto) {
+    public Product toProduct(ProductDTO productDTO) {
         return Product.builder()
-                      .name(dto.name())
-                      .price(dto.price())
+                      .name(productDTO.name())
+                      .oldPrice(Float.parseFloat(productDTO.oldPrice()))
                       .build();
     }
 

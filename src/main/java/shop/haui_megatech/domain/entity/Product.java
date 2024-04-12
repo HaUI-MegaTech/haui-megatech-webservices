@@ -28,6 +28,15 @@ public class Product {
 	private Integer id;
 	
 	private String name;
-	
-	private float price;
+	private Float oldPrice;
+	private Float newPrice;
+	private String display;
+	private String processor;
+	private String card;
+	private String battery;
+	private Float weight;
+	private Integer discountPercent;
+	private Integer ram;
+	private String storage;
+	private String bannerImg;
 }

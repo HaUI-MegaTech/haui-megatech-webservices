@@ -1,35 +1,36 @@
 package shop.haui_megatech.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
-import shop.haui_megatech.domain.entity.Product;
-import shop.haui_megatech.domain.mapper.ProductMapper;
-import shop.haui_megatech.domain.dto.ProductDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
+import shop.haui_megatech.domain.dto.product.CreateProductRequest;
+import shop.haui_megatech.domain.dto.product.ProductDTO;
+import shop.haui_megatech.domain.dto.product.UpdateProductRequest;
+import shop.haui_megatech.domain.entity.Product;
+import shop.haui_megatech.domain.mapper.ProductMapper;
+import shop.haui_megatech.domain.mapper.ProductMapperImpl;
 import shop.haui_megatech.repository.ProductRepository;
 import shop.haui_megatech.util.MessageSourceUtil;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final ProductMapper     mapper;
     private final MessageSourceUtil messageSourceUtil;
+    private final ProductMapper mapper;
 
     public CommonResponseDTO<ProductDTO> getProductById(Integer productId) {
 
@@ -49,14 +50,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public CommonResponseDTO<ProductDTO> createProduct(ProductDTO dto) {
+    public CommonResponseDTO<ProductDTO> createProduct(CreateProductRequest request) {
         return CommonResponseDTO.<ProductDTO>builder()
                                 .result(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.CREATED))
                                 .item(mapper.toProductDTO(
                                         productRepository.save(Product.builder()
-                                                                      .name(dto.name())
-                                                                      .price(dto.price())
+                                                                      .name(request.name())
+                                                                      .oldPrice(request.price())
                                                                       .build()
                                         )))
                                 .build();
@@ -65,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public CommonResponseDTO<?> updateProduct(
             Integer productId,
-            ProductDTO dto
+            UpdateProductRequest request
     ) {
         Optional<Product> found = productRepository.findById(productId);
 
@@ -76,8 +77,8 @@ public class ProductServiceImpl implements ProductService {
                                     .build();
 
         Product foundProduct = found.get();
-        foundProduct.setName(dto.name());
-        foundProduct.setPrice(dto.price());
+        foundProduct.setName(request.name());
+        foundProduct.setNewPrice(request.price());
         productRepository.save(foundProduct);
 
         return CommonResponseDTO.builder()

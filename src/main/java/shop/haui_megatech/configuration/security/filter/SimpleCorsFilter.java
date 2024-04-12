@@ -1,4 +1,4 @@
-package shop.haui_megatech.security.filter;
+package shop.haui_megatech.configuration.security.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

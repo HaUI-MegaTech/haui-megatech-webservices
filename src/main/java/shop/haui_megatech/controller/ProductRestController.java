@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.base.ResponseUtil;
 import shop.haui_megatech.base.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
-import shop.haui_megatech.domain.dto.ProductDTO;
+import shop.haui_megatech.domain.dto.product.CreateProductRequest;
+import shop.haui_megatech.domain.dto.product.ProductDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.product.UpdateProductRequest;
 import shop.haui_megatech.service.ProductService;
 
 @RestApiV1
@@ -34,41 +36,52 @@ public class ProductRestController {
                 : ResponseUtil.notFound(response);
     }
 
+
     @Operation(summary = "Get Products with pagination")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(UrlConstant.Product.GET_PRODUCTS)
     public ResponseEntity<?> getProducts(PaginationRequestDTO request) {
-        return ResponseUtil.internalServerError(productService.getProducts(request));
+        return ResponseUtil.ok(productService.getProducts(request));
     }
 
+
     @Operation(summary = "Create a new Product")
-    @ApiResponse(responseCode = "204", description = "Created")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204", description = "Created"),
+                    @ApiResponse(responseCode = "403", description = "Passing unmatched datatype or unauthorized"),
+            }
+    )
     @PostMapping(UrlConstant.Product.CREATE_PRODUCT)
-    public ResponseEntity<?> createProduct(@RequestBody ProductDTO dto) {
-        return ResponseUtil.created(productService.createProduct(dto));
+    public ResponseEntity<?> createProduct(@RequestBody CreateProductRequest request) {
+        return ResponseUtil.created(productService.createProduct(request ));
     }
+
 
     @Operation(summary = "Update a Product by Id")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "Passing unmatched datatype or unauthorized"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
     @PostMapping(UrlConstant.Product.UPDATE_PRODUCT)
     public ResponseEntity<?> updateProduct(
             @PathVariable(name = "productId", required = true) Integer productId,
-            @RequestBody ProductDTO dto) {
-        CommonResponseDTO<?> response = productService.updateProduct(productId, dto);
+            @RequestBody UpdateProductRequest request) {
+        CommonResponseDTO<?> response = productService.updateProduct(productId, request);
         return response.result()
                 ? ResponseUtil.ok(response)
                 : ResponseUtil.notFound(response);
     }
 
+
     @Operation(summary = "Delete a Product by Id")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "No Content"),
+                    @ApiResponse(responseCode = "403", description = "Unauthorized"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )

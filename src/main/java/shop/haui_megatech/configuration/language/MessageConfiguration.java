@@ -1,4 +1,4 @@
-package shop.haui_megatech.language;
+package shop.haui_megatech.configuration.language;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;

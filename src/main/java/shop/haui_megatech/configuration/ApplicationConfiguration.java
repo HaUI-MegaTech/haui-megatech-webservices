@@ -18,27 +18,13 @@ import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.repository.ProductRepository;
 import shop.haui_megatech.repository.UserRepository;
 
+import java.text.DecimalFormat;
+
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-
-    @Bean
-    public CommandLineRunner initDatabase() {
-        return args -> {
-            for (int i = 1; i <= 100; i++) {
-                productRepository.save(Product.builder()
-                                 .name("Sản phẩm " + i)
-                                 .price((float) Math.random() * 1000)
-                                 .build()
-                );
-            }
-        };
-    }
-
-
-
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -62,5 +48,10 @@ public class ApplicationConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DecimalFormat decimalFormat() {
+        return new DecimalFormat();
     }
 }

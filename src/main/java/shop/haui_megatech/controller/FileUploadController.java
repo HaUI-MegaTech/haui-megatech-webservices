@@ -1,5 +1,6 @@
 package shop.haui_megatech.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import java.io.IOException;
 
 @RestApiV1
 @RequiredArgsConstructor
+@Tag(name = "File upload")
 public class FileUploadController {
     private final FileUploadService fileUploadService;
 

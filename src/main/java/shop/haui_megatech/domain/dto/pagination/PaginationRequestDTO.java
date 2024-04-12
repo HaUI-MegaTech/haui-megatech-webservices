@@ -7,9 +7,13 @@ import java.util.Objects;
 
 public record PaginationRequestDTO(
         @RequestParam(name = "keyword", required = false) String keyword,
+
         @RequestParam(name = "pageIndex", required = false) Integer pageIndex,
+
         @RequestParam(name = "order", required = false) String order,
+
         @RequestParam(name = "orderBy", required = false) String orderBy,
+
         @RequestParam(name = "pageSize", required = false) Short pageSize
 ) {
     @Override

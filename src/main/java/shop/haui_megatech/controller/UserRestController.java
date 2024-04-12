@@ -3,7 +3,9 @@ package shop.haui_megatech.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +25,7 @@ import shop.haui_megatech.service.UserService;
 
 @RestApiV1
 @RequiredArgsConstructor
+@Tag(name = "Users")
 public class UserRestController {
     private final UserService userService;
 
@@ -187,9 +190,7 @@ public class UserRestController {
             }
     )
     @GetMapping(UrlConstant.User.GET_DELETED_USERS)
-    public ResponseEntity<?> getDeletedUsers(
-            PaginationRequestDTO request
-    ) {
+    public ResponseEntity<?> getDeletedUsers(@ParameterObject PaginationRequestDTO request) {
         return ResponseUtil.ok(userService.getDeletedUsers(request));
     }
 }

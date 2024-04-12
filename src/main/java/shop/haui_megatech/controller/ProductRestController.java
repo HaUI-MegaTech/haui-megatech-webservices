@@ -3,7 +3,9 @@ package shop.haui_megatech.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.base.ResponseUtil;
@@ -18,6 +20,7 @@ import shop.haui_megatech.service.ProductService;
 
 @RestApiV1
 @RequiredArgsConstructor
+@Tag(name = "Products")
 public class ProductRestController {
     private final ProductService productService;
 
@@ -40,7 +43,7 @@ public class ProductRestController {
     @Operation(summary = "Get Products with pagination")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(UrlConstant.Product.GET_PRODUCTS)
-    public ResponseEntity<?> getProducts(PaginationRequestDTO request) {
+    public ResponseEntity<?> getProducts(@ParameterObject PaginationRequestDTO request) {
         return ResponseUtil.ok(productService.getProducts(request));
     }
 

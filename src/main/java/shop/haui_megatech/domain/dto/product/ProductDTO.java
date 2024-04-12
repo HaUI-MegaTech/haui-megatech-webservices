@@ -13,8 +13,8 @@ public record ProductDTO(
         String card,
         String battery,
         String weight,
-        String discountPercent,
-        String ram,
+        Integer discountPercent,
+        Integer ram,
         String storage,
         String bannerImg
 ) {

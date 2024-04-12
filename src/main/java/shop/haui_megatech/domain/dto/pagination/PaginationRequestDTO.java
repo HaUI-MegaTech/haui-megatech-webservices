@@ -1,10 +1,9 @@
 package shop.haui_megatech.domain.dto.pagination;
 
-import java.util.Objects;
-
 import org.springframework.web.bind.annotation.RequestParam;
-
 import shop.haui_megatech.constant.PaginationConstant;
+
+import java.util.Objects;
 
 public record PaginationRequestDTO(
         @RequestParam(name = "keyword", required = false) String keyword,

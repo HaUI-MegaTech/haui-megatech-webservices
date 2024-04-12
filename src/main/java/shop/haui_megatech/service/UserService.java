@@ -1,11 +1,11 @@
 package shop.haui_megatech.service;
 
-import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
-import shop.haui_megatech.domain.dto.user.UserDTO;
-import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
+import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
+import shop.haui_megatech.domain.dto.user.UserDTO;
 
 public interface UserService {
     CommonResponseDTO<UserDTO> getUserById(Integer userId);

@@ -1,9 +1,9 @@
 package shop.haui_megatech.domain.dto.pagination;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
+
+import java.util.List;
 
 @Builder
 public record PaginationResponseDTO<T>(

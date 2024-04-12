@@ -17,7 +17,6 @@ import shop.haui_megatech.domain.dto.product.ProductDTO;
 import shop.haui_megatech.domain.dto.product.UpdateProductRequest;
 import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.domain.mapper.ProductMapper;
-import shop.haui_megatech.domain.mapper.ProductMapperImpl;
 import shop.haui_megatech.repository.ProductRepository;
 import shop.haui_megatech.util.MessageSourceUtil;
 

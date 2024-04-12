@@ -2,33 +2,29 @@ package shop.haui_megatech.domain.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.domain.dto.product.ProductDTO;
-
-import java.text.DecimalFormat;
+import shop.haui_megatech.domain.entity.Product;
+import shop.haui_megatech.util.DecimalFormatUtil;
 
 @Component
 @RequiredArgsConstructor
 public class ProductMapperImpl implements ProductMapper {
-    private final DecimalFormat df;
+    private final DecimalFormatUtil decimalFormatUtil;
 
     @Override
     public ProductDTO toProductDTO(Product product) {
         return ProductDTO.builder()
                          .id(product.getId())
                          .name(product.getName())
-                         .oldPrice(df.format(product.getOldPrice()))
-                         .newPrice(df.format(product.getNewPrice()))
+                         .oldPrice(decimalFormatUtil.format(product.getOldPrice()))
+                         .newPrice(decimalFormatUtil.format(product.getNewPrice()))
                          .display(product.getDisplay())
                          .processor(product.getProcessor())
                          .card(product.getCard())
                          .battery(product.getBattery())
-                         .weight(df.format(product.getWeight()))
-                         .discountPercent(product.getDiscountPercent() == null
-                                                  ? ""
-                                                  : product.getDiscountPercent() + "%")
-                         .ram(product.getRam() + " GB")
+                         .weight(decimalFormatUtil.format(product.getWeight()))
+                         .discountPercent(product.getDiscountPercent())
+                         .ram(product.getRam())
                          .storage(product.getStorage())
                          .bannerImg(product.getBannerImg())
                          .build();

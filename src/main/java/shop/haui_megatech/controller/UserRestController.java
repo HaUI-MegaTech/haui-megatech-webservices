@@ -175,9 +175,7 @@ public class UserRestController {
             }
     )
     @GetMapping(UrlConstant.User.GET_ACTIVE_USERS)
-    public ResponseEntity<?> getActiveUsers(
-            PaginationRequestDTO request
-    ) {
+    public ResponseEntity<?> getActiveUsers(@ParameterObject PaginationRequestDTO request) {
         return ResponseUtil.ok(userService.getActiveUsers(request));
     }
 

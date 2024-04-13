@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 class Item {
@@ -56,7 +58,7 @@ class SearchResult {
 public class SearchController {
 
     private static final String API_KEY = "AIzaSyBvQShdKz6SVuFY94HW9XOs4joQ0YS9DgU";
-    private static final String SEARCH_ENGINE_ID = "04427d5135e124d17"; 
+    private static final String SEARCH_ENGINE_ID = "04427d5135e124d17";
 
     @GetMapping("/search")
     public SearchResult search(@RequestParam String keyword) throws Exception {
@@ -81,10 +83,17 @@ public class SearchController {
                     break;
                 }
             }
+            String pricePattern = "\\d{1,3}(\\.\\d{3})*(,\\d{3})*";
+            Pattern pattern = Pattern.compile(pricePattern);
+            Matcher matcher = pattern.matcher(price);
+            if (matcher.find()) {
+                price = matcher.group();
+            }
             item.setPrice(price);
         }
         System.out.println(apiUrl);
         return response.getBody();
     }
 }
+
 

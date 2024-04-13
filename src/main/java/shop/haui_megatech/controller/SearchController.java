@@ -1,26 +1,21 @@
 package shop.haui_megatech.controller;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 class Item {
     private String link;
+    private String title;
+    private String price;
 
     public String getLink() {
         return link;
@@ -28,6 +23,22 @@ class Item {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }
 class SearchResult {
@@ -44,11 +55,11 @@ class SearchResult {
 @RestController
 public class SearchController {
 
-    private static final String API_KEY = "AIzaSyBvQShdKz6SVuFY94HW9XOs4joQ0YS9DgU"; // Thay YOUR_API_KEY bằng khóa API của bạn
-    private static final String SEARCH_ENGINE_ID = "04427d5135e124d17"; // Thay YOUR_SEARCH_ENGINE_ID bằng ID của công cụ tìm kiếm của bạn
+    private static final String API_KEY = "AIzaSyBvQShdKz6SVuFY94HW9XOs4joQ0YS9DgU";
+    private static final String SEARCH_ENGINE_ID = "04427d5135e124d17"; 
 
     @GetMapping("/search")
-    public List<String> search(@RequestParam String keyword) throws Exception {
+    public SearchResult search(@RequestParam String keyword) throws Exception {
         String encodedKeyword = URLEncoder.encode(keyword, "UTF-8");
         String apiUrl = "https://www.googleapis.com/customsearch/v1?key=" + API_KEY +
                 "&cx=" + SEARCH_ENGINE_ID + "&q=" + encodedKeyword + "&num=10";
@@ -58,18 +69,10 @@ public class SearchController {
 
         SearchResult searchResult = response.getBody();
 
-        List<String> links = new ArrayList<>();
-        if (searchResult != null && searchResult.getItems() != null) {
-            for (Item item : searchResult.getItems()) {
-                links.add(item.getLink());
-            }
-        }
-
-        String[] Classs = {".detail-product-old-price", ".gia-km-cu", ".pro-price", ".price", ".product-price",".productPriceMain"};
-        List<String> Prices = new ArrayList<>();
-        for (String link : links){
+        String[] Classs = {".giakm",".detail-product-old-price", ".gia-km-cu", ".pro-price", ".price", ".product-price",".productPriceMain",".product__price--show"};
+        for (Item item : searchResult.getItems()){
             String price ="";
-            Document doc = Jsoup.connect(link).get();
+            Document doc = Jsoup.connect(item.getLink()).get();
 
             for (String Class : Classs) {
                 Elements priceElements = doc.select(Class);
@@ -78,10 +81,10 @@ public class SearchController {
                     break;
                 }
             }
-            Prices.add(price);
+            item.setPrice(price);
         }
-        System.out.println(links);
-        return Prices;
+        System.out.println(apiUrl);
+        return response.getBody();
     }
 }
 

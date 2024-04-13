@@ -9,6 +9,7 @@ public record UserDTO(
         String firstName,
         String lastName,
         String avatar,
-        String email
+        String email,
+        String phoneNumber
 ) {
 }

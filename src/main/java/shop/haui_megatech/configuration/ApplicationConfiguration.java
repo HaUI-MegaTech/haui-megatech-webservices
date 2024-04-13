@@ -1,6 +1,7 @@
 package shop.haui_megatech.configuration;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,5 +50,12 @@ public class ApplicationConfiguration {
     @Bean
     public DecimalFormat decimalFormat() {
         return new DecimalFormat();
+    }
+
+    @Bean
+    public CommandLineRunner getHashedPassword() {
+        return args -> {
+            System.out.println(new BCryptPasswordEncoder().encode("123"));
+        };
     }
 }

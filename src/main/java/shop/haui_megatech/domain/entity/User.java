@@ -33,7 +33,9 @@ public class User implements UserDetails {
 
     private String email;
 
-    private boolean deleted;
+    private String phoneNumber;
+
+    private Boolean deleted;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,4 +1,4 @@
-DROP TABLE products;
+
 CREATE TABLE IF NOT EXISTS `products` (
     `product_id` INT,
     `name` VARCHAR(59) CHARACTER SET utf8,

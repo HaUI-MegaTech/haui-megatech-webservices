@@ -69,7 +69,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PostMapping(UrlConstant.Product.UPDATE_PRODUCT)
+    @PatchMapping(UrlConstant.Product.UPDATE_PRODUCT)
     public ResponseEntity<?> updateProduct(
             @PathVariable(name = "productId", required = true) Integer productId,
             @RequestBody UpdateProductRequest request) {

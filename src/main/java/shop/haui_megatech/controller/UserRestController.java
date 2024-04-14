@@ -7,10 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.base.ResponseUtil;
 import shop.haui_megatech.base.RestApiV1;
 import shop.haui_megatech.constant.ErrorMessageConstant;
@@ -71,7 +68,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PostMapping(UrlConstant.User.UPDATE_USER_INFO)
+    @PatchMapping(UrlConstant.User.UPDATE_USER_INFO)
     public ResponseEntity<?> updateUserInfo(
             @PathVariable(value = "userId") Integer userId,
             @RequestBody UserDTO dto
@@ -93,7 +90,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error")
             }
     )
-    @PostMapping(UrlConstant.User.UPDATE_USER_PASSWORD)
+    @PatchMapping(UrlConstant.User.UPDATE_USER_PASSWORD)
     public ResponseEntity<?> updateUserPassword(
             @PathVariable(value = "userId") Integer userId,
             @RequestBody UpdateUserPasswordRequest request
@@ -118,7 +115,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.User.TEMPORARILY_DELETE_USER)
+    @PatchMapping(UrlConstant.User.TEMPORARILY_DELETE_USER)
     public ResponseEntity<?> temporarilyDeleteUserById(
             @PathVariable(value = "userId") Integer userId
     ) {
@@ -137,7 +134,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.User.PERMANENTLY_DELETE_USER)
+    @DeleteMapping(UrlConstant.User.PERMANENTLY_DELETE_USER)
     public ResponseEntity<?> permanentlyDeleteUserById(
             @PathVariable(name = "userId") Integer userId
     ) {
@@ -156,7 +153,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.User.RESTORE_USER_BY_ID)
+    @PatchMapping(UrlConstant.User.RESTORE_USER_BY_ID)
     public ResponseEntity<?> restoreDeletedUserById(
             @PathVariable(name = "userId") Integer userId
     ) {

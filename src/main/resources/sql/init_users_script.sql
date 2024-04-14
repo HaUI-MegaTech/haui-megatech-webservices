@@ -1,12 +1,12 @@
 create table users (
-	user_id INT,
+	user_id INT PRIMARY KEY auto_increment,
 	username VARCHAR(50),
-	password VARCHAR(50),
+	password VARCHAR(2048),
 	first_name VARCHAR(50),
 	last_name VARCHAR(50),
 	email VARCHAR(50),
 	phone_number VARCHAR(50),
-	deleted VARCHAR(50)
+	deleted BOOLEAN
 );
 insert into users (user_id, username, password, first_name, last_name, email, phone_number, deleted) values (1, 'viethoang', '$2a$10$8eO7rt13n6ogqNKdanU83emW3idivRebU0BVEw6JW7zSHy6B.YXR.', 'Viet Hoang', 'Nguyen', 'hoangnv.swe@gmail.com', '861-690-2853', false);
 insert into users (user_id, username, password, first_name, last_name, email, phone_number, deleted) values (2, 'dbanaszczyk1', '$2a$04$quzprZQtp9B6rv16al6NReYG.wCiLpe.TWrroloSwpVD9BlsY4F0W', 'Dar', 'Banaszczyk', 'dbanaszczyk1@auda.org.au', '963-934-9203', false);

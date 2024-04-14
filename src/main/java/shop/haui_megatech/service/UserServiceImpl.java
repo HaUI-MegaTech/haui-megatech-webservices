@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
                                 .item(mapper.toUserDTO(
                                         userRepository.save(User.builder()
                                                                 .username(request.username())
-                                                                .password(request.password())
+                                                                .password(passwordEncoder.encode(request.password()))
                                                                 .firstName(request.firstName())
                                                                 .lastName(request.lastName())
                                                                 .build()

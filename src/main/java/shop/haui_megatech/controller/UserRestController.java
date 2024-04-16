@@ -22,7 +22,7 @@ import shop.haui_megatech.service.UserService;
 
 @RestApiV1
 @RequiredArgsConstructor
-@Tag(name = "Users")
+@Tag(name = "Users Management REST API")
 public class UserRestController {
     private final UserService userService;
 
@@ -48,15 +48,25 @@ public class UserRestController {
     @Operation(summary = "Create a new User")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "Created"),
-                    @ApiResponse(responseCode = "403", description = "Forbidden")
+                    @ApiResponse(responseCode = "204", description = "When has created successfully"),
+                    @ApiResponse(responseCode = "400", description = "When send empty username or password request"),
+                    @ApiResponse(responseCode = "403", description = "When has not been authorized"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             }
     )
     @PostMapping(UrlConstant.User.CREATE_USER)
     public ResponseEntity<?> createUser(
             @RequestBody CreateUserRequestDTO request
     ) {
-        return ResponseUtil.created(userService.createUser(request));
+        CommonResponseDTO<?> response = userService.createUser(request);
+
+        return switch (response.message()) {
+            case SuccessMessageConstant.User.CREATED -> ResponseUtil.created(response);
+            case ErrorMessageConstant.Request.BLANK_USERNAME,
+                 ErrorMessageConstant.Request.BLANK_PASSWORD
+                    -> ResponseUtil.badRequest(response);
+            default -> ResponseUtil.internalServerError(response);
+        };
     }
 
 
@@ -68,7 +78,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(UrlConstant.User.UPDATE_USER_INFO)
+    @PutMapping(UrlConstant.User.UPDATE_USER_INFO)
     public ResponseEntity<?> updateUserInfo(
             @PathVariable(value = "userId") Integer userId,
             @RequestBody UserDTO dto

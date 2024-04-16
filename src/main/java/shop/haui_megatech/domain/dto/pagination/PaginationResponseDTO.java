@@ -10,7 +10,7 @@ public record PaginationResponseDTO<T>(
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		String keyword,
 		Integer pageIndex,
-		Short pageSize,
+		Integer pageSize,
 		Long totalItems,
 		Integer totalPages,
 		List<T> items

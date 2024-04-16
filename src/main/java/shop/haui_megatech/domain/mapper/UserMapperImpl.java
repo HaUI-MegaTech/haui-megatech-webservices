@@ -9,6 +9,8 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public User toUser(UserDTO dto) {
+        if (dto == null) return null;
+
         return User.builder()
                    .username(dto.username())
                    .firstName(dto.firstName())
@@ -21,6 +23,8 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public UserDTO toUserDTO(User user) {
+        if (user == null) return null;
+
         return UserDTO.builder()
                       .id(user.getId())
                       .username(user.getUsername())

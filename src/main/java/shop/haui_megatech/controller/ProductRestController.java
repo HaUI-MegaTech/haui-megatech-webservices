@@ -20,7 +20,7 @@ import shop.haui_megatech.service.ProductService;
 
 @RestApiV1
 @RequiredArgsConstructor
-@Tag(name = "Products")
+@Tag(name = "Products Management REST API")
 public class ProductRestController {
     private final ProductService productService;
 
@@ -32,7 +32,7 @@ public class ProductRestController {
             }
     )
     @GetMapping(UrlConstant.Product.GET_PRODUCT_BY_ID)
-    public ResponseEntity<?> getProductById(@PathVariable(name = "productId", required = true) Integer productId) {
+    public ResponseEntity<?> getProductById(@PathVariable(name = "productId") Integer productId) {
         CommonResponseDTO<ProductDTO> response = productService.getProductById(productId);
         return response.result()
                 ? ResponseUtil.ok(response)
@@ -69,9 +69,9 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(UrlConstant.Product.UPDATE_PRODUCT)
+    @PutMapping(UrlConstant.Product.UPDATE_PRODUCT)
     public ResponseEntity<?> updateProduct(
-            @PathVariable(name = "productId", required = true) Integer productId,
+            @PathVariable(name = "productId") Integer productId,
             @RequestBody UpdateProductRequest request) {
         CommonResponseDTO<?> response = productService.updateProduct(productId, request);
         return response.result()
@@ -89,7 +89,7 @@ public class ProductRestController {
             }
     )
     @DeleteMapping(UrlConstant.Product.DELETE_PRODUCT)
-    public ResponseEntity<?> deleteProduct(@PathVariable(name = "productId", required = true) Integer productId) {
+    public ResponseEntity<?> deleteProduct(@PathVariable(name = "productId") Integer productId) {
         CommonResponseDTO<?> response = productService.deleteProductById(productId);
         return response.result()
                 ? ResponseUtil.noContent(response)

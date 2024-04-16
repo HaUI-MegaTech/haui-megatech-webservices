@@ -1,9 +1,11 @@
 package shop.haui_megatech.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import shop.haui_megatech.constant.ErrorMessageConstant;
 
 import java.util.Collection;
 import java.util.List;

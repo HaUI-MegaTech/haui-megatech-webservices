@@ -20,6 +20,7 @@ import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.util.MessageSourceUtil;
+import shop.haui_megatech.validator.RequestValidator;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +52,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<UserDTO> createUser(CreateUserRequestDTO request) {
+    public CommonResponseDTO<?> createUser(CreateUserRequestDTO request) {
+        if (!RequestValidator.isBlankRequestParams(request.username()))
+            return CommonResponseDTO.builder()
+                                    .result(false)
+                                    .message(messageSourceUtil.getMessage(ErrorMessageConstant.Request.BLANK_USERNAME))
+                                    .build();
+
+        if (!RequestValidator.isBlankRequestParams(request.password()))
+            return CommonResponseDTO.builder()
+                                    .result(false)
+                                    .message(messageSourceUtil.getMessage(ErrorMessageConstant.Request.BLANK_PASSWORD))
+                                    .build();
+
+        if (request.password().equalsIgnoreCase(request.confirmPassword()))
+            return CommonResponseDTO.builder()
+                                    .result(false)
+                                    .message(messageSourceUtil.getMessage(ErrorMessageConstant.User.MISMATCHED_PASSWORD))
+                                    .build();
 
         return CommonResponseDTO.<UserDTO>builder()
                                 .result(true)
@@ -140,6 +158,7 @@ public class UserServiceImpl implements UserService {
 
         User foundUser = found.get();
         foundUser.setDeleted(true);
+        userRepository.save(foundUser);
 
         return CommonResponseDTO.builder()
                                 .result(true)
@@ -198,7 +217,7 @@ public class UserServiceImpl implements UserService {
         return PaginationResponseDTO.<UserDTO>builder()
                                     .keyword(request.keyword())
                                     .pageIndex(request.pageIndex())
-                                    .pageSize(request.pageSize())
+                                    .pageSize(page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(users.parallelStream()
@@ -224,7 +243,7 @@ public class UserServiceImpl implements UserService {
         return PaginationResponseDTO.<UserDTO>builder()
                                     .keyword(request.keyword())
                                     .pageIndex(request.pageIndex())
-                                    .pageSize(request.pageSize())
+                                    .pageSize(page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(users.parallelStream()

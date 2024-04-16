@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final MessageSourceUtil messageSourceUtil;
-    private final ProductMapper mapper;
+    private final ProductMapper     mapper;
 
     public CommonResponseDTO<ProductDTO> getProductById(Integer productId) {
 
@@ -121,7 +121,7 @@ public class ProductServiceImpl implements ProductService {
         return PaginationResponseDTO.<ProductDTO>builder()
                                     .keyword(request.keyword())
                                     .pageIndex(request.pageIndex())
-                                    .pageSize(request.pageSize())
+                                    .pageSize(page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(products.parallelStream()

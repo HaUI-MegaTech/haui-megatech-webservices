@@ -10,7 +10,7 @@ import shop.haui_megatech.domain.dto.user.UserDTO;
 public interface UserService {
     CommonResponseDTO<UserDTO> getUserById(Integer userId);
 
-    CommonResponseDTO<UserDTO> createUser(CreateUserRequestDTO request);
+    CommonResponseDTO<?> createUser(CreateUserRequestDTO request);
 
     CommonResponseDTO<?> updateUserInfo(Integer userId, UserDTO dto);
 

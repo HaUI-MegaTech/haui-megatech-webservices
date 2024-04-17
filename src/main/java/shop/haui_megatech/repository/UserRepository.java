@@ -13,12 +13,14 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(
             "SELECT u FROM User u " +
-            "WHERE u.username LIKE %?1% AND (u.deleted = false OR u.deleted IS NULL)")
+            "WHERE u.username LIKE %?1% AND (u.deleted = false OR u.deleted IS NULL)"
+    )
     Optional<User> findByUsername(String username);
 
     @Query(
             "SELECT u FROM User u " +
-            "WHERE u.deleted = false OR u.deleted IS NULL")
+            "WHERE u.deleted = false OR u.deleted IS NULL"
+    )
     Page<User> getAllActiveUsers(Pageable pageable);
 
     @Query(

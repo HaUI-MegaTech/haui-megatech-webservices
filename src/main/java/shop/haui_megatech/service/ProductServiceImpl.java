@@ -17,6 +17,7 @@ import shop.haui_megatech.domain.dto.product.ProductDTO;
 import shop.haui_megatech.domain.dto.product.UpdateProductRequest;
 import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.domain.mapper.ProductMapper;
+import shop.haui_megatech.exception.InvalidRequestParamException;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.ProductRepository;
 import shop.haui_megatech.util.MessageSourceUtil;
@@ -101,6 +102,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PaginationResponseDTO<ProductDTO> getProducts(PaginationRequestDTO request) {
+        if (request.pageIndex() < 0)
+            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
+
         Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
                 ? Sort.by(request.orderBy())
                       .ascending()

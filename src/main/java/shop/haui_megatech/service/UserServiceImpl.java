@@ -14,19 +14,18 @@ import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
 import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
 import shop.haui_megatech.domain.dto.user.UserDTO;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.UserMapper;
-import shop.haui_megatech.exception.AbsentRequiredFieldException;
-import shop.haui_megatech.exception.MismatchedConfirmPasswordException;
-import shop.haui_megatech.exception.NotFoundException;
-import shop.haui_megatech.exception.WrongPasswordException;
+import shop.haui_megatech.exception.*;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.util.MessageSourceUtil;
 import shop.haui_megatech.validator.RequestValidator;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,10 +45,10 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
 
         return CommonResponseDTO.<UserDTO>builder()
-                                   .result(true)
-                                   .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.FOUND))
-                                   .item(mapper.toUserDTO(foundUser.get()))
-                                   .build();
+                                .result(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.FOUND))
+                                .item(mapper.toUserDTO(foundUser.get()))
+                                .build();
     }
 
     @Override
@@ -81,8 +80,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonResponseDTO<?> updateUserInfo(
             Integer userId,
-            UserDTO dto
+            UpdateUserInfoRequest request
     ) {
+        if (Objects.isNull(request))
+            throw new NullRequestException(ErrorMessageConstant.Request.NULL_REQUEST);
+
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
@@ -90,10 +92,11 @@ public class UserServiceImpl implements UserService {
 
         User foundUser = found.get();
 
-        if (dto.firstName() != null) foundUser.setFirstName(dto.firstName());
-        if (dto.lastName() != null) foundUser.setLastName(dto.lastName());
-        if (dto.avatar() != null) foundUser.setAvatar(dto.avatar());
-        if (dto.email() != null) foundUser.setEmail(dto.email());
+        if (request.firstName() != null) foundUser.setFirstName(request.firstName());
+        if (request.lastName() != null) foundUser.setLastName(request.lastName());
+        if (request.avatar() != null) foundUser.setAvatar(request.avatar());
+        if (request.email() != null) foundUser.setEmail(request.email());
+        if (request.phoneNumber() != null) foundUser.setPhoneNumber(request.phoneNumber());
 
         userRepository.save(foundUser);
 
@@ -177,6 +180,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginationResponseDTO<UserDTO> getActiveUsers(PaginationRequestDTO request) {
+        if (request.pageIndex() < 0)
+            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
+
         Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
                 ? Sort.by(request.orderBy())
                       .ascending()
@@ -205,6 +211,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginationResponseDTO<UserDTO> getDeletedUsers(PaginationRequestDTO request) {
+        if (request.pageIndex() < 0)
+            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
+
         Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
                 ? Sort.by(request.orderBy())
                       .ascending()
@@ -216,7 +225,7 @@ public class UserServiceImpl implements UserService {
         Page<User> page = request.keyword() == null
                 ? userRepository.getAllDeletedUsers(pageable)
                 : userRepository.searchDeletedUsers(request.keyword(), pageable);
-        
+
         List<User> users = page.getContent();
 
         return PaginationResponseDTO.<UserDTO>builder()

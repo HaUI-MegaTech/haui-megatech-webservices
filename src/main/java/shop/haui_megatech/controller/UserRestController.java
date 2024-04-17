@@ -13,9 +13,12 @@ import shop.haui_megatech.base.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
 import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
 import shop.haui_megatech.domain.dto.user.UserDTO;
 import shop.haui_megatech.service.UserService;
+
+import java.util.Objects;
 
 @RestApiV1
 @RequiredArgsConstructor
@@ -67,9 +70,9 @@ public class UserRestController {
     @PutMapping(UrlConstant.User.UPDATE_USER_INFO)
     public ResponseEntity<?> updateUserInfo(
             @PathVariable(value = "userId") Integer userId,
-            @RequestBody UserDTO dto
+            @RequestBody(required = false) UpdateUserInfoRequest request
     ) {
-        return ResponseUtil.ok(userService.updateUserInfo(userId, dto));
+        return ResponseUtil.ok(userService.updateUserInfo(userId, request));
     }
 
 

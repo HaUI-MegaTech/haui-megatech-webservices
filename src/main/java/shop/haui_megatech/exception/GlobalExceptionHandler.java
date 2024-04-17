@@ -1,5 +1,6 @@
 package shop.haui_megatech.exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,7 +11,7 @@ import shop.haui_megatech.util.MessageSourceUtil;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class CustomExceptionHandler {
+public class GlobalExceptionHandler {
     private final MessageSourceUtil messageSourceUtil;
 
     @ExceptionHandler(AbsentRequiredFieldException.class)
@@ -44,4 +45,21 @@ public class CustomExceptionHandler {
                                                         .message(messageSourceUtil.getMessage(ex.getMessage()))
                                                         .build());
     }
+
+    @ExceptionHandler(InvalidRequestParamException.class)
+    public ResponseEntity<?> handleInvalidRequestParamException(InvalidRequestParamException ex) {
+        return ResponseUtil.badRequest(CommonResponseDTO.builder()
+                                                        .result(false)
+                                                        .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                        .build());
+    }
+
+    @ExceptionHandler(NullRequestException.class)
+    public ResponseEntity<?> handleNullRequestException(NullRequestException ex) {
+        return ResponseUtil.badRequest(CommonResponseDTO.builder()
+                                                        .result(false)
+                                                        .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                        .build());
+    }
+
 }

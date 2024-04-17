@@ -42,16 +42,13 @@ public class UserServiceImpl implements UserService {
     public CommonResponseDTO<UserDTO> getUserById(Integer userId) {
         Optional<User> foundUser = userRepository.findById(userId);
 
-        return foundUser.isPresent()
-                ? CommonResponseDTO.<UserDTO>builder()
+        if (foundUser.isEmpty())
+            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+
+        return CommonResponseDTO.<UserDTO>builder()
                                    .result(true)
                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.FOUND))
                                    .item(mapper.toUserDTO(foundUser.get()))
-                                   .build()
-                : CommonResponseDTO.<UserDTO>builder()
-                                   .result(false)
-                                   .message(messageSourceUtil.getMessage(ErrorMessageConstant.Product.NOT_FOUND))
-                                   .item(null)
                                    .build();
     }
 

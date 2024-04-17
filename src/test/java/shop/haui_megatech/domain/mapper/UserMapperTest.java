@@ -6,7 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import shop.haui_megatech.domain.dto.user.UserDTO;
 import shop.haui_megatech.domain.entity.User;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 class UserMapperTest {

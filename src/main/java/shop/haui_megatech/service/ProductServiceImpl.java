@@ -1,6 +1,5 @@
 package shop.haui_megatech.service;
 
-import com.cloudinary.api.exceptions.NotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

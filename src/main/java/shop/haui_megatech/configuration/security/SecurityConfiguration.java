@@ -10,8 +10,14 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import shop.haui_megatech.configuration.security.filter.JwtAuthenticationFilter;
 import shop.haui_megatech.constant.UrlConstant;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -27,10 +33,15 @@ public class SecurityConfiguration {
             UrlConstant.API_V1 + UrlConstant.Product.GET_PRODUCTS,
             UrlConstant.API_V1 + UrlConstant.Product.GET_PRODUCT_BY_ID
     };
+    final String[] WHITE_LIST_ORIGINS = {
+            "http://localhost:3000",
+            "http://localhost:3001"
+    };
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(this.corsConfigurationSource()))
                    .authorizeHttpRequests(auth -> auth.requestMatchers(WHITE_LIST)
                                                       .permitAll()
                                                       .anyRequest()
@@ -41,5 +52,17 @@ public class SecurityConfiguration {
                    .build();
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList(WHITE_LIST_ORIGINS));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Accept-Language"));
+        configuration.setExposedHeaders(List.of("Authorization", "Accept-Language"));
+        configuration.setMaxAge((long) (24 * 60 * 60));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
 }

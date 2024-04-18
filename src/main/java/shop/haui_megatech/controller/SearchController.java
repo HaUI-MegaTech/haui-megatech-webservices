@@ -13,10 +13,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+record PageMap(List<Cse_Image> cse_image) {}
+
+record Cse_Image(String src) {}
 
 class Item {
     private String link;
     private String title;
+    private PageMap pagemap;
     private String price;
 
     public String getLink() {
@@ -33,6 +37,14 @@ class Item {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public PageMap getPagemap() {
+        return pagemap;
+    }
+
+    public void setPagemap(PageMap pagemap) {
+        this.pagemap = pagemap;
     }
 
     public String getPrice() {
@@ -95,5 +107,3 @@ public class SearchController {
         return response.getBody();
     }
 }
-
-

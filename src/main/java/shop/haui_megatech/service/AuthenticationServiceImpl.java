@@ -42,7 +42,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                                                         request.password()
                 )
         );
-        User user = repository.findByUsername(request.username()).orElseThrow();
+        User user = repository.findActiveUserByUsername(request.username()).orElseThrow();
         String jwtToken = jwtUtil.generateToken(user);
         return AuthenticationResponseDTO.builder()
                                         .token(jwtToken)

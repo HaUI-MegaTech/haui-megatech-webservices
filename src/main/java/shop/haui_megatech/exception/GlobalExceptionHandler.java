@@ -62,4 +62,12 @@ public class GlobalExceptionHandler {
                                                         .build());
     }
 
+    @ExceptionHandler(DuplicateUsernameException.class)
+    public ResponseEntity<?> handleDuplicateUsernameException(DuplicateUsernameException ex) {
+        return ResponseUtil.badRequest(CommonResponseDTO.builder()
+                                                        .result(false)
+                                                        .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                        .build());
+    }
+
 }

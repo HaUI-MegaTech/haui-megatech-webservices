@@ -62,6 +62,9 @@ public class UserServiceImpl implements UserService {
         if (!request.password().equalsIgnoreCase(request.confirmPassword()))
             throw new MismatchedConfirmPasswordException(ErrorMessageConstant.User.MISMATCHED_PASSWORD);
 
+        if (userRepository.findUserByUsername(request.username()).isPresent())
+            throw new DuplicateUsernameException(ErrorMessageConstant.Request.DUPLICATE_USERNAME);
+
         return CommonResponseDTO.<UserDTO>builder()
                                 .result(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.CREATED))

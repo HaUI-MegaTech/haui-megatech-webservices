@@ -1,6 +1,7 @@
 package shop.haui_megatech.configuration;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,7 @@ import shop.haui_megatech.repository.ProductRepository;
 import shop.haui_megatech.repository.UserRepository;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor

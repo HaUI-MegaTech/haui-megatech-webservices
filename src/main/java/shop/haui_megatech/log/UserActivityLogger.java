@@ -1,4 +1,4 @@
-package shop.haui_megatech.aspect;
+package shop.haui_megatech.log;
 
 public class UserActivityLogger {
 

@@ -62,6 +62,9 @@ public class UserServiceImpl implements UserService {
         if (!request.password().equalsIgnoreCase(request.confirmPassword()))
             throw new MismatchedConfirmPasswordException(ErrorMessageConstant.User.MISMATCHED_PASSWORD);
 
+        if (userRepository.findUserByUsername(request.username()).isPresent())
+            throw new DuplicateUsernameException(ErrorMessageConstant.Request.DUPLICATE_USERNAME);
+
         return CommonResponseDTO.<UserDTO>builder()
                                 .result(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.CREATED))
@@ -117,13 +120,15 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
 
         User foundUser = found.get();
-        if (!foundUser.getPassword().equals(passwordEncoder.encode(request.oldPassword())))
+
+        if (!passwordEncoder.matches(request.oldPassword(), foundUser.getPassword()))
             throw new WrongPasswordException(ErrorMessageConstant.User.WRONG_PASSWORD);
 
         if (!request.newPassword().equals(request.confirmNewPassword()))
             throw new MismatchedConfirmPasswordException(ErrorMessageConstant.User.MISMATCHED_PASSWORD);
 
         foundUser.setPassword(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(foundUser);
 
         return CommonResponseDTO.builder()
                                 .result(true)
@@ -171,10 +176,11 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
 
         found.get().setDeleted(false);
+        userRepository.save(found.get());
 
         return CommonResponseDTO.builder()
                                 .result(true)
-                                .message(SuccessMessageConstant.User.RESTORED)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESTORED))
                                 .build();
     }
 

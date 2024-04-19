@@ -12,7 +12,7 @@ public class UrlConstant {
         public static final String GET_USER_BY_ID          = PREFIX + "/{userId}";
         public static final String CREATE_USER             = PREFIX;
         public static final String UPDATE_USER_INFO        = PREFIX + "/{userId}";
-        public static final String UPDATE_USER_PASSWORD    = PREFIX + "/change-password/{userId}";
+        public static final String UPDATE_USER_PASSWORD    = PREFIX + "/update-password/{userId}";
         public static final String TEMPORARILY_DELETE_USER = PREFIX + "/temporarily-delete/{userId}";
         public static final String PERMANENTLY_DELETE_USER = PREFIX + "/permanently-delete/{userId}";
         public static final String RESTORE_USER_BY_ID      = PREFIX + "/restore/{userId}";

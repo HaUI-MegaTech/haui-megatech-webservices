@@ -1,4 +1,4 @@
-package shop.haui_megatech.aspect;
+package shop.haui_megatech.log;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

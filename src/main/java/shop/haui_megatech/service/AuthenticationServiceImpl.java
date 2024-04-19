@@ -10,7 +10,7 @@ import shop.haui_megatech.domain.dto.authentication.AuthenticationResponseDTO;
 import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.repository.UserRepository;
-import shop.haui_megatech.util.JwtUtil;
+import shop.haui_megatech.util.JwtTokenUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +18,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
+    private final JwtTokenUtil          jwtUtil;
 
     @Override
     public AuthenticationResponseDTO register(CreateUserRequestDTO request) {
@@ -42,7 +42,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                                                         request.password()
                 )
         );
-        User user = repository.findByUsername(request.username()).orElseThrow();
+        User user = repository.findActiveUserByUsername(request.username()).orElseThrow();
         String jwtToken = jwtUtil.generateToken(user);
         return AuthenticationResponseDTO.builder()
                                         .token(jwtToken)

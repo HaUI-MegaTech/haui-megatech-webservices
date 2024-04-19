@@ -16,6 +16,7 @@ import shop.haui_megatech.repository.ProductRepository;
 import shop.haui_megatech.repository.UserRepository;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class ApplicationConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByUsername(username)
+        return username -> userRepository.findActiveUserByUsername(username)
                                          .orElseThrow(() -> new UsernameNotFoundException("User not found!!"));
     }
 
@@ -52,10 +53,4 @@ public class ApplicationConfiguration {
         return new DecimalFormat();
     }
 
-    @Bean
-    public CommandLineRunner getHashedPassword() {
-        return args -> {
-            System.out.println(new BCryptPasswordEncoder().encode("123"));
-        };
-    }
 }

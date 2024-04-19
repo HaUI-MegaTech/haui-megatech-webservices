@@ -10,14 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.base.ResponseUtil;
 import shop.haui_megatech.base.RestApiV1;
-import shop.haui_megatech.constant.ErrorMessageConstant;
-import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.constant.UrlConstant;
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
 import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
-import shop.haui_megatech.domain.dto.user.UserDTO;
 import shop.haui_megatech.service.UserService;
 
 @RestApiV1
@@ -38,10 +35,7 @@ public class UserRestController {
     public ResponseEntity<?> getUserById(
             @PathVariable(name = "userId") Integer userId
     ) {
-        CommonResponseDTO<UserDTO> response = userService.getUserById(userId);
-        return response.result()
-                ? ResponseUtil.ok(response)
-                : ResponseUtil.notFound(response);
+        return ResponseUtil.ok(userService.getUserById(userId));
     }
 
 
@@ -58,15 +52,7 @@ public class UserRestController {
     public ResponseEntity<?> createUser(
             @RequestBody CreateUserRequestDTO request
     ) {
-        CommonResponseDTO<?> response = userService.createUser(request);
-
-        return switch (response.message()) {
-            case SuccessMessageConstant.User.CREATED -> ResponseUtil.created(response);
-            case ErrorMessageConstant.Request.BLANK_USERNAME,
-                 ErrorMessageConstant.Request.BLANK_PASSWORD
-                    -> ResponseUtil.badRequest(response);
-            default -> ResponseUtil.internalServerError(response);
-        };
+        return ResponseUtil.created(userService.createUser(request));
     }
 
 
@@ -81,12 +67,9 @@ public class UserRestController {
     @PutMapping(UrlConstant.User.UPDATE_USER_INFO)
     public ResponseEntity<?> updateUserInfo(
             @PathVariable(value = "userId") Integer userId,
-            @RequestBody UserDTO dto
+            @RequestBody(required = false) UpdateUserInfoRequest request
     ) {
-        CommonResponseDTO<?> response = userService.updateUserInfo(userId, dto);
-        return response.result()
-                ? ResponseUtil.ok(response)
-                : ResponseUtil.notFound(response);
+        return ResponseUtil.ok(userService.updateUserInfo(userId, request));
     }
 
 
@@ -105,15 +88,7 @@ public class UserRestController {
             @PathVariable(value = "userId") Integer userId,
             @RequestBody UpdateUserPasswordRequest request
     ) {
-        CommonResponseDTO<?> response = userService.updateUserPassword(userId, request);
-
-        return switch (response.message()) {
-            case ErrorMessageConstant.User.NOT_FOUND -> ResponseUtil.notFound(response);
-            case ErrorMessageConstant.User.WRONG_PASSWORD,
-                 ErrorMessageConstant.User.MISMATCHED_PASSWORD -> ResponseUtil.badRequest(response);
-            case SuccessMessageConstant.User.PASSWORD_UPDATED -> ResponseUtil.ok(response);
-            default -> ResponseUtil.internalServerError(response);
-        };
+        return ResponseUtil.ok(userService.updateUserPassword(userId, request));
     }
 
 
@@ -129,10 +104,7 @@ public class UserRestController {
     public ResponseEntity<?> temporarilyDeleteUserById(
             @PathVariable(value = "userId") Integer userId
     ) {
-        CommonResponseDTO<?> response = userService.temporarilyDeleteUserById(userId);
-        return response.result()
-                ? ResponseUtil.ok(response)
-                : ResponseUtil.notFound(response);
+        return ResponseUtil.ok(userService.temporarilyDeleteUserById(userId));
     }
 
 
@@ -148,10 +120,7 @@ public class UserRestController {
     public ResponseEntity<?> permanentlyDeleteUserById(
             @PathVariable(name = "userId") Integer userId
     ) {
-        CommonResponseDTO<?> response = userService.permanentlyDeleteUserById(userId);
-        return response.result()
-                ? ResponseUtil.ok(response)
-                : ResponseUtil.notFound(response);
+        return ResponseUtil.ok(userService.permanentlyDeleteUserById(userId));
     }
 
 
@@ -167,10 +136,7 @@ public class UserRestController {
     public ResponseEntity<?> restoreDeletedUserById(
             @PathVariable(name = "userId") Integer userId
     ) {
-        CommonResponseDTO<?> response = userService.restoreDeletedUserById(userId);
-        return response.result()
-                ? ResponseUtil.ok(response)
-                : ResponseUtil.notFound(response);
+        return ResponseUtil.ok(userService.restoreDeletedUserById(userId));
     }
 
 

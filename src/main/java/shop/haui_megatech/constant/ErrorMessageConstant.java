@@ -13,8 +13,11 @@ public class ErrorMessageConstant {
     }
 
     public static class Request {
-        public static final String BLANK_USERNAME = "request.error.blank_username";
-        public static final String BLANK_PASSWORD = "request.error.blank_password";
+        public static final String BLANK_USERNAME      = "request.error.blank_username";
+        public static final String BLANK_PASSWORD      = "request.error.blank_password";
+        public static final String NEGATIVE_PAGE_INDEX = "request.error.negative_page_index";
+        public static final String NULL_REQUEST        = "request.error.null_request";
+        public static final String DUPLICATE_USERNAME  = "request.error.duplicate_username";
     }
 
 }

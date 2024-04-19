@@ -26,23 +26,24 @@ public class SecurityConfiguration {
     private final String                  CATCH_ALL_WILDCARDS = "/**";
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider  authenticationProvider;
-    private final String[]                WHITE_LIST          = {
+    private final String[]                WHITE_LIST_URLS     = {
             "/swagger-ui" + CATCH_ALL_WILDCARDS,
             UrlConstant.API_V1 + UrlConstant.Auth.PREFIX + CATCH_ALL_WILDCARDS,
             "/v3/api-docs" + CATCH_ALL_WILDCARDS,
             UrlConstant.API_V1 + UrlConstant.Product.GET_PRODUCTS,
-            UrlConstant.API_V1 + UrlConstant.Product.GET_PRODUCT_BY_ID
+            UrlConstant.API_V1 + UrlConstant.Product.GET_PRODUCT_BY_ID,
+            "/search"
     };
-    final String[] WHITE_LIST_ORIGINS = {
+    private final List<String>            WHITE_LIST_ORIGINS  = List.of(
             "http://localhost:3000",
             "http://localhost:3001"
-    };
+    );
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(this.corsConfigurationSource()))
-                   .authorizeHttpRequests(auth -> auth.requestMatchers(WHITE_LIST)
+                   .cors(cors -> cors.configurationSource(this.corsConfigurationSource()))
+                   .authorizeHttpRequests(auth -> auth.requestMatchers(WHITE_LIST_URLS)
                                                       .permitAll()
                                                       .anyRequest()
                                                       .authenticated())
@@ -55,7 +56,7 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(WHITE_LIST_ORIGINS));
+        configuration.setAllowedOrigins(WHITE_LIST_ORIGINS);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization", "Accept-Language"));
         configuration.setExposedHeaders(List.of("Authorization", "Accept-Language"));

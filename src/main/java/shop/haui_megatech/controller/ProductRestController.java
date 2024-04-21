@@ -29,8 +29,8 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.Product.GET_PRODUCT_BY_ID)
-    public ResponseEntity<?> getProductById(
+    @GetMapping(UrlConstant.Product.GET_ONE)
+    public ResponseEntity<?> getOne(
             @PathVariable(name = "productId") Integer productId
     ) {
         return ResponseUtil.ok(productService.getProductById(productId));
@@ -39,8 +39,8 @@ public class ProductRestController {
 
     @Operation(summary = "Get Products with pagination")
     @ApiResponse(responseCode = "200", description = "OK")
-    @GetMapping(UrlConstant.Product.GET_PRODUCTS)
-    public ResponseEntity<?> getProducts(
+    @GetMapping(UrlConstant.Product.GET_ACTIVE_LIST)
+    public ResponseEntity<?> getActiveList(
             @ParameterObject PaginationRequestDTO request
     ) {
         return ResponseUtil.ok(productService.getProducts(request));
@@ -54,8 +54,8 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Passing unmatched datatype or unauthorized"),
             }
     )
-    @PostMapping(UrlConstant.Product.CREATE_PRODUCT)
-    public ResponseEntity<?> createProduct(
+    @PostMapping(UrlConstant.Product.ADD_ONE)
+    public ResponseEntity<?> addOne(
             @RequestBody CreateProductRequest request
     ) {
         return ResponseUtil.created(productService.createProduct(request));
@@ -70,8 +70,8 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PutMapping(UrlConstant.Product.UPDATE_PRODUCT)
-    public ResponseEntity<?> updateProduct(
+    @PutMapping(UrlConstant.Product.UPDATE_ONE)
+    public ResponseEntity<?> updateOne(
             @PathVariable(name = "productId") Integer productId,
             @RequestBody UpdateProductRequest request) {
         return ResponseUtil.ok(productService.updateProduct(productId, request));
@@ -86,8 +86,8 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @DeleteMapping(UrlConstant.Product.DELETE_PRODUCT)
-    public ResponseEntity<?> deleteProduct(
+    @DeleteMapping(UrlConstant.Product.HARD_DELETE_ONE)
+    public ResponseEntity<?> hardDeleteOne(
             @PathVariable(name = "productId") Integer productId
     ) {
         return ResponseUtil.noContent(productService.deleteProductById(productId));

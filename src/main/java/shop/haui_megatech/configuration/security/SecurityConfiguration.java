@@ -16,7 +16,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import shop.haui_megatech.configuration.security.filter.JwtAuthenticationFilter;
 import shop.haui_megatech.constant.UrlConstant;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -30,8 +29,8 @@ public class SecurityConfiguration {
             "/swagger-ui" + CATCH_ALL_WILDCARDS,
             UrlConstant.API_V1 + UrlConstant.Auth.PREFIX + CATCH_ALL_WILDCARDS,
             "/v3/api-docs" + CATCH_ALL_WILDCARDS,
-            UrlConstant.API_V1 + UrlConstant.Product.GET_PRODUCTS,
-            UrlConstant.API_V1 + UrlConstant.Product.GET_PRODUCT_BY_ID,
+            UrlConstant.API_V1 + UrlConstant.Product.GET_ACTIVE_LIST,
+            UrlConstant.API_V1 + UrlConstant.Product.GET_ONE,
             "/search"
     };
     private final List<String>            WHITE_LIST_ORIGINS  = List.of(

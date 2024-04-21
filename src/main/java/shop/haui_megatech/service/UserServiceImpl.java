@@ -190,7 +190,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonResponseDTO<?> softDeleteList(ListIdRequestDTO request) {
-        return null;
+        List<User> foundUsers = userRepository.findAllById(request.list());
+
+        foundUsers.parallelStream().forEach(item -> item.setDeleted(true));
+
+        userRepository.saveAll(foundUsers);
+
+        return CommonResponseDTO.builder()
+                                .result(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.SOFT_DELETED_LIST,
+                                                                      foundUsers.size()))
+                                .build();
     }
 
     @Override
@@ -210,7 +220,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonResponseDTO<?> hardDeleteList(ListIdRequestDTO request) {
-        return null;
+        userRepository.deleteAllById(request.list());
+
+        return CommonResponseDTO.builder()
+                                .result(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.HARD_DELETED_LIST,
+                                                                      request.list().size()))
+                                .build();
     }
 
     @Override
@@ -231,7 +247,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonResponseDTO<?> restoreList(ListIdRequestDTO request) {
-        return null;
+        List<User> foundUsers = userRepository.findAllById(request.list());
+
+        foundUsers.parallelStream().forEach(item -> item.setDeleted(false));
+
+        userRepository.saveAll(foundUsers);
+
+        return CommonResponseDTO.builder()
+                                .result(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESTORED_LIST,
+                                                                      foundUsers.size()))
+                                .build();
     }
 
     @Override

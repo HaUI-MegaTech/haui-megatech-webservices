@@ -13,6 +13,7 @@ import shop.haui_megatech.base.ResponseUtil;
 import shop.haui_megatech.base.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
 import shop.haui_megatech.domain.dto.common.ImportDataRequest;
+import shop.haui_megatech.domain.dto.common.ListIdRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
@@ -144,6 +145,22 @@ public class UserRestController {
     }
 
 
+    @Operation(summary = "Temporarily delete Users by a list of Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
+    @PatchMapping(UrlConstant.User.SOFT_DELETE_LIST)
+    public ResponseEntity<?> softDeleteList(
+            @RequestBody ListIdRequestDTO request
+    ) {
+        return ResponseUtil.ok(userService.softDeleteList(request));
+    }
+
+
     @Operation(summary = "Permanently delete a User by Id")
     @ApiResponses(
             value = {
@@ -160,6 +177,22 @@ public class UserRestController {
     }
 
 
+    @Operation(summary = "Permanently delete Users by a list of Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
+    @DeleteMapping(UrlConstant.User.HARD_DELETE_LIST)
+    public ResponseEntity<?> hardDeleteList(
+            @RequestBody ListIdRequestDTO request
+    ) {
+        return ResponseUtil.ok(userService.hardDeleteList(request));
+    }
+
+
     @Operation(summary = "Restore a User from deleted Users by Id")
     @ApiResponses(
             value = {
@@ -173,6 +206,22 @@ public class UserRestController {
             @PathVariable(name = "userId") Integer userId
     ) {
         return ResponseUtil.ok(userService.restoreOne(userId));
+    }
+
+
+    @Operation(summary = "Restore Users from deleted Users by a list of Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
+    @PatchMapping(UrlConstant.User.RESTORE_LIST)
+    public ResponseEntity<?> restoreList(
+            @RequestBody ListIdRequestDTO request
+    ) {
+        return ResponseUtil.ok(userService.restoreList(request));
     }
 
 

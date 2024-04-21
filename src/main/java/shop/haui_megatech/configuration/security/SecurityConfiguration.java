@@ -58,7 +58,7 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(WHITE_LIST_ORIGINS);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Accept-Language"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Accept-Language", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization", "Accept-Language"));
         configuration.setMaxAge((long) (24 * 60 * 60));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

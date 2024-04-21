@@ -4,10 +4,10 @@ public class SuccessMessageConstant {
 
     public static class User {
         public static final String CREATED             = "user.success.created";
-        public static final String INFO_UPDATED        = "user.success.info_updated";
-        public static final String PASSWORD_UPDATED    = "user.success.password_updated";
-        public static final String TEMPORARILY_DELETED = "user.success.temporarily_deleted";
-        public static final String PERMANENTLY_DELETED = "user.success.permanently_deleted";
+        public static final String INFO_UPDATED        = "user.success.info-updated";
+        public static final String PASSWORD_UPDATED    = "user.success.password-updated";
+        public static final String TEMPORARILY_DELETED = "user.success.temporarily-deleted";
+        public static final String PERMANENTLY_DELETED = "user.success.permanently-deleted";
         public static final String RESTORED            = "user.success.restored";
         public static final String FOUND               = "user.success.found";
 

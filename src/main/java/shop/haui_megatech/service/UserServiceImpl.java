@@ -20,6 +20,7 @@ import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.exception.*;
 import shop.haui_megatech.repository.UserRepository;
+import shop.haui_megatech.utility.CsvUtil;
 import shop.haui_megatech.utility.ExcelUtil;
 import shop.haui_megatech.utility.MessageSourceUtil;
 import shop.haui_megatech.validator.RequestValidator;
@@ -84,7 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> addList(MultipartFile file) {
+    public CommonResponseDTO<?> importExcel(MultipartFile file) {
         try {
             List<User> users = ExcelUtil.excelToUsers(file.getInputStream());
             List<User> savedUsers = userRepository.saveAll(users);
@@ -95,6 +96,21 @@ public class UserServiceImpl implements UserService {
                                     .build();
         } catch (IOException e) {
             throw new RuntimeException("Excel data is failed to store: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public CommonResponseDTO<?> importCsv(MultipartFile file) {
+        try {
+            List<User> stuList = CsvUtil.csvToUsers(file.getInputStream());
+            List<User> savedUsers = userRepository.saveAll(stuList);
+            return CommonResponseDTO.builder()
+                                    .result(true)
+                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.ADDED_LIST,
+                                                                          savedUsers.size()))
+                                    .build();
+        } catch (IOException ex) {
+            throw new RuntimeException("Data is not store successfully: " + ex.getMessage());
         }
     }
 

@@ -57,7 +57,7 @@ public class UserRestController {
     }
 
 
-    @Operation(summary = "Add a list User")
+    @Operation(summary = "Add a list of Users using Excel file")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "When has created successfully"),
@@ -66,11 +66,28 @@ public class UserRestController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             }
     )
-    @PostMapping(UrlConstant.User.ADD_LIST)
-    public ResponseEntity<?> addList(
-            @RequestParam(name = "file")MultipartFile file
+    @PostMapping(UrlConstant.User.IMPORT_EXCEL)
+    public ResponseEntity<?> importExcel(
+            @RequestParam(name = "file") MultipartFile file
     ) {
-        return ResponseUtil.created(userService.addList(file));
+        return ResponseUtil.created(userService.importExcel(file));
+    }
+
+
+    @Operation(summary = "Add a list of Users using Csv file")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204", description = "When has created successfully"),
+                    @ApiResponse(responseCode = "400", description = "When send empty username or password request"),
+                    @ApiResponse(responseCode = "403", description = "When has not been authorized"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+            }
+    )
+    @PostMapping(UrlConstant.User.IMPORT_CSV)
+    public ResponseEntity<?> importCsv(
+            @RequestParam(name = "file") MultipartFile file
+    ) {
+        return ResponseUtil.created(userService.importCsv(file));
     }
 
 

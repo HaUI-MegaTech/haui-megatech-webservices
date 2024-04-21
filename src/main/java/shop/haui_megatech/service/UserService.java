@@ -12,7 +12,9 @@ public interface UserService {
 
     CommonResponseDTO<?> addOne(AddUserRequestDTO request);
 
-    CommonResponseDTO<?> addList(MultipartFile file);
+    CommonResponseDTO<?> importExcel(MultipartFile file);
+
+    CommonResponseDTO<?> importCsv(MultipartFile file);
 
     CommonResponseDTO<?> updateInfo(Integer userId, UpdateUserInfoRequest request);
 

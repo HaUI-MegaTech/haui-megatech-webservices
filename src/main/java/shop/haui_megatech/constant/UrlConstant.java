@@ -11,7 +11,9 @@ public class UrlConstant {
         public static final String GET_ACTIVE_LIST  = PREFIX + ACTIVE;
         public static final String GET_DELETED_LIST = PREFIX + DELETED;
         public static final String ADD_ONE          = PREFIX;
-        public static final String ADD_LIST         = PREFIX + "/excel/upload";
+        public static final String IMPORT_EXCEL     = PREFIX + "/import/excel";
+        public static final String EXPORT_EXCEL     = PREFIX + "/export/excel";
+        public static final String IMPORT_CSV       = PREFIX + "/import/csv";
         public static final String UPDATE_INFO      = PREFIX + "/{userId}";
         public static final String UPDATE_PASSWORD  = PREFIX + "/update-password/{userId}";
         public static final String SOFT_DELETE_ONE  = PREFIX + "/soft-delete/{userId}";

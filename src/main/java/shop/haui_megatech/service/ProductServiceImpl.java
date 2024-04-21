@@ -20,7 +20,7 @@ import shop.haui_megatech.domain.mapper.ProductMapper;
 import shop.haui_megatech.exception.InvalidRequestParamException;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.ProductRepository;
-import shop.haui_megatech.util.MessageSourceUtil;
+import shop.haui_megatech.utility.MessageSourceUtil;
 
 import java.util.List;
 import java.util.Optional;

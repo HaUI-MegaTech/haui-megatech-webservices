@@ -1,4 +1,4 @@
-package shop.haui_megatech.util;
+package shop.haui_megatech.utility;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

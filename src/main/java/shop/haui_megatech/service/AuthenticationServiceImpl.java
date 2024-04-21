@@ -7,10 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.domain.dto.authentication.AuthenticationRequestDTO;
 import shop.haui_megatech.domain.dto.authentication.AuthenticationResponseDTO;
-import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.repository.UserRepository;
-import shop.haui_megatech.util.JwtTokenUtil;
+import shop.haui_megatech.utility.JwtTokenUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +21,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtTokenUtil          jwtUtil;
 
     @Override
-    public AuthenticationResponseDTO register(CreateUserRequestDTO request) {
+    public AuthenticationResponseDTO register(AddUserRequestDTO request) {
         User user = User.builder()
                         .firstName(request.firstName())
                         .lastName(request.lastName())

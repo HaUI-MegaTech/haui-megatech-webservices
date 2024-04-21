@@ -8,11 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import shop.haui_megatech.base.ResponseUtil;
 import shop.haui_megatech.base.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
 import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
 import shop.haui_megatech.service.UserService;
@@ -31,15 +32,15 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.User.GET_USER_BY_ID)
-    public ResponseEntity<?> getUserById(
+    @GetMapping(UrlConstant.User.GET_ONE)
+    public ResponseEntity<?> getOne(
             @PathVariable(name = "userId") Integer userId
     ) {
-        return ResponseUtil.ok(userService.getUserById(userId));
+        return ResponseUtil.ok(userService.getOne(userId));
     }
 
 
-    @Operation(summary = "Create a new User")
+    @Operation(summary = "Add a new User")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "When has created successfully"),
@@ -48,11 +49,28 @@ public class UserRestController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             }
     )
-    @PostMapping(UrlConstant.User.CREATE_USER)
-    public ResponseEntity<?> createUser(
-            @RequestBody CreateUserRequestDTO request
+    @PostMapping(UrlConstant.User.ADD_ONE)
+    public ResponseEntity<?> addOne(
+            @RequestBody AddUserRequestDTO request
     ) {
-        return ResponseUtil.created(userService.createUser(request));
+        return ResponseUtil.created(userService.addOne(request));
+    }
+
+
+    @Operation(summary = "Add a list User")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204", description = "When has created successfully"),
+                    @ApiResponse(responseCode = "400", description = "When send empty username or password request"),
+                    @ApiResponse(responseCode = "403", description = "When has not been authorized"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+            }
+    )
+    @PostMapping(UrlConstant.User.ADD_LIST)
+    public ResponseEntity<?> addList(
+            @RequestParam(name = "file")MultipartFile file
+    ) {
+        return ResponseUtil.created(userService.addList(file));
     }
 
 
@@ -64,12 +82,12 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PutMapping(UrlConstant.User.UPDATE_USER_INFO)
-    public ResponseEntity<?> updateUserInfo(
+    @PutMapping(UrlConstant.User.UPDATE_INFO)
+    public ResponseEntity<?> updateInfo(
             @PathVariable(value = "userId") Integer userId,
             @RequestBody(required = false) UpdateUserInfoRequest request
     ) {
-        return ResponseUtil.ok(userService.updateUserInfo(userId, request));
+        return ResponseUtil.ok(userService.updateInfo(userId, request));
     }
 
 
@@ -83,12 +101,12 @@ public class UserRestController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error")
             }
     )
-    @PatchMapping(UrlConstant.User.UPDATE_USER_PASSWORD)
-    public ResponseEntity<?> updateUserPassword(
+    @PatchMapping(UrlConstant.User.UPDATE_PASSWORD)
+    public ResponseEntity<?> updatePassword(
             @PathVariable(value = "userId") Integer userId,
             @RequestBody UpdateUserPasswordRequest request
     ) {
-        return ResponseUtil.ok(userService.updateUserPassword(userId, request));
+        return ResponseUtil.ok(userService.updatePassword(userId, request));
     }
 
 
@@ -100,11 +118,11 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(UrlConstant.User.SOFT_DELETE_USER)
-    public ResponseEntity<?> softDeleteUserById(
+    @PatchMapping(UrlConstant.User.SOFT_DELETE_ONE)
+    public ResponseEntity<?> softDeleteOne(
             @PathVariable(value = "userId") Integer userId
     ) {
-        return ResponseUtil.ok(userService.softDeleteUserById(userId));
+        return ResponseUtil.ok(userService.softDeleteOne(userId));
     }
 
 
@@ -116,11 +134,11 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @DeleteMapping(UrlConstant.User.HARD_DELETE_USER)
-    public ResponseEntity<?> hardDeleteUserById(
+    @DeleteMapping(UrlConstant.User.HARD_DELETE_ONE)
+    public ResponseEntity<?> hardDeleteOne(
             @PathVariable(name = "userId") Integer userId
     ) {
-        return ResponseUtil.ok(userService.hardDeleteUserById(userId));
+        return ResponseUtil.ok(userService.hardDeleteOne(userId));
     }
 
 
@@ -132,11 +150,11 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(UrlConstant.User.RESTORE_USER_BY_ID)
-    public ResponseEntity<?> restoreDeletedUserById(
+    @PatchMapping(UrlConstant.User.RESTORE_ONE)
+    public ResponseEntity<?> restoreOne(
             @PathVariable(name = "userId") Integer userId
     ) {
-        return ResponseUtil.ok(userService.restoreDeletedUserById(userId));
+        return ResponseUtil.ok(userService.restoreOne(userId));
     }
 
 
@@ -147,9 +165,9 @@ public class UserRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden")
             }
     )
-    @GetMapping(UrlConstant.User.GET_ACTIVE_USERS)
-    public ResponseEntity<?> getActiveUsers(@ParameterObject PaginationRequestDTO request) {
-        return ResponseUtil.ok(userService.getActiveUsers(request));
+    @GetMapping(UrlConstant.User.GET_ACTIVE_LIST)
+    public ResponseEntity<?> getActiveList(@ParameterObject PaginationRequestDTO request) {
+        return ResponseUtil.ok(userService.getActiveList(request));
     }
 
 
@@ -160,8 +178,8 @@ public class UserRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden")
             }
     )
-    @GetMapping(UrlConstant.User.GET_DELETED_USERS)
-    public ResponseEntity<?> getDeletedUsers(@ParameterObject PaginationRequestDTO request) {
-        return ResponseUtil.ok(userService.getDeletedUsers(request));
+    @GetMapping(UrlConstant.User.GET_DELETED_LIST)
+    public ResponseEntity<?> getDeletedList(@ParameterObject PaginationRequestDTO request) {
+        return ResponseUtil.ok(userService.getDeletedList(request));
     }
 }

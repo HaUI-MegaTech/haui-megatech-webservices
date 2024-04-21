@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import shop.haui_megatech.domain.dto.product.ProductDTO;
 import shop.haui_megatech.domain.entity.Product;
-import shop.haui_megatech.util.DecimalFormatUtil;
+import shop.haui_megatech.utility.DecimalFormatUtil;
 
 @Component
 @RequiredArgsConstructor

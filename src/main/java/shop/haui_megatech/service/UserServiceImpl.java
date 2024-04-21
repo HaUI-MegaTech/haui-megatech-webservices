@@ -7,23 +7,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.common.ListIdRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
-import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
-import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
-import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
-import shop.haui_megatech.domain.dto.user.UserDTO;
+import shop.haui_megatech.domain.dto.user.*;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.exception.*;
 import shop.haui_megatech.repository.UserRepository;
-import shop.haui_megatech.util.MessageSourceUtil;
+import shop.haui_megatech.utility.ExcelUtil;
+import shop.haui_megatech.utility.MessageSourceUtil;
 import shop.haui_megatech.validator.RequestValidator;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper        mapper;
 
     @Override
-    public CommonResponseDTO<UserDTO> getUserById(Integer userId) {
+    public CommonResponseDTO<UserDTO> getOne(Integer userId) {
         Optional<User> foundUser = userRepository.findById(userId);
 
         if (foundUser.isEmpty())
@@ -52,22 +53,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> createUser(CreateUserRequestDTO request) {
+    public CommonResponseDTO<?> addOne(AddUserRequestDTO request) {
         if (!RequestValidator.isBlankRequestParams(request.username()))
             throw new AbsentRequiredFieldException(ErrorMessageConstant.Request.BLANK_USERNAME);
 
         if (!RequestValidator.isBlankRequestParams(request.password()))
             throw new AbsentRequiredFieldException(ErrorMessageConstant.Request.BLANK_PASSWORD);
 
-        if (!request.password().equalsIgnoreCase(request.confirmPassword()))
+        if (!request.password()
+                    .equalsIgnoreCase(request.confirmPassword()))
             throw new MismatchedConfirmPasswordException(ErrorMessageConstant.User.MISMATCHED_PASSWORD);
 
-        if (userRepository.findUserByUsername(request.username()).isPresent())
+        if (userRepository.findUserByUsername(request.username())
+                          .isPresent())
             throw new DuplicateUsernameException(ErrorMessageConstant.Request.DUPLICATE_USERNAME);
 
         return CommonResponseDTO.<UserDTO>builder()
                                 .result(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.CREATED))
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.ADDED_ONE))
                                 .item(mapper.toUserDTO(
                                         userRepository.save(User.builder()
                                                                 .username(request.username())
@@ -81,7 +84,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> updateUserInfo(
+    public CommonResponseDTO<?> addList(MultipartFile file) {
+        try {
+            List<User> users = ExcelUtil.excelToUsers(file.getInputStream());
+            List<User> savedUsers = userRepository.saveAll(users);
+            return CommonResponseDTO.builder()
+                                    .result(true)
+                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.ADDED_LIST,
+                                                                          savedUsers.size()))
+                                    .build();
+        } catch (IOException e) {
+            throw new RuntimeException("Excel data is failed to store: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public CommonResponseDTO<?> updateInfo(
             Integer userId,
             UpdateUserInfoRequest request
     ) {
@@ -110,7 +128,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> updateUserPassword(
+    public CommonResponseDTO<?> updatePassword(
             Integer userId,
             UpdateUserPasswordRequest request
     ) {
@@ -137,7 +155,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> softDeleteUserById(Integer userId) {
+    public CommonResponseDTO<?> softDeleteOne(Integer userId) {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
@@ -149,12 +167,17 @@ public class UserServiceImpl implements UserService {
 
         return CommonResponseDTO.builder()
                                 .result(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.TEMPORARILY_DELETED))
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.SOFT_DELETED_ONE))
                                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteUserById(Integer userId) {
+    public CommonResponseDTO<?> softDeleteList(ListIdRequestDTO request) {
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> hardDeleteOne(Integer userId) {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
@@ -164,12 +187,17 @@ public class UserServiceImpl implements UserService {
 
         return CommonResponseDTO.builder()
                                 .result(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.PERMANENTLY_DELETED))
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.HARD_DELETED_ONE))
                                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> restoreDeletedUserById(Integer userId) {
+    public CommonResponseDTO<?> hardDeleteList(ListIdRequestDTO request) {
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> restoreOne(Integer userId) {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
@@ -180,12 +208,17 @@ public class UserServiceImpl implements UserService {
 
         return CommonResponseDTO.builder()
                                 .result(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESTORED))
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESTORED_ONE))
                                 .build();
     }
 
     @Override
-    public PaginationResponseDTO<UserDTO> getActiveUsers(PaginationRequestDTO request) {
+    public CommonResponseDTO<?> restoreList(ListIdRequestDTO request) {
+        return null;
+    }
+
+    @Override
+    public PaginationResponseDTO<UserDTO> getActiveList(PaginationRequestDTO request) {
         if (request.pageIndex() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
@@ -216,7 +249,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PaginationResponseDTO<UserDTO> getDeletedUsers(PaginationRequestDTO request) {
+    public PaginationResponseDTO<UserDTO> getDeletedList(PaginationRequestDTO request) {
         if (request.pageIndex() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 

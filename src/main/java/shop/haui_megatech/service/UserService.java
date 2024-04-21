@@ -1,29 +1,36 @@
 package shop.haui_megatech.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.common.ListIdRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
-import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
-import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
-import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
-import shop.haui_megatech.domain.dto.user.UserDTO;
+import shop.haui_megatech.domain.dto.user.*;
 
 public interface UserService {
-    CommonResponseDTO<UserDTO> getUserById(Integer userId);
+    CommonResponseDTO<UserDTO> getOne(Integer userId);
 
-    CommonResponseDTO<?> createUser(CreateUserRequestDTO request);
+    CommonResponseDTO<?> addOne(AddUserRequestDTO request);
 
-    CommonResponseDTO<?> updateUserInfo(Integer userId, UpdateUserInfoRequest request);
+    CommonResponseDTO<?> addList(MultipartFile file);
 
-    CommonResponseDTO<?> updateUserPassword(Integer userId, UpdateUserPasswordRequest request);
+    CommonResponseDTO<?> updateInfo(Integer userId, UpdateUserInfoRequest request);
 
-    CommonResponseDTO<?> softDeleteUserById(Integer userId);
+    CommonResponseDTO<?> updatePassword(Integer userId, UpdateUserPasswordRequest request);
 
-    CommonResponseDTO<?> hardDeleteUserById(Integer userId);
+    CommonResponseDTO<?> softDeleteOne(Integer userId);
 
-    CommonResponseDTO<?> restoreDeletedUserById(Integer userId);
+    CommonResponseDTO<?> softDeleteList(ListIdRequestDTO request);
 
-    PaginationResponseDTO<UserDTO> getActiveUsers(PaginationRequestDTO request);
+    CommonResponseDTO<?> hardDeleteOne(Integer userId);
 
-    PaginationResponseDTO<UserDTO> getDeletedUsers(PaginationRequestDTO requestDTO);
+    CommonResponseDTO<?> hardDeleteList(ListIdRequestDTO request);
+
+    CommonResponseDTO<?> restoreOne(Integer userId);
+
+    CommonResponseDTO<?> restoreList(ListIdRequestDTO request);
+
+    PaginationResponseDTO<UserDTO> getActiveList(PaginationRequestDTO request);
+
+    PaginationResponseDTO<UserDTO> getDeletedList(PaginationRequestDTO requestDTO);
 }

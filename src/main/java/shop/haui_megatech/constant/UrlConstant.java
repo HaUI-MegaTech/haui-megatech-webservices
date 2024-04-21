@@ -6,16 +6,20 @@ public class UrlConstant {
     private static final String DELETED = "/deleted";
 
     public static class User {
-        public static final String PREFIX               = "/users";
-        public static final String GET_ACTIVE_USERS     = PREFIX + ACTIVE;
-        public static final String GET_DELETED_USERS    = PREFIX + DELETED;
-        public static final String GET_USER_BY_ID       = PREFIX + "/{userId}";
-        public static final String CREATE_USER          = PREFIX;
-        public static final String UPDATE_USER_INFO     = PREFIX + "/{userId}";
-        public static final String UPDATE_USER_PASSWORD = PREFIX + "/update-password/{userId}";
-        public static final String SOFT_DELETE_USER     = PREFIX + "/soft-delete/{userId}";
-        public static final String HARD_DELETE_USER     = PREFIX + "/hard-delete/{userId}";
-        public static final String RESTORE_USER_BY_ID   = PREFIX + "/restore/{userId}";
+        public static final String PREFIX           = "/users";
+        public static final String GET_ONE          = PREFIX + "/{userId}";
+        public static final String GET_ACTIVE_LIST  = PREFIX + ACTIVE;
+        public static final String GET_DELETED_LIST = PREFIX + DELETED;
+        public static final String ADD_ONE          = PREFIX;
+        public static final String ADD_LIST         = PREFIX + "/excel/upload";
+        public static final String UPDATE_INFO      = PREFIX + "/{userId}";
+        public static final String UPDATE_PASSWORD  = PREFIX + "/update-password/{userId}";
+        public static final String SOFT_DELETE_ONE  = PREFIX + "/soft-delete/{userId}";
+        public static final String SOFT_DELETE_LIST = PREFIX + "/soft-delete";
+        public static final String HARD_DELETE_ONE  = PREFIX + "/hard-delete/{userId}";
+        public static final String HARD_DELETE_LIST = PREFIX + "/hard-delete";
+        public static final String RESTORE_ONE      = PREFIX + "/restore/{userId}";
+        public static final String RESTORE_LIST     = PREFIX + "/restore";
 
     }
 

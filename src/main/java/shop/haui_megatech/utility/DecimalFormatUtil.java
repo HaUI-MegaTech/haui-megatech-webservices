@@ -1,4 +1,4 @@
-package shop.haui_megatech.util;
+package shop.haui_megatech.utility;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;

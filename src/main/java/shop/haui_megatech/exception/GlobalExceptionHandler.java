@@ -1,13 +1,12 @@
 package shop.haui_megatech.exception;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import shop.haui_megatech.base.ResponseUtil;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
-import shop.haui_megatech.util.MessageSourceUtil;
+import shop.haui_megatech.utility.MessageSourceUtil;
 
 @RestControllerAdvice
 @RequiredArgsConstructor

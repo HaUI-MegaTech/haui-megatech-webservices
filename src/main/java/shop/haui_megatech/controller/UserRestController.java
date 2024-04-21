@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import shop.haui_megatech.base.ResponseUtil;
 import shop.haui_megatech.base.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
+import shop.haui_megatech.domain.dto.common.ImportDataRequest;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
@@ -68,9 +69,9 @@ public class UserRestController {
     )
     @PostMapping(UrlConstant.User.IMPORT_EXCEL)
     public ResponseEntity<?> importExcel(
-            @RequestParam(name = "file") MultipartFile file
+            @ParameterObject ImportDataRequest request
     ) {
-        return ResponseUtil.created(userService.importExcel(file));
+        return ResponseUtil.created(userService.importExcel(request));
     }
 
 
@@ -85,9 +86,9 @@ public class UserRestController {
     )
     @PostMapping(UrlConstant.User.IMPORT_CSV)
     public ResponseEntity<?> importCsv(
-            @RequestParam(name = "file") MultipartFile file
+            @ParameterObject ImportDataRequest request
     ) {
-        return ResponseUtil.created(userService.importCsv(file));
+        return ResponseUtil.created(userService.importCsv(request));
     }
 
 

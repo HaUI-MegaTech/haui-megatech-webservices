@@ -12,6 +12,7 @@ import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.common.ImportDataRequest;
 import shop.haui_megatech.domain.dto.common.ListIdRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
@@ -85,9 +86,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> importExcel(MultipartFile file) {
+    public CommonResponseDTO<?> importExcel(ImportDataRequest request) {
         try {
-            List<User> users = ExcelUtil.excelToUsers(file.getInputStream());
+            List<User> users = ExcelUtil.excelToUsers(request.file().getInputStream());
             List<User> savedUsers = userRepository.saveAll(users);
             return CommonResponseDTO.builder()
                                     .result(true)
@@ -100,9 +101,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> importCsv(MultipartFile file) {
+    public CommonResponseDTO<?> importCsv(ImportDataRequest request) {
         try {
-            List<User> stuList = CsvUtil.csvToUsers(file.getInputStream());
+            List<User> stuList = CsvUtil.csvToUsers(request.file().getInputStream());
             List<User> savedUsers = userRepository.saveAll(stuList);
             return CommonResponseDTO.builder()
                                     .result(true)

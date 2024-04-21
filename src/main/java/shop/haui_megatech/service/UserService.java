@@ -2,6 +2,7 @@ package shop.haui_megatech.service;
 
 import org.springframework.web.multipart.MultipartFile;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.common.ImportDataRequest;
 import shop.haui_megatech.domain.dto.common.ListIdRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
@@ -12,9 +13,9 @@ public interface UserService {
 
     CommonResponseDTO<?> addOne(AddUserRequestDTO request);
 
-    CommonResponseDTO<?> importExcel(MultipartFile file);
+    CommonResponseDTO<?> importExcel(ImportDataRequest request);
 
-    CommonResponseDTO<?> importCsv(MultipartFile file);
+    CommonResponseDTO<?> importCsv(ImportDataRequest request);
 
     CommonResponseDTO<?> updateInfo(Integer userId, UpdateUserInfoRequest request);
 

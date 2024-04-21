@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
@@ -16,10 +15,14 @@ import shop.haui_megatech.domain.dto.common.ImportDataRequest;
 import shop.haui_megatech.domain.dto.common.ListIdRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
-import shop.haui_megatech.domain.dto.user.*;
+import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
+import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
+import shop.haui_megatech.domain.dto.user.UserDTO;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.exception.*;
+import shop.haui_megatech.job.AutoMailSender;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.utility.CsvUtil;
 import shop.haui_megatech.utility.ExcelUtil;
@@ -39,6 +42,7 @@ public class UserServiceImpl implements UserService {
     private final MessageSourceUtil messageSourceUtil;
     private final PasswordEncoder   passwordEncoder;
     private final UserMapper        mapper;
+    private final AutoMailSender    autoMailSender;
 
     @Override
     public CommonResponseDTO<UserDTO> getOne(Integer userId) {
@@ -258,6 +262,32 @@ public class UserServiceImpl implements UserService {
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESTORED_LIST,
                                                                       foundUsers.size()))
                                 .build();
+    }
+
+    @Override
+    public CommonResponseDTO<?> resetPasswordOne(Integer userId) {
+        String newPassword = Integer.toString((int) (Math.random() * 1e6));
+
+        Optional<User> found = userRepository.findById(userId);
+
+        if (found.isEmpty())
+            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+
+        User foundUser = found.get();
+        foundUser.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(foundUser);
+        autoMailSender.sendResetPasswordMail(foundUser.getEmail(), newPassword);
+        System.out.println("hi");
+        return CommonResponseDTO.builder()
+                                .result(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESET_PASSWORD_ONE,
+                                                                      foundUser.getUsername()))
+                                .build();
+    }
+
+    @Override
+    public CommonResponseDTO<?> resetPasswordList(ListIdRequestDTO request) {
+        return null;
     }
 
     @Override

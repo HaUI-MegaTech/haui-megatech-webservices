@@ -225,6 +225,22 @@ public class UserRestController {
     }
 
 
+    @Operation(summary = "Reset User's password by Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
+    @PatchMapping(UrlConstant.User.RESET_PASSWORD_ONE)
+    public ResponseEntity<?> resetPasswordOne(
+            @PathVariable(name = "userId") Integer userId
+    ) {
+        return ResponseUtil.ok(userService.resetPasswordOne(userId));
+    }
+
+
     @Operation(summary = "Get active Users with pagination")
     @ApiResponses(
             value = {

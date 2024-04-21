@@ -1,6 +1,5 @@
 package shop.haui_megatech.service;
 
-import org.springframework.web.multipart.MultipartFile;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequest;
 import shop.haui_megatech.domain.dto.common.ListIdRequestDTO;
@@ -33,7 +32,11 @@ public interface UserService {
 
     CommonResponseDTO<?> restoreList(ListIdRequestDTO request);
 
+    CommonResponseDTO<?> resetPasswordOne(Integer userId);
+
+    CommonResponseDTO<?> resetPasswordList(ListIdRequestDTO request);
+
     PaginationResponseDTO<UserDTO> getActiveList(PaginationRequestDTO request);
 
-    PaginationResponseDTO<UserDTO> getDeletedList(PaginationRequestDTO requestDTO);
+    PaginationResponseDTO<UserDTO> getDeletedList(PaginationRequestDTO request);
 }

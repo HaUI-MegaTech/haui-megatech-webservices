@@ -56,12 +56,7 @@ public class ApplicationConfiguration {
     @Bean
     public CommandLineRunner init() {
         return args -> {
-            String newPassword = Integer.toString((int)(Math.random() * 1e6));
 
-            System.out.println(Integer.toString((int)(Math.random() * 1e6)));
-            System.out.println(Integer.toString((int)(Math.random() * 1e6)));
-            System.out.println(Integer.toString((int)(Math.random() * 1e6)));
-            System.out.println(Integer.toString((int)(Math.random() * 1e6)));
         };
     }
 }

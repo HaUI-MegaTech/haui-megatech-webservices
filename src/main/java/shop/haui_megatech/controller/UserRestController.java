@@ -241,6 +241,22 @@ public class UserRestController {
     }
 
 
+    @Operation(summary = "Reset Users' password by a list of Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
+    @PatchMapping(UrlConstant.User.RESET_PASSWORD_LIST)
+    public ResponseEntity<?> resetPasswordList(
+            @RequestBody ListIdRequestDTO request
+    ) {
+        return ResponseUtil.ok(userService.resetPasswordList(request));
+    }
+
+
     @Operation(summary = "Get active Users with pagination")
     @ApiResponses(
             value = {

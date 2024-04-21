@@ -27,6 +27,7 @@ import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.utility.CsvUtil;
 import shop.haui_megatech.utility.ExcelUtil;
 import shop.haui_megatech.utility.MessageSourceUtil;
+import shop.haui_megatech.utility.RandomUtil;
 import shop.haui_megatech.validator.RequestValidator;
 
 import java.io.IOException;
@@ -266,7 +267,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonResponseDTO<?> resetPasswordOne(Integer userId) {
-        String newPassword = Integer.toString((int) (Math.random() * 1e6));
+        String newPassword = RandomUtil.randomPassword();
 
         Optional<User> found = userRepository.findById(userId);
 
@@ -277,7 +278,7 @@ public class UserServiceImpl implements UserService {
         foundUser.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(foundUser);
         autoMailSender.sendResetPasswordMail(foundUser.getEmail(), newPassword);
-        System.out.println("hi");
+
         return CommonResponseDTO.builder()
                                 .result(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESET_PASSWORD_ONE,
@@ -287,7 +288,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonResponseDTO<?> resetPasswordList(ListIdRequestDTO request) {
-        return null;
+        List<User> foundUsers = userRepository.findAllById(request.list());
+
+        foundUsers.parallelStream().forEach(item -> {
+            this.resetPasswordOne(item.getId());
+        });
+
+        return CommonResponseDTO.builder()
+                                .result(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESET_PASSWORD_LIST,
+                                                                      foundUsers.size()))
+                                .build();
     }
 
     @Override

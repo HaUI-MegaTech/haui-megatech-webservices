@@ -1,6 +1,7 @@
 package shop.haui_megatech.job;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,8 @@ import org.springframework.stereotype.Component;
 public class AutoMailSender {
     private final JavaMailSender mailSender;
 
-    private final String FROM = "hauimegatech.bot@gmail.com";
+    @Value("${spring.mail.username}")
+    private String FROM;
 
     public void sendResetPasswordMail(String email, String newPassword) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();

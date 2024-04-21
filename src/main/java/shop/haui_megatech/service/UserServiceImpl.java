@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> temporarilyDeleteUserById(Integer userId) {
+    public CommonResponseDTO<?> softDeleteUserById(Integer userId) {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
@@ -154,7 +154,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> permanentlyDeleteUserById(Integer userId) {
+    public CommonResponseDTO<?> hardDeleteUserById(Integer userId) {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())

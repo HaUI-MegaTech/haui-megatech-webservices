@@ -100,11 +100,11 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(UrlConstant.User.TEMPORARILY_DELETE_USER)
-    public ResponseEntity<?> temporarilyDeleteUserById(
+    @PatchMapping(UrlConstant.User.SOFT_DELETE_USER)
+    public ResponseEntity<?> softDeleteUserById(
             @PathVariable(value = "userId") Integer userId
     ) {
-        return ResponseUtil.ok(userService.temporarilyDeleteUserById(userId));
+        return ResponseUtil.ok(userService.softDeleteUserById(userId));
     }
 
 
@@ -116,11 +116,11 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @DeleteMapping(UrlConstant.User.PERMANENTLY_DELETE_USER)
-    public ResponseEntity<?> permanentlyDeleteUserById(
+    @DeleteMapping(UrlConstant.User.HARD_DELETE_USER)
+    public ResponseEntity<?> hardDeleteUserById(
             @PathVariable(name = "userId") Integer userId
     ) {
-        return ResponseUtil.ok(userService.permanentlyDeleteUserById(userId));
+        return ResponseUtil.ok(userService.hardDeleteUserById(userId));
     }
 
 

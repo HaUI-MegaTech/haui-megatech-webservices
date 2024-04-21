@@ -17,9 +17,9 @@ public interface UserService {
 
     CommonResponseDTO<?> updateUserPassword(Integer userId, UpdateUserPasswordRequest request);
 
-    CommonResponseDTO<?> temporarilyDeleteUserById(Integer userId);
+    CommonResponseDTO<?> softDeleteUserById(Integer userId);
 
-    CommonResponseDTO<?> permanentlyDeleteUserById(Integer userId);
+    CommonResponseDTO<?> hardDeleteUserById(Integer userId);
 
     CommonResponseDTO<?> restoreDeletedUserById(Integer userId);
 

@@ -12,7 +12,7 @@ import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequest;
-import shop.haui_megatech.domain.dto.common.ListIdRequestDTO;
+import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
@@ -194,8 +194,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> softDeleteList(ListIdRequestDTO request) {
-        List<User> foundUsers = userRepository.findAllById(request.list());
+    public CommonResponseDTO<?> softDeleteList(ListIdsRequestDTO request) {
+        List<User> foundUsers = userRepository.findAllById(request.ids());
 
         foundUsers.parallelStream().forEach(item -> item.setDeleted(true));
 
@@ -224,13 +224,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteList(ListIdRequestDTO request) {
-        userRepository.deleteAllById(request.list());
+    public CommonResponseDTO<?> hardDeleteList(ListIdsRequestDTO request) {
+        userRepository.deleteAllById(request.ids());
 
         return CommonResponseDTO.builder()
                                 .result(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.HARD_DELETED_LIST,
-                                                                      request.list().size()))
+                                                                      request.ids().size()))
                                 .build();
     }
 
@@ -251,8 +251,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> restoreList(ListIdRequestDTO request) {
-        List<User> foundUsers = userRepository.findAllById(request.list());
+    public CommonResponseDTO<?> restoreList(ListIdsRequestDTO request) {
+        List<User> foundUsers = userRepository.findAllById(request.ids());
 
         foundUsers.parallelStream().forEach(item -> item.setDeleted(false));
 
@@ -287,8 +287,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> resetPasswordList(ListIdRequestDTO request) {
-        List<User> foundUsers = userRepository.findAllById(request.list());
+    public CommonResponseDTO<?> resetPasswordList(ListIdsRequestDTO request) {
+        List<User> foundUsers = userRepository.findAllById(request.ids());
 
         foundUsers.parallelStream().forEach(item -> {
             this.resetPasswordOne(item.getId());

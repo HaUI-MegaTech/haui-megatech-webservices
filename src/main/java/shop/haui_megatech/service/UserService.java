@@ -2,7 +2,7 @@ package shop.haui_megatech.service;
 
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequest;
-import shop.haui_megatech.domain.dto.common.ListIdRequestDTO;
+import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.dto.user.*;
@@ -22,19 +22,19 @@ public interface UserService {
 
     CommonResponseDTO<?> softDeleteOne(Integer userId);
 
-    CommonResponseDTO<?> softDeleteList(ListIdRequestDTO request);
+    CommonResponseDTO<?> softDeleteList(ListIdsRequestDTO request);
 
     CommonResponseDTO<?> hardDeleteOne(Integer userId);
 
-    CommonResponseDTO<?> hardDeleteList(ListIdRequestDTO request);
+    CommonResponseDTO<?> hardDeleteList(ListIdsRequestDTO request);
 
     CommonResponseDTO<?> restoreOne(Integer userId);
 
-    CommonResponseDTO<?> restoreList(ListIdRequestDTO request);
+    CommonResponseDTO<?> restoreList(ListIdsRequestDTO request);
 
     CommonResponseDTO<?> resetPasswordOne(Integer userId);
 
-    CommonResponseDTO<?> resetPasswordList(ListIdRequestDTO request);
+    CommonResponseDTO<?> resetPasswordList(ListIdsRequestDTO request);
 
     PaginationResponseDTO<UserDTO> getActiveList(PaginationRequestDTO request);
 

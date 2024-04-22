@@ -9,12 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import shop.haui_megatech.base.ResponseUtil;
 import shop.haui_megatech.base.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
 import shop.haui_megatech.domain.dto.common.ImportDataRequest;
-import shop.haui_megatech.domain.dto.common.ListIdRequestDTO;
+import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
@@ -157,7 +156,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.SOFT_DELETE_LIST)
     public ResponseEntity<?> softDeleteList(
-            @RequestBody ListIdRequestDTO request
+            @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(userService.softDeleteList(request));
     }
@@ -189,7 +188,7 @@ public class UserRestController {
     )
     @DeleteMapping(UrlConstant.User.HARD_DELETE_LIST)
     public ResponseEntity<?> hardDeleteList(
-            @RequestBody ListIdRequestDTO request
+            @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(userService.hardDeleteList(request));
     }
@@ -221,7 +220,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.RESTORE_LIST)
     public ResponseEntity<?> restoreList(
-            @RequestBody ListIdRequestDTO request
+            @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(userService.restoreList(request));
     }
@@ -253,7 +252,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.RESET_PASSWORD_LIST)
     public ResponseEntity<?> resetPasswordList(
-            @RequestBody ListIdRequestDTO request
+            @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(userService.resetPasswordList(request));
     }

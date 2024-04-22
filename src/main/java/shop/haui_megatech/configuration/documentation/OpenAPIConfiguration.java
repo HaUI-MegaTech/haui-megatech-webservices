@@ -1,6 +1,8 @@
 package shop.haui_megatech.configuration.documentation;
 
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -15,6 +17,12 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer"
+)
 public class OpenAPIConfiguration {
     @Value("${haui-megatech.openapi.dev-url}")
     private String devUrl;
@@ -24,6 +32,8 @@ public class OpenAPIConfiguration {
 
     @Bean
     public OpenAPI customOpenAPI() {
+        final String securitySchemeName = "bearerAuth";
+
         Server devServer = new Server();
         devServer.setUrl(devUrl);
         devServer.setDescription("Server URL in Development environment");

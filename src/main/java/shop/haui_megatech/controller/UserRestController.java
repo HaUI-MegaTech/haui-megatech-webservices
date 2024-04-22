@@ -3,6 +3,7 @@ package shop.haui_megatech.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -23,6 +24,7 @@ import shop.haui_megatech.service.UserService;
 @RestApiV1
 @RequiredArgsConstructor
 @Tag(name = "Users Management REST API")
+@SecurityRequirement(name = "bearerAuth")
 public class UserRestController {
     private final UserService userService;
 

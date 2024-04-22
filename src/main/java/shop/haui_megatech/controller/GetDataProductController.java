@@ -37,20 +37,28 @@ public class GetDataProductController {
 
         List<String> urls = readUrlsFromFile(inputFile);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-            writer.write("url;");
+            writer.write("url;imageLink;");
             writer.write(String.join(";", propertyList));writer.newLine();
             for (String url : urls) {
                 try {
+                    List<String> productInfo = new ArrayList<>();
+                    productInfo.add(url);
                     Document document = Jsoup.connect(url).get();
-                    Element productld = document.getElementById("productld");
 
+                    Element imgElement = document.select("div.img-main img.lazyload").first();
+
+                    String imageLink="";
+                    if (imgElement != null) {
+                        imageLink = imgElement.attr("data-src");
+                    }
+                    productInfo.add(imageLink);
+
+                    Element productld = document.getElementById("productld");
                     if (productld != null) {
                         String jsonContent = productld.html();
                         JSONObject jsonObject = new JSONObject(jsonContent);
                         JSONArray additionalProperties = jsonObject.getJSONArray("additionalProperty");
 
-                        List<String> productInfo = new ArrayList<>();
-                        productInfo.add(url);
                         int j=0;
                         for (int i = 0; i < additionalProperties.length(); i++) {
                             JSONObject property = additionalProperties.getJSONObject(i);

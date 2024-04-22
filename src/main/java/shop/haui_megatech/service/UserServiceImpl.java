@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
 
         return CommonResponseDTO.<UserDTO>builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.FOUND))
                                 .item(UserMapper.INSTANCE.toUserDTO(foundUser.get()))
                                 .build();
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateUsernameException(ErrorMessageConstant.Request.DUPLICATE_USERNAME);
 
         return CommonResponseDTO.<UserDTO>builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.ADDED_ONE))
                                 .item(UserMapper.INSTANCE.toUserDTO(
                                         userRepository.save(User.builder()
@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
             List<User> users = ExcelUtil.excelToUsers(request.file().getInputStream());
             List<User> savedUsers = userRepository.saveAll(users);
             return CommonResponseDTO.builder()
-                                    .result(true)
+                                    .success(true)
                                     .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.ADDED_LIST,
                                                                           savedUsers.size()))
                                     .build();
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
             List<User> stuList = CsvUtil.csvToUsers(request.file().getInputStream());
             List<User> savedUsers = userRepository.saveAll(stuList);
             return CommonResponseDTO.builder()
-                                    .result(true)
+                                    .success(true)
                                     .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.ADDED_LIST,
                                                                           savedUsers.size()))
                                     .build();
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(foundUser);
 
         return CommonResponseDTO.builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.INFO_UPDATED))
                                 .build();
     }
@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(foundUser);
 
         return CommonResponseDTO.builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.PASSWORD_UPDATED))
                                 .build();
     }
@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(foundUser);
 
         return CommonResponseDTO.builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.SOFT_DELETED_ONE))
                                 .build();
     }
@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService {
         userRepository.saveAll(foundUsers);
 
         return CommonResponseDTO.builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.SOFT_DELETED_LIST,
                                                                       foundUsers.size()))
                                 .build();
@@ -217,7 +217,7 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(found.get());
 
         return CommonResponseDTO.builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.HARD_DELETED_ONE))
                                 .build();
     }
@@ -227,7 +227,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteAllById(request.ids());
 
         return CommonResponseDTO.builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.HARD_DELETED_LIST,
                                                                       request.ids().size()))
                                 .build();
@@ -244,7 +244,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(found.get());
 
         return CommonResponseDTO.builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESTORED_ONE))
                                 .build();
     }
@@ -258,7 +258,7 @@ public class UserServiceImpl implements UserService {
         userRepository.saveAll(foundUsers);
 
         return CommonResponseDTO.builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESTORED_LIST,
                                                                       foundUsers.size()))
                                 .build();
@@ -279,7 +279,7 @@ public class UserServiceImpl implements UserService {
         autoMailSender.sendResetPasswordMail(foundUser.getEmail(), newPassword);
 
         return CommonResponseDTO.builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESET_PASSWORD_ONE,
                                                                       foundUser.getUsername()))
                                 .build();
@@ -294,7 +294,7 @@ public class UserServiceImpl implements UserService {
         });
 
         return CommonResponseDTO.builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESET_PASSWORD_LIST,
                                                                       foundUsers.size()))
                                 .build();

@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
             throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
 
         return CommonResponseDTO.<ProductDTO>builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.FOUND))
                                 .item(ProductMapper.INSTANCE.toProductDTO(foundProduct.get()))
                                 .build();
@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
     public CommonResponseDTO<ProductDTO> createProduct(CreateProductRequest request) {
 
         return CommonResponseDTO.<ProductDTO>builder()
-                                .result(true)
+                                .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.CREATED))
                                 .item(ProductMapper.INSTANCE.toProductDTO(
                                         productRepository.save(Product.builder()
@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(foundProduct);
 
         return CommonResponseDTO.builder()
-                                .result(true)
+                                .success(true)
                                 .message(SuccessMessageConstant.Product.UPDATED)
                                 .build();
     }
@@ -94,7 +94,7 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
 
         return CommonResponseDTO.builder()
-                                .result(true)
+                                .success(true)
                                 .message(SuccessMessageConstant.Product.DELETED)
                                 .build();
     }

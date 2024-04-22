@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record CommonResponseDTO<T>(
-		Boolean result,
+		Boolean success,
 
 		String message,
 

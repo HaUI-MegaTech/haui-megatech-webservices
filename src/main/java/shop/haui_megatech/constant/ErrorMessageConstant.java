@@ -3,9 +3,10 @@ package shop.haui_megatech.constant;
 public class ErrorMessageConstant {
 
     public static class User {
-        public static final String NOT_FOUND           = "user.error.not-found";
-        public static final String WRONG_PASSWORD      = "user.error.wrong-password";
-        public static final String MISMATCHED_PASSWORD = "user.error.mismatched-password";
+        public static final String NOT_FOUND                 = "user.error.not-found";
+        public static final String WRONG_PASSWORD            = "user.error.wrong-password";
+        public static final String MISMATCHED_PASSWORD       = "user.error.mismatched-password";
+        public static final String DEFICIENT_USERNAME_LENGTH = "user.error.deficient-username-length";
     }
 
     public static class Product {

@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,9 +36,10 @@ public class GetDataProductController {
                 "Thông tin Pin", "Công suất bộ sạc", "Hệ điều hành", "Thời điểm ra mắt"
         };
 
+
         List<String> urls = readUrlsFromFile(inputFile);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-            writer.write("url;imageLink;");
+            writer.write("url;productDetailsImgLink;");
             writer.write(String.join(";", propertyList));writer.newLine();
             for (String url : urls) {
                 try {
@@ -45,19 +47,20 @@ public class GetDataProductController {
                     productInfo.add(url);
                     Document document = Jsoup.connect(url).get();
 
-                    Element imgElement = document.select("div.img-main img.lazyload").first();
+                    Element productDetailsImgElement = document.select("div.img-main img.lazyload").first();
 
-                    String imageLink="";
-                    if (imgElement != null) {
-                        imageLink = imgElement.attr("data-src");
+                    String productDetailsImgLink="";
+                    if (productDetailsImgElement != null) {
+                        productDetailsImgLink = productDetailsImgElement.attr("data-src");
                     }
-                    productInfo.add(imageLink);
+                    productInfo.add(productDetailsImgLink);
 
                     Element productld = document.getElementById("productld");
                     if (productld != null) {
                         String jsonContent = productld.html();
                         JSONObject jsonObject = new JSONObject(jsonContent);
                         JSONArray additionalProperties = jsonObject.getJSONArray("additionalProperty");
+
 
                         int j=0;
                         for (int i = 0; i < additionalProperties.length(); i++) {
@@ -71,6 +74,15 @@ public class GetDataProductController {
                             productInfo.add(value);
                             j++;
                         }
+                        Elements bannerImgElements = document.select("div.detail-slider img");
+
+                        productInfo.add(bannerImgElements.get(0).attr("src"));
+                        for (int i = 1; i < bannerImgElements.size(); i++) {
+                            Element bannerImgElement = bannerImgElements.get(i);
+                            String dataSrc = bannerImgElement.attr("data-src");
+                            productInfo.add(dataSrc);
+                        }
+
                         writer.write(String.join(";", productInfo));
                         writer.newLine();
                     }

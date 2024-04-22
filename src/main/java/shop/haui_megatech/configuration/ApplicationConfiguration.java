@@ -12,16 +12,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import shop.haui_megatech.repository.ProductRepository;
 import shop.haui_megatech.repository.UserRepository;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
-    private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
     @Bean

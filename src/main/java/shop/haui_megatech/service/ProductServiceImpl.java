@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final MessageSourceUtil messageSourceUtil;
-    private final ProductMapper     mapper;
 
     public CommonResponseDTO<ProductDTO> getProductById(Integer productId) {
         Optional<Product> foundProduct = productRepository.findById(productId);
@@ -42,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.<ProductDTO>builder()
                                 .result(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.FOUND))
-                                .item(mapper.toProductDTO(foundProduct.get()))
+                                .item(ProductMapper.INSTANCE.toProductDTO(foundProduct.get()))
                                 .build();
 
     }
@@ -53,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.<ProductDTO>builder()
                                 .result(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.CREATED))
-                                .item(mapper.toProductDTO(
+                                .item(ProductMapper.INSTANCE.toProductDTO(
                                         productRepository.save(Product.builder()
                                                                       .name(request.name())
                                                                       .oldPrice(request.price())
@@ -74,8 +73,8 @@ public class ProductServiceImpl implements ProductService {
 
         Product foundProduct = found.get();
 
-        if(request.name() != null) foundProduct.setName(request.name());
-        if(request.price() != null) foundProduct.setNewPrice(request.price());
+        if (request.name() != null) foundProduct.setName(request.name());
+        if (request.price() != null) foundProduct.setCurrentPrice(request.price());
         productRepository.save(foundProduct);
 
         return CommonResponseDTO.builder()
@@ -126,7 +125,7 @@ public class ProductServiceImpl implements ProductService {
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(products.parallelStream()
-                                                   .map(mapper::toProductDTO)
+                                                   .map(ProductMapper.INSTANCE::toProductDTO)
                                                    .collect(Collectors.toList()))
                                     .build();
     }

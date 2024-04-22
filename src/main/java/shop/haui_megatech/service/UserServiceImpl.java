@@ -42,7 +42,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository    userRepository;
     private final MessageSourceUtil messageSourceUtil;
     private final PasswordEncoder   passwordEncoder;
-    private final UserMapper        mapper;
     private final AutoMailSender    autoMailSender;
 
     @Override
@@ -55,7 +54,7 @@ public class UserServiceImpl implements UserService {
         return CommonResponseDTO.<UserDTO>builder()
                                 .result(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.FOUND))
-                                .item(mapper.toUserDTO(foundUser.get()))
+                                .item(UserMapper.INSTANCE.toUserDTO(foundUser.get()))
                                 .build();
     }
 
@@ -78,7 +77,7 @@ public class UserServiceImpl implements UserService {
         return CommonResponseDTO.<UserDTO>builder()
                                 .result(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.ADDED_ONE))
-                                .item(mapper.toUserDTO(
+                                .item(UserMapper.INSTANCE.toUserDTO(
                                         userRepository.save(User.builder()
                                                                 .username(request.username())
                                                                 .password(passwordEncoder.encode(request.password()))
@@ -327,7 +326,7 @@ public class UserServiceImpl implements UserService {
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(users.parallelStream()
-                                                .map(mapper::toUserDTO)
+                                                .map(UserMapper.INSTANCE::toUserDTO)
                                                 .collect(Collectors.toList()))
                                     .build();
     }
@@ -358,7 +357,7 @@ public class UserServiceImpl implements UserService {
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(users.parallelStream()
-                                                .map(mapper::toUserDTO)
+                                                .map(UserMapper.INSTANCE::toUserDTO)
                                                 .collect(Collectors.toList()))
                                     .build();
     }

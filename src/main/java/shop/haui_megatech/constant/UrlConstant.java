@@ -4,6 +4,7 @@ public class UrlConstant {
     public static final  String API_V1      = "/api/v1";
     private static final String ACTIVE      = "/active";
     private static final String DELETED     = "/deleted";
+    private static final String HIDDEN      = "/hidden";
     private static final String SOFT_DELETE = "/soft-delete";
     private static final String HARD_DELETE = "/hard-delete";
     private static final String RESTORE     = "/restore";
@@ -12,6 +13,7 @@ public class UrlConstant {
     private static final String CSV         = "/csv";
     private static final String HIDE        = "/hide";
     private static final String SHOW        = "/show";
+
 
     public static final class User {
         public static final String PREFIX              = "/users";
@@ -37,7 +39,7 @@ public class UrlConstant {
         public static final String PREFIX                      = "/products";
         public static final String GET_ONE                     = PREFIX + "/{productId}";
         public static final String GET_ACTIVE_LIST             = PREFIX + ACTIVE;
-        public static final String GET_HIDDEN_LIST             = PREFIX + HIDE;
+        public static final String GET_HIDDEN_LIST             = PREFIX + HIDDEN;
         public static final String GET_DELETED_LIST            = PREFIX + DELETED;
         public static final String GET_ACTIVE_LIST_BY_BRAND_ID = PREFIX + ACTIVE + "{brandId}";
         public static final String ADD_ONE                     = PREFIX;

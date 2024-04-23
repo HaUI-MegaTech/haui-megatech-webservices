@@ -29,8 +29,8 @@ public class SuccessMessageConstant {
         public static final String RESTORED_LIST     = "product.success.restored-list";
         public static final String HIDED_ONE         = "product.success.hided-one";
         public static final String HIDED_LIST        = "product.success.hided-list";
-        public static final String UNHIDED_ONE       = "product.success.unhided-one";
-        public static final String UNHIDED_LIST      = "product.success.unhided-list";
+        public static final String EXPOSED_ONE       = "product.success.exposed-one";
+        public static final String EXPOSED_LIST      = "product.success.exposed-list";
         public static final String HARD_DELETED_ONE  = "product.success.hard-deleted-one";
         public static final String HARD_DELETED_LIST = "product.success.hard-deleted-list";
         public static final String FOUND             = "product.success.found";

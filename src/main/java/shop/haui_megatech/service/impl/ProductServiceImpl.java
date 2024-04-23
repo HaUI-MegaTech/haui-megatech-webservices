@@ -319,7 +319,7 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.UNHIDED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.EXPOSED_ONE))
                                 .build();
     }
 
@@ -333,7 +333,7 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.UNHIDED_LIST,
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.EXPOSED_LIST,
                                                                       foundProducts.size()
                                          )
                                 )

@@ -1,14 +1,14 @@
 package shop.haui_megatech.controller;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.jsoup.nodes.Element;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 @RestController
 @RequestMapping(path = "/getDataProductByLink")

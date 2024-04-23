@@ -4,9 +4,8 @@ public class Processor {
     private String manufacturer;
     private String variant;
     private String name;
-    private Float baseClock;
-    private Float maxClock;
-
+    private Float  baseClock;
+    private Float  maxClock;
 
 
 }

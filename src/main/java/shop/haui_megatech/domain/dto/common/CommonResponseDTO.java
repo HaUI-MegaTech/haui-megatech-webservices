@@ -5,11 +5,11 @@ import lombok.Builder;
 
 @Builder
 public record CommonResponseDTO<T>(
-		Boolean success,
+        Boolean success,
 
-		String message,
+        String message,
 
-		@JsonInclude(JsonInclude.Include.NON_NULL)
-		T item
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        T item
 ) {
 }

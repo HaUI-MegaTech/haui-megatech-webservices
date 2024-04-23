@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CsvUtil {
-    public static String TYPE = "text/csv";
-    static String[] HEADERs = { "Username", "Email", "Phone number" };
+    public static String   TYPE    = "text/csv";
+    static        String[] HEADERs = {"Username", "Email", "Phone number"};
 
     public static boolean hasCsvFormat(MultipartFile file) {
         return TYPE.equals(file.getContentType());
@@ -27,9 +27,8 @@ public class CsvUtil {
              CSVParser csvParser = new CSVParser(bufferedReader,
                                                  CSVFormat.DEFAULT.withFirstRecordAsHeader()
                                                                   .withIgnoreHeaderCase()
-                                                                  .withTrim());
-            )
-        {
+                                                                  .withTrim())
+        ) {
             List<User> users = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
             for (CSVRecord csvRecord : csvRecords) {

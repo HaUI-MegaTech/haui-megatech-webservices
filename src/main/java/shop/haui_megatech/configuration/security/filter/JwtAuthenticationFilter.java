@@ -20,9 +20,9 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private static final String             AUTH_PREFIX = "Bearer ";
     private final        UserDetailsService userDetailsService;
     private final        JwtTokenUtil       jwtUtil;
-    private static final String             AUTH_PREFIX = "Bearer ";
 
     @Override
     protected void doFilterInternal(

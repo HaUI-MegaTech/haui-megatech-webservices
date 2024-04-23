@@ -5,7 +5,7 @@ import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 
-public interface SoftDeletable<T> {
+public interface SoftDeletable<T> extends Restorable {
     CommonResponseDTO<?> softDeleteOne(Integer id);
 
     CommonResponseDTO<?> softDeleteList(ListIdsRequestDTO request);

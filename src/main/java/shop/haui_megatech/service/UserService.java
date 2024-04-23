@@ -13,8 +13,7 @@ public interface UserService extends Addable<AddUserRequestDTO>,
                                      Updatable<UpdateUserInfoRequest>,
                                      Importable,
                                      HardDeletable,
-                                     SoftDeletable<UserDTO>,
-                                     Restorable {
+                                     SoftDeletable<UserDTO> {
     CommonResponseDTO<?> updatePassword(Integer userId, UpdateUserPasswordRequest request);
 
     CommonResponseDTO<?> resetPasswordOne(Integer userId);

@@ -283,7 +283,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public CommonResponseDTO<?> unhideOne(Integer id) {
+    public CommonResponseDTO<?> exposeOne(Integer id) {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
@@ -300,7 +300,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public CommonResponseDTO<?> unhideList(ListIdsRequestDTO request) {
+    public CommonResponseDTO<?> exposeList(ListIdsRequestDTO request) {
         List<Product> foundProducts = productRepository.findAllById(request.ids());
 
         foundProducts.parallelStream().forEach(item -> item.setHidden(false));

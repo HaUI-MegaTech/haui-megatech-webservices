@@ -5,7 +5,7 @@ import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 
-public interface Hidable<T> {
+public interface Hidable<T> extends Exposable {
     CommonResponseDTO<?> hideOne(Integer id);
 
     CommonResponseDTO<?> hideList(ListIdsRequestDTO request);

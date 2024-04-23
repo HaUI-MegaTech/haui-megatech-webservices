@@ -254,7 +254,7 @@ public class ProductRestController {
 
 
     @Operation(
-            summary = "Unhide a Product from hidden Products by Id",
+            summary = "Expose a Product to e-commercial marketplace by Id",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
@@ -262,16 +262,16 @@ public class ProductRestController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @PatchMapping(UrlConstant.Product.UNHIDE_ONE)
-    public ResponseEntity<?> unhideOne(
+    @PatchMapping(UrlConstant.Product.EXPOSE_ONE)
+    public ResponseEntity<?> exposeOne(
             @PathVariable(name = "userId") Integer userId
     ) {
-        return ResponseUtil.ok(productService.unhideOne(userId));
+        return ResponseUtil.ok(productService.exposeOne(userId));
     }
 
 
     @Operation(
-            summary = "Unhide Products from hidden Products by a list of Id",
+            summary = "Expose Products to e-commercial marketplace by a list of Id",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
@@ -279,11 +279,11 @@ public class ProductRestController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found")
     })
-    @PatchMapping(UrlConstant.Product.UNHIDE_LIST)
-    public ResponseEntity<?> unhideList(
+    @PatchMapping(UrlConstant.Product.EXPOSE_LIST)
+    public ResponseEntity<?> exposeList(
             @RequestBody ListIdsRequestDTO request
     ) {
-        return ResponseUtil.ok(productService.unhideList(request));
+        return ResponseUtil.ok(productService.exposeList(request));
     }
 
 

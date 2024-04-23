@@ -1,4 +1,4 @@
-package shop.haui_megatech.service;
+package shop.haui_megatech.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,6 +10,8 @@ import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.common.ImportDataRequest;
+import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.dto.product.CreateProductRequest;
@@ -20,6 +22,7 @@ import shop.haui_megatech.domain.mapper.ProductMapper;
 import shop.haui_megatech.exception.InvalidRequestParamException;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.ProductRepository;
+import shop.haui_megatech.service.ProductService;
 import shop.haui_megatech.utility.MessageSourceUtil;
 
 import java.util.List;
@@ -32,8 +35,8 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final MessageSourceUtil messageSourceUtil;
 
-    public CommonResponseDTO<ProductDTO> getProductById(Integer productId) {
-        Optional<Product> foundProduct = productRepository.findById(productId);
+    public CommonResponseDTO<ProductDTO> getOne(Integer id) {
+        Optional<Product> foundProduct = productRepository.findById(id);
 
         if (foundProduct.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
@@ -47,60 +50,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public CommonResponseDTO<ProductDTO> createProduct(CreateProductRequest request) {
-
-        return CommonResponseDTO.<ProductDTO>builder()
-                                .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.CREATED))
-                                .item(ProductMapper.INSTANCE.toProductDTO(
-                                        productRepository.save(Product.builder()
-                                                                      .name(request.name())
-                                                                      .oldPrice(request.price())
-                                                                      .build()
-                                        )))
-                                .build();
-    }
-
-    @Override
-    public CommonResponseDTO<?> updateProduct(
-            Integer productId,
-            UpdateProductRequest request
-    ) {
-        Optional<Product> found = productRepository.findById(productId);
-
-        if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
-
-        Product foundProduct = found.get();
-
-        if (request.name() != null) foundProduct.setName(request.name());
-        if (request.price() != null) foundProduct.setCurrentPrice(request.price());
-        productRepository.save(foundProduct);
-
-        return CommonResponseDTO.builder()
-                                .success(true)
-                                .message(SuccessMessageConstant.Product.UPDATED)
-                                .build();
-    }
-
-    @Override
-    public CommonResponseDTO<?> deleteProductById(Integer id) {
-
-        Optional<Product> found = productRepository.findById(id);
-
-        if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
-
-        productRepository.deleteById(id);
-
-        return CommonResponseDTO.builder()
-                                .success(true)
-                                .message(SuccessMessageConstant.Product.DELETED)
-                                .build();
-    }
-
-    @Override
-    public PaginationResponseDTO<ProductDTO> getProducts(PaginationRequestDTO request) {
+    public PaginationResponseDTO<ProductDTO> getActiveList(PaginationRequestDTO request) {
         if (request.pageIndex() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
@@ -130,4 +80,130 @@ public class ProductServiceImpl implements ProductService {
                                     .build();
     }
 
+    @Override
+    public CommonResponseDTO<ProductDTO> addOne(CreateProductRequest request) {
+
+        return CommonResponseDTO.<ProductDTO>builder()
+                                .success(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.CREATED))
+                                .item(ProductMapper.INSTANCE.toProductDTO(
+                                        productRepository.save(Product.builder()
+                                                                      .name(request.name())
+                                                                      .oldPrice(request.price())
+                                                                      .build()
+                                        )))
+                                .build();
+    }
+
+    @Override
+    public CommonResponseDTO<?> importExcel(ImportDataRequest request) {
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> importCsv(ImportDataRequest request) {
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> updateOne(
+            Integer id,
+            UpdateProductRequest request
+    ) {
+        Optional<Product> found = productRepository.findById(id);
+
+        if (found.isEmpty())
+            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
+
+        Product foundProduct = found.get();
+
+        if (request.name() != null) foundProduct.setName(request.name());
+        if (request.price() != null) foundProduct.setCurrentPrice(request.price());
+        productRepository.save(foundProduct);
+
+        return CommonResponseDTO.builder()
+                                .success(true)
+                                .message(SuccessMessageConstant.Product.UPDATED)
+                                .build();
+    }
+
+    @Override
+    public CommonResponseDTO<?> hardDeleteOne(Integer id) {
+
+        Optional<Product> found = productRepository.findById(id);
+
+        if (found.isEmpty())
+            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
+
+        productRepository.deleteById(id);
+
+        return CommonResponseDTO.builder()
+                                .success(true)
+                                .message(SuccessMessageConstant.Product.DELETED)
+                                .build();
+    }
+
+    @Override
+    public CommonResponseDTO<?> hardDeleteList(ListIdsRequestDTO request) {
+        return null;
+    }
+
+
+    @Override
+    public PaginationResponseDTO<ProductDTO> getActiveListByBrand(
+            PaginationRequestDTO request,
+            Integer brandId
+    ) {
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> hideOne(Integer id) {
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> hideList(ListIdsRequestDTO request) {
+        return null;
+    }
+
+    @Override
+    public PaginationResponseDTO<ProductDTO> getHiddenList(PaginationRequestDTO request) {
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> restoreOne(Integer id) {
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> restoreList(ListIdsRequestDTO request) {
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> showOne(Integer productId) {
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> showList(ListIdsRequestDTO request) {
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> softDeleteOne(Integer id) {
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> softDeleteList(ListIdsRequestDTO request) {
+        return null;
+    }
+
+    @Override
+    public PaginationResponseDTO<ProductDTO> getDeletedList(PaginationRequestDTO request) {
+        return null;
+    }
 }

@@ -1,4 +1,4 @@
-package shop.haui_megatech.service;
+package shop.haui_megatech.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,13 +10,14 @@ import shop.haui_megatech.domain.dto.authentication.AuthenticationResponseDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.repository.UserRepository;
+import shop.haui_megatech.service.AuthenticationService;
 import shop.haui_megatech.utility.JwtTokenUtil;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private final UserRepository repository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserRepository        repository;
+    private final PasswordEncoder       passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil          jwtUtil;
 

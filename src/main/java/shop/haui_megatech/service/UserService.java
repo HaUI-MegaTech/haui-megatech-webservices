@@ -1,42 +1,23 @@
 package shop.haui_megatech.service;
 
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
-import shop.haui_megatech.domain.dto.common.ImportDataRequest;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
-import shop.haui_megatech.domain.dto.user.*;
+import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
+import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
+import shop.haui_megatech.domain.dto.user.UserDTO;
+import shop.haui_megatech.service.base.*;
 
-public interface UserService {
-    CommonResponseDTO<UserDTO> getOne(Integer userId);
-
-    CommonResponseDTO<?> addOne(AddUserRequestDTO request);
-
-    CommonResponseDTO<?> importExcel(ImportDataRequest request);
-
-    CommonResponseDTO<?> importCsv(ImportDataRequest request);
-
-    CommonResponseDTO<?> updateInfo(Integer userId, UpdateUserInfoRequest request);
-
+public interface UserService extends Addable<AddUserRequestDTO>,
+                                     Gettable<UserDTO>,
+                                     Updatable<UpdateUserInfoRequest>,
+                                     Importable,
+                                     HardDeletable,
+                                     SoftDeletable<UserDTO>,
+                                     Restorable {
     CommonResponseDTO<?> updatePassword(Integer userId, UpdateUserPasswordRequest request);
-
-    CommonResponseDTO<?> softDeleteOne(Integer userId);
-
-    CommonResponseDTO<?> softDeleteList(ListIdsRequestDTO request);
-
-    CommonResponseDTO<?> hardDeleteOne(Integer userId);
-
-    CommonResponseDTO<?> hardDeleteList(ListIdsRequestDTO request);
-
-    CommonResponseDTO<?> restoreOne(Integer userId);
-
-    CommonResponseDTO<?> restoreList(ListIdsRequestDTO request);
 
     CommonResponseDTO<?> resetPasswordOne(Integer userId);
 
     CommonResponseDTO<?> resetPasswordList(ListIdsRequestDTO request);
-
-    PaginationResponseDTO<UserDTO> getActiveList(PaginationRequestDTO request);
-
-    PaginationResponseDTO<UserDTO> getDeletedList(PaginationRequestDTO request);
 }

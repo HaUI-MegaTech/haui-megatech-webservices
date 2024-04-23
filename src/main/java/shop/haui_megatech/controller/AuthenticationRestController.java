@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import shop.haui_megatech.base.ResponseUtil;
-import shop.haui_megatech.base.RestApiV1;
+import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
 import shop.haui_megatech.domain.dto.authentication.AuthenticationRequestDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.service.AuthenticationService;
+import shop.haui_megatech.utility.ResponseUtil;
 
 @RestApiV1
 @RequiredArgsConstructor

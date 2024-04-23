@@ -36,26 +36,26 @@ public class UrlConstant {
     }
 
     public static final class Product {
-        public static final String PREFIX                      = "/products";
-        public static final String GET_ONE                     = PREFIX + "/{productId}";
-        public static final String GET_ACTIVE_LIST             = PREFIX + ACTIVE;
-        public static final String GET_HIDDEN_LIST             = PREFIX + HIDDEN;
-        public static final String GET_DELETED_LIST            = PREFIX + DELETED;
-        public static final String GET_ACTIVE_LIST_BY_BRAND_ID = PREFIX + ACTIVE + "{brandId}";
-        public static final String ADD_ONE                     = PREFIX;
-        public static final String IMPORT_EXCEL                = PREFIX + IMPORT + EXCEL;
-        public static final String IMPORT_CSV                  = PREFIX + IMPORT + CSV;
-        public static final String UPDATE_ONE                  = PREFIX + "/{productId}";
-        public static final String HIDE_ONE                    = PREFIX + HIDE + "/{productId}";
-        public static final String HIDE_LIST                   = PREFIX + HIDE;
-        public static final String SHOW_ONE                    = PREFIX + SHOW + "/productId";
-        public static final String SHOW_LIST                   = PREFIX + SHOW;
-        public static final String SOFT_DELETE_ONE             = PREFIX + SOFT_DELETE + "/{productId}";
-        public static final String SOFT_DELETE_LIST            = PREFIX + SOFT_DELETE;
-        public static final String RESTORE_ONE                 = PREFIX + RESTORE + "/{productId}";
-        public static final String RESTORE_LIST                = PREFIX + RESTORE;
-        public static final String HARD_DELETE_ONE             = PREFIX + HARD_DELETE + "/{productId}";
-        public static final String HARD_DELETE_LIST            = PREFIX + HARD_DELETE;
+        public static final String PREFIX                   = "/products";
+        public static final String GET_ONE                  = PREFIX + "/{productId}";
+        public static final String GET_ACTIVE_LIST          = PREFIX + ACTIVE;
+        public static final String GET_HIDDEN_LIST          = PREFIX + HIDDEN;
+        public static final String GET_DELETED_LIST         = PREFIX + DELETED;
+        public static final String GET_ACTIVE_LIST_BY_BRAND = PREFIX + ACTIVE + "{brandId}";
+        public static final String ADD_ONE                  = PREFIX;
+        public static final String IMPORT_EXCEL             = PREFIX + IMPORT + EXCEL;
+        public static final String IMPORT_CSV               = PREFIX + IMPORT + CSV;
+        public static final String UPDATE_ONE               = PREFIX + "/{productId}";
+        public static final String HIDE_ONE                 = PREFIX + HIDE + "/{productId}";
+        public static final String HIDE_LIST                = PREFIX + HIDE;
+        public static final String SHOW_ONE                 = PREFIX + SHOW + "/productId";
+        public static final String SHOW_LIST                = PREFIX + SHOW;
+        public static final String SOFT_DELETE_ONE          = PREFIX + SOFT_DELETE + "/{productId}";
+        public static final String SOFT_DELETE_LIST         = PREFIX + SOFT_DELETE;
+        public static final String RESTORE_ONE              = PREFIX + RESTORE + "/{productId}";
+        public static final String RESTORE_LIST             = PREFIX + RESTORE;
+        public static final String HARD_DELETE_ONE          = PREFIX + HARD_DELETE + "/{productId}";
+        public static final String HARD_DELETE_LIST         = PREFIX + HARD_DELETE;
     }
 
     public static final class Auth {

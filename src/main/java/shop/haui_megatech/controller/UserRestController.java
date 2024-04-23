@@ -10,8 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import shop.haui_megatech.base.ResponseUtil;
-import shop.haui_megatech.base.RestApiV1;
+import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
 import shop.haui_megatech.domain.dto.common.ImportDataRequest;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
@@ -20,6 +19,7 @@ import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
 import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
 import shop.haui_megatech.service.UserService;
+import shop.haui_megatech.utility.ResponseUtil;
 
 @RestApiV1
 @RequiredArgsConstructor
@@ -108,7 +108,7 @@ public class UserRestController {
             @PathVariable(value = "userId") Integer userId,
             @RequestBody(required = false) UpdateUserInfoRequest request
     ) {
-        return ResponseUtil.ok(userService.updateInfo(userId, request));
+        return ResponseUtil.ok(userService.updateOne(userId, request));
     }
 
 

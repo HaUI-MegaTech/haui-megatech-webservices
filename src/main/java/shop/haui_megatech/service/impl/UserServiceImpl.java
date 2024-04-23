@@ -1,4 +1,4 @@
-package shop.haui_megatech.service;
+package shop.haui_megatech.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +24,7 @@ import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.exception.*;
 import shop.haui_megatech.job.AutoMailSender;
 import shop.haui_megatech.repository.UserRepository;
+import shop.haui_megatech.service.UserService;
 import shop.haui_megatech.utility.CsvUtil;
 import shop.haui_megatech.utility.ExcelUtil;
 import shop.haui_megatech.utility.MessageSourceUtil;
@@ -120,7 +121,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> updateInfo(
+    public CommonResponseDTO<?> updateOne(
             Integer userId,
             UpdateUserInfoRequest request
     ) {

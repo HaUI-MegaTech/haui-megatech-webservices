@@ -9,13 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import shop.haui_megatech.base.ResponseUtil;
-import shop.haui_megatech.base.RestApiV1;
+import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.product.CreateProductRequest;
 import shop.haui_megatech.domain.dto.product.UpdateProductRequest;
 import shop.haui_megatech.service.ProductService;
+import shop.haui_megatech.utility.ResponseUtil;
 
 @RestApiV1
 @RequiredArgsConstructor
@@ -34,7 +34,7 @@ public class ProductRestController {
     public ResponseEntity<?> getOne(
             @PathVariable(name = "productId") Integer productId
     ) {
-        return ResponseUtil.ok(productService.getProductById(productId));
+        return ResponseUtil.ok(productService.getOne(productId));
     }
 
 
@@ -44,7 +44,7 @@ public class ProductRestController {
     public ResponseEntity<?> getActiveList(
             @ParameterObject PaginationRequestDTO request
     ) {
-        return ResponseUtil.ok(productService.getProducts(request));
+        return ResponseUtil.ok(productService.getActiveList(request));
     }
 
 
@@ -59,7 +59,7 @@ public class ProductRestController {
     public ResponseEntity<?> addOne(
             @RequestBody CreateProductRequest request
     ) {
-        return ResponseUtil.created(productService.createProduct(request));
+        return ResponseUtil.created(productService.addOne(request));
     }
 
 
@@ -75,7 +75,7 @@ public class ProductRestController {
     public ResponseEntity<?> updateOne(
             @PathVariable(name = "productId") Integer productId,
             @RequestBody UpdateProductRequest request) {
-        return ResponseUtil.ok(productService.updateProduct(productId, request));
+        return ResponseUtil.ok(productService.updateOne(productId, request));
     }
 
 
@@ -91,6 +91,6 @@ public class ProductRestController {
     public ResponseEntity<?> hardDeleteOne(
             @PathVariable(name = "productId") Integer productId
     ) {
-        return ResponseUtil.noContent(productService.deleteProductById(productId));
+        return ResponseUtil.noContent(productService.hardDeleteOne(productId));
     }
 }

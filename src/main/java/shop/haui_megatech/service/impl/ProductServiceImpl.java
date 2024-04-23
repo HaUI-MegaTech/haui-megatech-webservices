@@ -41,15 +41,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public CommonResponseDTO<ProductDetailDTO> getOne(Integer id) {
-        Optional<Product> foundProduct = productRepository.findById(id);
+        Optional<Product> found = productRepository.findById(id);
 
-        if (foundProduct.isEmpty())
+        if (found.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
 
         return CommonResponseDTO.<ProductDetailDTO>builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.FOUND))
-                                .item(ProductMapper.INSTANCE.toProductDetailDTO(foundProduct.get()))
+                                .item(ProductMapper.INSTANCE.toProductDetailDTO(found.get()))
                                 .build();
 
     }

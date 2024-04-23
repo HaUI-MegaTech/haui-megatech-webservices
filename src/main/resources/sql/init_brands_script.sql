@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `brands` (
     `brand_id` INT KEY AUTO_INCREMENT,
     `name` VARCHAR(255) CHARACTER SET utf8,
-    `img` VARCHAR(255) CHARACTER SET utf8,
+    `image` VARCHAR(255) CHARACTER SET utf8,
     `when_created` DATETIME
 );
 INSERT INTO `brands` 

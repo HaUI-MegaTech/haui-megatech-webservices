@@ -13,6 +13,10 @@ public class ErrorMessageConstant {
         public static final String NOT_FOUND = "product.error.not-found";
     }
 
+    public static class Brand {
+        public static final String NOT_FOUND = "brand.error.not-found";
+    }
+
     public static class Request {
         public static final String BLANK_USERNAME      = "request.error.blank-username";
         public static final String BLANK_PASSWORD      = "request.error.blank-password";

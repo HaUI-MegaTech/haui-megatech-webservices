@@ -35,4 +35,8 @@ public class SuccessMessageConstant {
         public static final String HARD_DELETED_LIST = "product.success.hard-deleted-list";
         public static final String FOUND             = "product.success.found";
     }
+
+    public static class Brand {
+        public static final String FOUND = "brand.success.found";
+    }
 }

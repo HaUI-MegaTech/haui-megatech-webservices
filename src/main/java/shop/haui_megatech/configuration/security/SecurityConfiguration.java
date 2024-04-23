@@ -32,6 +32,8 @@ public class SecurityConfiguration {
             UrlConstant.API_V1 + UrlConstant.Product.GET_ACTIVE_LIST,
             UrlConstant.API_V1 + UrlConstant.Product.GET_ACTIVE_LIST_BY_BRAND,
             UrlConstant.API_V1 + UrlConstant.Product.GET_ONE,
+            UrlConstant.API_V1 + UrlConstant.Brand.GET_ONE,
+            UrlConstant.API_V1 + UrlConstant.Brand.GET_ACTIVE_LIST,
             "/search"
     };
     private final List<String>            WHITE_LIST_ORIGINS  = List.of(

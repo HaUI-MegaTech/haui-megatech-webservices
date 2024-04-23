@@ -58,6 +58,12 @@ public class UrlConstant {
         public static final String HARD_DELETE_LIST         = PREFIX + HARD_DELETE;
     }
 
+    public static final class Brand {
+        public static final String PREFIX          = "/brands";
+        public static final String GET_ONE         = PREFIX + "/{brandId}";
+        public static final String GET_ACTIVE_LIST = PREFIX + ACTIVE;
+    }
+
     public static final class Auth {
         public static final String PREFIX       = "/auth";
         public static final String REGISTER     = PREFIX + "/register";

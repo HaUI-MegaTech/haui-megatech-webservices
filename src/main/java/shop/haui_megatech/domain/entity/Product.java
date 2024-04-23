@@ -87,4 +87,6 @@ public class Product {
     private Boolean hidden;
     private Boolean deleted;
 
+    @Column(name = "brand_id")
+    private Integer brandId;
 }

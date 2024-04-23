@@ -182,7 +182,31 @@ public class ProductServiceImpl implements ProductService {
             PaginationRequestDTO request,
             Integer brandId
     ) {
-        return null;
+        if (request.pageIndex() < 0)
+            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
+
+        Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(request.orderBy())
+                          .ascending()
+                    : Sort.by(request.orderBy())
+                          .descending();
+
+        Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
+
+        Page<Product> page = productRepository.getActiveListByBrand(brandId, pageable);
+
+        List<Product> products = page.getContent();
+
+        return PaginationResponseDTO.<ProductDTO>builder()
+                                    .keyword(request.keyword())
+                                    .pageIndex(request.pageIndex())
+                                    .pageSize(page.getNumberOfElements())
+                                    .totalItems(page.getTotalElements())
+                                    .totalPages(page.getTotalPages())
+                                    .items(products.parallelStream()
+                                                   .map(ProductMapper.INSTANCE::toProductDTO)
+                                                   .collect(Collectors.toList()))
+                                    .build();
     }
 
     @Override

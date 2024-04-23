@@ -48,11 +48,26 @@ public class ProductRestController {
     }
 
 
+    @Operation(summary = "Get active Products by brand Id with pagination")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @GetMapping(UrlConstant.Product.GET_ACTIVE_LIST_BY_BRAND)
+    public ResponseEntity<?> getActiveListByBrand(
+            @PathVariable(name = "brandId") Integer brandId,
+            @ParameterObject PaginationRequestDTO request
+    ) {
+        return ResponseUtil.ok(productService.getActiveListByBrand(request, brandId));
+    }
+
+
     @Operation(
             summary = "Get hidden Products with pagination",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "403", description = "When has not been authorized"),
+    })
+
     @GetMapping(UrlConstant.Product.GET_HIDDEN_LIST)
     public ResponseEntity<?> getHiddenList(
             @ParameterObject PaginationRequestDTO request
@@ -65,7 +80,10 @@ public class ProductRestController {
             summary = "Get temporarily deleted Products with pagination",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "403", description = "When has not been authorized"),
+    })
     @GetMapping(UrlConstant.Product.GET_DELETED_LIST)
     public ResponseEntity<?> getDeletedList(
             @ParameterObject PaginationRequestDTO request
@@ -96,9 +114,7 @@ public class ProductRestController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "When has created successfully"),
-            @ApiResponse(responseCode = "400", description = "When send empty username or password request"),
             @ApiResponse(responseCode = "403", description = "When has not been authorized"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     @PostMapping(UrlConstant.Product.IMPORT_EXCEL)
     public ResponseEntity<?> importExcel(
@@ -114,9 +130,7 @@ public class ProductRestController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "When has created successfully"),
-            @ApiResponse(responseCode = "400", description = "When send empty username or password request"),
             @ApiResponse(responseCode = "403", description = "When has not been authorized"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     @PostMapping(UrlConstant.Product.IMPORT_CSV)
     public ResponseEntity<?> importCsv(
@@ -133,7 +147,6 @@ public class ProductRestController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Passing unmatched datatype or unauthorized"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @PutMapping(UrlConstant.Product.UPDATE_ONE)
     public ResponseEntity<?> updateOne(
@@ -151,14 +164,13 @@ public class ProductRestController {
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
     @PatchMapping(UrlConstant.Product.SOFT_DELETE_ONE)
     public ResponseEntity<?> softDeleteOne(
-            @PathVariable(value = "userId") Integer userId
+            @PathVariable(value = "productId") Integer productId
     ) {
-        return ResponseUtil.ok(productService.softDeleteOne(userId));
+        return ResponseUtil.ok(productService.softDeleteOne(productId));
     }
 
 
@@ -170,7 +182,6 @@ public class ProductRestController {
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
     @PatchMapping(UrlConstant.Product.SOFT_DELETE_LIST)
@@ -189,14 +200,13 @@ public class ProductRestController {
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
     @PatchMapping(UrlConstant.Product.RESTORE_ONE)
     public ResponseEntity<?> restoreOne(
-            @PathVariable(name = "userId") Integer userId
+            @PathVariable(name = "productId") Integer productId
     ) {
-        return ResponseUtil.ok(productService.restoreOne(userId));
+        return ResponseUtil.ok(productService.restoreOne(productId));
     }
 
 
@@ -208,7 +218,6 @@ public class ProductRestController {
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
     @PatchMapping(UrlConstant.Product.RESTORE_LIST)
@@ -226,13 +235,12 @@ public class ProductRestController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @PatchMapping(UrlConstant.Product.HIDE_ONE)
     public ResponseEntity<?> hideOne(
-            @PathVariable(name = "userId") Integer userId
+            @PathVariable(name = "productId") Integer productId
     ) {
-        return ResponseUtil.ok(productService.hideOne(userId));
+        return ResponseUtil.ok(productService.hideOne(productId));
     }
 
 
@@ -243,7 +251,6 @@ public class ProductRestController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @PatchMapping(UrlConstant.Product.HIDE_LIST)
     public ResponseEntity<?> hideList(
@@ -260,13 +267,12 @@ public class ProductRestController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @PatchMapping(UrlConstant.Product.EXPOSE_ONE)
     public ResponseEntity<?> exposeOne(
-            @PathVariable(name = "userId") Integer userId
+            @PathVariable(name = "productId") Integer productId
     ) {
-        return ResponseUtil.ok(productService.exposeOne(userId));
+        return ResponseUtil.ok(productService.exposeOne(productId));
     }
 
 
@@ -277,7 +283,6 @@ public class ProductRestController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @PatchMapping(UrlConstant.Product.EXPOSE_LIST)
     public ResponseEntity<?> exposeList(
@@ -294,7 +299,6 @@ public class ProductRestController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "No Content"),
             @ApiResponse(responseCode = "403", description = "Unauthorized"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @DeleteMapping(UrlConstant.Product.HARD_DELETE_ONE)
     public ResponseEntity<?> hardDeleteOne(
@@ -312,7 +316,6 @@ public class ProductRestController {
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
     @DeleteMapping(UrlConstant.Product.HARD_DELETE_LIST)

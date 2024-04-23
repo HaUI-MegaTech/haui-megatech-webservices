@@ -50,4 +50,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "AND p.deleted = true "
     )
     Page<Product> searchDeletedProductsPage(String keyword, Pageable pageable);
+
+
+    @Query("SELECT p FROM Product p " +
+            "WHERE p.brandId = :brandId " +
+            "AND (p.deleted = false OR p.deleted IS NULL) " +
+            "AND (p.hidden = false OR p.hidden IS NULL) "
+    )
+    Page<Product> getActiveListByBrand(Integer brandId, Pageable pageable);
 }

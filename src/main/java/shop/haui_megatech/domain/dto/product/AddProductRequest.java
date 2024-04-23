@@ -1,6 +1,6 @@
 package shop.haui_megatech.domain.dto.product;
 
-public record CreateProductRequest(
+public record AddProductRequest(
         String name,
         Float price
 ) {

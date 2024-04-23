@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
             List<User> savedUsers = userRepository.saveAll(users);
             return CommonResponseDTO.builder()
                                     .success(true)
-                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.ADDED_LIST,
+                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.IMPORTED_LIST,
                                                                           savedUsers.size()))
                                     .build();
         } catch (IOException e) {
@@ -108,11 +108,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonResponseDTO<?> importCsv(ImportDataRequest request) {
         try {
-            List<User> stuList = CsvUtil.csvToUsers(request.file().getInputStream());
-            List<User> savedUsers = userRepository.saveAll(stuList);
+            List<User> users = CsvUtil.csvToUsers(request.file().getInputStream());
+            List<User> savedUsers = userRepository.saveAll(users);
             return CommonResponseDTO.builder()
                                     .success(true)
-                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.ADDED_LIST,
+                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.IMPORTED_LIST,
                                                                           savedUsers.size()))
                                     .build();
         } catch (IOException ex) {

@@ -48,8 +48,8 @@ public class UrlConstant {
         public static final String UPDATE_ONE               = PREFIX + "/{productId}";
         public static final String HIDE_ONE                 = PREFIX + HIDE + "/{productId}";
         public static final String HIDE_LIST                = PREFIX + HIDE;
-        public static final String SHOW_ONE                 = PREFIX + SHOW + "/productId";
-        public static final String SHOW_LIST                = PREFIX + SHOW;
+        public static final String UNHIDE_ONE               = PREFIX + SHOW + "/productId";
+        public static final String UNHIDE_LIST              = PREFIX + SHOW;
         public static final String SOFT_DELETE_ONE          = PREFIX + SOFT_DELETE + "/{productId}";
         public static final String SOFT_DELETE_LIST         = PREFIX + SOFT_DELETE;
         public static final String RESTORE_ONE              = PREFIX + RESTORE + "/{productId}";

@@ -21,6 +21,7 @@ import shop.haui_megatech.domain.dto.product.UpdateProductRequest;
 import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.domain.mapper.ProductMapper;
 import shop.haui_megatech.exception.InvalidRequestParamException;
+import shop.haui_megatech.exception.MalformedFileException;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.ProductRepository;
 import shop.haui_megatech.service.ProductService;
@@ -100,6 +101,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public CommonResponseDTO<?> importExcel(ImportDataRequest request) {
+        if (ExcelUtil.notHasExcelFormat(request.file()))
+            throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
+
         try {
             List<Product> products = ExcelUtil.excelToProducts(request.file().getInputStream());
             List<Product> savedProducts = productRepository.saveAll(products);
@@ -115,6 +119,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public CommonResponseDTO<?> importCsv(ImportDataRequest request) {
+        if (ExcelUtil.notHasExcelFormat(request.file()))
+            throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
+
         try {
             List<Product> products = CsvUtil.csvToProducts(request.file().getInputStream());
             List<Product> savedProducts = productRepository.saveAll(products);
@@ -146,7 +153,7 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(SuccessMessageConstant.Product.UPDATED)
+                                .message(SuccessMessageConstant.Product.UPDATED_ONE)
                                 .build();
     }
 
@@ -176,6 +183,24 @@ public class ProductServiceImpl implements ProductService {
                                 .build();
     }
 
+
+    @Override
+    public CommonResponseDTO<?> updateListFromExcel(ImportDataRequest request) {
+        if (ExcelUtil.notHasExcelFormat(request.file()))
+            throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
+
+        try {
+            List<Product> updatedProducts = ExcelUtil.excelToProducts(request.file().getInputStream());
+            List<Product> savedProducts = productRepository.saveAll(updatedProducts);
+            return CommonResponseDTO.builder()
+                                    .success(true)
+                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.UPDATED_LIST_FROM_EXCEL,
+                                                                          savedProducts.size()))
+                                    .build();
+        } catch (IOException e) {
+            throw new RuntimeException("Excel data is failed to store: " + e.getMessage());
+        }
+    }
 
     @Override
     public PaginationResponseDTO<ProductDTO> getActiveListByBrand(

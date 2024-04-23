@@ -92,6 +92,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonResponseDTO<?> importExcel(ImportDataRequest request) {
+        if (ExcelUtil.notHasExcelFormat(request.file()))
+            throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
+
         try {
             List<User> users = ExcelUtil.excelToUsers(request.file().getInputStream());
             List<User> savedUsers = userRepository.saveAll(users);
@@ -107,6 +110,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonResponseDTO<?> importCsv(ImportDataRequest request) {
+        if (ExcelUtil.notHasExcelFormat(request.file()))
+            throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
+
         try {
             List<User> users = CsvUtil.csvToUsers(request.file().getInputStream());
             List<User> savedUsers = userRepository.saveAll(users);
@@ -307,16 +313,16 @@ public class UserServiceImpl implements UserService {
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
-                ? Sort.by(request.orderBy())
-                      .ascending()
-                : Sort.by(request.orderBy())
-                      .descending();
+                    ? Sort.by(request.orderBy())
+                          .ascending()
+                    : Sort.by(request.orderBy())
+                          .descending();
 
         Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
 
         Page<User> page = request.keyword() == null
-                ? userRepository.getAllActiveUsers(pageable)
-                : userRepository.searchActiveUsers(request.keyword(), pageable);
+                          ? userRepository.getAllActiveUsers(pageable)
+                          : userRepository.searchActiveUsers(request.keyword(), pageable);
 
         List<User> users = page.getContent();
 
@@ -338,16 +344,16 @@ public class UserServiceImpl implements UserService {
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
-                ? Sort.by(request.orderBy())
-                      .ascending()
-                : Sort.by(request.orderBy())
-                      .descending();
+                    ? Sort.by(request.orderBy())
+                          .ascending()
+                    : Sort.by(request.orderBy())
+                          .descending();
 
         Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
 
         Page<User> page = request.keyword() == null
-                ? userRepository.getAllDeletedUsers(pageable)
-                : userRepository.searchDeletedUsers(request.keyword(), pageable);
+                          ? userRepository.getAllDeletedUsers(pageable)
+                          : userRepository.searchDeletedUsers(request.keyword(), pageable);
 
         List<User> users = page.getContent();
 

@@ -80,4 +80,12 @@ public class GlobalExceptionHandler {
                                                                                                      .getDefaultMessage()))
                                                         .build());
     }
+
+    @ExceptionHandler(MalformedFileException.class)
+    public ResponseEntity<?> handleMalformedFileException(MalformedFileException ex) {
+        return ResponseUtil.badRequest(CommonResponseDTO.builder()
+                                                        .success(false)
+                                                        .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                        .build());
+    }
 }

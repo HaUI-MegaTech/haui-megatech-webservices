@@ -23,6 +23,7 @@ public class ErrorMessageConstant {
         public static final String NEGATIVE_PAGE_INDEX = "request.error.negative-page-index";
         public static final String NULL_REQUEST        = "request.error.null-request";
         public static final String DUPLICATE_USERNAME  = "request.error.duplicate-username";
+        public static final String MALFORMED_FILE      = "request.error.malformed-file";
     }
 
 }

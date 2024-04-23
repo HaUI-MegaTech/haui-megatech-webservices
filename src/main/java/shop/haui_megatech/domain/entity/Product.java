@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -89,4 +90,7 @@ public class Product {
 
     @Column(name = "brand_id")
     private Integer brandId;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<Image> images;
 }

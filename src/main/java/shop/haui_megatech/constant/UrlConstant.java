@@ -13,6 +13,7 @@ public class UrlConstant {
     private static final String CSV         = "/csv";
     private static final String HIDE        = "/hide";
     private static final String EXPOSE      = "/expose";
+    private static final String UPDATE      = "/update";
 
 
     public static final class User {
@@ -45,7 +46,8 @@ public class UrlConstant {
         public static final String ADD_ONE                  = PREFIX;
         public static final String IMPORT_EXCEL             = PREFIX + IMPORT + EXCEL;
         public static final String IMPORT_CSV               = PREFIX + IMPORT + CSV;
-        public static final String UPDATE_ONE               = PREFIX + "/{productId}";
+        public static final String UPDATE_ONE               = PREFIX + UPDATE + "/{productId}";
+        public static final String UPDATE_LIST_FROM_EXCEL   = PREFIX + UPDATE + EXCEL;
         public static final String HIDE_ONE                 = PREFIX + HIDE + "/{productId}";
         public static final String HIDE_LIST                = PREFIX + HIDE;
         public static final String EXPOSE_ONE               = PREFIX + EXPOSE + "/{productId}";

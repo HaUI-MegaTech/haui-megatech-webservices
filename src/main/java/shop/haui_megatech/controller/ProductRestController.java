@@ -157,6 +157,22 @@ public class ProductRestController {
 
 
     @Operation(
+            summary = "Update a list of Products from exported excel file",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "403", description = "Passing unmatched datatype or unauthorized"),
+    })
+    @PutMapping(UrlConstant.Product.UPDATE_LIST_FROM_EXCEL)
+    public ResponseEntity<?> updateListFromExcel(
+            @ParameterObject ImportDataRequest request
+    ) {
+        return ResponseUtil.ok(productService.updateListFromExcel(request));
+    }
+
+
+    @Operation(
             summary = "Temporarily delete a Product by Id",
             security = @SecurityRequirement(name = "bearerAuth")
     )

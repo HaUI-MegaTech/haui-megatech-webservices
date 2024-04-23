@@ -10,7 +10,7 @@ import shop.haui_megatech.service.base.*;
 public interface ProductService extends Addable<CreateProductRequest>,
                                         Gettable<ProductDTO>,
                                         Hidable<ProductDTO>,
-                                        Showable,
+                                        Unhidable,
                                         Importable,
                                         SoftDeletable<ProductDTO>,
                                         Restorable,

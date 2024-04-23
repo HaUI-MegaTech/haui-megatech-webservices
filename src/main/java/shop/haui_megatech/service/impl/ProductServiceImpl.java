@@ -183,12 +183,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public CommonResponseDTO<?> showOne(Integer productId) {
+    public CommonResponseDTO<?> unhideOne(Integer productId) {
         return null;
     }
 
     @Override
-    public CommonResponseDTO<?> showList(ListIdsRequestDTO request) {
+    public CommonResponseDTO<?> unhideList(ListIdsRequestDTO request) {
         return null;
     }
 

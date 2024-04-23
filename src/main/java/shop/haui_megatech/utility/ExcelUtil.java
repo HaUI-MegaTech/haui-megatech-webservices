@@ -236,21 +236,17 @@ public class ExcelUtil {
                             break;
 
                         default:
-                            if (currentCell.getStringCellValue() != null && !currentCell.getStringCellValue()
-                                                                                        .isBlank()) {
+                            if (currentCell.getStringCellValue() != null
+                                    && !currentCell.getStringCellValue().isBlank()) {
                                 if (product.getImages() == null) {
                                     product.setImages(new ArrayList<>());
                                 }
-                                if (product.getImages()
-                                           .parallelStream()
-                                           .map(Image::getLink)
-                                           .anyMatch(item -> item.equals(currentCell.getStringCellValue())))
-                                    continue;
 
                                 product.getImages().add(Image.builder()
                                                              .link(currentCell.getStringCellValue())
                                                              .product(product)
                                                              .build());
+
                             }
                             break;
                     }

@@ -1,10 +1,17 @@
 package shop.haui_megatech.domain.dto.product;
 
 import lombok.Builder;
+import shop.haui_megatech.domain.dto.image.ImageDTO;
+
+import java.util.List;
 
 @Builder
 public record ProductDetailDTO(
         Integer id,
+        String name,
+        Float oldPrice,
+        Float currentPrice,
+        Integer discountPercent,
 
         String processor,
         Integer cores,
@@ -42,7 +49,9 @@ public record ProductDetailDTO(
         String batteryCapacity,
         String chargerCapacity,
         String os,
-        Integer launchDate
+        Integer launchDate,
+
+        List<ImageDTO> images
 ) {
 
 }

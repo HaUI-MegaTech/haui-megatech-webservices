@@ -17,13 +17,19 @@ public class ErrorMessageConstant {
         public static final String NOT_FOUND = "brand.error.not-found";
     }
 
+    public static class Cart {
+        public static final String NOT_FOUND = "cart.error.not-found";
+    }
+
     public static class Request {
-        public static final String BLANK_USERNAME      = "request.error.blank-username";
-        public static final String BLANK_PASSWORD      = "request.error.blank-password";
-        public static final String NEGATIVE_PAGE_INDEX = "request.error.negative-page-index";
-        public static final String NULL_REQUEST        = "request.error.null-request";
-        public static final String DUPLICATE_USERNAME  = "request.error.duplicate-username";
-        public static final String MALFORMED_FILE      = "request.error.malformed-file";
+        public static final String BLANK_USERNAME              = "request.error.blank-username";
+        public static final String BLANK_PASSWORD              = "request.error.blank-password";
+        public static final String NEGATIVE_PAGE_INDEX         = "request.error.negative-page-index";
+        public static final String NULL_REQUEST                = "request.error.null-request";
+        public static final String DUPLICATE_USERNAME          = "request.error.duplicate-username";
+        public static final String MALFORMED_FILE              = "request.error.malformed-file";
+        public static final String NEGATIVE_CART_ITEM_QUANTITY = "request.error.negative-cart-item-quantity";
+        public static final String NEGATIVE_CART_ITEM_ID       = "request.error.negative-cart-item-id";
     }
 
 }

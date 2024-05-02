@@ -1,6 +1,6 @@
 package shop.haui_megatech.domain.dto.user;
 
-public record UpdateUserPasswordRequest(
+public record UpdateUserPasswordRequestDTO(
         String oldPassword,
         String newPassword,
         String confirmNewPassword

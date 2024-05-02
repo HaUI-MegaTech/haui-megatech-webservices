@@ -16,6 +16,6 @@ public record ProductDTO(
         Integer discountPercent,
         String ram,
         String storage,
-        String mainImg
+        String mainImageUrl
 ) {
 }

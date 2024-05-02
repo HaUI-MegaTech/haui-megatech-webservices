@@ -37,6 +37,13 @@ public class SuccessMessageConstant {
         public static final String FOUND                   = "product.success.found";
     }
 
+    public static class Cart {
+        public static final String ADDED_ONE         = "cart.success.added-one";
+        public static final String UPDATED_ONE       = "cart.success.updated-one";
+        public static final String HARD_DELETED_ONE  = "cart.success.hard-deleted-one";
+        public static final String HARD_DELETED_LIST = "cart.success.hard-deleted-list";
+    }
+
     public static class Brand {
         public static final String FOUND = "brand.success.found";
     }

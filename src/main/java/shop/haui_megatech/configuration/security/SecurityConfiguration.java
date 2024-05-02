@@ -31,7 +31,7 @@ public class SecurityConfiguration {
             "/v3/api-docs" + CATCH_ALL_WILDCARDS,
             UrlConstant.API_V1 + UrlConstant.Product.GET_ACTIVE_LIST,
             UrlConstant.API_V1 + UrlConstant.Product.GET_ACTIVE_LIST_BY_BRAND,
-            UrlConstant.API_V1 + UrlConstant.Product.GET_ONE,
+            UrlConstant.API_V1 + UrlConstant.Product.GET_DETAIL_ONE,
             UrlConstant.API_V1 + UrlConstant.Brand.GET_ONE,
             UrlConstant.API_V1 + UrlConstant.Brand.GET_ACTIVE_LIST,
             "/search"
@@ -42,7 +42,8 @@ public class SecurityConfiguration {
     );
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    public SecurityFilterChain configure(HttpSecurity http)
+            throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                    .cors(cors -> cors.configurationSource(this.corsConfigurationSource()))
                    .authorizeHttpRequests(auth -> auth.requestMatchers(WHITE_LIST_URLS)

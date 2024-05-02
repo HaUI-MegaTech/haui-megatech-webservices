@@ -24,7 +24,7 @@ public class Product {
     private Float   oldPrice;
     private Float   currentPrice;
     private Integer discountPercent;
-    private String  mainImg;
+    private String  mainImageUrl;
     private String  shortProcessor;
     private String  shortDisplay;
     private String  shortCard;

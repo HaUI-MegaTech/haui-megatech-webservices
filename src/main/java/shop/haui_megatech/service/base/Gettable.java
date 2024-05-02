@@ -7,5 +7,5 @@ import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 public interface Gettable<T> {
     CommonResponseDTO<?> getOne(Integer id);
 
-    PaginationResponseDTO<T> getActiveList(PaginationRequestDTO request);
+    PaginationResponseDTO<T> getList(PaginationRequestDTO request);
 }

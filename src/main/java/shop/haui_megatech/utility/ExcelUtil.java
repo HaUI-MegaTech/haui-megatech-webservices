@@ -120,7 +120,7 @@ public class ExcelUtil {
                             product.setDiscountPercent((int) currentCell.getNumericCellValue());
                             break;
                         case 5:
-                            product.setMainImg(currentCell.getStringCellValue());
+                            product.setMainImageUrl(currentCell.getStringCellValue());
                             break;
                         case 6:
                             product.setShortProcessor(currentCell.getStringCellValue());
@@ -243,7 +243,7 @@ public class ExcelUtil {
                                 }
 
                                 product.getImages().add(Image.builder()
-                                                             .link(currentCell.getStringCellValue())
+                                                             .url(currentCell.getStringCellValue())
                                                              .product(product)
                                                              .build());
 

@@ -38,7 +38,8 @@ public class UrlConstant {
 
     public static final class Product {
         public static final String PREFIX                   = "/products";
-        public static final String GET_ONE                  = PREFIX + "/{productId}";
+        public static final String GET_DETAIL_ONE           = PREFIX + "/{productId}";
+        //        public static final String GET_LIST_BY_IDS =
         public static final String GET_ACTIVE_LIST          = PREFIX + ACTIVE;
         public static final String GET_HIDDEN_LIST          = PREFIX + HIDDEN;
         public static final String GET_DELETED_LIST         = PREFIX + DELETED;
@@ -58,6 +59,14 @@ public class UrlConstant {
         public static final String RESTORE_LIST             = PREFIX + RESTORE;
         public static final String HARD_DELETE_ONE          = PREFIX + HARD_DELETE + "/{productId}";
         public static final String HARD_DELETE_LIST         = PREFIX + HARD_DELETE;
+    }
+
+    public static final class Cart {
+        public static final String PREFIX           = "/cart";
+        public static final String GET_CART_ITEMS   = PREFIX;
+        public static final String ADD_CART_ITEM    = PREFIX;
+        public static final String UPDATE_CART_ITEM = PREFIX;
+        public static final String DELETE_CART_ITEM = PREFIX;
     }
 
     public static final class Brand {

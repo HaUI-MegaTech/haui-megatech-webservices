@@ -10,14 +10,15 @@ import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
-import shop.haui_megatech.domain.dto.common.ImportDataRequest;
+import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
+import shop.haui_megatech.domain.dto.common.RequestIdDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
-import shop.haui_megatech.domain.dto.product.AddProductRequest;
+import shop.haui_megatech.domain.dto.product.AddProductRequestDTO;
 import shop.haui_megatech.domain.dto.product.ProductDTO;
 import shop.haui_megatech.domain.dto.product.ProductDetailDTO;
-import shop.haui_megatech.domain.dto.product.UpdateProductRequest;
+import shop.haui_megatech.domain.dto.product.UpdateProductRequestDTO;
 import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.domain.mapper.ProductMapper;
 import shop.haui_megatech.exception.InvalidRequestParamException;
@@ -56,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponseDTO<ProductDTO> getActiveList(PaginationRequestDTO request) {
+    public PaginationResponseDTO<ProductDTO> getList(PaginationRequestDTO request) {
         if (request.pageIndex() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
@@ -87,20 +88,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public CommonResponseDTO<ProductDTO> addOne(AddProductRequest request) {
+    public CommonResponseDTO<ProductDTO> addOne(AddProductRequestDTO request) {
 
         return CommonResponseDTO.<ProductDTO>builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.ADDED_ONE))
                                 .item(ProductMapper.INSTANCE.toProductDTO(
-                                              productRepository.save(ProductMapper.INSTANCE.toProduct(request))
-                                      )
+                                                productRepository.save(ProductMapper.INSTANCE.toProduct(request))
+                                        )
                                 )
                                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> importExcel(ImportDataRequest request) {
+    public CommonResponseDTO<?> importExcel(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
 
@@ -110,7 +111,7 @@ public class ProductServiceImpl implements ProductService {
             return CommonResponseDTO.builder()
                                     .success(true)
                                     .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.IMPORTED_LIST,
-                                                                          savedProducts.size()))
+                                            savedProducts.size()))
                                     .build();
         } catch (IOException e) {
             throw new RuntimeException("Excel data is failed to store: " + e.getMessage());
@@ -118,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public CommonResponseDTO<?> importCsv(ImportDataRequest request) {
+    public CommonResponseDTO<?> importCsv(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
 
@@ -128,7 +129,7 @@ public class ProductServiceImpl implements ProductService {
             return CommonResponseDTO.builder()
                                     .success(true)
                                     .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.IMPORTED_LIST,
-                                                                          savedProducts.size()))
+                                            savedProducts.size()))
                                     .build();
         } catch (IOException ex) {
             throw new RuntimeException("Data is not store successfully: " + ex.getMessage());
@@ -138,7 +139,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public CommonResponseDTO<?> updateOne(
             Integer id,
-            UpdateProductRequest request
+            UpdateProductRequestDTO request
     ) {
         Optional<Product> found = productRepository.findById(id);
 
@@ -158,13 +159,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteOne(Integer id) {
-        Optional<Product> found = productRepository.findById(id);
+    public CommonResponseDTO<?> hardDeleteOne(RequestIdDTO request) {
+        Optional<Product> found = productRepository.findById(request.id());
 
         if (found.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
 
-        productRepository.deleteById(id);
+        productRepository.deleteById(request.id());
 
         return CommonResponseDTO.builder()
                                 .success(true)
@@ -178,14 +179,17 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.HARD_DELETED_LIST,
-                                                                      request.ids().size()))
+                                .message(messageSourceUtil.getMessage(
+                                                SuccessMessageConstant.Product.HARD_DELETED_LIST,
+                                                request.ids().size()
+                                        )
+                                )
                                 .build();
     }
 
 
     @Override
-    public CommonResponseDTO<?> updateListFromExcel(ImportDataRequest request) {
+    public CommonResponseDTO<?> updateListFromExcel(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
 
@@ -195,7 +199,7 @@ public class ProductServiceImpl implements ProductService {
             return CommonResponseDTO.builder()
                                     .success(true)
                                     .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.UPDATED_LIST_FROM_EXCEL,
-                                                                          savedProducts.size()))
+                                            savedProducts.size()))
                                     .build();
         } catch (IOException e) {
             throw new RuntimeException("Excel data is failed to store: " + e.getMessage());
@@ -260,8 +264,8 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.HIDED_LIST,
-                                                                      foundProducts.size()
-                                         )
+                                                foundProducts.size()
+                                        )
                                 )
                                 .build();
     }
@@ -324,9 +328,10 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.RESTORED_LIST,
-                                                                      foundProducts.size()
-                                         )
+                                .message(messageSourceUtil.getMessage(
+                                                SuccessMessageConstant.Product.RESTORED_LIST,
+                                                foundProducts.size()
+                                        )
                                 )
                                 .build();
     }
@@ -358,9 +363,10 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.EXPOSED_LIST,
-                                                                      foundProducts.size()
-                                         )
+                                .message(messageSourceUtil.getMessage(
+                                                SuccessMessageConstant.Product.EXPOSED_LIST,
+                                                foundProducts.size()
+                                        )
                                 )
                                 .build();
     }
@@ -392,9 +398,10 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.SOFT_DELETED_LIST,
-                                                                      foundProducts.size()
-                                         )
+                                .message(messageSourceUtil.getMessage(
+                                                SuccessMessageConstant.Product.SOFT_DELETED_LIST,
+                                                foundProducts.size()
+                                        )
                                 )
                                 .build();
     }

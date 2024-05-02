@@ -33,14 +33,14 @@ public class BrandServiceImpl implements BrandService {
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Brand.FOUND))
                                 .item(BrandMapper.INSTANCE.toBrandDTO(found.orElseThrow(
-                                              () -> new NotFoundException(ErrorMessageConstant.Brand.NOT_FOUND))
-                                      )
+                                                () -> new NotFoundException(ErrorMessageConstant.Brand.NOT_FOUND))
+                                        )
                                 )
                                 .build();
     }
 
     @Override
-    public PaginationResponseDTO<BrandDTO> getActiveList(PaginationRequestDTO request) {
+    public PaginationResponseDTO<BrandDTO> getList(PaginationRequestDTO request) {
         List<Brand> brands = brandRepository.findAll();
         return PaginationResponseDTO.<BrandDTO>builder()
                                     .items(brands.parallelStream()

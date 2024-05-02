@@ -11,13 +11,14 @@ import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
-import shop.haui_megatech.domain.dto.common.ImportDataRequest;
+import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
+import shop.haui_megatech.domain.dto.common.RequestIdDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
-import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
-import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
+import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequestDTO;
 import shop.haui_megatech.domain.dto.user.UserDTO;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.UserMapper;
@@ -67,12 +68,10 @@ public class UserServiceImpl implements UserService {
         if (!RequestValidator.isBlankRequestParams(request.password()))
             throw new AbsentRequiredFieldException(ErrorMessageConstant.Request.BLANK_PASSWORD);
 
-        if (!request.password()
-                    .equalsIgnoreCase(request.confirmPassword()))
+        if (!request.password().equals(request.confirmPassword()))
             throw new MismatchedConfirmPasswordException(ErrorMessageConstant.User.MISMATCHED_PASSWORD);
 
-        if (userRepository.findUserByUsername(request.username())
-                          .isPresent())
+        if (userRepository.findUserByUsername(request.username()).isPresent())
             throw new DuplicateUsernameException(ErrorMessageConstant.Request.DUPLICATE_USERNAME);
 
         return CommonResponseDTO.<UserDTO>builder()
@@ -84,14 +83,13 @@ public class UserServiceImpl implements UserService {
                                                                 .password(passwordEncoder.encode(request.password()))
                                                                 .firstName(request.firstName())
                                                                 .lastName(request.lastName())
-                                                                .build()
-                                        )))
+                                                                .build())))
                                 .build();
 
     }
 
     @Override
-    public CommonResponseDTO<?> importExcel(ImportDataRequest request) {
+    public CommonResponseDTO<?> importExcel(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
 
@@ -101,7 +99,7 @@ public class UserServiceImpl implements UserService {
             return CommonResponseDTO.builder()
                                     .success(true)
                                     .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.IMPORTED_LIST,
-                                                                          savedUsers.size()))
+                                            savedUsers.size()))
                                     .build();
         } catch (IOException e) {
             throw new RuntimeException("Excel data is failed to store: " + e.getMessage());
@@ -109,7 +107,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> importCsv(ImportDataRequest request) {
+    public CommonResponseDTO<?> importCsv(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
 
@@ -119,7 +117,7 @@ public class UserServiceImpl implements UserService {
             return CommonResponseDTO.builder()
                                     .success(true)
                                     .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.IMPORTED_LIST,
-                                                                          savedUsers.size()))
+                                            savedUsers.size()))
                                     .build();
         } catch (IOException ex) {
             throw new RuntimeException("Data is not store successfully: " + ex.getMessage());
@@ -129,7 +127,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonResponseDTO<?> updateOne(
             Integer userId,
-            UpdateUserInfoRequest request
+            UpdateUserInfoRequestDTO request
     ) {
         if (Objects.isNull(request))
             throw new NullRequestException(ErrorMessageConstant.Request.NULL_REQUEST);
@@ -143,7 +141,7 @@ public class UserServiceImpl implements UserService {
 
         if (request.firstName() != null) foundUser.setFirstName(request.firstName());
         if (request.lastName() != null) foundUser.setLastName(request.lastName());
-        if (request.avatar() != null) foundUser.setAvatar(request.avatar());
+        if (request.avatar() != null) foundUser.setAvatarImageUrl(request.avatar());
         if (request.email() != null) foundUser.setEmail(request.email());
         if (request.phoneNumber() != null) foundUser.setPhoneNumber(request.phoneNumber());
 
@@ -158,7 +156,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonResponseDTO<?> updatePassword(
             Integer userId,
-            UpdateUserPasswordRequest request
+            UpdateUserPasswordRequestDTO request
     ) {
         Optional<User> found = userRepository.findById(userId);
 
@@ -210,13 +208,13 @@ public class UserServiceImpl implements UserService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.SOFT_DELETED_LIST,
-                                                                      foundUsers.size()))
+                                        foundUsers.size()))
                                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteOne(Integer userId) {
-        Optional<User> found = userRepository.findById(userId);
+    public CommonResponseDTO<?> hardDeleteOne(RequestIdDTO request) {
+        Optional<User> found = userRepository.findById(request.id());
 
         if (found.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
@@ -236,7 +234,7 @@ public class UserServiceImpl implements UserService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.HARD_DELETED_LIST,
-                                                                      request.ids().size()))
+                                        request.ids().size()))
                                 .build();
     }
 
@@ -267,7 +265,7 @@ public class UserServiceImpl implements UserService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESTORED_LIST,
-                                                                      foundUsers.size()))
+                                        foundUsers.size()))
                                 .build();
     }
 
@@ -288,7 +286,7 @@ public class UserServiceImpl implements UserService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESET_PASSWORD_ONE,
-                                                                      foundUser.getUsername()))
+                                        foundUser.getUsername()))
                                 .build();
     }
 
@@ -303,12 +301,12 @@ public class UserServiceImpl implements UserService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESET_PASSWORD_LIST,
-                                                                      foundUsers.size()))
+                                        foundUsers.size()))
                                 .build();
     }
 
     @Override
-    public PaginationResponseDTO<UserDTO> getActiveList(PaginationRequestDTO request) {
+    public PaginationResponseDTO<UserDTO> getList(PaginationRequestDTO request) {
         if (request.pageIndex() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 

@@ -12,12 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
-import shop.haui_megatech.domain.dto.common.ImportDataRequest;
+import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
+import shop.haui_megatech.domain.dto.common.RequestIdDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
-import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
-import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
+import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequestDTO;
 import shop.haui_megatech.service.UserService;
 import shop.haui_megatech.utility.ResponseUtil;
 
@@ -72,7 +73,7 @@ public class UserRestController {
     )
     @PostMapping(UrlConstant.User.IMPORT_EXCEL)
     public ResponseEntity<?> importExcel(
-            @ParameterObject ImportDataRequest request
+            @ParameterObject ImportDataRequestDTO request
     ) {
         return ResponseUtil.created(userService.importExcel(request));
     }
@@ -89,7 +90,7 @@ public class UserRestController {
     )
     @PostMapping(UrlConstant.User.IMPORT_CSV)
     public ResponseEntity<?> importCsv(
-            @ParameterObject ImportDataRequest request
+            @ParameterObject ImportDataRequestDTO request
     ) {
         return ResponseUtil.created(userService.importCsv(request));
     }
@@ -106,7 +107,7 @@ public class UserRestController {
     @PutMapping(UrlConstant.User.UPDATE_INFO)
     public ResponseEntity<?> updateInfo(
             @PathVariable(value = "userId") Integer userId,
-            @RequestBody(required = false) UpdateUserInfoRequest request
+            @RequestBody(required = false) UpdateUserInfoRequestDTO request
     ) {
         return ResponseUtil.ok(userService.updateOne(userId, request));
     }
@@ -125,7 +126,7 @@ public class UserRestController {
     @PatchMapping(UrlConstant.User.UPDATE_PASSWORD)
     public ResponseEntity<?> updatePassword(
             @PathVariable(value = "userId") Integer userId,
-            @RequestBody UpdateUserPasswordRequest request
+            @RequestBody UpdateUserPasswordRequestDTO request
     ) {
         return ResponseUtil.ok(userService.updatePassword(userId, request));
     }
@@ -175,7 +176,7 @@ public class UserRestController {
     public ResponseEntity<?> hardDeleteOne(
             @PathVariable(name = "userId") Integer userId
     ) {
-        return ResponseUtil.ok(userService.hardDeleteOne(userId));
+        return ResponseUtil.ok(userService.hardDeleteOne(RequestIdDTO.builder().id(userId).build()));
     }
 
 
@@ -268,7 +269,7 @@ public class UserRestController {
     )
     @GetMapping(UrlConstant.User.GET_ACTIVE_LIST)
     public ResponseEntity<?> getActiveList(@ParameterObject PaginationRequestDTO request) {
-        return ResponseUtil.ok(userService.getActiveList(request));
+        return ResponseUtil.ok(userService.getList(request));
     }
 
 

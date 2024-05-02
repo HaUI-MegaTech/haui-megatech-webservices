@@ -22,10 +22,12 @@ public class BrandRestController {
     private final BrandService brandService;
 
     @Operation(summary = "Get an active Brand by Id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
-    })
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
     @GetMapping(UrlConstant.Brand.GET_ONE)
     public ResponseEntity<?> getOne(
             @PathVariable(name = "brandId") Integer brandId
@@ -40,6 +42,6 @@ public class BrandRestController {
     public ResponseEntity<?> getActiveList(
             @ParameterObject PaginationRequestDTO request
     ) {
-        return ResponseUtil.ok(brandService.getActiveList(request));
+        return ResponseUtil.ok(brandService.getList(request));
     }
 }

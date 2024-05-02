@@ -4,19 +4,26 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "images")
+@Table(name = "cart_items")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class Image {
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id")
+    @Column(name = "card_id")
     private Integer id;
-    private String  url;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    private Integer quantity;
+
 }

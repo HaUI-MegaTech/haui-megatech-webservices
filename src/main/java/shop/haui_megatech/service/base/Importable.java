@@ -1,10 +1,10 @@
 package shop.haui_megatech.service.base;
 
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
-import shop.haui_megatech.domain.dto.common.ImportDataRequest;
+import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 
 public interface Importable {
-    CommonResponseDTO<?> importExcel(ImportDataRequest request);
+    CommonResponseDTO<?> importExcel(ImportDataRequestDTO request);
 
-    CommonResponseDTO<?> importCsv(ImportDataRequest request);
+    CommonResponseDTO<?> importCsv(ImportDataRequestDTO request);
 }

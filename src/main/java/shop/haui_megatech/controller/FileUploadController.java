@@ -1,20 +1,22 @@
 package shop.haui_megatech.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import shop.haui_megatech.base.ResponseUtil;
-import shop.haui_megatech.base.RestApiV1;
+import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.service.FileUploadService;
+import shop.haui_megatech.utility.ResponseUtil;
 
 import java.io.IOException;
 
 @RestApiV1
+@RequiredArgsConstructor
+@Tag(name = "File upload")
 public class FileUploadController {
-    @Autowired
-    private FileUploadService fileUploadService;
+    private final FileUploadService fileUploadService;
 
     @PostMapping("/upload-file")
     public ResponseEntity<?> uploadFile(@RequestParam("image") MultipartFile multipartFile) {

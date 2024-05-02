@@ -34,3 +34,4 @@ Bước 5: Định nghĩa repository interface cho model vừa tạo tại packa
 Bước 6: Định nghĩa service interface và lớp implements lại interface đó tại package: /service
 
 Bước 7: Định nghĩa controller class thực hiện bắt các request và sử dụng các xử lí nghiệp vụ đã cài đặt ở service interface
+ 

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
@@ -111,7 +112,7 @@ public class ProductRestController {
     )
     @PostMapping(UrlConstant.Product.ADD_ONE)
     public ResponseEntity<?> addOne(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody AddProductRequestDTO request
     ) {
         return ResponseUtil.created(productService.addOne(request));
@@ -130,7 +131,7 @@ public class ProductRestController {
     )
     @PostMapping(UrlConstant.Product.IMPORT_EXCEL)
     public ResponseEntity<?> importExcel(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @ParameterObject ImportDataRequestDTO request
     ) {
         return ResponseUtil.created(productService.importExcel(request));
@@ -149,7 +150,7 @@ public class ProductRestController {
     )
     @PostMapping(UrlConstant.Product.IMPORT_CSV)
     public ResponseEntity<?> importCsv(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @ParameterObject ImportDataRequestDTO request
     ) {
         return ResponseUtil.created(productService.importCsv(request));
@@ -168,7 +169,7 @@ public class ProductRestController {
     )
     @PutMapping(UrlConstant.Product.UPDATE_ONE)
     public ResponseEntity<?> updateOne(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId,
             @RequestBody UpdateProductRequestDTO request) {
         return ResponseUtil.ok(productService.updateOne(productId, request));
@@ -187,7 +188,7 @@ public class ProductRestController {
     )
     @PutMapping(UrlConstant.Product.UPDATE_LIST_FROM_EXCEL)
     public ResponseEntity<?> updateListFromExcel(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @ParameterObject ImportDataRequestDTO request
     ) {
         return ResponseUtil.ok(productService.updateListFromExcel(request));
@@ -206,7 +207,7 @@ public class ProductRestController {
     )
     @PatchMapping(UrlConstant.Product.SOFT_DELETE_ONE)
     public ResponseEntity<?> softDeleteOne(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId
     ) {
         return ResponseUtil.ok(productService.softDeleteOne(productId));
@@ -225,7 +226,7 @@ public class ProductRestController {
     )
     @PatchMapping(UrlConstant.Product.SOFT_DELETE_LIST)
     public ResponseEntity<?> softDeleteList(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(productService.softDeleteList(request));
@@ -244,7 +245,7 @@ public class ProductRestController {
     )
     @PatchMapping(UrlConstant.Product.RESTORE_ONE)
     public ResponseEntity<?> restoreOne(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId
     ) {
         return ResponseUtil.ok(productService.restoreOne(productId));
@@ -263,7 +264,7 @@ public class ProductRestController {
     )
     @PatchMapping(UrlConstant.Product.RESTORE_LIST)
     public ResponseEntity<?> restoreList(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(productService.restoreList(request));
@@ -282,7 +283,7 @@ public class ProductRestController {
     )
     @PatchMapping(UrlConstant.Product.HIDE_ONE)
     public ResponseEntity<?> hideOne(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId
     ) {
         return ResponseUtil.ok(productService.hideOne(productId));
@@ -301,7 +302,7 @@ public class ProductRestController {
     )
     @PatchMapping(UrlConstant.Product.HIDE_LIST)
     public ResponseEntity<?> hideList(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(productService.hideList(request));
@@ -320,7 +321,7 @@ public class ProductRestController {
     )
     @PatchMapping(UrlConstant.Product.EXPOSE_ONE)
     public ResponseEntity<?> exposeOne(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId
     ) {
         return ResponseUtil.ok(productService.exposeOne(productId));
@@ -339,7 +340,7 @@ public class ProductRestController {
     )
     @PatchMapping(UrlConstant.Product.EXPOSE_LIST)
     public ResponseEntity<?> exposeList(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(productService.exposeList(request));
@@ -358,7 +359,7 @@ public class ProductRestController {
     )
     @DeleteMapping(UrlConstant.Product.HARD_DELETE_ONE)
     public ResponseEntity<?> hardDeleteOne(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId
     ) {
         return ResponseUtil.noContent(productService.hardDeleteOne(RequestIdDTO.builder().id(productId).build()));
@@ -377,7 +378,7 @@ public class ProductRestController {
     )
     @DeleteMapping(UrlConstant.Product.HARD_DELETE_LIST)
     public ResponseEntity<?> hardDeleteList(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(productService.hardDeleteList(request));

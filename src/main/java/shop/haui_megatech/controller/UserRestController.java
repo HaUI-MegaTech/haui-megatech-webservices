@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
@@ -39,7 +40,7 @@ public class UserRestController {
     )
     @GetMapping(UrlConstant.User.GET_ONE)
     public ResponseEntity<?> getOne(
-            @PathVariable(name = "userId") Integer userId
+            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId
     ) {
         return ResponseUtil.ok(userService.getOne(userId));
     }
@@ -56,7 +57,7 @@ public class UserRestController {
     )
     @PostMapping(UrlConstant.User.ADD_ONE)
     public ResponseEntity<?> addOne(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody @Valid AddUserRequestDTO request
     ) {
         return ResponseUtil.created(userService.addOne(request));
@@ -74,7 +75,7 @@ public class UserRestController {
     )
     @PostMapping(UrlConstant.User.IMPORT_EXCEL)
     public ResponseEntity<?> importExcel(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @ParameterObject ImportDataRequestDTO request
     ) {
         return ResponseUtil.created(userService.importExcel(request));
@@ -92,7 +93,7 @@ public class UserRestController {
     )
     @PostMapping(UrlConstant.User.IMPORT_CSV)
     public ResponseEntity<?> importCsv(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @ParameterObject ImportDataRequestDTO request
     ) {
         return ResponseUtil.created(userService.importCsv(request));
@@ -109,7 +110,7 @@ public class UserRestController {
     )
     @PutMapping(UrlConstant.User.UPDATE_INFO)
     public ResponseEntity<?> updateInfo(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId,
             @RequestBody(required = false) UpdateUserInfoRequestDTO request
     ) {
@@ -129,7 +130,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.UPDATE_PASSWORD)
     public ResponseEntity<?> updatePassword(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId,
             @RequestBody UpdateUserPasswordRequestDTO request
     ) {
@@ -147,7 +148,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.SOFT_DELETE_ONE)
     public ResponseEntity<?> softDeleteOne(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId
     ) {
         return ResponseUtil.ok(userService.softDeleteOne(userId));
@@ -164,7 +165,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.SOFT_DELETE_LIST)
     public ResponseEntity<?> softDeleteList(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(userService.softDeleteList(request));
@@ -181,7 +182,7 @@ public class UserRestController {
     )
     @DeleteMapping(UrlConstant.User.HARD_DELETE_ONE)
     public ResponseEntity<?> hardDeleteOne(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId
     ) {
         return ResponseUtil.ok(userService.hardDeleteOne(RequestIdDTO.builder().id(userId).build()));
@@ -198,7 +199,7 @@ public class UserRestController {
     )
     @DeleteMapping(UrlConstant.User.HARD_DELETE_LIST)
     public ResponseEntity<?> hardDeleteList(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(userService.hardDeleteList(request));
@@ -215,7 +216,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.RESTORE_ONE)
     public ResponseEntity<?> restoreOne(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId
     ) {
         return ResponseUtil.ok(userService.restoreOne(userId));
@@ -232,7 +233,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.RESTORE_LIST)
     public ResponseEntity<?> restoreList(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(userService.restoreList(request));
@@ -249,7 +250,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.RESET_PASSWORD_ONE)
     public ResponseEntity<?> resetPasswordOne(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId
     ) {
         return ResponseUtil.ok(userService.resetPasswordOne(userId));
@@ -266,7 +267,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.RESET_PASSWORD_LIST)
     public ResponseEntity<?> resetPasswordList(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody ListIdsRequestDTO request
     ) {
         return ResponseUtil.ok(userService.resetPasswordList(request));

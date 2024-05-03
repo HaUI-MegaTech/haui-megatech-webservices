@@ -3,6 +3,7 @@ package shop.haui_megatech.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
@@ -23,7 +24,7 @@ public class CartRestController {
 
     @PostMapping(UrlConstant.CartItem.ADD_ONE)
     public CommonResponseDTO<?> addCartItem(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody ModifyCartItemRequestDTO request
     ) {
         return cartService.addOne(request);
@@ -38,7 +39,7 @@ public class CartRestController {
 
     @PutMapping(UrlConstant.CartItem.UPDATE_CART_ITEM)
     public CommonResponseDTO<?> updateCartItem(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.CART_ITEM_ID) Integer cartItemId,
             @RequestBody ModifyCartItemRequestDTO request
     ) {
@@ -47,7 +48,7 @@ public class CartRestController {
 
     @DeleteMapping(UrlConstant.CartItem.DELETE_ONE)
     public CommonResponseDTO<?> deleteCartItem(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable(UrlConstant.PathVariableName.CART_ITEM_ID) Integer cartItemId,
             @RequestBody RequestIdDTO request
     ) {
@@ -56,7 +57,7 @@ public class CartRestController {
 
     @DeleteMapping(UrlConstant.CartItem.DELETE_LIST)
     public CommonResponseDTO<?> deleteCartItems(
-            @PathVariable(UrlConstant.PathVariableName.LOGINED_USER_ID) Integer loginedUserId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @RequestBody ListIdsRequestDTO request
     ) {
         return cartService.hardDeleteList(request);

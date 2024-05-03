@@ -115,7 +115,22 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CommonResponseDTO<?> hardDeleteList(ListIdsRequestDTO request) {
-        return null;
+        request.ids().parallelStream().forEach(item -> {
+            if (item < 0)
+                throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_ID);
+        });
+
+        Optional<User> foundUser =
+                userRepository.findActiveUserByUsername(jwtTokenUtil.extractUsername(request.token()));
+        if (foundUser.isEmpty())
+            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+
+        cartRepository.deleteAllById(request.ids());
+
+        return CommonResponseDTO.<UserDTO>builder()
+                                .success(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Cart.HARD_DELETED_LIST))
+                                .build();
     }
 
 

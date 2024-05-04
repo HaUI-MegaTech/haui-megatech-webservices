@@ -14,7 +14,6 @@ import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.common.RequestIdDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequestDTO;
@@ -176,7 +175,7 @@ public class UserRestController {
     public ResponseEntity<?> hardDeleteOne(
             @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId
     ) {
-        return ResponseUtil.ok(userService.hardDeleteOne(RequestIdDTO.builder().id(userId).build()));
+        return ResponseUtil.ok(userService.hardDeleteOne(userId));
     }
 
 

@@ -6,40 +6,37 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
-import shop.haui_megatech.domain.dto.cart.GetCartItemsRequestDTO;
-import shop.haui_megatech.domain.dto.cart.GetCartItemsResponseDTO;
+import shop.haui_megatech.domain.dto.cart.CartItemDTO;
 import shop.haui_megatech.domain.dto.cart.ModifyCartItemRequestDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.common.RequestIdDTO;
-import shop.haui_megatech.service.CartService;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
+import shop.haui_megatech.service.CartItemService;
 
 @RestApiV1
 @RequiredArgsConstructor
 @Tag(name = "Carts Management REST API")
 @SecurityRequirement(name = "bearerAuth")
 public class CartRestController {
-    private final CartService cartService;
+    private final CartItemService cartService;
 
     @PostMapping(UrlConstant.CartItem.ADD_ONE)
     public CommonResponseDTO<?> addCartItem(
-            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId,
             @RequestBody ModifyCartItemRequestDTO request
     ) {
         return cartService.addOne(request);
     }
 
     @GetMapping(UrlConstant.CartItem.GET_LIST)
-    public GetCartItemsResponseDTO getCartItems(
-            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId,
-            @RequestBody GetCartItemsRequestDTO request
+    public PaginationResponseDTO<CartItemDTO> getCartItems(
+            @RequestBody PaginationRequestDTO request
     ) {
         return cartService.getCartItems(request);
     }
 
     @PutMapping(UrlConstant.CartItem.UPDATE_CART_ITEM)
     public CommonResponseDTO<?> updateCartItem(
-            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId,
             @PathVariable(UrlConstant.PathVariableName.CART_ITEM_ID) Integer cartItemId,
             @RequestBody ModifyCartItemRequestDTO request
     ) {
@@ -48,16 +45,13 @@ public class CartRestController {
 
     @DeleteMapping(UrlConstant.CartItem.DELETE_ONE)
     public CommonResponseDTO<?> deleteCartItem(
-            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId,
-            @PathVariable(UrlConstant.PathVariableName.CART_ITEM_ID) Integer cartItemId,
-            @RequestBody RequestIdDTO request
+            @PathVariable(UrlConstant.PathVariableName.CART_ITEM_ID) Integer cartItemId
     ) {
-        return cartService.hardDeleteOne(request);
+        return cartService.hardDeleteOne(cartItemId);
     }
 
     @DeleteMapping(UrlConstant.CartItem.DELETE_LIST)
     public CommonResponseDTO<?> deleteCartItems(
-            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId,
             @RequestBody ListIdsRequestDTO request
     ) {
         return cartService.hardDeleteList(request);

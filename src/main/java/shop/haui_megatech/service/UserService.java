@@ -2,7 +2,6 @@ package shop.haui_megatech.service;
 
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.common.RequestIdDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequestDTO;
 import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequestDTO;
@@ -13,7 +12,7 @@ public interface UserService extends Addable<AddUserRequestDTO>,
                                      Gettable<UserDTO>,
                                      Updatable<UpdateUserInfoRequestDTO>,
                                      Importable,
-                                     HardDeletable<RequestIdDTO>,
+                                     HardDeletable,
                                      SoftDeletable<UserDTO> {
     CommonResponseDTO<?> updatePassword(Integer userId, UpdateUserPasswordRequestDTO request);
 

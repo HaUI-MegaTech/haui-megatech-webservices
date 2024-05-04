@@ -13,7 +13,6 @@ import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.common.RequestIdDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
@@ -26,7 +25,10 @@ import shop.haui_megatech.exception.*;
 import shop.haui_megatech.job.AutoMailSender;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.service.UserService;
-import shop.haui_megatech.utility.*;
+import shop.haui_megatech.utility.CsvUtil;
+import shop.haui_megatech.utility.ExcelUtil;
+import shop.haui_megatech.utility.MessageSourceUtil;
+import shop.haui_megatech.utility.RandomUtil;
 import shop.haui_megatech.validator.RequestValidator;
 
 import java.io.IOException;
@@ -210,8 +212,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteOne(RequestIdDTO request) {
-        Optional<User> found = userRepository.findById(request.id());
+    public CommonResponseDTO<?> hardDeleteOne(Integer id) {
+        Optional<User> found = userRepository.findById(id);
 
         if (found.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
@@ -306,8 +308,6 @@ public class UserServiceImpl implements UserService {
     public PaginationResponseDTO<UserDTO> getList(PaginationRequestDTO request) {
         if (request.pageIndex() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
-
-        System.out.println(AuthenticationUtil.getRequestedUser().getUsername());
 
         Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
                     ? Sort.by(request.orderBy())

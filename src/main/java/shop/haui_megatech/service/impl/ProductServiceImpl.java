@@ -12,7 +12,6 @@ import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.common.RequestIdDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.dto.product.AddProductRequestDTO;
@@ -159,13 +158,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteOne(RequestIdDTO request) {
-        Optional<Product> found = productRepository.findById(request.id());
+    public CommonResponseDTO<?> hardDeleteOne(Integer id) {
+        Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
 
-        productRepository.deleteById(request.id());
+        productRepository.deleteById(id);
 
         return CommonResponseDTO.builder()
                                 .success(true)

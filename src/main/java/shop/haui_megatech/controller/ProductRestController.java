@@ -13,7 +13,6 @@ import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.common.RequestIdDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.product.AddProductRequestDTO;
 import shop.haui_megatech.domain.dto.product.UpdateProductRequestDTO;
@@ -347,7 +346,7 @@ public class ProductRestController {
     public ResponseEntity<?> hardDeleteOne(
             @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId
     ) {
-        return ResponseUtil.noContent(productService.hardDeleteOne(RequestIdDTO.builder().id(productId).build()));
+        return ResponseUtil.noContent(productService.hardDeleteOne(productId));
     }
 
 

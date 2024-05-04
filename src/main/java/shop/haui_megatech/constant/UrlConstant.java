@@ -72,11 +72,11 @@ public class UrlConstant {
     public static final class CartItem {
         public static final String PREFIX           = "/cart-items";
         public static final String CART_ITEM_ID     = "/{cart-item-id}";
-        public static final String GET_LIST         = User.PREFIX + User.USER_ID + CartItem.PREFIX;
-        public static final String ADD_ONE          = User.PREFIX + User.USER_ID + CartItem.PREFIX;
-        public static final String UPDATE_CART_ITEM = User.PREFIX + User.USER_ID + CartItem.PREFIX + CART_ITEM_ID;
-        public static final String DELETE_ONE       = User.PREFIX + User.USER_ID + CartItem.PREFIX + CART_ITEM_ID;
-        public static final String DELETE_LIST      = User.PREFIX + User.USER_ID + CartItem.PREFIX;
+        public static final String GET_LIST         = PREFIX;
+        public static final String ADD_ONE          = PREFIX;
+        public static final String UPDATE_CART_ITEM = PREFIX + CART_ITEM_ID;
+        public static final String DELETE_ONE       = PREFIX + CART_ITEM_ID;
+        public static final String DELETE_LIST      = PREFIX;
     }
 
     public static final class Brand {

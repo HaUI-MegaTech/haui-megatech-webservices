@@ -18,7 +18,7 @@ import shop.haui_megatech.service.CartItemService;
 @RequiredArgsConstructor
 @Tag(name = "Carts Management REST API")
 @SecurityRequirement(name = "bearerAuth")
-public class CartRestController {
+public class CartItemRestController {
     private final CartItemService cartService;
 
     @PostMapping(UrlConstant.CartItem.ADD_ONE)

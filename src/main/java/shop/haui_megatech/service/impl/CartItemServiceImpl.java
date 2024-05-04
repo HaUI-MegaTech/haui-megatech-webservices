@@ -176,14 +176,34 @@ public class CartItemServiceImpl implements CartItemService {
 
         Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
 
+        if (request.keyword() != null) {
+            String[] keywords = request.keyword().split(" ");
+            List<CartItem> cartItems = new ArrayList<>();
+            int pageCount = 0;
+            for (String keyword : keywords) {
+                ++pageCount;
+                Page<CartItem> page = cartItemRepository.searchCartItemsByUserIdAndKeyword(keyword, foundUser.get().getId(), pageable);
+                cartItems.addAll(page.getContent());
+            }
+            return PaginationResponseDTO.<CartItemDTO>builder()
+                                        .keyword(request.keyword())
+                                        .pageIndex(request.pageIndex())
+                                        .pageSize(request.pageSize())
+                                        .totalItems((long) cartItems.size())
+                                        .totalPages(pageCount)
+                                        .items(cartItems.parallelStream()
+                                                        .map(CartItemMapper.INSTANCE::toCartItemDTO)
+                                                        .collect(Collectors.toList()))
+                                        .build();
+        }
+
         Page<CartItem> page = cartItemRepository.getCartItemsByUserId(foundUser.get().getId(), pageable);
 
         List<CartItem> cartItems = page.getContent();
 
         return PaginationResponseDTO.<CartItemDTO>builder()
-                                    .keyword(request.keyword())
                                     .pageIndex(request.pageIndex())
-                                    .pageSize(page.getNumberOfElements())
+                                    .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(cartItems.parallelStream()

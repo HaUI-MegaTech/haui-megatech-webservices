@@ -10,7 +10,7 @@ import java.util.List;
 public record PaginationResponseDTO<T>(
         String keyword,
         Integer pageIndex,
-        Integer pageSize,
+        Short pageSize,
         Long totalItems,
         Integer totalPages,
         List<T> items

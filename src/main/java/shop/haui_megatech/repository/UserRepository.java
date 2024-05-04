@@ -14,7 +14,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(
             "SELECT u FROM User u " +
-            "WHERE u.username LIKE %?1% AND (u.deleted = false OR u.deleted IS NULL)"
+            "WHERE u.username = :username AND (u.deleted = false OR u.deleted IS NULL)"
     )
     Optional<User> findActiveUserByUsername(String username);
 

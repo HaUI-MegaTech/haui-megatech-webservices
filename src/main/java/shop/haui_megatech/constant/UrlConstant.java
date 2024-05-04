@@ -90,7 +90,7 @@ public class UrlConstant {
         public static final String PREFIX       = "/auth";
         public static final String REGISTER     = PREFIX + "/register";
         public static final String AUTHENTICATE = PREFIX + "/authenticate";
-
+        public static final String REFRESH      = PREFIX + "/refresh";
 
     }
 

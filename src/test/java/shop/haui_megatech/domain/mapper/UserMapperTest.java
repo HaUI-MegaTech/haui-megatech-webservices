@@ -32,7 +32,7 @@ class UserMapperTest {
 
         // assert
         assertEquals(expected.id(), givenUser.getId());
-        assertEquals(expected.avatar(), givenUser.getAvatar());
+        assertEquals(expected.avatarImageUrl(), givenUser.getAvatar());
         assertEquals(expected.email(), givenUser.getEmail());
         assertEquals(expected.firstName(), givenUser.getFirstName());
         assertEquals(expected.lastName(), givenUser.getLastName());
@@ -69,7 +69,7 @@ class UserMapperTest {
         assertEquals(expected.getUsername(), dto.username());
         assertEquals(expected.getFirstName(), dto.firstName());
         assertEquals(expected.getLastName(), dto.lastName());
-        assertEquals(expected.getAvatar(), dto.avatar());
+        assertEquals(expected.getAvatar(), dto.avatarImageUrl());
         assertEquals(expected.getEmail(), dto.email());
         assertEquals(expected.getPhoneNumber(), dto.phoneNumber());
     }

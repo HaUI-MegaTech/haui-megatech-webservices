@@ -29,13 +29,16 @@ public class User implements UserDetails {
 
     private String lastName;
 
-    private String avatar;
+    private String avatarImageUrl;
 
     private String email;
 
     private String phoneNumber;
 
     private Boolean deleted;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CartItem> cartItems;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

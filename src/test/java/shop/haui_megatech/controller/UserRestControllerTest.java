@@ -3,7 +3,7 @@ package shop.haui_megatech.controller;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 
 
 @SpringBootTest
@@ -26,12 +26,12 @@ class UserRestControllerTest {
     @Disabled
     public void givenBlankUsername_whenCreateUser_thenReturn400BadRequest() throws Exception {
         // setup
-        CreateUserRequestDTO request = CreateUserRequestDTO.builder()
-                                                           .firstName("Hoang")
-                                                           .lastName("Nguyen Viet")
-                                                           .password("123")
-                                                           .confirmPassword("123")
-                                                           .build();
+        AddUserRequestDTO request = AddUserRequestDTO.builder()
+                                                     .firstName("Hoang")
+                                                     .lastName("Nguyen Viet")
+                                                     .password("123")
+                                                     .confirmPassword("123")
+                                                     .build();
 //        String requestBody = objectMapper.writeValueAsString(request);
 
         // run

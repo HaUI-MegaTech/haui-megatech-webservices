@@ -1,4 +1,4 @@
-package shop.haui_megatech.base;
+package shop.haui_megatech.annotation;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

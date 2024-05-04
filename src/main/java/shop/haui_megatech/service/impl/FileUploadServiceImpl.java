@@ -1,9 +1,10 @@
-package shop.haui_megatech.service;
+package shop.haui_megatech.service.impl;
 
 import com.cloudinary.Cloudinary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import shop.haui_megatech.service.FileUploadService;
 
 import java.io.IOException;
 import java.util.Map;

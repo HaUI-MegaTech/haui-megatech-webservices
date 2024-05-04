@@ -12,17 +12,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import shop.haui_megatech.repository.ProductRepository;
+import shop.haui_megatech.job.BrandClassifier;
 import shop.haui_megatech.repository.UserRepository;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
-    private final ProductRepository productRepository;
-    private final UserRepository userRepository;
+    private final UserRepository  userRepository;
+    private final BrandClassifier brandClassifier;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -56,12 +55,7 @@ public class ApplicationConfiguration {
     @Bean
     public CommandLineRunner init() {
         return args -> {
-            String newPassword = Integer.toString((int)(Math.random() * 1e6));
-
-            System.out.println(Integer.toString((int)(Math.random() * 1e6)));
-            System.out.println(Integer.toString((int)(Math.random() * 1e6)));
-            System.out.println(Integer.toString((int)(Math.random() * 1e6)));
-            System.out.println(Integer.toString((int)(Math.random() * 1e6)));
+            brandClassifier.classify();
         };
     }
 }

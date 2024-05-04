@@ -1,6 +1,6 @@
 package shop.haui_megatech.domain.dto.user;
 
-public record UpdateUserInfoRequest(
+public record UpdateUserInfoRequestDTO(
         String firstName,
         String lastName,
         String avatar,

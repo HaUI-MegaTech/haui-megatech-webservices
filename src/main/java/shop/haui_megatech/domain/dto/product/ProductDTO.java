@@ -6,16 +6,16 @@ import lombok.Builder;
 public record ProductDTO(
         Integer id,
         String name,
-        String oldPrice,
-        String newPrice,
+        Float oldPrice,
+        Float newPrice,
         String display,
         String processor,
         String card,
         String battery,
         String weight,
         Integer discountPercent,
-        Integer ram,
+        String ram,
         String storage,
-        String bannerImg
+        String mainImageUrl
 ) {
 }

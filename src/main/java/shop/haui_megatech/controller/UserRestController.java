@@ -38,7 +38,7 @@ public class UserRestController {
     )
     @GetMapping(UrlConstant.User.GET_ONE)
     public ResponseEntity<?> getOne(
-            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId
+            @PathVariable Integer userId
     ) {
         return ResponseUtil.ok(userService.getOne(userId));
     }
@@ -105,7 +105,7 @@ public class UserRestController {
     )
     @PutMapping(UrlConstant.User.UPDATE_INFO)
     public ResponseEntity<?> updateInfo(
-            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId,
+            @PathVariable Integer userId,
             @RequestBody(required = false) UpdateUserInfoRequestDTO request
     ) {
         return ResponseUtil.ok(userService.updateOne(userId, request));
@@ -124,7 +124,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.UPDATE_PASSWORD)
     public ResponseEntity<?> updatePassword(
-            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId,
+            @PathVariable Integer userId,
             @RequestBody UpdateUserPasswordRequestDTO request
     ) {
         return ResponseUtil.ok(userService.updatePassword(userId, request));
@@ -141,7 +141,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.SOFT_DELETE_ONE)
     public ResponseEntity<?> softDeleteOne(
-            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId
+            @PathVariable Integer userId
     ) {
         return ResponseUtil.ok(userService.softDeleteOne(userId));
     }
@@ -173,7 +173,7 @@ public class UserRestController {
     )
     @DeleteMapping(UrlConstant.User.HARD_DELETE_ONE)
     public ResponseEntity<?> hardDeleteOne(
-            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId
+            @PathVariable Integer userId
     ) {
         return ResponseUtil.ok(userService.hardDeleteOne(userId));
     }
@@ -205,7 +205,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.RESTORE_ONE)
     public ResponseEntity<?> restoreOne(
-            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId
+            @PathVariable Integer userId
     ) {
         return ResponseUtil.ok(userService.restoreOne(userId));
     }
@@ -237,7 +237,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.RESET_PASSWORD_ONE)
     public ResponseEntity<?> resetPasswordOne(
-            @PathVariable(UrlConstant.PathVariableName.USER_ID) Integer userId
+            @PathVariable Integer userId
     ) {
         return ResponseUtil.ok(userService.resetPasswordOne(userId));
     }

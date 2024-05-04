@@ -10,7 +10,7 @@ import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.domain.dto.cart.CartItemDTO;
-import shop.haui_megatech.domain.dto.cart.ModifyCartItemRequestDTO;
+import shop.haui_megatech.domain.dto.cart.CartItemRequestDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
@@ -38,14 +38,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CartItemServiceImpl implements CartItemService {
-    private final CartItemRepository cartRepository;
     private final UserRepository     userRepository;
     private final MessageSourceUtil  messageSourceUtil;
     private final ProductRepository  productRepository;
     private final CartItemRepository cartItemRepository;
 
     @Override
-    public CommonResponseDTO<?> addOne(ModifyCartItemRequestDTO request) {
+    public CommonResponseDTO<?> addOne(CartItemRequestDTO request) {
         if (request.quantity() <= 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
@@ -74,11 +73,11 @@ public class CartItemServiceImpl implements CartItemService {
         }
 
 
-        cartRepository.save(CartItem.builder()
-                                    .product(foundProduct.get())
-                                    .user(foundUser.get())
-                                    .quantity(request.quantity())
-                                    .build());
+        cartItemRepository.save(CartItem.builder()
+                                        .product(foundProduct.get())
+                                        .user(foundUser.get())
+                                        .quantity(request.quantity())
+                                        .build());
 
         return CommonResponseDTO.<UserDTO>builder()
                                 .success(true)
@@ -87,11 +86,11 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CommonResponseDTO<?> updateOne(Integer id, ModifyCartItemRequestDTO request) {
+    public CommonResponseDTO<?> updateOne(Integer id, CartItemRequestDTO request) {
         if (request.quantity() <= 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
-        Optional<CartItem> foundCartItem = cartRepository.findById(id);
+        Optional<CartItem> foundCartItem = cartItemRepository.findById(id);
         if (foundCartItem.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.Cart.NOT_FOUND);
 
@@ -108,7 +107,7 @@ public class CartItemServiceImpl implements CartItemService {
             throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
 
         foundCartItem.get().setQuantity(request.quantity());
-        cartRepository.save(foundCartItem.get());
+        cartItemRepository.save(foundCartItem.get());
 
         return CommonResponseDTO.<UserDTO>builder()
                                 .success(true)
@@ -126,7 +125,7 @@ public class CartItemServiceImpl implements CartItemService {
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
 
-        cartRepository.deleteById(cartItemId);
+        cartItemRepository.deleteById(cartItemId);
 
         return CommonResponseDTO.<UserDTO>builder()
                                 .success(true)
@@ -136,6 +135,8 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CommonResponseDTO<?> hardDeleteList(ListIdsRequestDTO request) {
+        if (request.ids().size() == 1) return this.hardDeleteOne(request.ids().getFirst());
+
         request.ids().parallelStream().forEach(item -> {
             if (item < 0)
                 throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_ID);
@@ -153,7 +154,7 @@ public class CartItemServiceImpl implements CartItemService {
                                                                          .toList()
         );
 
-        cartRepository.deleteAllById(checkedCartItemIds);
+        cartItemRepository.deleteAllByIds(checkedCartItemIds);
 
         return CommonResponseDTO.<UserDTO>builder()
                                 .success(true)

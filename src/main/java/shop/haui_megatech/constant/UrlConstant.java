@@ -15,17 +15,9 @@ public class UrlConstant {
     private static final String EXPOSE      = "/expose";
     private static final String UPDATE      = "/update";
 
-    public static final class PathVariableName {
-        public static final String CART_ITEM_ID = "cart-item-id";
-        public static final String BRAND_ID     = "brand-id";
-        public static final String PRODUCT_ID   = "product-id";
-        public static final String USER_ID      = "user-id";
-    }
-
-
     public static final class User {
         public static final String PREFIX              = "/users";
-        public static final String USER_ID             = "/{user-id}";
+        public static final String USER_ID             = "/{userId}";
         public static final String GET_ONE             = PREFIX + USER_ID;
         public static final String GET_ACTIVE_LIST     = PREFIX + ACTIVE;
         public static final String GET_DELETED_LIST    = PREFIX + DELETED;
@@ -46,7 +38,7 @@ public class UrlConstant {
 
     public static final class Product {
         public static final String PREFIX                   = "/products";
-        public static final String PRODUCT_ID               = "/{product-id}";
+        public static final String PRODUCT_ID               = "/{productId}";
         public static final String GET_DETAIL_ONE           = PREFIX + PRODUCT_ID;
         public static final String GET_ACTIVE_LIST          = PREFIX + ACTIVE;
         public static final String GET_HIDDEN_LIST          = PREFIX + HIDDEN;
@@ -70,18 +62,18 @@ public class UrlConstant {
     }
 
     public static final class CartItem {
-        public static final String PREFIX           = "/cart-items";
-        public static final String CART_ITEM_ID     = "/{cart-item-id}";
-        public static final String GET_LIST         = PREFIX;
-        public static final String ADD_ONE          = PREFIX;
-        public static final String UPDATE_CART_ITEM = PREFIX + CART_ITEM_ID;
-        public static final String DELETE_ONE       = PREFIX + CART_ITEM_ID;
-        public static final String DELETE_LIST      = PREFIX;
+        public static final String PREFIX     = "/cart-items";
+        public static final String ID         = "/{cartItemId}";
+        public static final String IDS        = "/{cartItemIds}";
+        public static final String GET_LIST   = PREFIX;
+        public static final String ADD_ONE    = PREFIX;
+        public static final String UPDATE_ONE = PREFIX + ID;
+        public static final String DELETE     = PREFIX + IDS;
     }
 
     public static final class Brand {
         public static final String PREFIX          = "/brands";
-        public static final String BRAND_ID        = "/{brand-id}";
+        public static final String BRAND_ID        = "/{brandId}";
         public static final String GET_ONE         = PREFIX + BRAND_ID;
         public static final String GET_ACTIVE_LIST = PREFIX + ACTIVE;
     }

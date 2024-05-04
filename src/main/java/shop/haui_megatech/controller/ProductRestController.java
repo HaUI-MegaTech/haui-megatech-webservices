@@ -34,7 +34,7 @@ public class ProductRestController {
     )
     @GetMapping(UrlConstant.Product.GET_DETAIL_ONE)
     public ResponseEntity<?> getOne(
-            @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId
+            @PathVariable Integer productId
     ) {
         return ResponseUtil.ok(productService.getOne(productId));
     }
@@ -54,7 +54,7 @@ public class ProductRestController {
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(UrlConstant.Product.GET_ACTIVE_LIST_BY_BRAND)
     public ResponseEntity<?> getActiveListByBrand(
-            @PathVariable(UrlConstant.PathVariableName.BRAND_ID) Integer brandId,
+            @PathVariable Integer brandId,
             @ParameterObject PaginationRequestDTO request
     ) {
         return ResponseUtil.ok(productService.getActiveListByBrand(request, brandId));
@@ -164,7 +164,7 @@ public class ProductRestController {
     )
     @PutMapping(UrlConstant.Product.UPDATE_ONE)
     public ResponseEntity<?> updateOne(
-            @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId,
+            @PathVariable Integer productId,
             @RequestBody UpdateProductRequestDTO request) {
         return ResponseUtil.ok(productService.updateOne(productId, request));
     }
@@ -200,7 +200,7 @@ public class ProductRestController {
     )
     @PatchMapping(UrlConstant.Product.SOFT_DELETE_ONE)
     public ResponseEntity<?> softDeleteOne(
-            @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId
+            @PathVariable Integer productId
     ) {
         return ResponseUtil.ok(productService.softDeleteOne(productId));
     }
@@ -236,7 +236,7 @@ public class ProductRestController {
     )
     @PatchMapping(UrlConstant.Product.RESTORE_ONE)
     public ResponseEntity<?> restoreOne(
-            @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId
+            @PathVariable Integer productId
     ) {
         return ResponseUtil.ok(productService.restoreOne(productId));
     }
@@ -272,7 +272,7 @@ public class ProductRestController {
     )
     @PatchMapping(UrlConstant.Product.HIDE_ONE)
     public ResponseEntity<?> hideOne(
-            @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId
+            @PathVariable Integer productId
     ) {
         return ResponseUtil.ok(productService.hideOne(productId));
     }
@@ -308,7 +308,7 @@ public class ProductRestController {
     )
     @PatchMapping(UrlConstant.Product.EXPOSE_ONE)
     public ResponseEntity<?> exposeOne(
-            @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId
+            @PathVariable Integer productId
     ) {
         return ResponseUtil.ok(productService.exposeOne(productId));
     }
@@ -344,7 +344,7 @@ public class ProductRestController {
     )
     @DeleteMapping(UrlConstant.Product.HARD_DELETE_ONE)
     public ResponseEntity<?> hardDeleteOne(
-            @PathVariable(UrlConstant.PathVariableName.PRODUCT_ID) Integer productId
+            @PathVariable Integer productId
     ) {
         return ResponseUtil.noContent(productService.hardDeleteOne(productId));
     }

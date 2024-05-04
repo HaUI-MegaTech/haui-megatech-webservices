@@ -58,7 +58,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PaginationResponseDTO<ProductDTO> getList(PaginationRequestDTO request) {
-        System.out.println("here");
         if (request.pageIndex() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 

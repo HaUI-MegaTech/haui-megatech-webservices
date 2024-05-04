@@ -30,7 +30,7 @@ public class BrandRestController {
     )
     @GetMapping(UrlConstant.Brand.GET_ONE)
     public ResponseEntity<?> getOne(
-            @PathVariable(UrlConstant.PathVariableName.BRAND_ID) Integer brandId
+            @PathVariable Integer brandId
     ) {
         return ResponseUtil.ok(brandService.getOne(brandId));
     }

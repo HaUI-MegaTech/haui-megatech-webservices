@@ -3,9 +3,12 @@ package shop.haui_megatech.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import shop.haui_megatech.domain.entity.CartItem;
+
+import java.util.List;
 
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
@@ -27,6 +30,14 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
             "AND LOWER(CONCAT(c.product.name, c.product.processor, c.product.storage)) LIKE LOWER(CONCAT('%', :keyword, '%')) "
     )
     Page<CartItem> searchCartItemsByUserIdAndKeyword(String keyword, Integer userId, Pageable pageable);
+
+
+    @Query(
+            "DELETE FROM CartItem c " +
+            "WHERE c.id IN :ids "
+    )
+    @Modifying
+    void deleteAllByIds(List<Integer> ids);
 
 
 }

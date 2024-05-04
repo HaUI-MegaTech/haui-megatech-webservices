@@ -73,7 +73,12 @@ public class CartItemServiceImpl implements CartItemService {
                                     .build();
         }
 
-        cartRepository.save(CartItemMapper.INSTANCE.toCartItem(request));
+
+        cartRepository.save(CartItem.builder()
+                                    .product(foundProduct.get())
+                                    .user(foundUser.get())
+                                    .quantity(request.quantity())
+                                    .build());
 
         return CommonResponseDTO.<UserDTO>builder()
                                 .success(true)

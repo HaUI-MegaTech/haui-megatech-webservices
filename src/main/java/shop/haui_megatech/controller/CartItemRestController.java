@@ -3,6 +3,7 @@ package shop.haui_megatech.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
@@ -30,7 +31,7 @@ public class CartItemRestController {
 
     @GetMapping(UrlConstant.CartItem.GET_LIST)
     public PaginationResponseDTO<CartItemDTO> getCartItems(
-            @RequestBody PaginationRequestDTO request
+            @ParameterObject PaginationRequestDTO request
     ) {
         return cartService.getCartItems(request);
     }

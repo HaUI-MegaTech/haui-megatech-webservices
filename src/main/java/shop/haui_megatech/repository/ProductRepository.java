@@ -35,7 +35,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query(
             "SELECT p FROM Product p " +
-            "WHERE (p.name LIKE %?1% OR p.processor LIKE %?1%) " +
+            "WHERE LOWER(CONCAT(p.name, p.processor, p.storage, p.memoryCapacity)) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "AND (p.deleted = false OR p.deleted IS NULL) " +
             "AND (p.hidden = false OR p.hidden IS NULL) "
     )

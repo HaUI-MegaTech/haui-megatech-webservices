@@ -3,23 +3,28 @@ package shop.haui_megatech.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import shop.haui_megatech.base.ResponseUtil;
-import shop.haui_megatech.base.RestApiV1;
+import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
+import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
+import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
-import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
-import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
+import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequestDTO;
 import shop.haui_megatech.service.UserService;
+import shop.haui_megatech.utility.ResponseUtil;
 
 @RestApiV1
 @RequiredArgsConstructor
 @Tag(name = "Users Management REST API")
+@SecurityRequirement(name = "bearerAuth")
 public class UserRestController {
     private final UserService userService;
 
@@ -31,15 +36,15 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.User.GET_USER_BY_ID)
-    public ResponseEntity<?> getUserById(
-            @PathVariable(name = "userId") Integer userId
+    @GetMapping(UrlConstant.User.GET_ONE)
+    public ResponseEntity<?> getOne(
+            @PathVariable Integer userId
     ) {
-        return ResponseUtil.ok(userService.getUserById(userId));
+        return ResponseUtil.ok(userService.getOne(userId));
     }
 
 
-    @Operation(summary = "Create a new User")
+    @Operation(summary = "Add a new User")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "When has created successfully"),
@@ -48,11 +53,45 @@ public class UserRestController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             }
     )
-    @PostMapping(UrlConstant.User.CREATE_USER)
-    public ResponseEntity<?> createUser(
-            @RequestBody CreateUserRequestDTO request
+    @PostMapping(UrlConstant.User.ADD_ONE)
+    public ResponseEntity<?> addOne(
+            @RequestBody @Valid AddUserRequestDTO request
     ) {
-        return ResponseUtil.created(userService.createUser(request));
+        return ResponseUtil.created(userService.addOne(request));
+    }
+
+
+    @Operation(summary = "Add a list of Users using Excel file")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204", description = "When has created successfully"),
+                    @ApiResponse(responseCode = "400", description = "When send empty username or password request"),
+                    @ApiResponse(responseCode = "403", description = "When has not been authorized"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+            }
+    )
+    @PostMapping(UrlConstant.User.IMPORT_EXCEL)
+    public ResponseEntity<?> importExcel(
+            @ParameterObject ImportDataRequestDTO request
+    ) {
+        return ResponseUtil.created(userService.importExcel(request));
+    }
+
+
+    @Operation(summary = "Add a list of Users using Csv file")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204", description = "When has created successfully"),
+                    @ApiResponse(responseCode = "400", description = "When send empty username or password request"),
+                    @ApiResponse(responseCode = "403", description = "When has not been authorized"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+            }
+    )
+    @PostMapping(UrlConstant.User.IMPORT_CSV)
+    public ResponseEntity<?> importCsv(
+            @ParameterObject ImportDataRequestDTO request
+    ) {
+        return ResponseUtil.created(userService.importCsv(request));
     }
 
 
@@ -64,12 +103,12 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PutMapping(UrlConstant.User.UPDATE_USER_INFO)
-    public ResponseEntity<?> updateUserInfo(
-            @PathVariable(value = "userId") Integer userId,
-            @RequestBody(required = false) UpdateUserInfoRequest request
+    @PutMapping(UrlConstant.User.UPDATE_INFO)
+    public ResponseEntity<?> updateInfo(
+            @PathVariable Integer userId,
+            @RequestBody(required = false) UpdateUserInfoRequestDTO request
     ) {
-        return ResponseUtil.ok(userService.updateUserInfo(userId, request));
+        return ResponseUtil.ok(userService.updateOne(userId, request));
     }
 
 
@@ -83,12 +122,12 @@ public class UserRestController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error")
             }
     )
-    @PatchMapping(UrlConstant.User.UPDATE_USER_PASSWORD)
-    public ResponseEntity<?> updateUserPassword(
-            @PathVariable(value = "userId") Integer userId,
-            @RequestBody UpdateUserPasswordRequest request
+    @PatchMapping(UrlConstant.User.UPDATE_PASSWORD)
+    public ResponseEntity<?> updatePassword(
+            @PathVariable Integer userId,
+            @RequestBody UpdateUserPasswordRequestDTO request
     ) {
-        return ResponseUtil.ok(userService.updateUserPassword(userId, request));
+        return ResponseUtil.ok(userService.updatePassword(userId, request));
     }
 
 
@@ -100,11 +139,27 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(UrlConstant.User.TEMPORARILY_DELETE_USER)
-    public ResponseEntity<?> temporarilyDeleteUserById(
-            @PathVariable(value = "userId") Integer userId
+    @PatchMapping(UrlConstant.User.SOFT_DELETE_ONE)
+    public ResponseEntity<?> softDeleteOne(
+            @PathVariable Integer userId
     ) {
-        return ResponseUtil.ok(userService.temporarilyDeleteUserById(userId));
+        return ResponseUtil.ok(userService.softDeleteOne(userId));
+    }
+
+
+    @Operation(summary = "Temporarily delete Users by a list of Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
+    @PatchMapping(UrlConstant.User.SOFT_DELETE_LIST)
+    public ResponseEntity<?> softDeleteList(
+            @RequestBody ListIdsRequestDTO request
+    ) {
+        return ResponseUtil.ok(userService.softDeleteList(request));
     }
 
 
@@ -116,11 +171,27 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @DeleteMapping(UrlConstant.User.PERMANENTLY_DELETE_USER)
-    public ResponseEntity<?> permanentlyDeleteUserById(
-            @PathVariable(name = "userId") Integer userId
+    @DeleteMapping(UrlConstant.User.HARD_DELETE_ONE)
+    public ResponseEntity<?> hardDeleteOne(
+            @PathVariable Integer userId
     ) {
-        return ResponseUtil.ok(userService.permanentlyDeleteUserById(userId));
+        return ResponseUtil.ok(userService.hardDeleteOne(userId));
+    }
+
+
+    @Operation(summary = "Permanently delete Users by a list of Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
+    @DeleteMapping(UrlConstant.User.HARD_DELETE_LIST)
+    public ResponseEntity<?> hardDeleteList(
+            @RequestBody ListIdsRequestDTO request
+    ) {
+        return ResponseUtil.ok(userService.hardDeleteList(request));
     }
 
 
@@ -132,11 +203,59 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(UrlConstant.User.RESTORE_USER_BY_ID)
-    public ResponseEntity<?> restoreDeletedUserById(
-            @PathVariable(name = "userId") Integer userId
+    @PatchMapping(UrlConstant.User.RESTORE_ONE)
+    public ResponseEntity<?> restoreOne(
+            @PathVariable Integer userId
     ) {
-        return ResponseUtil.ok(userService.restoreDeletedUserById(userId));
+        return ResponseUtil.ok(userService.restoreOne(userId));
+    }
+
+
+    @Operation(summary = "Restore Users from deleted Users by a list of Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
+    @PatchMapping(UrlConstant.User.RESTORE_LIST)
+    public ResponseEntity<?> restoreList(
+            @RequestBody ListIdsRequestDTO request
+    ) {
+        return ResponseUtil.ok(userService.restoreList(request));
+    }
+
+
+    @Operation(summary = "Reset User's password by Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
+    @PatchMapping(UrlConstant.User.RESET_PASSWORD_ONE)
+    public ResponseEntity<?> resetPasswordOne(
+            @PathVariable Integer userId
+    ) {
+        return ResponseUtil.ok(userService.resetPasswordOne(userId));
+    }
+
+
+    @Operation(summary = "Reset Users' password by a list of Id")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
+    @PatchMapping(UrlConstant.User.RESET_PASSWORD_LIST)
+    public ResponseEntity<?> resetPasswordList(
+            @RequestBody ListIdsRequestDTO request
+    ) {
+        return ResponseUtil.ok(userService.resetPasswordList(request));
     }
 
 
@@ -147,9 +266,9 @@ public class UserRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden")
             }
     )
-    @GetMapping(UrlConstant.User.GET_ACTIVE_USERS)
-    public ResponseEntity<?> getActiveUsers(@ParameterObject PaginationRequestDTO request) {
-        return ResponseUtil.ok(userService.getActiveUsers(request));
+    @GetMapping(UrlConstant.User.GET_ACTIVE_LIST)
+    public ResponseEntity<?> getActiveList(@ParameterObject PaginationRequestDTO request) {
+        return ResponseUtil.ok(userService.getList(request));
     }
 
 
@@ -160,8 +279,8 @@ public class UserRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden")
             }
     )
-    @GetMapping(UrlConstant.User.GET_DELETED_USERS)
-    public ResponseEntity<?> getDeletedUsers(@ParameterObject PaginationRequestDTO request) {
-        return ResponseUtil.ok(userService.getDeletedUsers(request));
+    @GetMapping(UrlConstant.User.GET_DELETED_LIST)
+    public ResponseEntity<?> getDeletedList(@ParameterObject PaginationRequestDTO request) {
+        return ResponseUtil.ok(userService.getDeletedList(request));
     }
 }

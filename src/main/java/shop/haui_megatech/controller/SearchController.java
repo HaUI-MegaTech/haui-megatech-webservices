@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpStatus;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,13 +19,14 @@ import java.util.regex.Pattern;
 
 record PageMap(List<Cse_Image> cse_image) {}
 
-record Cse_Image(String src) {}
+record Cse_Image(String src) {
+}
 
 class Item {
-    private String link;
-    private String title;
+    private String  link;
+    private String  title;
     private PageMap pagemap;
-    private String price;
+    private String  price;
 
     public String getLink() {
         return link;
@@ -58,6 +60,7 @@ class Item {
         this.price = price;
     }
 }
+
 class SearchResult {
     private List<Item> items;
 
@@ -69,13 +72,15 @@ class SearchResult {
         this.items = items;
     }
 }
+
 //http://localhost:8080/api/v1?compare={tenSP}
 @RestController
 @RequestMapping(path = "/api/v1")
 public class SearchController {
 
-    private static final String API_KEY = "AIzaSyBvQShdKz6SVuFY94HW9XOs4joQ0YS9DgU";
+    private static final String API_KEY          = "AIzaSyBvQShdKz6SVuFY94HW9XOs4joQ0YS9DgU";
     private static final String SEARCH_ENGINE_ID = "04427d5135e124d17";
+
 
     @GetMapping("")
     public SearchResult search(@RequestParam String compare) throws Exception {
@@ -101,6 +106,7 @@ public class SearchController {
             }
 
             SearchResult searchResult = response.getBody();
+
 
             String[] Classs = {".product-price",".box-price-present",".detail-product-old-price",".pro-price", ".price",".productPriceMain",".product__price--show",".giakm",".gia-km-cu"};
             for (Item item : searchResult.getItems()){

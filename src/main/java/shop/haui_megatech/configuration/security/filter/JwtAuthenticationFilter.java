@@ -13,16 +13,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import shop.haui_megatech.util.JwtTokenUtil;
+import shop.haui_megatech.utility.JwtTokenUtil;
 
 import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private static final String             AUTH_PREFIX = "Bearer ";
     private final        UserDetailsService userDetailsService;
     private final        JwtTokenUtil       jwtUtil;
-    private static final String             AUTH_PREFIX = "Bearer ";
 
     @Override
     protected void doFilterInternal(

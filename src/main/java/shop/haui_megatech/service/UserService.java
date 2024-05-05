@@ -1,29 +1,22 @@
 package shop.haui_megatech.service;
 
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
-import shop.haui_megatech.domain.dto.user.CreateUserRequestDTO;
-import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
-import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
+import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
+import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequestDTO;
 import shop.haui_megatech.domain.dto.user.UserDTO;
+import shop.haui_megatech.service.base.*;
 
-public interface UserService {
-    CommonResponseDTO<UserDTO> getUserById(Integer userId);
+public interface UserService extends Addable<AddUserRequestDTO>,
+                                     Gettable<UserDTO>,
+                                     Updatable<UpdateUserInfoRequestDTO>,
+                                     Importable,
+                                     HardDeletable,
+                                     SoftDeletable<UserDTO> {
+    CommonResponseDTO<?> updatePassword(Integer userId, UpdateUserPasswordRequestDTO request);
 
-    CommonResponseDTO<?> createUser(CreateUserRequestDTO request);
+    CommonResponseDTO<?> resetPasswordOne(Integer userId);
 
-    CommonResponseDTO<?> updateUserInfo(Integer userId, UpdateUserInfoRequest request);
-
-    CommonResponseDTO<?> updateUserPassword(Integer userId, UpdateUserPasswordRequest request);
-
-    CommonResponseDTO<?> temporarilyDeleteUserById(Integer userId);
-
-    CommonResponseDTO<?> permanentlyDeleteUserById(Integer userId);
-
-    CommonResponseDTO<?> restoreDeletedUserById(Integer userId);
-
-    PaginationResponseDTO<UserDTO> getActiveUsers(PaginationRequestDTO request);
-
-    PaginationResponseDTO<UserDTO> getDeletedUsers(PaginationRequestDTO requestDTO);
+    CommonResponseDTO<?> resetPasswordList(ListIdsRequestDTO request);
 }

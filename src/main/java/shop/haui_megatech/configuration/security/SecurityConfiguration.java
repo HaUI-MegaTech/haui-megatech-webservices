@@ -16,7 +16,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import shop.haui_megatech.configuration.security.filter.JwtAuthenticationFilter;
 import shop.haui_megatech.constant.UrlConstant;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -30,8 +29,11 @@ public class SecurityConfiguration {
             "/swagger-ui" + CATCH_ALL_WILDCARDS,
             UrlConstant.API_V1 + UrlConstant.Auth.PREFIX + CATCH_ALL_WILDCARDS,
             "/v3/api-docs" + CATCH_ALL_WILDCARDS,
-            UrlConstant.API_V1 + UrlConstant.Product.GET_PRODUCTS,
-            UrlConstant.API_V1 + UrlConstant.Product.GET_PRODUCT_BY_ID,
+            UrlConstant.API_V1 + UrlConstant.Product.GET_ACTIVE_LIST,
+            UrlConstant.API_V1 + UrlConstant.Product.GET_ACTIVE_LIST_BY_BRAND,
+            UrlConstant.API_V1 + UrlConstant.Product.GET_DETAIL_ONE,
+            UrlConstant.API_V1 + UrlConstant.Brand.GET_ONE,
+            UrlConstant.API_V1 + UrlConstant.Brand.GET_ACTIVE_LIST,
             "/search"
     };
     private final List<String>            WHITE_LIST_ORIGINS  = List.of(
@@ -40,7 +42,8 @@ public class SecurityConfiguration {
     );
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    public SecurityFilterChain configure(HttpSecurity http)
+            throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                    .cors(cors -> cors.configurationSource(this.corsConfigurationSource()))
                    .authorizeHttpRequests(auth -> auth.requestMatchers(WHITE_LIST_URLS)
@@ -58,7 +61,7 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(WHITE_LIST_ORIGINS);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Accept-Language"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Accept-Language", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization", "Accept-Language"));
         configuration.setMaxAge((long) (24 * 60 * 60));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -6,14 +6,14 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record PaginationResponseDTO<T>(
-		@JsonInclude(JsonInclude.Include.NON_NULL)
-		String keyword,
-		Integer pageIndex,
-		Integer pageSize,
-		Long totalItems,
-		Integer totalPages,
-		List<T> items
+        String keyword,
+        Integer pageIndex,
+        Short pageSize,
+        Long totalItems,
+        Integer totalPages,
+        List<T> items
 ) {
-	
+
 }

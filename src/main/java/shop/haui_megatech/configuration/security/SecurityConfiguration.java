@@ -34,7 +34,8 @@ public class SecurityConfiguration {
             UrlConstant.API_V1 + UrlConstant.Product.GET_DETAIL_ONE,
             UrlConstant.API_V1 + UrlConstant.Brand.GET_ONE,
             UrlConstant.API_V1 + UrlConstant.Brand.GET_ACTIVE_LIST,
-            "/search"
+            "/search",
+            UrlConstant.API_V1 + UrlConstant.Order.PREFIX + CATCH_ALL_WILDCARDS
     };
     private final List<String>            WHITE_LIST_ORIGINS  = List.of(
             "http://localhost:3000",

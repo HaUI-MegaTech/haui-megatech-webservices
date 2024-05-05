@@ -20,7 +20,9 @@ public class ErrorMessageConstant {
     public static class Cart {
         public static final String NOT_FOUND = "cart.error.not-found";
     }
-
+    public static class Order {
+        public static final String NOT_FOUND = "order.error.not-found";
+    }
     public static class Request {
         public static final String BLANK_USERNAME              = "request.error.blank-username";
         public static final String BLANK_PASSWORD              = "request.error.blank-password";

@@ -14,7 +14,7 @@ public class UrlConstant {
     private static final String HIDE        = "/hide";
     private static final String EXPOSE      = "/expose";
     private static final String UPDATE      = "/update";
-
+    private static final String ADMIN  = "/admin";
 
     public static final class User {
         public static final String PREFIX              = "/users";
@@ -74,7 +74,18 @@ public class UrlConstant {
         public static final String GET_ONE         = PREFIX + "/{brandId}";
         public static final String GET_ACTIVE_LIST = PREFIX + ACTIVE;
     }
-
+    public static final class Order {
+        public static final String PREFIX           = "/orders";
+        public static final String GET_LIST_BY_USER_ID    = PREFIX;
+        public static final String GET_LIST_FOR_ADMIN     = PREFIX + ADMIN;
+        public static final String GET_DETAIL_FOR_USER = PREFIX + "/detail";
+        public static final String GET_DETAIL_FOR_ADMIN = PREFIX + ADMIN + "/detail" +"/{orderId}";
+        public static final String ADD_ONE_FOR_USER          = PREFIX + "/addOne";
+        public static final String ADD_ONE_FOR_ADMIN         = PREFIX + ADMIN + "/addOne";
+        public static final String UPDATED_ONE_FOR_UER       = PREFIX + "/updatedOne";
+        public static final String UPDATED_ONE_FOR_ADMIN     = PREFIX + ADMIN + "/updatedOne";
+        public static final String DELETE_ONE_ORDER    = PREFIX + DELETED + "/{orderId}";
+    }
     public static final class Auth {
         public static final String PREFIX       = "/auth";
         public static final String REGISTER     = PREFIX + "/register";

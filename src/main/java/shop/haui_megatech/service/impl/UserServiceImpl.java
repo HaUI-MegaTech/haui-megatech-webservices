@@ -13,7 +13,6 @@ import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.common.RequestIdDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
@@ -213,8 +212,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteOne(RequestIdDTO request) {
-        Optional<User> found = userRepository.findById(request.id());
+    public CommonResponseDTO<?> hardDeleteOne(Integer id) {
+        Optional<User> found = userRepository.findById(id);
 
         if (found.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
@@ -327,7 +326,7 @@ public class UserServiceImpl implements UserService {
         return PaginationResponseDTO.<UserDTO>builder()
                                     .keyword(request.keyword())
                                     .pageIndex(request.pageIndex())
-                                    .pageSize(page.getNumberOfElements())
+                                    .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(users.parallelStream()
@@ -358,7 +357,7 @@ public class UserServiceImpl implements UserService {
         return PaginationResponseDTO.<UserDTO>builder()
                                     .keyword(request.keyword())
                                     .pageIndex(request.pageIndex())
-                                    .pageSize(page.getNumberOfElements())
+                                    .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(users.parallelStream()

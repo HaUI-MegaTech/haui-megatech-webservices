@@ -31,7 +31,6 @@ public record PaginationRequestDTO(
         return Objects.requireNonNullElse(this.orderBy, PaginationConstant.DEFAULT_ORDER_BY);
     }
 
-    @Override
     public Short pageSize() {
         return Objects.requireNonNullElse(this.pageSize, PaginationConstant.DEFAULT_PAGE_SIZE);
     }

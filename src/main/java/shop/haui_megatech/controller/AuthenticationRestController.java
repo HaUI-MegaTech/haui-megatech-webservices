@@ -19,12 +19,24 @@ public class AuthenticationRestController {
     private final AuthenticationService service;
 
     @PostMapping(UrlConstant.Auth.REGISTER)
-    public ResponseEntity<?> register(@RequestBody AddUserRequestDTO request) {
+    public ResponseEntity<?> register(
+            @RequestBody AddUserRequestDTO request
+    ) {
         return ResponseUtil.ok(service.register(request));
     }
 
     @PostMapping(UrlConstant.Auth.AUTHENTICATE)
-    public ResponseEntity<?> register(@RequestBody AuthenticationRequestDTO request) {
+    public ResponseEntity<?> authenticate(
+            @RequestBody AuthenticationRequestDTO request
+    ) {
         return ResponseUtil.ok(service.authenticate(request));
     }
+
+    @PostMapping(UrlConstant.Auth.REFRESH)
+    public ResponseEntity<?> refresh(
+            @RequestBody AuthenticationRequestDTO request
+    ) {
+        return ResponseUtil.ok(service.refresh(request));
+    }
+
 }

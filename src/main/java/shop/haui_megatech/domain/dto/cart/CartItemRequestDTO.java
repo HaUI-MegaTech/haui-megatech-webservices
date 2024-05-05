@@ -1,8 +1,6 @@
 package shop.haui_megatech.domain.dto.cart;
 
-public record ModifyCartItemRequestDTO(
-        String token,
-        Integer cartItemId,
+public record CartItemRequestDTO(
         Integer productId,
         Integer quantity
 ) {

@@ -2,7 +2,6 @@ package shop.haui_megatech.service;
 
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
-import shop.haui_megatech.domain.dto.common.RequestIdDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.dto.product.AddProductRequestDTO;
@@ -15,7 +14,7 @@ public interface ProductService extends Addable<AddProductRequestDTO>,
                                         Hidable<ProductDTO>,
                                         Importable,
                                         SoftDeletable<ProductDTO>,
-                                        HardDeletable<RequestIdDTO>,
+                                        HardDeletable,
                                         Updatable<UpdateProductRequestDTO> {
     CommonResponseDTO<?> updateListFromExcel(ImportDataRequestDTO request);
 

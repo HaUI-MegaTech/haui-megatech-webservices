@@ -12,7 +12,6 @@ import shop.haui_megatech.constant.SuccessMessageConstant;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.common.RequestIdDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.dto.product.AddProductRequestDTO;
@@ -31,6 +30,7 @@ import shop.haui_megatech.utility.ExcelUtil;
 import shop.haui_megatech.utility.MessageSourceUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,16 +69,34 @@ public class ProductServiceImpl implements ProductService {
 
         Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
 
-        Page<Product> page = request.keyword() == null
-                             ? productRepository.getActiveProductsPage(pageable)
-                             : productRepository.searchActiveProductsPage(request.keyword(), pageable);
+        if (request.keyword() != null) {
+            String[] keywords = request.keyword().split(" ");
+            List<Product> products = new ArrayList<>();
+            int pageCount = 0;
+            for (String keyword : keywords) {
+                ++pageCount;
+                Page<Product> page = productRepository.searchActiveProductsPage(keyword, pageable);
+                products.addAll(page.getContent());
+            }
+            return PaginationResponseDTO.<ProductDTO>builder()
+                                        .keyword(request.keyword())
+                                        .pageIndex(request.pageIndex())
+                                        .pageSize(request.pageSize())
+                                        .totalItems((long) products.size())
+                                        .totalPages(pageCount)
+                                        .items(products.parallelStream()
+                                                       .map(ProductMapper.INSTANCE::toProductDTO)
+                                                       .collect(Collectors.toList()))
+                                        .build();
+        }
+
+        Page<Product> page = productRepository.getActiveProductsPage(pageable);
 
         List<Product> products = page.getContent();
 
         return PaginationResponseDTO.<ProductDTO>builder()
-                                    .keyword(request.keyword())
                                     .pageIndex(request.pageIndex())
-                                    .pageSize(page.getNumberOfElements())
+                                    .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(products.parallelStream()
@@ -159,13 +177,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteOne(RequestIdDTO request) {
-        Optional<Product> found = productRepository.findById(request.id());
+    public CommonResponseDTO<?> hardDeleteOne(Integer id) {
+        Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
 
-        productRepository.deleteById(request.id());
+        productRepository.deleteById(id);
 
         return CommonResponseDTO.builder()
                                 .success(true)
@@ -229,7 +247,7 @@ public class ProductServiceImpl implements ProductService {
         return PaginationResponseDTO.<ProductDTO>builder()
                                     .keyword(request.keyword())
                                     .pageIndex(request.pageIndex())
-                                    .pageSize(page.getNumberOfElements())
+                                    .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(products.parallelStream()
@@ -292,7 +310,7 @@ public class ProductServiceImpl implements ProductService {
         return PaginationResponseDTO.<ProductDTO>builder()
                                     .keyword(request.keyword())
                                     .pageIndex(request.pageIndex())
-                                    .pageSize(page.getNumberOfElements())
+                                    .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(products.parallelStream()
@@ -428,7 +446,7 @@ public class ProductServiceImpl implements ProductService {
         return PaginationResponseDTO.<ProductDTO>builder()
                                     .keyword(request.keyword())
                                     .pageIndex(request.pageIndex())
-                                    .pageSize(page.getNumberOfElements())
+                                    .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
                                     .items(products.parallelStream()

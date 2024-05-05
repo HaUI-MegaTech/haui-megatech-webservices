@@ -14,7 +14,6 @@ import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.common.RequestIdDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequestDTO;
@@ -39,7 +38,7 @@ public class UserRestController {
     )
     @GetMapping(UrlConstant.User.GET_ONE)
     public ResponseEntity<?> getOne(
-            @PathVariable(name = "userId") Integer userId
+            @PathVariable Integer userId
     ) {
         return ResponseUtil.ok(userService.getOne(userId));
     }
@@ -106,7 +105,7 @@ public class UserRestController {
     )
     @PutMapping(UrlConstant.User.UPDATE_INFO)
     public ResponseEntity<?> updateInfo(
-            @PathVariable(value = "userId") Integer userId,
+            @PathVariable Integer userId,
             @RequestBody(required = false) UpdateUserInfoRequestDTO request
     ) {
         return ResponseUtil.ok(userService.updateOne(userId, request));
@@ -125,7 +124,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.UPDATE_PASSWORD)
     public ResponseEntity<?> updatePassword(
-            @PathVariable(value = "userId") Integer userId,
+            @PathVariable Integer userId,
             @RequestBody UpdateUserPasswordRequestDTO request
     ) {
         return ResponseUtil.ok(userService.updatePassword(userId, request));
@@ -142,7 +141,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.SOFT_DELETE_ONE)
     public ResponseEntity<?> softDeleteOne(
-            @PathVariable(value = "userId") Integer userId
+            @PathVariable Integer userId
     ) {
         return ResponseUtil.ok(userService.softDeleteOne(userId));
     }
@@ -174,9 +173,9 @@ public class UserRestController {
     )
     @DeleteMapping(UrlConstant.User.HARD_DELETE_ONE)
     public ResponseEntity<?> hardDeleteOne(
-            @PathVariable(name = "userId") Integer userId
+            @PathVariable Integer userId
     ) {
-        return ResponseUtil.ok(userService.hardDeleteOne(RequestIdDTO.builder().id(userId).build()));
+        return ResponseUtil.ok(userService.hardDeleteOne(userId));
     }
 
 
@@ -206,7 +205,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.RESTORE_ONE)
     public ResponseEntity<?> restoreOne(
-            @PathVariable(name = "userId") Integer userId
+            @PathVariable Integer userId
     ) {
         return ResponseUtil.ok(userService.restoreOne(userId));
     }
@@ -238,7 +237,7 @@ public class UserRestController {
     )
     @PatchMapping(UrlConstant.User.RESET_PASSWORD_ONE)
     public ResponseEntity<?> resetPasswordOne(
-            @PathVariable(name = "userId") Integer userId
+            @PathVariable Integer userId
     ) {
         return ResponseUtil.ok(userService.resetPasswordOne(userId));
     }

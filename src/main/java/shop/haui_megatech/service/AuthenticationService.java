@@ -8,4 +8,6 @@ public interface AuthenticationService {
     AuthenticationResponseDTO register(AddUserRequestDTO request);
 
     AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request);
+
+    AuthenticationResponseDTO refresh(AuthenticationRequestDTO request);
 }

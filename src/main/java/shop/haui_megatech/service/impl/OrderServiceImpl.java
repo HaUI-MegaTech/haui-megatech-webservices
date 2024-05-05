@@ -31,10 +31,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final MessageSourceUtil messageSourceUtil;
-    private final JwtTokenUtil jwtTokenUtil;
-    private final OrderMapper orderMapper;
-    private final UserRepository userRepository;
-    private final OrderRepository orderRepository;
+    private final JwtTokenUtil      jwtTokenUtil;
+    private final OrderMapper       orderMapper;
+    private final UserRepository    userRepository;
+    private final OrderRepository   orderRepository;
 
     @Override
     public PaginationResponseDTO<?> getListOrderForUser(ListOrdersForUserRequestDTO requestDTO) {
@@ -49,28 +49,28 @@ public class OrderServiceImpl implements OrderService {
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = requestDTO.paginationRequestDTO().order().equals(PaginationConstant.DEFAULT_ORDER)
-                ? Sort.by(requestDTO.paginationRequestDTO().orderBy())
-                .ascending()
-                : Sort.by(requestDTO.paginationRequestDTO().orderBy())
-                .descending();
+                    ? Sort.by(requestDTO.paginationRequestDTO().orderBy())
+                          .ascending()
+                    : Sort.by(requestDTO.paginationRequestDTO().orderBy())
+                          .descending();
 
         Pageable pageable = PageRequest.of(requestDTO.paginationRequestDTO().pageIndex(), requestDTO.paginationRequestDTO().pageSize(), sort);
 
         Page<Order> page = requestDTO.paginationRequestDTO().keyword() == null
-                ? orderRepository.findOrderByUserId(foundUser.get().getId(), pageable)
-                : orderRepository.searchOrderForUser(requestDTO.paginationRequestDTO().keyword(),foundUser.get().getId(), pageable);
+                           ? orderRepository.findOrderByUserId(foundUser.get().getId(), pageable)
+                           : orderRepository.searchOrderForUser(requestDTO.paginationRequestDTO().keyword(), foundUser.get().getId(), pageable);
 
         List<Order> orders = page.getContent();
         return PaginationResponseDTO.<OrderBaseDTO>builder()
-                .keyword(requestDTO.paginationRequestDTO().keyword())
-                .pageIndex(requestDTO.paginationRequestDTO().pageIndex())
-                .pageSize(page.getNumberOfElements())
-                .totalItems(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .items(orders
-                        .stream()
-                        .map(orderMapper::orderToOrderBase).toList())
-                .build();
+                                    .keyword(requestDTO.paginationRequestDTO().keyword())
+                                    .pageIndex(requestDTO.paginationRequestDTO().pageIndex())
+                                    .pageSize((short) page.getNumberOfElements())
+                                    .totalItems(page.getTotalElements())
+                                    .totalPages(page.getTotalPages())
+                                    .items(orders
+                                            .stream()
+                                            .map(orderMapper::orderToOrderBase).toList())
+                                    .build();
     }
 
     @Override
@@ -79,28 +79,28 @@ public class OrderServiceImpl implements OrderService {
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = requestDTO.order().equals(PaginationConstant.DEFAULT_ORDER)
-                ? Sort.by(requestDTO.orderBy())
-                .ascending()
-                : Sort.by(requestDTO.orderBy())
-                .descending();
+                    ? Sort.by(requestDTO.orderBy())
+                          .ascending()
+                    : Sort.by(requestDTO.orderBy())
+                          .descending();
 
         Pageable pageable = PageRequest.of(requestDTO.pageIndex(), requestDTO.pageSize(), sort);
 
         Page<Order> page = requestDTO.keyword() == null
-                ? orderRepository.findByAll(pageable)
-                : orderRepository.searchOrderForAdmin(requestDTO.keyword(),pageable);
+                           ? orderRepository.findByAll(pageable)
+                           : orderRepository.searchOrderForAdmin(requestDTO.keyword(), pageable);
 
         List<Order> orders = page.getContent();
         return PaginationResponseDTO.<OrderBaseDTO>builder()
-                .keyword(requestDTO.keyword())
-                .pageIndex(requestDTO.pageIndex())
-                .pageSize(page.getNumberOfElements())
-                .totalItems(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .items(orders
-                        .stream()
-                        .map(orderMapper::orderToOrderBase).toList())
-                .build();
+                                    .keyword(requestDTO.keyword())
+                                    .pageIndex(requestDTO.pageIndex())
+                                    .pageSize((short) page.getNumberOfElements())
+                                    .totalItems(page.getTotalElements())
+                                    .totalPages(page.getTotalPages())
+                                    .items(orders
+                                            .stream()
+                                            .map(orderMapper::orderToOrderBase).toList())
+                                    .build();
     }
 
     @Override
@@ -113,10 +113,10 @@ public class OrderServiceImpl implements OrderService {
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
         Order order = orderRepository.findOrderDetailById_UserId(requestDTO.orderId(), foundUser.get().getId()).get();
         return CommonResponseDTO.<OrderItemResponseDTO>builder()
-                .success(true)
-                .message("Get Order Detail For User")
-                .item(orderMapper.orderItemResponseDto(order))
-                .build();
+                                .success(true)
+                                .message("Get Order Detail For User")
+                                .item(orderMapper.orderItemResponseDto(order))
+                                .build();
     }
 
     @Override
@@ -124,10 +124,10 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(orderId).get();
 
         return CommonResponseDTO.<OrderItemResponseDTO>builder()
-                .success(true)
-                .message("Get Order Detail For Admin")
-                .item(orderMapper.orderItemResponseDto(order))
-                .build();
+                                .success(true)
+                                .message("Get Order Detail For Admin")
+                                .item(orderMapper.orderItemResponseDto(order))
+                                .build();
     }
 
     @Override
@@ -143,20 +143,21 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(foundUser.get());
         Order saveOrder = orderRepository.save(order);
         return CommonResponseDTO.<OrderBaseDTO>builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Order.ADDED_ONE))
-                .item(orderMapper.orderToOrderBase(saveOrder))
-                .build();
+                                .success(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Order.ADDED_ONE))
+                                .item(orderMapper.orderToOrderBase(saveOrder))
+                                .build();
     }
+
     @Override
     public CommonResponseDTO<OrderBaseDTO> addOrderForAdmin(AddOrderForAdminRequestDTO requestDTO) {
         Order order = orderMapper.addOrderRequestForAdminDTOtoOrder(requestDTO);
         Order saveOrder = orderRepository.save(order);
         return CommonResponseDTO.<OrderBaseDTO>builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Order.ADDED_ONE))
-                .item(orderMapper.orderToOrderBase(saveOrder))
-                .build();
+                                .success(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Order.ADDED_ONE))
+                                .item(orderMapper.orderToOrderBase(saveOrder))
+                                .build();
     }
 
     @Override
@@ -176,10 +177,10 @@ public class OrderServiceImpl implements OrderService {
         orderUpdate.setUser(foundUser.get());
         Order saveOrder = orderRepository.save(orderUpdate);
         return CommonResponseDTO.<OrderBaseDTO>builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Order.UPDATED_ONE))
-                .item(orderMapper.orderToOrderBase(saveOrder))
-                .build();
+                                .success(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Order.UPDATED_ONE))
+                                .item(orderMapper.orderToOrderBase(saveOrder))
+                                .build();
     }
 
     @Override
@@ -197,10 +198,10 @@ public class OrderServiceImpl implements OrderService {
         orderUpdate.setUser(foundUser.get());
         Order saveOrder = orderRepository.save(orderUpdate);
         return CommonResponseDTO.<OrderBaseDTO>builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Order.UPDATED_ONE))
-                .item(orderMapper.orderToOrderBase(saveOrder))
-                .build();
+                                .success(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Order.UPDATED_ONE))
+                                .item(orderMapper.orderToOrderBase(saveOrder))
+                                .build();
     }
 
     @Override
@@ -210,10 +211,10 @@ public class OrderServiceImpl implements OrderService {
             throw new NotFoundException(ErrorMessageConstant.Order.NOT_FOUND);
         orderRepository.deleteById(order.getId());
         return CommonResponseDTO.<OrderBaseDTO>builder()
-                .success(true)
-                .message("Delete Order")
-                .item(orderMapper.orderToOrderBase(order))
-                .build();
+                                .success(true)
+                                .message("Delete Order")
+                                .item(orderMapper.orderToOrderBase(order))
+                                .build();
 
     }
 }

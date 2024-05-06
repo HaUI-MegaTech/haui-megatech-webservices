@@ -101,3 +101,7 @@ interface
 
 Settings (3 dots icon) -> Editor -> Code Style -> Java -> Import Scheme (3 dots icon) -> IntelliJ IDEA Code Style XML ->
 GlobalFormat.xml
+
+Và config thêm cái này: Settings -> Tools -> Actions on Save
+
+![img.png](img.png)

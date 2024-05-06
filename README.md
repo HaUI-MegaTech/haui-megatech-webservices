@@ -1,3 +1,60 @@
+# Cấu trúc thư mục dự án
+
+```bash
+src
+├───main
+│   ├───java
+│   │   └───shop
+│   │       └───haui_megatech
+│   │           ├───annotation
+│   │           ├───configuration
+│   │           │   ├───cache
+│   │           │   ├───documentation
+│   │           │   ├───language
+│   │           │   └───security
+│   │           │       └───filter
+│   │           ├───constant
+│   │           ├───controller
+│   │           ├───domain
+│   │           │   ├───dto
+│   │           │   │   ├───authentication
+│   │           │   │   ├───brand
+│   │           │   │   ├───cart
+│   │           │   │   ├───common
+│   │           │   │   ├───image
+│   │           │   │   ├───order
+│   │           │   │   ├───order_detail
+│   │           │   │   ├───pagination
+│   │           │   │   ├───product
+│   │           │   │   └───user
+│   │           │   ├───entity
+│   │           │   └───mapper
+│   │           │       └───impl
+│   │           ├───exception
+│   │           ├───job
+│   │           ├───log
+│   │           ├───repository
+│   │           ├───service
+│   │           │   ├───base
+│   │           │   └───impl
+│   │           ├───utility
+│   │           └───validator
+│   └───resources
+│       ├───i18n
+│       ├───META-INF
+│       ├───sql
+│       └───template
+└───test
+    └───java
+        └───shop
+            ├───hauimegatech
+            └───haui_megatech
+                ├───controller
+                ├───domain
+                │   └───mapper
+                └───order
+```
+
 # Cấu trúc các thư mục:
 
 - aspect: chứa các file thực hiện cho các thao tác logging hệ thống, phục vụ cho việc logging activity, benchmark query

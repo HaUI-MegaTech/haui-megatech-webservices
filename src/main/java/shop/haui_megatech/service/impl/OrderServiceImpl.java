@@ -45,16 +45,17 @@ public class OrderServiceImpl implements OrderService {
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
 
-        if (requestDTO.paginationRequestDTO().pageIndex() < 0)
+        if (requestDTO.paginationRequestDTO().index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
-        Sort sort = requestDTO.paginationRequestDTO().order().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(requestDTO.paginationRequestDTO().orderBy())
+        Sort sort = requestDTO.paginationRequestDTO().direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(requestDTO.paginationRequestDTO().fields())
                           .ascending()
-                    : Sort.by(requestDTO.paginationRequestDTO().orderBy())
+                    : Sort.by(requestDTO.paginationRequestDTO().fields())
                           .descending();
 
-        Pageable pageable = PageRequest.of(requestDTO.paginationRequestDTO().pageIndex(), requestDTO.paginationRequestDTO().pageSize(), sort);
+        Pageable pageable =
+                PageRequest.of(requestDTO.paginationRequestDTO().index(), requestDTO.paginationRequestDTO().limit(), sort);
 
         Page<Order> page = requestDTO.paginationRequestDTO().keyword() == null
                            ? orderRepository.findOrderByUserId(foundUser.get().getId(), pageable)
@@ -63,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = page.getContent();
         return PaginationResponseDTO.<OrderBaseDTO>builder()
                                     .keyword(requestDTO.paginationRequestDTO().keyword())
-                                    .pageIndex(requestDTO.paginationRequestDTO().pageIndex())
+                                    .pageIndex(requestDTO.paginationRequestDTO().index())
                                     .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
@@ -75,16 +76,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public PaginationResponseDTO<?> getListOrderForAdmin(PaginationRequestDTO requestDTO) {
-        if (requestDTO.pageIndex() < 0)
+        if (requestDTO.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
-        Sort sort = requestDTO.order().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(requestDTO.orderBy())
+        Sort sort = requestDTO.direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(requestDTO.fields())
                           .ascending()
-                    : Sort.by(requestDTO.orderBy())
+                    : Sort.by(requestDTO.fields())
                           .descending();
 
-        Pageable pageable = PageRequest.of(requestDTO.pageIndex(), requestDTO.pageSize(), sort);
+        Pageable pageable = PageRequest.of(requestDTO.index(), requestDTO.limit(), sort);
 
         Page<Order> page = requestDTO.keyword() == null
                            ? orderRepository.findByAll(pageable)
@@ -93,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = page.getContent();
         return PaginationResponseDTO.<OrderBaseDTO>builder()
                                     .keyword(requestDTO.keyword())
-                                    .pageIndex(requestDTO.pageIndex())
+                                    .pageIndex(requestDTO.index())
                                     .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())

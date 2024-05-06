@@ -306,16 +306,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginationResponseDTO<UserDTO> getList(PaginationRequestDTO request) {
-        if (request.pageIndex() < 0)
+        if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
-        Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(request.orderBy())
+        Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(request.fields())
                           .ascending()
-                    : Sort.by(request.orderBy())
+                    : Sort.by(request.fields())
                           .descending();
 
-        Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
+        Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
         Page<User> page = request.keyword() == null
                           ? userRepository.getAllActiveUsers(pageable)
@@ -325,7 +325,7 @@ public class UserServiceImpl implements UserService {
 
         return PaginationResponseDTO.<UserDTO>builder()
                                     .keyword(request.keyword())
-                                    .pageIndex(request.pageIndex())
+                                    .pageIndex(request.index())
                                     .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
@@ -337,16 +337,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginationResponseDTO<UserDTO> getDeletedList(PaginationRequestDTO request) {
-        if (request.pageIndex() < 0)
+        if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
-        Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(request.orderBy())
+        Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(request.fields())
                           .ascending()
-                    : Sort.by(request.orderBy())
+                    : Sort.by(request.fields())
                           .descending();
 
-        Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
+        Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
         Page<User> page = request.keyword() == null
                           ? userRepository.getAllDeletedUsers(pageable)
@@ -356,7 +356,7 @@ public class UserServiceImpl implements UserService {
 
         return PaginationResponseDTO.<UserDTO>builder()
                                     .keyword(request.keyword())
-                                    .pageIndex(request.pageIndex())
+                                    .pageIndex(request.index())
                                     .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())

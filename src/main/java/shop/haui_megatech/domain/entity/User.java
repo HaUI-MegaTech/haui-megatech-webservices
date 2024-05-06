@@ -2,10 +2,15 @@ package shop.haui_megatech.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -15,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,20 +28,36 @@ public class User implements UserDetails {
     private Integer id;
 
     private String username;
-
     private String password;
-
     private String firstName;
-
     private String lastName;
-
-    private String avatarImageUrl;
-
+    private Gender gender;
     private String email;
-
+    private String avatarImageUrl;
     private String phoneNumber;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Address> addresses;
+
+    @LastModifiedDate
+    @DateTimeFormat(pattern = "yyyy/MM/dd-HH:mm:ss")
+    private Date lastUpdated;
+
+    @CreatedDate
+    @DateTimeFormat(pattern = "yyyy/MM/dd-HH:mm:ss")
+    private Date whenCreated;
+
+
+    @DateTimeFormat(pattern = "yyyy/MM/dd-HH:mm:ss")
+    private Date    lastLogined;
+    private Integer logined;
+
+
+    @LastModifiedDate
+    @DateTimeFormat(pattern = "yyyy/MM/dd-HH:mm:ss")
+    private Date    whenDeleted;
     private Boolean deleted;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CartItem> cartItems;

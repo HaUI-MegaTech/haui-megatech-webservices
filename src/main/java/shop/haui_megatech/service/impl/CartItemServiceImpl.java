@@ -48,7 +48,8 @@ public class CartItemServiceImpl implements CartItemService {
         if (request.quantity() <= 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
-        Optional<User> foundUser = userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
+        Optional<User> foundUser =
+                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
@@ -94,7 +95,8 @@ public class CartItemServiceImpl implements CartItemService {
         if (foundCartItem.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.Cart.NOT_FOUND);
 
-        Optional<User> foundUser = userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
+        Optional<User> foundUser =
+                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
@@ -120,7 +122,8 @@ public class CartItemServiceImpl implements CartItemService {
         if (cartItemId < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_ID);
 
-        Optional<User> foundUser = userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
+        Optional<User> foundUser =
+                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
@@ -142,7 +145,8 @@ public class CartItemServiceImpl implements CartItemService {
                 throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_ID);
         });
 
-        Optional<User> foundUser = userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
+        Optional<User> foundUser =
+                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
@@ -169,18 +173,19 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public PaginationResponseDTO<CartItemDTO> getCartItems(PaginationRequestDTO request) {
-        Optional<User> foundUser = userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
+        Optional<User> foundUser =
+                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
 
-        Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(request.orderBy())
+        Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(request.fields())
                           .ascending()
-                    : Sort.by(request.orderBy())
+                    : Sort.by(request.fields())
                           .descending();
 
-        Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
+        Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
         if (request.keyword() != null) {
             String[] keywords = request.keyword().split(" ");
@@ -188,13 +193,14 @@ public class CartItemServiceImpl implements CartItemService {
             int pageCount = 0;
             for (String keyword : keywords) {
                 ++pageCount;
-                Page<CartItem> page = cartItemRepository.searchCartItemsByUserIdAndKeyword(keyword, foundUser.get().getId(), pageable);
+                Page<CartItem> page =
+                        cartItemRepository.searchCartItemsByUserIdAndKeyword(keyword, foundUser.get().getId(), pageable);
                 cartItems.addAll(page.getContent());
             }
             return PaginationResponseDTO.<CartItemDTO>builder()
                                         .keyword(request.keyword())
-                                        .pageIndex(request.pageIndex())
-                                        .pageSize(request.pageSize())
+                                        .pageIndex(request.index())
+                                        .pageSize(request.limit())
                                         .totalItems((long) cartItems.size())
                                         .totalPages(pageCount)
                                         .items(cartItems.parallelStream()
@@ -208,7 +214,7 @@ public class CartItemServiceImpl implements CartItemService {
         List<CartItem> cartItems = page.getContent();
 
         return PaginationResponseDTO.<CartItemDTO>builder()
-                                    .pageIndex(request.pageIndex())
+                                    .pageIndex(request.index())
                                     .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())

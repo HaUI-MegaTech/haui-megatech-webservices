@@ -22,7 +22,7 @@ src
 │   │           │   │   ├───cart
 │   │           │   │   ├───common
 │   │           │   │   ├───image
-│   │           │   │   ├───order
+│   │           │   │   ├───direction
 │   │           │   │   ├───order_detail
 │   │           │   │   ├───pagination
 │   │           │   │   ├───product
@@ -52,7 +52,7 @@ src
                 ├───controller
                 ├───domain
                 │   └───mapper
-                └───order
+                └───direction
 ```
 
 # Cấu trúc các thư mục:

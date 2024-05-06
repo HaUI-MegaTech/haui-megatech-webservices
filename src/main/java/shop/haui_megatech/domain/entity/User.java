@@ -5,7 +5,6 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -40,24 +39,17 @@ public class User implements UserDetails {
     private List<Address> addresses;
 
     @LastModifiedDate
-    @DateTimeFormat(pattern = "yyyy/MM/dd-HH:mm:ss")
     private Date lastUpdated;
 
     @CreatedDate
-    @DateTimeFormat(pattern = "yyyy/MM/dd-HH:mm:ss")
     private Date whenCreated;
 
-
-    @DateTimeFormat(pattern = "yyyy/MM/dd-HH:mm:ss")
     private Date    lastLogined;
     private Integer logined;
 
-
     @LastModifiedDate
-    @DateTimeFormat(pattern = "yyyy/MM/dd-HH:mm:ss")
     private Date    whenDeleted;
     private Boolean deleted;
-
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CartItem> cartItems;

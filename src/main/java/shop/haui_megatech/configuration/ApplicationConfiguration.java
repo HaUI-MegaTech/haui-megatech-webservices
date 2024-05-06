@@ -15,7 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import shop.haui_megatech.job.BrandClassifier;
 import shop.haui_megatech.repository.UserRepository;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
 @Configuration
 @RequiredArgsConstructor
@@ -57,5 +59,12 @@ public class ApplicationConfiguration {
         return args -> {
             brandClassifier.classify();
         };
+    }
+
+    @Bean
+    public DateFormat simpleDateFormat() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        DateFormat.
+        return dateFormat;
     }
 }

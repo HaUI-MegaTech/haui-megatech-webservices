@@ -3,13 +3,14 @@ package shop.haui_megatech.controller;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.http.HttpStatus;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -82,21 +83,21 @@ public class SearchController {
     private static final String SEARCH_ENGINE_ID = "04427d5135e124d17";
 
 
-    @GetMapping("")
+    @GetMapping("/outer-search")
     public SearchResult search(@RequestParam String compare) throws Exception {
         try {
             Pattern pattern = Pattern.compile("\\((.*?)\\)");
             Matcher matcher = pattern.matcher(compare);
-            String id="";
+            String id = "";
             if (matcher.find()) {
                 id = matcher.group(1);
             } else {
-                id = compare+" giá";
+                id = compare + " giá";
             }
 
-            String encodedKeyword = URLEncoder.encode(id, "UTF-8");
+            String encodedKeyword = URLEncoder.encode(id, StandardCharsets.UTF_8);
             String apiUrl = "https://www.googleapis.com/customsearch/v1?key=" + API_KEY +
-                    "&cx=" + SEARCH_ENGINE_ID + "&q=" + encodedKeyword + "&num=10";
+                            "&cx=" + SEARCH_ENGINE_ID + "&q=" + encodedKeyword + "&num=10";
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<SearchResult> response = restTemplate.getForEntity(apiUrl, SearchResult.class);
@@ -108,9 +109,12 @@ public class SearchController {
             SearchResult searchResult = response.getBody();
 
 
-            String[] Classs = {".product-price",".box-price-present",".detail-product-old-price",".pro-price", ".price",".productPriceMain",".product__price--show",".giakm",".gia-km-cu"};
-            for (Item item : searchResult.getItems()){
-                String price ="";
+            String[] Classs = {
+                    ".product-price", ".box-price-present", ".detail-product-old-price", ".pro-price", ".price", ".productPriceMain", ".product__price--show",
+                    ".giakm", ".gia-km-cu"
+            };
+            for (Item item : searchResult.getItems()) {
+                String price = "";
                 Document doc = Jsoup.connect(item.getLink()).get();
 
                 for (String Class : Classs) {
@@ -134,7 +138,7 @@ public class SearchController {
                 item.setPrice(price);
             }
             return searchResult;
-        } catch (Exception e){
+        } catch (Exception e) {
             return new SearchResult();
         }
     }

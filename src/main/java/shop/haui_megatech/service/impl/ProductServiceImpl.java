@@ -58,16 +58,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PaginationResponseDTO<ProductDTO> getList(PaginationRequestDTO request) {
-        if (request.pageIndex() < 0)
+        if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
-        Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(request.orderBy())
+        Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(request.fields())
                           .ascending()
-                    : Sort.by(request.orderBy())
+                    : Sort.by(request.fields())
                           .descending();
 
-        Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
+        Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
         if (request.keyword() != null) {
             String[] keywords = request.keyword().split(" ");
@@ -80,8 +80,8 @@ public class ProductServiceImpl implements ProductService {
             }
             return PaginationResponseDTO.<ProductDTO>builder()
                                         .keyword(request.keyword())
-                                        .pageIndex(request.pageIndex())
-                                        .pageSize(request.pageSize())
+                                        .pageIndex(request.index())
+                                        .pageSize(request.limit())
                                         .totalItems((long) products.size())
                                         .totalPages(pageCount)
                                         .items(products.parallelStream()
@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = page.getContent();
 
         return PaginationResponseDTO.<ProductDTO>builder()
-                                    .pageIndex(request.pageIndex())
+                                    .pageIndex(request.index())
                                     .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
@@ -229,16 +229,16 @@ public class ProductServiceImpl implements ProductService {
             PaginationRequestDTO request,
             Integer brandId
     ) {
-        if (request.pageIndex() < 0)
+        if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
-        Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(request.orderBy())
+        Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(request.fields())
                           .ascending()
-                    : Sort.by(request.orderBy())
+                    : Sort.by(request.fields())
                           .descending();
 
-        Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
+        Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
         Page<Product> page = productRepository.getActiveListByBrand(brandId, pageable);
 
@@ -246,7 +246,7 @@ public class ProductServiceImpl implements ProductService {
 
         return PaginationResponseDTO.<ProductDTO>builder()
                                     .keyword(request.keyword())
-                                    .pageIndex(request.pageIndex())
+                                    .pageIndex(request.index())
                                     .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
@@ -290,16 +290,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PaginationResponseDTO<ProductDTO> getHiddenList(PaginationRequestDTO request) {
-        if (request.pageIndex() < 0)
+        if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
-        Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(request.orderBy())
+        Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(request.fields())
                           .ascending()
-                    : Sort.by(request.orderBy())
+                    : Sort.by(request.fields())
                           .descending();
 
-        Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
+        Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
         Page<Product> page = request.keyword() == null
                              ? productRepository.getHiddenProductsPage(pageable)
@@ -309,7 +309,7 @@ public class ProductServiceImpl implements ProductService {
 
         return PaginationResponseDTO.<ProductDTO>builder()
                                     .keyword(request.keyword())
-                                    .pageIndex(request.pageIndex())
+                                    .pageIndex(request.index())
                                     .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
@@ -426,16 +426,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PaginationResponseDTO<ProductDTO> getDeletedList(PaginationRequestDTO request) {
-        if (request.pageIndex() < 0)
+        if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
-        Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(request.orderBy())
+        Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(request.fields())
                           .ascending()
-                    : Sort.by(request.orderBy())
+                    : Sort.by(request.fields())
                           .descending();
 
-        Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
+        Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
         Page<Product> page = request.keyword() == null
                              ? productRepository.getDeletedProductsPage(pageable)
@@ -445,7 +445,7 @@ public class ProductServiceImpl implements ProductService {
 
         return PaginationResponseDTO.<ProductDTO>builder()
                                     .keyword(request.keyword())
-                                    .pageIndex(request.pageIndex())
+                                    .pageIndex(request.index())
                                     .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())

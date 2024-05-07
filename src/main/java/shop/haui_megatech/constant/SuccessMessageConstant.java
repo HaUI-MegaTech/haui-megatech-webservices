@@ -47,4 +47,10 @@ public class SuccessMessageConstant {
     public static class Brand {
         public static final String FOUND = "brand.success.found";
     }
+
+    public static class Order {
+        public static final String ADDED_ONE   = "order.success.added-one";
+        public static final String FOUND       = "order.success.found";
+        public static final String UPDATED_ONE = "order.success.updated-one";
+    }
 }

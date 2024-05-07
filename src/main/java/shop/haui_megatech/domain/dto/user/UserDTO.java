@@ -1,6 +1,7 @@
 package shop.haui_megatech.domain.dto.user;
 
 import lombok.Builder;
+import shop.haui_megatech.domain.entity.Gender;
 
 @Builder
 public record UserDTO(
@@ -8,8 +9,9 @@ public record UserDTO(
         String username,
         String firstName,
         String lastName,
-        String avatarImageUrl,
+        Gender gender,
         String email,
+        String avatarImageUrl,
         String phoneNumber
 ) {
 }

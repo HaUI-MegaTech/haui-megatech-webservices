@@ -15,10 +15,7 @@ import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
-import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
-import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequestDTO;
-import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequestDTO;
-import shop.haui_megatech.domain.dto.user.UserDTO;
+import shop.haui_megatech.domain.dto.user.*;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.exception.*;
@@ -46,16 +43,16 @@ public class UserServiceImpl implements UserService {
     private final AutoMailSender    autoMailSender;
 
     @Override
-    public CommonResponseDTO<UserDTO> getOne(Integer userId) {
+    public CommonResponseDTO<UserDetailDTO> getOne(Integer userId) {
         Optional<User> foundUser = userRepository.findById(userId);
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
 
-        return CommonResponseDTO.<UserDTO>builder()
+        return CommonResponseDTO.<UserDetailDTO>builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.FOUND))
-                                .item(UserMapper.INSTANCE.toUserDTO(foundUser.get()))
+                                .item(UserMapper.INSTANCE.toUserDetailDTO(foundUser.get()))
                                 .build();
     }
 
@@ -306,16 +303,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginationResponseDTO<UserDTO> getList(PaginationRequestDTO request) {
-        if (request.pageIndex() < 0)
+        if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
-        Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(request.orderBy())
+        Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(request.fields())
                           .ascending()
-                    : Sort.by(request.orderBy())
+                    : Sort.by(request.fields())
                           .descending();
 
-        Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
+        Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
         Page<User> page = request.keyword() == null
                           ? userRepository.getAllActiveUsers(pageable)
@@ -325,7 +322,7 @@ public class UserServiceImpl implements UserService {
 
         return PaginationResponseDTO.<UserDTO>builder()
                                     .keyword(request.keyword())
-                                    .pageIndex(request.pageIndex())
+                                    .pageIndex(request.index())
                                     .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())
@@ -337,16 +334,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginationResponseDTO<UserDTO> getDeletedList(PaginationRequestDTO request) {
-        if (request.pageIndex() < 0)
+        if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
-        Sort sort = request.order().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(request.orderBy())
+        Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(request.fields())
                           .ascending()
-                    : Sort.by(request.orderBy())
+                    : Sort.by(request.fields())
                           .descending();
 
-        Pageable pageable = PageRequest.of(request.pageIndex(), request.pageSize(), sort);
+        Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
         Page<User> page = request.keyword() == null
                           ? userRepository.getAllDeletedUsers(pageable)
@@ -356,7 +353,7 @@ public class UserServiceImpl implements UserService {
 
         return PaginationResponseDTO.<UserDTO>builder()
                                     .keyword(request.keyword())
-                                    .pageIndex(request.pageIndex())
+                                    .pageIndex(request.index())
                                     .pageSize((short) page.getNumberOfElements())
                                     .totalItems(page.getTotalElements())
                                     .totalPages(page.getTotalPages())

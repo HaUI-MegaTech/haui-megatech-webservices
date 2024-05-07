@@ -1,8 +1,11 @@
 package shop.haui_megatech.configuration.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,7 +17,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import shop.haui_megatech.configuration.security.filter.JwtAuthenticationFilter;
+import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.UrlConstant;
+import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.utility.MessageSourceUtil;
 
 import java.util.List;
 
@@ -34,7 +40,8 @@ public class SecurityConfiguration {
             UrlConstant.API_V1 + UrlConstant.Product.GET_DETAIL_ONE,
             UrlConstant.API_V1 + UrlConstant.Brand.GET_ONE,
             UrlConstant.API_V1 + UrlConstant.Brand.GET_ACTIVE_LIST,
-            "/search"
+            "/search",
+            UrlConstant.API_V1 + UrlConstant.Order.PREFIX + CATCH_ALL_WILDCARDS
     };
     private final List<String>            WHITE_LIST_ORIGINS  = List.of(
             "http://localhost:3000",
@@ -42,16 +49,41 @@ public class SecurityConfiguration {
     );
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http)
+    public SecurityFilterChain configure(HttpSecurity http, MessageSourceUtil messageSourceUtil)
             throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                    .cors(cors -> cors.configurationSource(this.corsConfigurationSource()))
-                   .authorizeHttpRequests(auth -> auth.requestMatchers(WHITE_LIST_URLS)
-                                                      .permitAll()
-                                                      .anyRequest()
-                                                      .authenticated())
-                   .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                   .authorizeHttpRequests(
+                           auth -> auth.requestMatchers(WHITE_LIST_URLS)
+                                       .permitAll()
+                                       .anyRequest()
+                                       .authenticated()
+                   )
+                   .sessionManagement(
+                           management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                   )
                    .authenticationProvider(authenticationProvider)
+                   .exceptionHandling(
+                           httpSecurityExceptionHandlingConfigurer -> {
+                               httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(
+                                       (request, response, authException) -> {
+                                           response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                                           response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+                                           CommonResponseDTO<?> responseBody =
+                                                   CommonResponseDTO.builder()
+                                                                    .success(false)
+                                                                    .message(messageSourceUtil.getMessage(
+                                                                            ErrorMessageConstant.Auth.AUTHENTICATE
+                                                                    ))
+                                                                    .build();
+
+                                           ObjectMapper objectMapper = new ObjectMapper();
+                                           response.getWriter().write(objectMapper.writeValueAsString(responseBody));
+                                       }
+                               );
+                           }
+                   )
                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                    .build();
     }

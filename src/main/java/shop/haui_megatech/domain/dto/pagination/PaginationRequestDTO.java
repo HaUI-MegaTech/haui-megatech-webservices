@@ -8,30 +8,27 @@ import java.util.Objects;
 public record PaginationRequestDTO(
         @RequestParam(name = "keyword", required = false) String keyword,
 
-        @RequestParam(name = "pageIndex", required = false) Integer pageIndex,
+        @RequestParam(name = "index", required = false) Integer index,
 
-        @RequestParam(name = "order", required = false) String order,
+        @RequestParam(name = "direction", required = false) String direction,
 
-        @RequestParam(name = "orderBy", required = false) String orderBy,
+        @RequestParam(name = "limit", required = false) Short limit,
 
-        @RequestParam(name = "pageSize", required = false) Short pageSize
+        @RequestParam(name = "fields", required = false) String... fields
 ) {
-    @Override
-    public Integer pageIndex() {
-        return Objects.requireNonNullElse(this.pageIndex, PaginationConstant.DEFAULT_PAGE_INDEX);
+    public Integer index() {
+        return Objects.requireNonNullElse(this.index, PaginationConstant.DEFAULT_PAGE_INDEX);
     }
 
-    @Override
-    public String order() {
-        return Objects.requireNonNullElse(this.order, PaginationConstant.DEFAULT_ORDER);
+    public String direction() {
+        return Objects.requireNonNullElse(this.direction, PaginationConstant.DEFAULT_ORDER);
     }
 
-    @Override
-    public String orderBy() {
-        return Objects.requireNonNullElse(this.orderBy, PaginationConstant.DEFAULT_ORDER_BY);
+    public String[] fields() {
+        return Objects.requireNonNullElse(this.fields, PaginationConstant.DEFAULT_ORDER_BY);
     }
 
-    public Short pageSize() {
-        return Objects.requireNonNullElse(this.pageSize, PaginationConstant.DEFAULT_PAGE_SIZE);
+    public Short limit() {
+        return Objects.requireNonNullElse(this.limit, PaginationConstant.DEFAULT_PAGE_SIZE);
     }
 }

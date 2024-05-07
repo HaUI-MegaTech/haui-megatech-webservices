@@ -31,7 +31,7 @@ public class SecurityConfiguration {
     private final String                  CATCH_ALL_WILDCARDS = "/**";
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider  authenticationProvider;
-    private final String[]                WHITE_LIST_URLS     = {
+    private final String[]                PUBLIC_ENDPOINTS    = {
             "/swagger-ui" + CATCH_ALL_WILDCARDS,
             UrlConstant.API_V1 + UrlConstant.Auth.PREFIX + CATCH_ALL_WILDCARDS,
             "/v3/api-docs" + CATCH_ALL_WILDCARDS,
@@ -40,7 +40,9 @@ public class SecurityConfiguration {
             UrlConstant.API_V1 + UrlConstant.Product.GET_DETAIL_ONE,
             UrlConstant.API_V1 + UrlConstant.Brand.GET_ONE,
             UrlConstant.API_V1 + UrlConstant.Brand.GET_ACTIVE_LIST,
-            "/search",
+            "/api/v1/outer-search",
+            "/api/v1/getDataProductByLink",
+            "/api/v1/getDataCommentByLink",
             UrlConstant.API_V1 + UrlConstant.Order.PREFIX + CATCH_ALL_WILDCARDS
     };
     private final List<String>            WHITE_LIST_ORIGINS  = List.of(
@@ -54,7 +56,7 @@ public class SecurityConfiguration {
         return http.csrf(AbstractHttpConfigurer::disable)
                    .cors(cors -> cors.configurationSource(this.corsConfigurationSource()))
                    .authorizeHttpRequests(
-                           auth -> auth.requestMatchers(WHITE_LIST_URLS)
+                           auth -> auth.requestMatchers(PUBLIC_ENDPOINTS)
                                        .permitAll()
                                        .anyRequest()
                                        .authenticated()

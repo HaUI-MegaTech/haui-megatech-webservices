@@ -94,4 +94,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Image> images;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
+    private List<SimilarProduct> similarProducts;
 }

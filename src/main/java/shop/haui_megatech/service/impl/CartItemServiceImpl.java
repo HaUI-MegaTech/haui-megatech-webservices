@@ -9,13 +9,11 @@ import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
-import shop.haui_megatech.domain.dto.cart.CartItemDTO;
-import shop.haui_megatech.domain.dto.cart.CartItemRequestDTO;
+import shop.haui_megatech.domain.dto.CartItemDTO;
+import shop.haui_megatech.domain.dto.PaginationDTO;
+import shop.haui_megatech.domain.dto.UserDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
-import shop.haui_megatech.domain.dto.user.UserDTO;
 import shop.haui_megatech.domain.entity.CartItem;
 import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.domain.entity.User;
@@ -44,7 +42,7 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepository;
 
     @Override
-    public CommonResponseDTO<?> addOne(CartItemRequestDTO request) {
+    public CommonResponseDTO<?> addOne(CartItemDTO.Request request) {
         if (request.quantity() <= 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
@@ -87,7 +85,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CommonResponseDTO<?> updateOne(Integer id, CartItemRequestDTO request) {
+    public CommonResponseDTO<?> updateOne(Integer id, CartItemDTO.Request request) {
         if (request.quantity() <= 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
@@ -163,16 +161,16 @@ public class CartItemServiceImpl implements CartItemService {
         return CommonResponseDTO.<UserDTO>builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                SuccessMessageConstant.Cart.HARD_DELETED_LIST,
-                                                checkedCartItemIds.size()
-                                        )
+                                                 SuccessMessageConstant.Cart.HARD_DELETED_LIST,
+                                                 checkedCartItemIds.size()
+                                         )
                                 )
                                 .build();
     }
 
 
     @Override
-    public PaginationResponseDTO<CartItemDTO> getCartItems(PaginationRequestDTO request) {
+    public PaginationDTO.Response<CartItemDTO.Response> getCartItems(PaginationDTO.Request request) {
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
@@ -197,30 +195,30 @@ public class CartItemServiceImpl implements CartItemService {
                         cartItemRepository.searchCartItemsByUserIdAndKeyword(keyword, foundUser.get().getId(), pageable);
                 cartItems.addAll(page.getContent());
             }
-            return PaginationResponseDTO.<CartItemDTO>builder()
-                                        .keyword(request.keyword())
-                                        .pageIndex(request.index())
-                                        .pageSize(request.limit())
-                                        .totalItems((long) cartItems.size())
-                                        .totalPages(pageCount)
-                                        .items(cartItems.parallelStream()
-                                                        .map(CartItemMapper.INSTANCE::toCartItemDTO)
-                                                        .collect(Collectors.toList()))
-                                        .build();
+            return PaginationDTO.Response.<CartItemDTO.Response>builder()
+                                         .keyword(request.keyword())
+                                         .pageIndex(request.index())
+                                         .pageSize(request.limit())
+                                         .totalItems((long) cartItems.size())
+                                         .totalPages(pageCount)
+                                         .items(cartItems.parallelStream()
+                                                         .map(CartItemMapper.INSTANCE::toCartItemResponseDTO)
+                                                         .collect(Collectors.toList()))
+                                         .build();
         }
 
         Page<CartItem> page = cartItemRepository.getCartItemsByUserId(foundUser.get().getId(), pageable);
 
         List<CartItem> cartItems = page.getContent();
 
-        return PaginationResponseDTO.<CartItemDTO>builder()
-                                    .pageIndex(request.index())
-                                    .pageSize((short) page.getNumberOfElements())
-                                    .totalItems(page.getTotalElements())
-                                    .totalPages(page.getTotalPages())
-                                    .items(cartItems.parallelStream()
-                                                    .map(CartItemMapper.INSTANCE::toCartItemDTO)
-                                                    .collect(Collectors.toList()))
-                                    .build();
+        return PaginationDTO.Response.<CartItemDTO.Response>builder()
+                                     .pageIndex(request.index())
+                                     .pageSize((short) page.getNumberOfElements())
+                                     .totalItems(page.getTotalElements())
+                                     .totalPages(page.getTotalPages())
+                                     .items(cartItems.parallelStream()
+                                                     .map(CartItemMapper.INSTANCE::toCartItemResponseDTO)
+                                                     .collect(Collectors.toList()))
+                                     .build();
     }
 }

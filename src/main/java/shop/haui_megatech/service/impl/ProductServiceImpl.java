@@ -9,12 +9,11 @@ import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
+import shop.haui_megatech.domain.dto.PaginationDTO;
+import shop.haui_megatech.domain.dto.ProductDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
-import shop.haui_megatech.domain.dto.product.*;
 import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.domain.mapper.ProductMapper;
 import shop.haui_megatech.exception.InvalidRequestParamException;
@@ -40,13 +39,13 @@ public class ProductServiceImpl implements ProductService {
     private final MessageSourceUtil messageSourceUtil;
 
     @Override
-    public CommonResponseDTO<ProductDetailDTO> getOne(Integer id) {
+    public CommonResponseDTO<ProductDTO.DetailResponse> getOne(Integer id) {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
 
-        return CommonResponseDTO.<ProductDetailDTO>builder()
+        return CommonResponseDTO.<ProductDTO.DetailResponse>builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.FOUND))
                                 .item(ProductMapper.INSTANCE.toProductDetailDTO(found.get()))
@@ -55,9 +54,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponseDTO<ProductDTO> getList(
-            PaginationRequestDTO request,
-            ProductFilterRequestDTO filter
+    public PaginationDTO.Response<ProductDTO.SummaryResponse> getList(
+            PaginationDTO.Request request,
+            ProductDTO.FilterRequest filter
     ) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
@@ -138,16 +137,16 @@ public class ProductServiceImpl implements ProductService {
                 }
             }
 
-            return PaginationResponseDTO.<ProductDTO>builder()
-                                        .keyword(request.keyword())
-                                        .pageIndex(request.index())
-                                        .pageSize(request.limit())
-                                        .totalItems((long) products.size())
-                                        .totalPages(pageCount)
-                                        .items(products.parallelStream()
-                                                       .map(ProductMapper.INSTANCE::toProductDTO)
-                                                       .collect(Collectors.toList()))
-                                        .build();
+            return PaginationDTO.Response.<ProductDTO.SummaryResponse>builder()
+                                         .keyword(request.keyword())
+                                         .pageIndex(request.index())
+                                         .pageSize(request.limit())
+                                         .totalItems((long) products.size())
+                                         .totalPages(pageCount)
+                                         .items(products.parallelStream()
+                                                        .map(ProductMapper.INSTANCE::toProductSummaryDTO)
+                                                        .collect(Collectors.toList()))
+                                         .build();
         }
 
 
@@ -189,24 +188,24 @@ public class ProductServiceImpl implements ProductService {
 
         List<Product> products = page.getContent();
 
-        return PaginationResponseDTO.<ProductDTO>builder()
-                                    .pageIndex(request.index())
-                                    .pageSize((short) page.getNumberOfElements())
-                                    .totalItems(page.getTotalElements())
-                                    .totalPages(page.getTotalPages())
-                                    .items(products.parallelStream()
-                                                   .map(ProductMapper.INSTANCE::toProductDTO)
-                                                   .collect(Collectors.toList()))
-                                    .build();
+        return PaginationDTO.Response.<ProductDTO.SummaryResponse>builder()
+                                     .pageIndex(request.index())
+                                     .pageSize((short) page.getNumberOfElements())
+                                     .totalItems(page.getTotalElements())
+                                     .totalPages(page.getTotalPages())
+                                     .items(products.parallelStream()
+                                                    .map(ProductMapper.INSTANCE::toProductSummaryDTO)
+                                                    .collect(Collectors.toList()))
+                                     .build();
     }
 
     @Override
-    public CommonResponseDTO<ProductDTO> addOne(AddProductRequestDTO request) {
+    public CommonResponseDTO<ProductDTO.SummaryResponse> addOne(ProductDTO.AddRequest request) {
 
-        return CommonResponseDTO.<ProductDTO>builder()
+        return CommonResponseDTO.<ProductDTO.SummaryResponse>builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.ADDED_ONE))
-                                .item(ProductMapper.INSTANCE.toProductDTO(
+                                .item(ProductMapper.INSTANCE.toProductSummaryDTO(
                                               productRepository.save(ProductMapper.INSTANCE.toProduct(request))
                                       )
                                 )
@@ -256,7 +255,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public CommonResponseDTO<?> updateOne(
             Integer id,
-            UpdateProductRequestDTO request
+            ProductDTO.UpdateRequest request
     ) {
         Optional<Product> found = productRepository.findById(id);
 
@@ -360,7 +359,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponseDTO<ProductDTO> getHiddenList(PaginationRequestDTO request) {
+    public PaginationDTO.Response<ProductDTO.SummaryResponse> getHiddenList(PaginationDTO.Request request) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
@@ -378,16 +377,16 @@ public class ProductServiceImpl implements ProductService {
 
         List<Product> products = page.getContent();
 
-        return PaginationResponseDTO.<ProductDTO>builder()
-                                    .keyword(request.keyword())
-                                    .pageIndex(request.index())
-                                    .pageSize((short) page.getNumberOfElements())
-                                    .totalItems(page.getTotalElements())
-                                    .totalPages(page.getTotalPages())
-                                    .items(products.parallelStream()
-                                                   .map(ProductMapper.INSTANCE::toProductDTO)
-                                                   .collect(Collectors.toList()))
-                                    .build();
+        return PaginationDTO.Response.<ProductDTO.SummaryResponse>builder()
+                                     .keyword(request.keyword())
+                                     .pageIndex(request.index())
+                                     .pageSize((short) page.getNumberOfElements())
+                                     .totalItems(page.getTotalElements())
+                                     .totalPages(page.getTotalPages())
+                                     .items(products.parallelStream()
+                                                    .map(ProductMapper.INSTANCE::toProductSummaryDTO)
+                                                    .collect(Collectors.toList()))
+                                     .build();
     }
 
     @Override
@@ -496,7 +495,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponseDTO<ProductDTO> getDeletedList(PaginationRequestDTO request) {
+    public PaginationDTO.Response<ProductDTO.SummaryResponse> getDeletedList(PaginationDTO.Request request) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
@@ -514,15 +513,15 @@ public class ProductServiceImpl implements ProductService {
 
         List<Product> products = page.getContent();
 
-        return PaginationResponseDTO.<ProductDTO>builder()
-                                    .keyword(request.keyword())
-                                    .pageIndex(request.index())
-                                    .pageSize((short) page.getNumberOfElements())
-                                    .totalItems(page.getTotalElements())
-                                    .totalPages(page.getTotalPages())
-                                    .items(products.parallelStream()
-                                                   .map(ProductMapper.INSTANCE::toProductDTO)
-                                                   .collect(Collectors.toList()))
-                                    .build();
+        return PaginationDTO.Response.<ProductDTO.SummaryResponse>builder()
+                                     .keyword(request.keyword())
+                                     .pageIndex(request.index())
+                                     .pageSize((short) page.getNumberOfElements())
+                                     .totalItems(page.getTotalElements())
+                                     .totalPages(page.getTotalPages())
+                                     .items(products.parallelStream()
+                                                    .map(ProductMapper.INSTANCE::toProductSummaryDTO)
+                                                    .collect(Collectors.toList()))
+                                     .build();
     }
 }

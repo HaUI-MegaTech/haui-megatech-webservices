@@ -1,15 +1,13 @@
 package shop.haui_megatech.service;
 
-import shop.haui_megatech.domain.dto.cart.CartItemDTO;
-import shop.haui_megatech.domain.dto.cart.CartItemRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
+import shop.haui_megatech.domain.dto.CartItemDTO;
+import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.service.base.Addable;
 import shop.haui_megatech.service.base.HardDeletable;
 import shop.haui_megatech.service.base.Updatable;
 
-public interface CartItemService extends Addable<CartItemRequestDTO>,
-                                         Updatable<CartItemRequestDTO>,
+public interface CartItemService extends Addable<CartItemDTO.Request>,
+                                         Updatable<CartItemDTO.Request>,
                                          HardDeletable {
-    PaginationResponseDTO<CartItemDTO> getCartItems(PaginationRequestDTO request);
+    PaginationDTO.Response<CartItemDTO.Response> getCartItems(PaginationDTO.Request request);
 }

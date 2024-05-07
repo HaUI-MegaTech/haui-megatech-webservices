@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
-import shop.haui_megatech.domain.dto.brand.BrandDTO;
+import shop.haui_megatech.domain.dto.BrandDTO;
+import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.entity.Brand;
 import shop.haui_megatech.domain.mapper.BrandMapper;
 import shop.haui_megatech.exception.NotFoundException;
@@ -33,19 +32,19 @@ public class BrandServiceImpl implements BrandService {
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Brand.FOUND))
                                 .item(BrandMapper.INSTANCE.toBrandDTO(found.orElseThrow(
-                                                () -> new NotFoundException(ErrorMessageConstant.Brand.NOT_FOUND))
-                                        )
+                                              () -> new NotFoundException(ErrorMessageConstant.Brand.NOT_FOUND))
+                                      )
                                 )
                                 .build();
     }
 
     @Override
-    public PaginationResponseDTO<BrandDTO> getList(PaginationRequestDTO request) {
+    public PaginationDTO.Response<BrandDTO> getList(PaginationDTO.Request request) {
         List<Brand> brands = brandRepository.findAll();
-        return PaginationResponseDTO.<BrandDTO>builder()
-                                    .items(brands.parallelStream()
-                                                 .map(BrandMapper.INSTANCE::toBrandDTO)
-                                                 .collect(Collectors.toList()))
-                                    .build();
+        return PaginationDTO.Response.<BrandDTO>builder()
+                                     .items(brands.parallelStream()
+                                                  .map(BrandMapper.INSTANCE::toBrandDTO)
+                                                  .collect(Collectors.toList()))
+                                     .build();
     }
 }

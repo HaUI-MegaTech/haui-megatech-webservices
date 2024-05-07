@@ -1,24 +1,20 @@
 package shop.haui_megatech.service;
 
+import shop.haui_megatech.domain.dto.PaginationDTO;
+import shop.haui_megatech.domain.dto.ProductDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
-import shop.haui_megatech.domain.dto.product.AddProductRequestDTO;
-import shop.haui_megatech.domain.dto.product.ProductDTO;
-import shop.haui_megatech.domain.dto.product.ProductFilterRequestDTO;
-import shop.haui_megatech.domain.dto.product.UpdateProductRequestDTO;
 import shop.haui_megatech.service.base.*;
 
-public interface ProductService extends Addable<AddProductRequestDTO>,
-                                        Hidable<ProductDTO>,
+public interface ProductService extends Addable<ProductDTO.AddRequest>,
+                                        Hidable<ProductDTO.SummaryResponse>,
                                         Importable,
-                                        SoftDeletable<ProductDTO>,
+                                        SoftDeletable<ProductDTO.SummaryResponse>,
                                         HardDeletable,
-                                        Updatable<UpdateProductRequestDTO> {
+                                        Updatable<ProductDTO.UpdateRequest> {
     CommonResponseDTO<?> getOne(Integer id);
 
-    PaginationResponseDTO<ProductDTO> getList(PaginationRequestDTO request, ProductFilterRequestDTO filter);
+    PaginationDTO.Response<ProductDTO.SummaryResponse> getList(PaginationDTO.Request request, ProductDTO.FilterRequest filter);
 
     CommonResponseDTO<?> updateListFromExcel(ImportDataRequestDTO request);
 }

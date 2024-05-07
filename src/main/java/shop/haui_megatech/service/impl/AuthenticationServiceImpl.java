@@ -8,9 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessageConstant;
-import shop.haui_megatech.domain.dto.authentication.AuthenticationRequestDTO;
-import shop.haui_megatech.domain.dto.authentication.AuthenticationResponseDTO;
-import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
+import shop.haui_megatech.domain.dto.AuthenticationDTO;
+import shop.haui_megatech.domain.dto.UserDTO;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.exception.MismatchedConfirmPasswordException;
 import shop.haui_megatech.repository.UserRepository;
@@ -28,7 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtTokenUtil          jwtUtil;
 
     @Override
-    public AuthenticationResponseDTO register(AddUserRequestDTO request) {
+    public AuthenticationDTO.Response register(UserDTO.AddRequest request) {
         if (!request.password().equals(request.confirmPassword()))
             throw new MismatchedConfirmPasswordException(ErrorMessageConstant.User.MISMATCHED_PASSWORD);
 
@@ -42,13 +41,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .build();
         userRepository.save(user);
         String jwtToken = jwtUtil.generateToken(user);
-        return AuthenticationResponseDTO.builder()
-                                        .token(jwtToken)
-                                        .build();
+        return AuthenticationDTO.Response.builder()
+                                         .token(jwtToken)
+                                         .build();
     }
 
     @Override
-    public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request) {
+    public AuthenticationDTO.Response authenticate(AuthenticationDTO.Request request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.username(),
@@ -57,13 +56,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
         User user = userRepository.findActiveUserByUsername(request.username()).orElseThrow();
         String jwtToken = jwtUtil.generateToken(user);
-        return AuthenticationResponseDTO.builder()
-                                        .token(jwtToken)
-                                        .build();
+        return AuthenticationDTO.Response.builder()
+                                         .token(jwtToken)
+                                         .build();
     }
 
     @Override
-    public AuthenticationResponseDTO refresh(AuthenticationRequestDTO request) {
+    public AuthenticationDTO.Response refresh(AuthenticationDTO.Request request) {
         Optional<User> foundUser = userRepository.findActiveUserByUsername(request.username());
 
         if (foundUser.isEmpty())
@@ -72,11 +71,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (!passwordEncoder.matches(request.password(), foundUser.get().getPassword()))
             throw new BadCredentialsException(request.password());
 
-        return AuthenticationResponseDTO.builder()
-                                        .token(jwtUtil.generateToken(User.builder()
-                                                                         .username(request.username())
-                                                                         .build()))
-                                        .build();
+        return AuthenticationDTO.Response.builder()
+                                         .token(jwtUtil.generateToken(User.builder()
+                                                                          .username(request.username())
+                                                                          .build()))
+                                         .build();
     }
 
 

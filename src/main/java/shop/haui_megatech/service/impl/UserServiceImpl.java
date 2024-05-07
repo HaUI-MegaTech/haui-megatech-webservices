@@ -10,12 +10,11 @@ import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessageConstant;
+import shop.haui_megatech.domain.dto.PaginationDTO;
+import shop.haui_megatech.domain.dto.UserDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
-import shop.haui_megatech.domain.dto.user.*;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.exception.*;
@@ -43,13 +42,13 @@ public class UserServiceImpl implements UserService {
     private final AutoMailSender    autoMailSender;
 
     @Override
-    public CommonResponseDTO<UserDetailDTO> getOne(Integer userId) {
+    public CommonResponseDTO<UserDTO.DetailResponse> getOne(Integer userId) {
         Optional<User> foundUser = userRepository.findById(userId);
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
 
-        return CommonResponseDTO.<UserDetailDTO>builder()
+        return CommonResponseDTO.<UserDTO.DetailResponse>builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.FOUND))
                                 .item(UserMapper.INSTANCE.toUserDetailDTO(foundUser.get()))
@@ -57,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> addOne(AddUserRequestDTO request) {
+    public CommonResponseDTO<?> addOne(UserDTO.AddRequest request) {
         if (!RequestValidator.isBlankRequestParams(request.username()))
             throw new AbsentRequiredFieldException(ErrorMessageConstant.Request.BLANK_USERNAME);
 
@@ -70,7 +69,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findUserByUsername(request.username()).isPresent())
             throw new DuplicateUsernameException(ErrorMessageConstant.Request.DUPLICATE_USERNAME);
 
-        return CommonResponseDTO.<UserDTO>builder()
+        return CommonResponseDTO.<UserDTO.Response>builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.ADDED_ONE))
                                 .item(UserMapper.INSTANCE.toUserDTO(
@@ -94,8 +93,10 @@ public class UserServiceImpl implements UserService {
             List<User> savedUsers = userRepository.saveAll(users);
             return CommonResponseDTO.builder()
                                     .success(true)
-                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.IMPORTED_LIST,
-                                            savedUsers.size()))
+                                    .message(messageSourceUtil.getMessage(
+                                            SuccessMessageConstant.User.IMPORTED_LIST,
+                                            savedUsers.size()
+                                    ))
                                     .build();
         } catch (IOException e) {
             throw new RuntimeException("Excel data is failed to store: " + e.getMessage());
@@ -112,8 +113,10 @@ public class UserServiceImpl implements UserService {
             List<User> savedUsers = userRepository.saveAll(users);
             return CommonResponseDTO.builder()
                                     .success(true)
-                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.IMPORTED_LIST,
-                                            savedUsers.size()))
+                                    .message(messageSourceUtil.getMessage(
+                                            SuccessMessageConstant.User.IMPORTED_LIST,
+                                            savedUsers.size()
+                                    ))
                                     .build();
         } catch (IOException ex) {
             throw new RuntimeException("Data is not store successfully: " + ex.getMessage());
@@ -123,7 +126,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonResponseDTO<?> updateOne(
             Integer userId,
-            UpdateUserInfoRequestDTO request
+            UserDTO.UpdateInfoRequest request
     ) {
         if (Objects.isNull(request))
             throw new NullRequestException(ErrorMessageConstant.Request.NULL_REQUEST);
@@ -152,7 +155,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonResponseDTO<?> updatePassword(
             Integer userId,
-            UpdateUserPasswordRequestDTO request
+            UserDTO.UpdatePasswordRequest request
     ) {
         Optional<User> found = userRepository.findById(userId);
 
@@ -203,8 +206,10 @@ public class UserServiceImpl implements UserService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.SOFT_DELETED_LIST,
-                                        foundUsers.size()))
+                                .message(messageSourceUtil.getMessage(
+                                        SuccessMessageConstant.User.SOFT_DELETED_LIST,
+                                        foundUsers.size()
+                                ))
                                 .build();
     }
 
@@ -229,8 +234,10 @@ public class UserServiceImpl implements UserService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.HARD_DELETED_LIST,
-                                        request.ids().size()))
+                                .message(messageSourceUtil.getMessage(
+                                        SuccessMessageConstant.User.HARD_DELETED_LIST,
+                                        request.ids().size()
+                                ))
                                 .build();
     }
 
@@ -260,8 +267,10 @@ public class UserServiceImpl implements UserService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESTORED_LIST,
-                                        foundUsers.size()))
+                                .message(messageSourceUtil.getMessage(
+                                        SuccessMessageConstant.User.RESTORED_LIST,
+                                        foundUsers.size()
+                                ))
                                 .build();
     }
 
@@ -281,8 +290,10 @@ public class UserServiceImpl implements UserService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESET_PASSWORD_ONE,
-                                        foundUser.getUsername()))
+                                .message(messageSourceUtil.getMessage(
+                                        SuccessMessageConstant.User.RESET_PASSWORD_ONE,
+                                        foundUser.getUsername()
+                                ))
                                 .build();
     }
 
@@ -296,13 +307,15 @@ public class UserServiceImpl implements UserService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESET_PASSWORD_LIST,
-                                        foundUsers.size()))
+                                .message(messageSourceUtil.getMessage(
+                                        SuccessMessageConstant.User.RESET_PASSWORD_LIST,
+                                        foundUsers.size()
+                                ))
                                 .build();
     }
 
     @Override
-    public PaginationResponseDTO<UserDTO> getList(PaginationRequestDTO request) {
+    public PaginationDTO.Response<UserDTO.Response> getList(PaginationDTO.Request request) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
@@ -320,20 +333,20 @@ public class UserServiceImpl implements UserService {
 
         List<User> users = page.getContent();
 
-        return PaginationResponseDTO.<UserDTO>builder()
-                                    .keyword(request.keyword())
-                                    .pageIndex(request.index())
-                                    .pageSize((short) page.getNumberOfElements())
-                                    .totalItems(page.getTotalElements())
-                                    .totalPages(page.getTotalPages())
-                                    .items(users.parallelStream()
-                                                .map(UserMapper.INSTANCE::toUserDTO)
-                                                .collect(Collectors.toList()))
-                                    .build();
+        return PaginationDTO.Response.<UserDTO.Response>builder()
+                                     .keyword(request.keyword())
+                                     .pageIndex(request.index())
+                                     .pageSize((short) page.getNumberOfElements())
+                                     .totalItems(page.getTotalElements())
+                                     .totalPages(page.getTotalPages())
+                                     .items(users.parallelStream()
+                                                 .map(UserMapper.INSTANCE::toUserDTO)
+                                                 .collect(Collectors.toList()))
+                                     .build();
     }
 
     @Override
-    public PaginationResponseDTO<UserDTO> getDeletedList(PaginationRequestDTO request) {
+    public PaginationDTO.Response<UserDTO.Response> getDeletedList(PaginationDTO.Request request) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
@@ -351,15 +364,15 @@ public class UserServiceImpl implements UserService {
 
         List<User> users = page.getContent();
 
-        return PaginationResponseDTO.<UserDTO>builder()
-                                    .keyword(request.keyword())
-                                    .pageIndex(request.index())
-                                    .pageSize((short) page.getNumberOfElements())
-                                    .totalItems(page.getTotalElements())
-                                    .totalPages(page.getTotalPages())
-                                    .items(users.parallelStream()
-                                                .map(UserMapper.INSTANCE::toUserDTO)
-                                                .collect(Collectors.toList()))
-                                    .build();
+        return PaginationDTO.Response.<UserDTO.Response>builder()
+                                     .keyword(request.keyword())
+                                     .pageIndex(request.index())
+                                     .pageSize((short) page.getNumberOfElements())
+                                     .totalItems(page.getTotalElements())
+                                     .totalPages(page.getTotalPages())
+                                     .items(users.parallelStream()
+                                                 .map(UserMapper.INSTANCE::toUserDTO)
+                                                 .collect(Collectors.toList()))
+                                     .build();
     }
 }

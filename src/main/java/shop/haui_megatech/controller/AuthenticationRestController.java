@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
-import shop.haui_megatech.domain.dto.authentication.AuthenticationRequestDTO;
-import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
+import shop.haui_megatech.domain.dto.AuthenticationDTO;
+import shop.haui_megatech.domain.dto.UserDTO;
 import shop.haui_megatech.service.AuthenticationService;
 import shop.haui_megatech.utility.ResponseUtil;
 
@@ -20,21 +20,21 @@ public class AuthenticationRestController {
 
     @PostMapping(UrlConstant.Auth.REGISTER)
     public ResponseEntity<?> register(
-            @RequestBody AddUserRequestDTO request
+            @RequestBody UserDTO.AddRequest request
     ) {
         return ResponseUtil.ok(service.register(request));
     }
 
     @PostMapping(UrlConstant.Auth.AUTHENTICATE)
     public ResponseEntity<?> authenticate(
-            @RequestBody AuthenticationRequestDTO request
+            @RequestBody AuthenticationDTO.Request request
     ) {
         return ResponseUtil.ok(service.authenticate(request));
     }
 
     @PostMapping(UrlConstant.Auth.REFRESH)
     public ResponseEntity<?> refresh(
-            @RequestBody AuthenticationRequestDTO request
+            @RequestBody AuthenticationDTO.Request request
     ) {
         return ResponseUtil.ok(service.refresh(request));
     }

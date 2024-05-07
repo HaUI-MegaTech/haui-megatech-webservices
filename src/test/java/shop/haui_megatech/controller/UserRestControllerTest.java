@@ -3,7 +3,6 @@ package shop.haui_megatech.controller;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 
 
 @SpringBootTest
@@ -13,6 +12,10 @@ class UserRestControllerTest {
 
 //    private MockMvc mockMvc = new MockMvc();
 
+    @BeforeAll
+    public static void beforeAll() {
+        System.out.println("Inside beforeAll() method");
+    }
 
     @Test
     @Disabled
@@ -42,11 +45,6 @@ class UserRestControllerTest {
 
         // assert
 
-    }
-
-    @BeforeAll
-    public static void beforeAll() {
-        System.out.println("Inside beforeAll() method");
     }
 
     @BeforeEach

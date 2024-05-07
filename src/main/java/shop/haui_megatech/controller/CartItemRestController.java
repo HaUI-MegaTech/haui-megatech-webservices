@@ -7,12 +7,10 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.UrlConstant;
-import shop.haui_megatech.domain.dto.cart.CartItemDTO;
-import shop.haui_megatech.domain.dto.cart.CartItemRequestDTO;
+import shop.haui_megatech.domain.dto.CartItemDTO;
+import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.service.CartItemService;
 
 import java.util.List;
@@ -26,14 +24,14 @@ public class CartItemRestController {
 
     @PostMapping(UrlConstant.CartItem.ADD_ONE)
     public CommonResponseDTO<?> addCartItem(
-            @RequestBody CartItemRequestDTO request
+            @RequestBody CartItemDTO.Request request
     ) {
         return cartItemService.addOne(request);
     }
 
     @GetMapping(UrlConstant.CartItem.GET_LIST)
-    public PaginationResponseDTO<CartItemDTO> getCartItems(
-            @ParameterObject PaginationRequestDTO request
+    public PaginationDTO.Response<CartItemDTO.Response> getCartItems(
+            @ParameterObject PaginationDTO.Request request
     ) {
         return cartItemService.getCartItems(request);
     }
@@ -41,7 +39,7 @@ public class CartItemRestController {
     @PutMapping(UrlConstant.CartItem.UPDATE_ONE)
     public CommonResponseDTO<?> updateCartItem(
             @PathVariable Integer cartItemId,
-            @RequestBody CartItemRequestDTO request
+            @RequestBody CartItemDTO.Request request
     ) {
         return cartItemService.updateOne(cartItemId, request);
     }

@@ -7,10 +7,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.domain.dto.authentication.AuthenticationRequestDTO;
 import shop.haui_megatech.domain.dto.authentication.AuthenticationResponseDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.entity.User;
+import shop.haui_megatech.exception.MismatchedConfirmPasswordException;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.service.AuthenticationService;
 import shop.haui_megatech.utility.JwtTokenUtil;
@@ -27,11 +29,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponseDTO register(AddUserRequestDTO request) {
+        if (!request.password().equals(request.confirmPassword()))
+            throw new MismatchedConfirmPasswordException(ErrorMessageConstant.User.MISMATCHED_PASSWORD);
+
         User user = User.builder()
-                        .firstName(request.firstName())
-                        .lastName(request.lastName())
                         .username(request.username())
                         .password(passwordEncoder.encode(request.password()))
+                        .firstName(request.firstName())
+                        .lastName(request.lastName())
+                        .email(request.email())
+                        .phoneNumber(request.phoneNumber())
                         .build();
         userRepository.save(user);
         String jwtToken = jwtUtil.generateToken(user);

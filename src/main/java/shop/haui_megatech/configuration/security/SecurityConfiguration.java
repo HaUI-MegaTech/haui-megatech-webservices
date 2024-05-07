@@ -36,7 +36,7 @@ public class SecurityConfiguration {
             UrlConstant.API_V1 + UrlConstant.Auth.PREFIX + CATCH_ALL_WILDCARDS,
             "/v3/api-docs" + CATCH_ALL_WILDCARDS,
             UrlConstant.API_V1 + UrlConstant.Product.GET_ACTIVE_LIST,
-            UrlConstant.API_V1 + UrlConstant.Product.GET_ACTIVE_LIST_BY_BRAND,
+            UrlConstant.API_V1 + UrlConstant.Product.FILTER_ACTIVE_LIST,
             UrlConstant.API_V1 + UrlConstant.Product.GET_DETAIL_ONE,
             UrlConstant.API_V1 + UrlConstant.Brand.GET_ONE,
             UrlConstant.API_V1 + UrlConstant.Brand.GET_ACTIVE_LIST,

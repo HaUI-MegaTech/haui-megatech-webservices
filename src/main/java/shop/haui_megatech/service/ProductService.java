@@ -6,17 +6,19 @@ import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.dto.product.AddProductRequestDTO;
 import shop.haui_megatech.domain.dto.product.ProductDTO;
+import shop.haui_megatech.domain.dto.product.ProductFilterRequestDTO;
 import shop.haui_megatech.domain.dto.product.UpdateProductRequestDTO;
 import shop.haui_megatech.service.base.*;
 
 public interface ProductService extends Addable<AddProductRequestDTO>,
-                                        Gettable<ProductDTO>,
                                         Hidable<ProductDTO>,
                                         Importable,
                                         SoftDeletable<ProductDTO>,
                                         HardDeletable,
                                         Updatable<UpdateProductRequestDTO> {
-    CommonResponseDTO<?> updateListFromExcel(ImportDataRequestDTO request);
+    CommonResponseDTO<?> getOne(Integer id);
 
-    PaginationResponseDTO<ProductDTO> getActiveListByBrand(PaginationRequestDTO request, Integer brandId);
+    PaginationResponseDTO<ProductDTO> getList(PaginationRequestDTO request, ProductFilterRequestDTO filter);
+
+    CommonResponseDTO<?> updateListFromExcel(ImportDataRequestDTO request);
 }

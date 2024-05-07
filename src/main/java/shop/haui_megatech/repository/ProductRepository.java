@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import shop.haui_megatech.domain.entity.Product;
 
+import java.util.List;
+
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
@@ -60,9 +62,74 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query(
             "SELECT p FROM Product p " +
-            "WHERE p.brand.id = :brandId " +
+            "WHERE p.currentPrice BETWEEN :minPrice AND :maxPrice " +
             "AND (p.deleted = false OR p.deleted IS NULL) " +
             "AND (p.hidden = false OR p.hidden IS NULL) "
     )
-    Page<Product> getActiveListByBrand(Integer brandId, Pageable pageable);
+    Page<Product> filterActiveListByPrice(Float minPrice, Float maxPrice, Pageable pageable);
+
+    @Query(
+            "SELECT p FROM Product p " +
+            "WHERE (p.brand.id IN :brandIds) " +
+            "AND (p.deleted = false OR p.deleted IS NULL) " +
+            "AND (p.hidden = false OR p.hidden IS NULL) "
+    )
+    Page<Product> filterActiveListByBrandIds(List<Integer> brandIds, Pageable pageable);
+
+    @Query(
+            "SELECT p FROM Product p " +
+            "WHERE (p.brand.id IN :brandIds) " +
+            "AND (p.currentPrice BETWEEN :minPrice AND :maxPrice) " +
+            "AND (p.deleted = false OR p.deleted IS NULL) " +
+            "AND (p.hidden = false OR p.hidden IS NULL) "
+    )
+    Page<Product> filterActiveListByPriceAndBrandIds(
+            List<Integer> brandIds,
+            Float minPrice,
+            Float maxPrice,
+            Pageable pageable
+    );
+
+    @Query(
+            "SELECT p FROM Product p " +
+            "WHERE LOWER(CONCAT(p.name, p.processor, p.storage, p.memoryCapacity)) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "AND (p.brand.id IN :brandIds) " +
+            "AND (p.deleted = false OR p.deleted IS NULL) " +
+            "AND (p.hidden = false OR p.hidden IS NULL) "
+    )
+    Page<Product> filterActiveListByKeywordAndBrandIds(
+            String keyword,
+            List<Integer> brandIds,
+            Pageable pageable
+    );
+
+    @Query(
+            "SELECT p FROM Product p " +
+            "WHERE LOWER(CONCAT(p.name, p.processor, p.storage, p.memoryCapacity)) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "AND (p.currentPrice BETWEEN :minPrice AND :maxPrice) " +
+            "AND (p.deleted = false OR p.deleted IS NULL) " +
+            "AND (p.hidden = false OR p.hidden IS NULL) "
+    )
+    Page<Product> filterActiveListByKeywordAndPrice(
+            String keyword,
+            Float minPrice,
+            Float maxPrice,
+            Pageable pageable
+    );
+
+    @Query(
+            "SELECT p FROM Product p " +
+            "WHERE LOWER(CONCAT(p.name, p.processor, p.storage, p.memoryCapacity)) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "AND (p.brand.id IN :brandIds) " +
+            "AND (p.currentPrice BETWEEN :minPrice AND :maxPrice) " +
+            "AND (p.deleted = false OR p.deleted IS NULL) " +
+            "AND (p.hidden = false OR p.hidden IS NULL) "
+    )
+    Page<Product> filterActiveListByKeywordAndBrandIdsAndPrice(
+            String keyword,
+            List<Integer> brandIds,
+            Float minPrice,
+            Float maxPrice,
+            Pageable pageable
+    );
 }

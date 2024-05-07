@@ -14,10 +14,7 @@ import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
-import shop.haui_megatech.domain.dto.product.AddProductRequestDTO;
-import shop.haui_megatech.domain.dto.product.ProductDTO;
-import shop.haui_megatech.domain.dto.product.ProductDetailDTO;
-import shop.haui_megatech.domain.dto.product.UpdateProductRequestDTO;
+import shop.haui_megatech.domain.dto.product.*;
 import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.domain.mapper.ProductMapper;
 import shop.haui_megatech.exception.InvalidRequestParamException;
@@ -31,6 +28,7 @@ import shop.haui_megatech.utility.MessageSourceUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,7 +55,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponseDTO<ProductDTO> getList(PaginationRequestDTO request) {
+    public PaginationResponseDTO<ProductDTO> getList(
+            PaginationRequestDTO request,
+            ProductFilterRequestDTO filter
+    ) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
 
@@ -70,14 +71,62 @@ public class ProductServiceImpl implements ProductService {
         Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
         if (request.keyword() != null) {
-            String[] keywords = request.keyword().split(" ");
+            String[] keywords = request.keyword().split(",");
             List<Product> products = new ArrayList<>();
             int pageCount = 0;
-            for (String keyword : keywords) {
-                ++pageCount;
-                Page<Product> page = productRepository.searchActiveProductsPage(keyword, pageable);
-                products.addAll(page.getContent());
+
+            if (filter.brandIds() != null) {
+                List<Integer> brandIds = Arrays.stream(filter.brandIds().split(","))
+                                               .map(String::trim)
+                                               .map(Integer::valueOf)
+                                               .toList();
+                if (filter.minPrice() != null && filter.maxPrice() != null) {
+                    for (String keyword : keywords) {
+                        ++pageCount;
+                        Page<Product> page = productRepository.filterActiveListByKeywordAndBrandIdsAndPrice(
+                                keyword,
+                                brandIds,
+                                filter.minPrice(),
+                                filter.maxPrice(),
+                                pageable
+                        );
+                        products.addAll(page.getContent());
+                    }
+                } else {
+                    for (String keyword : keywords) {
+                        ++pageCount;
+                        Page<Product> page = productRepository.filterActiveListByKeywordAndBrandIds(
+                                keyword,
+                                brandIds,
+                                pageable
+                        );
+                        products.addAll(page.getContent());
+                    }
+                }
+            } else {
+                if (filter.minPrice() != null && filter.maxPrice() != null) {
+                    for (String keyword : keywords) {
+                        ++pageCount;
+                        Page<Product> page = productRepository.filterActiveListByKeywordAndPrice(
+                                keyword,
+                                filter.minPrice(),
+                                filter.maxPrice(),
+                                pageable
+                        );
+                        products.addAll(page.getContent());
+                    }
+                } else {
+                    for (String keyword : keywords) {
+                        ++pageCount;
+                        Page<Product> page = productRepository.searchActiveProductsPage(
+                                keyword,
+                                pageable
+                        );
+                        products.addAll(page.getContent());
+                    }
+                }
             }
+
             return PaginationResponseDTO.<ProductDTO>builder()
                                         .keyword(request.keyword())
                                         .pageIndex(request.index())
@@ -90,7 +139,38 @@ public class ProductServiceImpl implements ProductService {
                                         .build();
         }
 
-        Page<Product> page = productRepository.getActiveProductsPage(pageable);
+
+        Page<Product> page;
+
+        if (filter.brandIds() != null) {
+            List<Integer> brandIds = Arrays.stream(filter.brandIds().split(","))
+                                           .map(String::trim)
+                                           .map(Integer::valueOf)
+                                           .toList();
+            if (filter.minPrice() != null && filter.maxPrice() != null) {
+                page = productRepository.filterActiveListByPriceAndBrandIds(
+                        brandIds,
+                        filter.minPrice(),
+                        filter.maxPrice(),
+                        pageable
+                );
+            } else {
+                page = productRepository.filterActiveListByBrandIds(
+                        brandIds,
+                        pageable
+                );
+            }
+        } else {
+            if (filter.minPrice() != null && filter.maxPrice() != null) {
+                page = productRepository.filterActiveListByPrice(
+                        filter.minPrice(),
+                        filter.maxPrice(),
+                        pageable
+                );
+            } else {
+                page = productRepository.getActiveProductsPage(pageable);
+            }
+        }
 
         List<Product> products = page.getContent();
 
@@ -112,8 +192,8 @@ public class ProductServiceImpl implements ProductService {
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.ADDED_ONE))
                                 .item(ProductMapper.INSTANCE.toProductDTO(
-                                                productRepository.save(ProductMapper.INSTANCE.toProduct(request))
-                                        )
+                                              productRepository.save(ProductMapper.INSTANCE.toProduct(request))
+                                      )
                                 )
                                 .build();
     }
@@ -128,8 +208,10 @@ public class ProductServiceImpl implements ProductService {
             List<Product> savedProducts = productRepository.saveAll(products);
             return CommonResponseDTO.builder()
                                     .success(true)
-                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.IMPORTED_LIST,
-                                            savedProducts.size()))
+                                    .message(messageSourceUtil.getMessage(
+                                            SuccessMessageConstant.Product.IMPORTED_LIST,
+                                            savedProducts.size()
+                                    ))
                                     .build();
         } catch (IOException e) {
             throw new RuntimeException("Excel data is failed to store: " + e.getMessage());
@@ -146,8 +228,10 @@ public class ProductServiceImpl implements ProductService {
             List<Product> savedProducts = productRepository.saveAll(products);
             return CommonResponseDTO.builder()
                                     .success(true)
-                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.IMPORTED_LIST,
-                                            savedProducts.size()))
+                                    .message(messageSourceUtil.getMessage(
+                                            SuccessMessageConstant.Product.IMPORTED_LIST,
+                                            savedProducts.size()
+                                    ))
                                     .build();
         } catch (IOException ex) {
             throw new RuntimeException("Data is not store successfully: " + ex.getMessage());
@@ -198,9 +282,9 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                SuccessMessageConstant.Product.HARD_DELETED_LIST,
-                                                request.ids().size()
-                                        )
+                                                 SuccessMessageConstant.Product.HARD_DELETED_LIST,
+                                                 request.ids().size()
+                                         )
                                 )
                                 .build();
     }
@@ -216,45 +300,16 @@ public class ProductServiceImpl implements ProductService {
             List<Product> savedProducts = productRepository.saveAll(updatedProducts);
             return CommonResponseDTO.builder()
                                     .success(true)
-                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.UPDATED_LIST_FROM_EXCEL,
-                                            savedProducts.size()))
+                                    .message(messageSourceUtil.getMessage(
+                                            SuccessMessageConstant.Product.UPDATED_LIST_FROM_EXCEL,
+                                            savedProducts.size()
+                                    ))
                                     .build();
         } catch (IOException e) {
             throw new RuntimeException("Excel data is failed to store: " + e.getMessage());
         }
     }
 
-    @Override
-    public PaginationResponseDTO<ProductDTO> getActiveListByBrand(
-            PaginationRequestDTO request,
-            Integer brandId
-    ) {
-        if (request.index() < 0)
-            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
-
-        Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(request.fields())
-                          .ascending()
-                    : Sort.by(request.fields())
-                          .descending();
-
-        Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
-
-        Page<Product> page = productRepository.getActiveListByBrand(brandId, pageable);
-
-        List<Product> products = page.getContent();
-
-        return PaginationResponseDTO.<ProductDTO>builder()
-                                    .keyword(request.keyword())
-                                    .pageIndex(request.index())
-                                    .pageSize((short) page.getNumberOfElements())
-                                    .totalItems(page.getTotalElements())
-                                    .totalPages(page.getTotalPages())
-                                    .items(products.parallelStream()
-                                                   .map(ProductMapper.INSTANCE::toProductDTO)
-                                                   .collect(Collectors.toList()))
-                                    .build();
-    }
 
     @Override
     public CommonResponseDTO<?> hideOne(Integer id) {
@@ -281,9 +336,10 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.HIDED_LIST,
-                                                foundProducts.size()
-                                        )
+                                .message(messageSourceUtil.getMessage(
+                                                 SuccessMessageConstant.Product.HIDED_LIST,
+                                                 foundProducts.size()
+                                         )
                                 )
                                 .build();
     }
@@ -347,9 +403,9 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                SuccessMessageConstant.Product.RESTORED_LIST,
-                                                foundProducts.size()
-                                        )
+                                                 SuccessMessageConstant.Product.RESTORED_LIST,
+                                                 foundProducts.size()
+                                         )
                                 )
                                 .build();
     }
@@ -382,9 +438,9 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                SuccessMessageConstant.Product.EXPOSED_LIST,
-                                                foundProducts.size()
-                                        )
+                                                 SuccessMessageConstant.Product.EXPOSED_LIST,
+                                                 foundProducts.size()
+                                         )
                                 )
                                 .build();
     }
@@ -417,9 +473,9 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                SuccessMessageConstant.Product.SOFT_DELETED_LIST,
-                                                foundProducts.size()
-                                        )
+                                                 SuccessMessageConstant.Product.SOFT_DELETED_LIST,
+                                                 foundProducts.size()
+                                         )
                                 )
                                 .build();
     }

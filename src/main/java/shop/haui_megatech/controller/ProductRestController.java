@@ -15,6 +15,7 @@ import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.product.AddProductRequestDTO;
+import shop.haui_megatech.domain.dto.product.ProductFilterRequestDTO;
 import shop.haui_megatech.domain.dto.product.UpdateProductRequestDTO;
 import shop.haui_megatech.service.ProductService;
 import shop.haui_megatech.utility.ResponseUtil;
@@ -44,20 +45,21 @@ public class ProductRestController {
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(UrlConstant.Product.GET_ACTIVE_LIST)
     public ResponseEntity<?> getActiveList(
-            @ParameterObject PaginationRequestDTO request
+            @ParameterObject PaginationRequestDTO request,
+            @RequestBody ProductFilterRequestDTO filter
     ) {
-        return ResponseUtil.ok(productService.getList(request));
+        return ResponseUtil.ok(productService.getList(request, filter));
     }
 
 
-    @Operation(summary = "Get active Products by brand Id with pagination")
+    @Operation(summary = "Filter active Products by brand ids, price range with pagination")
     @ApiResponse(responseCode = "200", description = "OK")
-    @GetMapping(UrlConstant.Product.GET_ACTIVE_LIST_BY_BRAND)
-    public ResponseEntity<?> getActiveListByBrand(
-            @PathVariable Integer brandId,
-            @ParameterObject PaginationRequestDTO request
+    @GetMapping(UrlConstant.Product.FILTER_ACTIVE_LIST)
+    public ResponseEntity<?> filterActiveList(
+            @ParameterObject PaginationRequestDTO request,
+            @RequestBody ProductFilterRequestDTO filter
     ) {
-        return ResponseUtil.ok(productService.getActiveListByBrand(request, brandId));
+        return ResponseUtil.ok(productService.getList(request, filter));
     }
 
 

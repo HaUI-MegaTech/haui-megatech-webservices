@@ -41,23 +41,12 @@ public class ProductRestController {
     }
 
 
-    @Operation(summary = "Get active Products with pagination")
+    @Operation(summary = "Filter active Products by brand ids, price range with pagination")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(UrlConstant.Product.GET_ACTIVE_LIST)
     public ResponseEntity<?> getActiveList(
             @ParameterObject PaginationRequestDTO request,
-            @RequestBody ProductFilterRequestDTO filter
-    ) {
-        return ResponseUtil.ok(productService.getList(request, filter));
-    }
-
-
-    @Operation(summary = "Filter active Products by brand ids, price range with pagination")
-    @ApiResponse(responseCode = "200", description = "OK")
-    @GetMapping(UrlConstant.Product.FILTER_ACTIVE_LIST)
-    public ResponseEntity<?> filterActiveList(
-            @ParameterObject PaginationRequestDTO request,
-            @RequestBody ProductFilterRequestDTO filter
+            @RequestBody(required = false) ProductFilterRequestDTO filter
     ) {
         return ResponseUtil.ok(productService.getList(request, filter));
     }

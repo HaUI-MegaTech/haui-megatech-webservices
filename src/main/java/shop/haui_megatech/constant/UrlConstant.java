@@ -43,7 +43,6 @@ public class UrlConstant {
         public static final String PRODUCT_ID             = "/{productId}";
         public static final String GET_DETAIL_ONE         = PREFIX + PRODUCT_ID;
         public static final String GET_ACTIVE_LIST        = PREFIX + ACTIVE;
-        public static final String FILTER_ACTIVE_LIST     = GET_ACTIVE_LIST + "/filter";
         public static final String GET_HIDDEN_LIST        = PREFIX + HIDDEN;
         public static final String GET_DELETED_LIST       = PREFIX + DELETED;
         public static final String ADD_ONE                = PREFIX;

@@ -75,55 +75,66 @@ public class ProductServiceImpl implements ProductService {
             List<Product> products = new ArrayList<>();
             int pageCount = 0;
 
-            if (filter.brandIds() != null) {
-                List<Integer> brandIds = Arrays.stream(filter.brandIds().split(","))
-                                               .map(String::trim)
-                                               .map(Integer::valueOf)
-                                               .toList();
-                if (filter.minPrice() != null && filter.maxPrice() != null) {
-                    for (String keyword : keywords) {
-                        ++pageCount;
-                        Page<Product> page = productRepository.filterActiveListByKeywordAndBrandIdsAndPrice(
-                                keyword,
-                                brandIds,
-                                filter.minPrice(),
-                                filter.maxPrice(),
-                                pageable
-                        );
-                        products.addAll(page.getContent());
+            if (filter != null) {
+                if (filter.brandIds() != null) {
+                    List<Integer> brandIds = Arrays.stream(filter.brandIds().split(","))
+                                                   .map(String::trim)
+                                                   .map(Integer::valueOf)
+                                                   .toList();
+                    if (filter.minPrice() != null && filter.maxPrice() != null) {
+                        for (String keyword : keywords) {
+                            ++pageCount;
+                            Page<Product> page = productRepository.filterActiveListByKeywordAndBrandIdsAndPrice(
+                                    keyword,
+                                    brandIds,
+                                    filter.minPrice(),
+                                    filter.maxPrice(),
+                                    pageable
+                            );
+                            products.addAll(page.getContent());
+                        }
+                    } else {
+                        for (String keyword : keywords) {
+                            ++pageCount;
+                            Page<Product> page = productRepository.filterActiveListByKeywordAndBrandIds(
+                                    keyword,
+                                    brandIds,
+                                    pageable
+                            );
+                            products.addAll(page.getContent());
+                        }
                     }
                 } else {
-                    for (String keyword : keywords) {
-                        ++pageCount;
-                        Page<Product> page = productRepository.filterActiveListByKeywordAndBrandIds(
-                                keyword,
-                                brandIds,
-                                pageable
-                        );
-                        products.addAll(page.getContent());
+                    if (filter.minPrice() != null && filter.maxPrice() != null) {
+                        for (String keyword : keywords) {
+                            ++pageCount;
+                            Page<Product> page = productRepository.filterActiveListByKeywordAndPrice(
+                                    keyword,
+                                    filter.minPrice(),
+                                    filter.maxPrice(),
+                                    pageable
+                            );
+                            products.addAll(page.getContent());
+                        }
+                    } else {
+                        for (String keyword : keywords) {
+                            ++pageCount;
+                            Page<Product> page = productRepository.searchActiveProductsPage(
+                                    keyword,
+                                    pageable
+                            );
+                            products.addAll(page.getContent());
+                        }
                     }
                 }
             } else {
-                if (filter.minPrice() != null && filter.maxPrice() != null) {
-                    for (String keyword : keywords) {
-                        ++pageCount;
-                        Page<Product> page = productRepository.filterActiveListByKeywordAndPrice(
-                                keyword,
-                                filter.minPrice(),
-                                filter.maxPrice(),
-                                pageable
-                        );
-                        products.addAll(page.getContent());
-                    }
-                } else {
-                    for (String keyword : keywords) {
-                        ++pageCount;
-                        Page<Product> page = productRepository.searchActiveProductsPage(
-                                keyword,
-                                pageable
-                        );
-                        products.addAll(page.getContent());
-                    }
+                for (String keyword : keywords) {
+                    ++pageCount;
+                    Page<Product> page = productRepository.searchActiveProductsPage(
+                            keyword,
+                            pageable
+                    );
+                    products.addAll(page.getContent());
                 }
             }
 
@@ -142,34 +153,38 @@ public class ProductServiceImpl implements ProductService {
 
         Page<Product> page;
 
-        if (filter.brandIds() != null) {
-            List<Integer> brandIds = Arrays.stream(filter.brandIds().split(","))
-                                           .map(String::trim)
-                                           .map(Integer::valueOf)
-                                           .toList();
-            if (filter.minPrice() != null && filter.maxPrice() != null) {
-                page = productRepository.filterActiveListByPriceAndBrandIds(
-                        brandIds,
-                        filter.minPrice(),
-                        filter.maxPrice(),
-                        pageable
-                );
+        if (filter != null) {
+            if (filter.brandIds() != null) {
+                List<Integer> brandIds = Arrays.stream(filter.brandIds().split(","))
+                                               .map(String::trim)
+                                               .map(Integer::valueOf)
+                                               .toList();
+                if (filter.minPrice() != null && filter.maxPrice() != null) {
+                    page = productRepository.filterActiveListByPriceAndBrandIds(
+                            brandIds,
+                            filter.minPrice(),
+                            filter.maxPrice(),
+                            pageable
+                    );
+                } else {
+                    page = productRepository.filterActiveListByBrandIds(
+                            brandIds,
+                            pageable
+                    );
+                }
             } else {
-                page = productRepository.filterActiveListByBrandIds(
-                        brandIds,
-                        pageable
-                );
+                if (filter.minPrice() != null && filter.maxPrice() != null) {
+                    page = productRepository.filterActiveListByPrice(
+                            filter.minPrice(),
+                            filter.maxPrice(),
+                            pageable
+                    );
+                } else {
+                    page = productRepository.getActiveProductsPage(pageable);
+                }
             }
         } else {
-            if (filter.minPrice() != null && filter.maxPrice() != null) {
-                page = productRepository.filterActiveListByPrice(
-                        filter.minPrice(),
-                        filter.maxPrice(),
-                        pageable
-                );
-            } else {
-                page = productRepository.getActiveProductsPage(pageable);
-            }
+            page = productRepository.getActiveProductsPage(pageable);
         }
 
         List<Product> products = page.getContent();

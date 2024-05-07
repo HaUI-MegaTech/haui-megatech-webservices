@@ -51,6 +51,8 @@ public record ProductDetailDTO(
         String os,
         Integer launchDate,
 
+        ProductBrandDTO brand,
+
         List<ImageDTO> images
 ) {
 

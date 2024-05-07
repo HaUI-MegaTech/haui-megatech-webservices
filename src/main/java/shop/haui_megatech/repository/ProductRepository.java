@@ -60,7 +60,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query(
             "SELECT p FROM Product p " +
-            "WHERE p.brandId = :brandId " +
+            "WHERE p.brand.id = :brandId " +
             "AND (p.deleted = false OR p.deleted IS NULL) " +
             "AND (p.hidden = false OR p.hidden IS NULL) "
     )

@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import shop.haui_megatech.domain.dto.product.AddProductRequestDTO;
+import shop.haui_megatech.domain.dto.product.ProductBrandDTO;
 import shop.haui_megatech.domain.dto.product.ProductDTO;
 import shop.haui_megatech.domain.dto.product.ProductDetailDTO;
 import shop.haui_megatech.domain.entity.Product;
@@ -28,4 +29,6 @@ public interface ProductMapper {
     ProductDetailDTO toProductDetailDTO(Product product);
 
     Product toProduct(AddProductRequestDTO request);
+
+    ProductBrandDTO toProductBrandDTO(Product product);
 }

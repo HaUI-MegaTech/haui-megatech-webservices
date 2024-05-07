@@ -88,8 +88,9 @@ public class Product {
     private Boolean hidden;
     private Boolean deleted;
 
-    @Column(name = "brand_id")
-    private Integer brandId;
+    @JoinColumn(name = "brand_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Brand brand;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Image> images;

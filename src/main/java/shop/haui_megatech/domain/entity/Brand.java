@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "brands")
 @Entity
@@ -23,4 +24,7 @@ public class Brand {
     private String  image;
     @Temporal(TemporalType.TIMESTAMP)
     private Date    whenCreated;
+
+    @OneToMany(mappedBy = "brand")
+    private List<Product> products;
 }

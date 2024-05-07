@@ -53,4 +53,8 @@ public class SuccessMessageConstant {
         public static final String FOUND       = "order.success.found";
         public static final String UPDATED_ONE = "order.success.updated-one";
     }
+
+    public static class Location {
+        public static final String FOUND = "location.success.found";
+    }
 }

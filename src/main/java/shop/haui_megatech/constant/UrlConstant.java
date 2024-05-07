@@ -101,4 +101,15 @@ public class UrlConstant {
 
     }
 
+    public static final class Location {
+        public static final String PROVINCES         = "/provinces";
+        public static final String PROVINCE_CODE     = "/{provinceCode}";
+        public static final String DISTRICTS         = "/districts";
+        public static final String DISTRICT_CODE     = "/{districtCode}";
+        public static final String WARDS             = "/wards";
+        public static final String GET_ALL_PROVINCES = PROVINCES;
+        public static final String GET_ALL_DISTRICTS = GET_ALL_PROVINCES + PROVINCE_CODE + DISTRICTS;
+        public static final String GET_ALL_WARDS     = GET_ALL_DISTRICTS + DISTRICT_CODE + WARDS;
+    }
+
 }

@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,8 +43,11 @@ public class JwtTokenUtil {
         return Jwts.builder()
                    .setClaims(extraClaims)
                    .setSubject(userDetails.getUsername())
-                   .setIssuedAt(new Date(System.currentTimeMillis()))
-                   .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 1 day
+                   .setIssuedAt(new Date(Instant.now().toEpochMilli()))
+                   .setExpiration(new Date(
+                                   Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()
+                           )
+                   )
                    .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                    .compact();
     }

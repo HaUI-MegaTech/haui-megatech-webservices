@@ -6,9 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import shop.haui_megatech.constant.ErrorMessageConstant;
+import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.PaginationConstant;
-import shop.haui_megatech.constant.SuccessMessageConstant;
+import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.order.*;
@@ -42,10 +42,10 @@ public class OrderServiceImpl implements OrderService {
         Optional<User> foundUser = userRepository.findActiveUserByUsername(username);
 
         if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         if (requestDTO.paginationRequestDTO().index() < 0)
-            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
+            throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = requestDTO.paginationRequestDTO().direction().equals(PaginationConstant.DEFAULT_ORDER)
                     ? Sort.by(requestDTO.paginationRequestDTO().fields())
@@ -76,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public PaginationDTO.Response<?> getListOrderForAdmin(PaginationDTO.Request requestDTO) {
         if (requestDTO.index() < 0)
-            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
+            throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = requestDTO.direction().equals(PaginationConstant.DEFAULT_ORDER)
                     ? Sort.by(requestDTO.fields())
@@ -110,7 +110,7 @@ public class OrderServiceImpl implements OrderService {
         Optional<User> foundUser = userRepository.findActiveUserByUsername(username);
 
         if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
         Order order = orderRepository.findOrderDetailById_UserId(requestDTO.orderId(), foundUser.get().getId()).get();
         return CommonResponseDTO.<OrderItemResponseDTO>builder()
                                 .success(true)
@@ -137,14 +137,14 @@ public class OrderServiceImpl implements OrderService {
         Optional<User> foundUser = userRepository.findActiveUserByUsername(username);
 
         if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         Order order = orderMapper.addOrderRequestForUserDTOtoOrder(requestDTO);
         order.setUser(foundUser.get());
         Order saveOrder = orderRepository.save(order);
         return CommonResponseDTO.<OrderBaseDTO>builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Order.ADDED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Order.ADDED_ONE))
                                 .item(orderMapper.orderToOrderBase(saveOrder))
                                 .build();
     }
@@ -155,7 +155,7 @@ public class OrderServiceImpl implements OrderService {
         Order saveOrder = orderRepository.save(order);
         return CommonResponseDTO.<OrderBaseDTO>builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Order.ADDED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Order.ADDED_ONE))
                                 .item(orderMapper.orderToOrderBase(saveOrder))
                                 .build();
     }
@@ -167,10 +167,10 @@ public class OrderServiceImpl implements OrderService {
         Optional<User> foundUser = userRepository.findActiveUserByUsername(username);
 
         if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
         Order order = orderRepository.findOrderDetailById_UserId(requestDTO.orderId(), foundUser.get().getId()).get();
         if (order == null)
-            throw new NotFoundException(ErrorMessageConstant.Order.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Order.NOT_FOUND);
 
         Order orderUpdate = orderMapper.addOrderRequestForUserDTOtoOrder(requestDTO.addOrderForUserRequestDTO());
         orderUpdate.setId(order.getId());
@@ -178,7 +178,7 @@ public class OrderServiceImpl implements OrderService {
         Order saveOrder = orderRepository.save(orderUpdate);
         return CommonResponseDTO.<OrderBaseDTO>builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Order.UPDATED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Order.UPDATED_ONE))
                                 .item(orderMapper.orderToOrderBase(saveOrder))
                                 .build();
     }
@@ -188,10 +188,10 @@ public class OrderServiceImpl implements OrderService {
         Optional<User> foundUser = userRepository.findById(requestDTO.addOrderForAdminRequestDTO().userId());
 
         if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
         Order order = orderRepository.findOrderDetailById_UserId(requestDTO.orderId(), foundUser.get().getId()).get();
         if (order == null)
-            throw new NotFoundException(ErrorMessageConstant.Order.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Order.NOT_FOUND);
 
         Order orderUpdate = orderMapper.addOrderRequestForAdminDTOtoOrder(requestDTO.addOrderForAdminRequestDTO());
         orderUpdate.setId(order.getId());
@@ -199,7 +199,7 @@ public class OrderServiceImpl implements OrderService {
         Order saveOrder = orderRepository.save(orderUpdate);
         return CommonResponseDTO.<OrderBaseDTO>builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Order.UPDATED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Order.UPDATED_ONE))
                                 .item(orderMapper.orderToOrderBase(saveOrder))
                                 .build();
     }
@@ -208,7 +208,7 @@ public class OrderServiceImpl implements OrderService {
     public CommonResponseDTO<OrderBaseDTO> deleteOrderForAdmin(int orderId) {
         Order order = orderRepository.findById(orderId).get();
         if (order == null)
-            throw new NotFoundException(ErrorMessageConstant.Order.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Order.NOT_FOUND);
         orderRepository.deleteById(order.getId());
         return CommonResponseDTO.<OrderBaseDTO>builder()
                                 .success(true)

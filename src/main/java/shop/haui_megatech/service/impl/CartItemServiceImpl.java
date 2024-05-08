@@ -6,9 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import shop.haui_megatech.constant.ErrorMessageConstant;
+import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.PaginationConstant;
-import shop.haui_megatech.constant.SuccessMessageConstant;
+import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.CartItemDTO;
 import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.UserDTO;
@@ -44,18 +44,18 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CommonResponseDTO<?> addOne(CartItemDTO.Request request) {
         if (request.quantity() <= 0)
-            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_QUANTITY);
+            throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         Optional<Product> foundProduct = productRepository.findById(request.productId());
 
         if (foundProduct.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
         Optional<CartItem> existedCartItem = foundUser.get().getCartItems()
                                                       .parallelStream()
@@ -67,7 +67,7 @@ public class CartItemServiceImpl implements CartItemService {
             cartItemRepository.save(existedCartItem.get());
             return CommonResponseDTO.<UserDTO>builder()
                                     .success(true)
-                                    .message(messageSourceUtil.getMessage(SuccessMessageConstant.Cart.ADDED_ONE))
+                                    .message(messageSourceUtil.getMessage(SuccessMessage.Cart.ADDED_ONE))
                                     .build();
         }
 
@@ -80,57 +80,57 @@ public class CartItemServiceImpl implements CartItemService {
 
         return CommonResponseDTO.<UserDTO>builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Cart.ADDED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Cart.ADDED_ONE))
                                 .build();
     }
 
     @Override
     public CommonResponseDTO<?> updateOne(Integer id, CartItemDTO.Request request) {
         if (request.quantity() <= 0)
-            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_QUANTITY);
+            throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
         Optional<CartItem> foundCartItem = cartItemRepository.findById(id);
         if (foundCartItem.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.Cart.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Cart.NOT_FOUND);
 
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         if (!Objects.equals(foundCartItem.get().getUser().getId(), foundUser.get().getId()))
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         Optional<Product> foundProduct = productRepository.findById(request.productId());
         if (foundProduct.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
         foundCartItem.get().setQuantity(request.quantity());
         cartItemRepository.save(foundCartItem.get());
 
         return CommonResponseDTO.<UserDTO>builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Cart.UPDATED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Cart.UPDATED_ONE))
                                 .build();
     }
 
     @Override
     public CommonResponseDTO<?> hardDeleteOne(Integer cartItemId) {
         if (cartItemId < 0)
-            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_ID);
+            throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_ID);
 
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         cartItemRepository.deleteById(cartItemId);
 
         return CommonResponseDTO.<UserDTO>builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Cart.HARD_DELETED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Cart.HARD_DELETED_ONE))
                                 .build();
     }
 
@@ -140,14 +140,14 @@ public class CartItemServiceImpl implements CartItemService {
 
         request.ids().parallelStream().forEach(item -> {
             if (item < 0)
-                throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_CART_ITEM_ID);
+                throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_ID);
         });
 
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         ArrayList<Integer> checkedCartItemIds = new ArrayList<>(foundUser.get().getCartItems()
                                                                          .parallelStream()
@@ -161,7 +161,7 @@ public class CartItemServiceImpl implements CartItemService {
         return CommonResponseDTO.<UserDTO>builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                 SuccessMessageConstant.Cart.HARD_DELETED_LIST,
+                                                 SuccessMessage.Cart.HARD_DELETED_LIST,
                                                  checkedCartItemIds.size()
                                          )
                                 )
@@ -175,7 +175,7 @@ public class CartItemServiceImpl implements CartItemService {
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
                     ? Sort.by(request.fields())

@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import shop.haui_megatech.constant.ErrorMessageConstant;
+import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.PaginationConstant;
-import shop.haui_megatech.constant.SuccessMessageConstant;
+import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.UserDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
@@ -50,11 +50,11 @@ public class UserServiceImpl implements UserService {
         Optional<User> foundUser = userRepository.findById(userId);
 
         if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         return CommonResponseDTO.<UserDTO.DetailResponse>builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.FOUND))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.User.FOUND))
                                 .item(UserMapper.INSTANCE.toUserDetailDTO(foundUser.get()))
                                 .build();
     }
@@ -62,20 +62,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonResponseDTO<?> addOne(UserDTO.AddRequest request) {
         if (!RequestValidator.isBlankRequestParams(request.username()))
-            throw new AbsentRequiredFieldException(ErrorMessageConstant.Request.BLANK_USERNAME);
+            throw new AbsentRequiredFieldException(ErrorMessage.Request.BLANK_USERNAME);
 
         if (!RequestValidator.isBlankRequestParams(request.password()))
-            throw new AbsentRequiredFieldException(ErrorMessageConstant.Request.BLANK_PASSWORD);
+            throw new AbsentRequiredFieldException(ErrorMessage.Request.BLANK_PASSWORD);
 
         if (!request.password().equals(request.confirmPassword()))
-            throw new MismatchedConfirmPasswordException(ErrorMessageConstant.User.MISMATCHED_PASSWORD);
+            throw new MismatchedConfirmPasswordException(ErrorMessage.User.MISMATCHED_PASSWORD);
 
         if (userRepository.findUserByUsername(request.username()).isPresent())
-            throw new DuplicateUsernameException(ErrorMessageConstant.Request.DUPLICATE_USERNAME);
+            throw new DuplicateUsernameException(ErrorMessage.Request.DUPLICATE_USERNAME);
 
         return CommonResponseDTO.<UserDTO.Response>builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.ADDED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.User.ADDED_ONE))
                                 .item(UserMapper.INSTANCE.toUserDTO(
                                         userRepository.save(User.builder()
                                                                 .username(request.username())
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonResponseDTO<?> importExcel(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
-            throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
+            throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
         try {
             List<User> users = ExcelUtil.excelToUsers(request.file().getInputStream());
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
             return CommonResponseDTO.builder()
                                     .success(true)
                                     .message(messageSourceUtil.getMessage(
-                                            SuccessMessageConstant.User.IMPORTED_LIST,
+                                            SuccessMessage.User.IMPORTED_LIST,
                                             savedUsers.size()
                                     ))
                                     .build();
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonResponseDTO<?> importCsv(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
-            throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
+            throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
         try {
             List<User> users = CsvUtil.csvToUsers(request.file().getInputStream());
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
             return CommonResponseDTO.builder()
                                     .success(true)
                                     .message(messageSourceUtil.getMessage(
-                                            SuccessMessageConstant.User.IMPORTED_LIST,
+                                            SuccessMessage.User.IMPORTED_LIST,
                                             savedUsers.size()
                                     ))
                                     .build();
@@ -133,12 +133,12 @@ public class UserServiceImpl implements UserService {
             UserDTO.UpdateInfoRequest request
     ) {
         if (Objects.isNull(request))
-            throw new NullRequestException(ErrorMessageConstant.Request.NULL_REQUEST);
+            throw new NullRequestException(ErrorMessage.Request.NULL_REQUEST);
 
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         User foundUser = found.get();
 
@@ -160,7 +160,7 @@ public class UserServiceImpl implements UserService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.INFO_UPDATED))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.User.INFO_UPDATED))
                                 .build();
     }
 
@@ -172,22 +172,22 @@ public class UserServiceImpl implements UserService {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         User foundUser = found.get();
 
         if (!passwordEncoder.matches(request.oldPassword(), foundUser.getPassword()))
-            throw new WrongPasswordException(ErrorMessageConstant.User.WRONG_PASSWORD);
+            throw new WrongPasswordException(ErrorMessage.User.WRONG_PASSWORD);
 
         if (!request.newPassword().equals(request.confirmNewPassword()))
-            throw new MismatchedConfirmPasswordException(ErrorMessageConstant.User.MISMATCHED_PASSWORD);
+            throw new MismatchedConfirmPasswordException(ErrorMessage.User.MISMATCHED_PASSWORD);
 
         foundUser.setPassword(passwordEncoder.encode(request.newPassword()));
         userRepository.save(foundUser);
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.PASSWORD_UPDATED))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.User.PASSWORD_UPDATED))
                                 .build();
     }
 
@@ -196,7 +196,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         User foundUser = found.get();
         foundUser.setDeleted(true);
@@ -204,7 +204,7 @@ public class UserServiceImpl implements UserService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.SOFT_DELETED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.User.SOFT_DELETED_ONE))
                                 .build();
     }
 
@@ -219,7 +219,7 @@ public class UserServiceImpl implements UserService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                        SuccessMessageConstant.User.SOFT_DELETED_LIST,
+                                        SuccessMessage.User.SOFT_DELETED_LIST,
                                         foundUsers.size()
                                 ))
                                 .build();
@@ -230,13 +230,13 @@ public class UserServiceImpl implements UserService {
         Optional<User> found = userRepository.findById(id);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         userRepository.delete(found.get());
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.HARD_DELETED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.User.HARD_DELETED_ONE))
                                 .build();
     }
 
@@ -247,7 +247,7 @@ public class UserServiceImpl implements UserService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                        SuccessMessageConstant.User.HARD_DELETED_LIST,
+                                        SuccessMessage.User.HARD_DELETED_LIST,
                                         request.ids().size()
                                 ))
                                 .build();
@@ -258,14 +258,14 @@ public class UserServiceImpl implements UserService {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         found.get().setDeleted(false);
         userRepository.save(found.get());
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.User.RESTORED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.User.RESTORED_ONE))
                                 .build();
     }
 
@@ -280,7 +280,7 @@ public class UserServiceImpl implements UserService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                        SuccessMessageConstant.User.RESTORED_LIST,
+                                        SuccessMessage.User.RESTORED_LIST,
                                         foundUsers.size()
                                 ))
                                 .build();
@@ -293,7 +293,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.User.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         User foundUser = found.get();
         foundUser.setPassword(passwordEncoder.encode(newPassword));
@@ -303,7 +303,7 @@ public class UserServiceImpl implements UserService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                        SuccessMessageConstant.User.RESET_PASSWORD_ONE,
+                                        SuccessMessage.User.RESET_PASSWORD_ONE,
                                         foundUser.getUsername()
                                 ))
                                 .build();
@@ -320,7 +320,7 @@ public class UserServiceImpl implements UserService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                        SuccessMessageConstant.User.RESET_PASSWORD_LIST,
+                                        SuccessMessage.User.RESET_PASSWORD_LIST,
                                         foundUsers.size()
                                 ))
                                 .build();
@@ -329,7 +329,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public PaginationDTO.Response<UserDTO.Response> getList(PaginationDTO.Request request) {
         if (request.index() < 0)
-            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
+            throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
                     ? Sort.by(request.fields())
@@ -360,7 +360,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public PaginationDTO.Response<UserDTO.Response> getDeletedList(PaginationDTO.Request request) {
         if (request.index() < 0)
-            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
+            throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
                     ? Sort.by(request.fields())

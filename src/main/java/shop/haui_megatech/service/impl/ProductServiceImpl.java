@@ -6,9 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import shop.haui_megatech.constant.ErrorMessageConstant;
+import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.PaginationConstant;
-import shop.haui_megatech.constant.SuccessMessageConstant;
+import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.ProductDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
@@ -43,11 +43,11 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
         return CommonResponseDTO.<ProductDTO.DetailResponse>builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.FOUND))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Product.FOUND))
                                 .item(ProductMapper.INSTANCE.toProductDetailDTO(found.get()))
                                 .build();
 
@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
             ProductDTO.FilterRequest filter
     ) {
         if (request.index() < 0)
-            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
+            throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
                     ? Sort.by(request.fields())
@@ -204,7 +204,7 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.<ProductDTO.SummaryResponse>builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.ADDED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Product.ADDED_ONE))
                                 .item(ProductMapper.INSTANCE.toProductSummaryDTO(
                                               productRepository.save(ProductMapper.INSTANCE.toProduct(request))
                                       )
@@ -215,7 +215,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public CommonResponseDTO<?> importExcel(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
-            throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
+            throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
         try {
             List<Product> products = ExcelUtil.excelToProducts(request.file().getInputStream());
@@ -223,7 +223,7 @@ public class ProductServiceImpl implements ProductService {
             return CommonResponseDTO.builder()
                                     .success(true)
                                     .message(messageSourceUtil.getMessage(
-                                            SuccessMessageConstant.Product.IMPORTED_LIST,
+                                            SuccessMessage.Product.IMPORTED_LIST,
                                             savedProducts.size()
                                     ))
                                     .build();
@@ -235,7 +235,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public CommonResponseDTO<?> importCsv(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
-            throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
+            throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
         try {
             List<Product> products = CsvUtil.csvToProducts(request.file().getInputStream());
@@ -243,7 +243,7 @@ public class ProductServiceImpl implements ProductService {
             return CommonResponseDTO.builder()
                                     .success(true)
                                     .message(messageSourceUtil.getMessage(
-                                            SuccessMessageConstant.Product.IMPORTED_LIST,
+                                            SuccessMessage.Product.IMPORTED_LIST,
                                             savedProducts.size()
                                     ))
                                     .build();
@@ -260,7 +260,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
         Product foundProduct = found.get();
 
@@ -270,7 +270,7 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(SuccessMessageConstant.Product.UPDATED_ONE)
+                                .message(SuccessMessage.Product.UPDATED_ONE)
                                 .build();
     }
 
@@ -279,13 +279,13 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
         productRepository.deleteById(id);
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(SuccessMessageConstant.Product.HARD_DELETED_ONE)
+                                .message(SuccessMessage.Product.HARD_DELETED_ONE)
                                 .build();
     }
 
@@ -296,7 +296,7 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                 SuccessMessageConstant.Product.HARD_DELETED_LIST,
+                                                 SuccessMessage.Product.HARD_DELETED_LIST,
                                                  request.ids().size()
                                          )
                                 )
@@ -307,7 +307,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public CommonResponseDTO<?> updateListFromExcel(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
-            throw new MalformedFileException(ErrorMessageConstant.Request.MALFORMED_FILE);
+            throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
         try {
             List<Product> updatedProducts = ExcelUtil.excelToProducts(request.file().getInputStream());
@@ -315,7 +315,7 @@ public class ProductServiceImpl implements ProductService {
             return CommonResponseDTO.builder()
                                     .success(true)
                                     .message(messageSourceUtil.getMessage(
-                                            SuccessMessageConstant.Product.UPDATED_LIST_FROM_EXCEL,
+                                            SuccessMessage.Product.UPDATED_LIST_FROM_EXCEL,
                                             savedProducts.size()
                                     ))
                                     .build();
@@ -330,13 +330,13 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
         productRepository.deleteById(id);
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(SuccessMessageConstant.Product.HIDED_ONE)
+                                .message(SuccessMessage.Product.HIDED_ONE)
                                 .build();
     }
 
@@ -351,7 +351,7 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                 SuccessMessageConstant.Product.HIDED_LIST,
+                                                 SuccessMessage.Product.HIDED_LIST,
                                                  foundProducts.size()
                                          )
                                 )
@@ -361,7 +361,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PaginationDTO.Response<ProductDTO.SummaryResponse> getHiddenList(PaginationDTO.Request request) {
         if (request.index() < 0)
-            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
+            throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
                     ? Sort.by(request.fields())
@@ -394,7 +394,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
         Product foundProduct = found.get();
         foundProduct.setDeleted(false);
@@ -402,7 +402,7 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.RESTORED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Product.RESTORED_ONE))
                                 .build();
     }
 
@@ -417,7 +417,7 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                 SuccessMessageConstant.Product.RESTORED_LIST,
+                                                 SuccessMessage.Product.RESTORED_LIST,
                                                  foundProducts.size()
                                          )
                                 )
@@ -429,7 +429,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
         Product foundProduct = found.get();
         foundProduct.setHidden(false);
@@ -437,7 +437,7 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.EXPOSED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Product.EXPOSED_ONE))
                                 .build();
     }
 
@@ -452,7 +452,7 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                 SuccessMessageConstant.Product.EXPOSED_LIST,
+                                                 SuccessMessage.Product.EXPOSED_LIST,
                                                  foundProducts.size()
                                          )
                                 )
@@ -464,7 +464,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
-            throw new NotFoundException(ErrorMessageConstant.Product.NOT_FOUND);
+            throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
         Product foundProduct = found.get();
         foundProduct.setDeleted(true);
@@ -472,7 +472,7 @@ public class ProductServiceImpl implements ProductService {
 
         return CommonResponseDTO.builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Product.SOFT_DELETED_ONE))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Product.SOFT_DELETED_ONE))
                                 .build();
     }
 
@@ -487,7 +487,7 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                 SuccessMessageConstant.Product.SOFT_DELETED_LIST,
+                                                 SuccessMessage.Product.SOFT_DELETED_LIST,
                                                  foundProducts.size()
                                          )
                                 )
@@ -497,7 +497,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PaginationDTO.Response<ProductDTO.SummaryResponse> getDeletedList(PaginationDTO.Request request) {
         if (request.index() < 0)
-            throw new InvalidRequestParamException(ErrorMessageConstant.Request.NEGATIVE_PAGE_INDEX);
+            throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
                     ? Sort.by(request.fields())

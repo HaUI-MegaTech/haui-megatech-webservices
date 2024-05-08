@@ -7,7 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import shop.haui_megatech.constant.ErrorMessageConstant;
+import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.domain.dto.AuthenticationDTO;
 import shop.haui_megatech.domain.dto.UserDTO;
 import shop.haui_megatech.domain.entity.User;
@@ -33,16 +33,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthenticationDTO.Response register(UserDTO.AddRequest request) {
         if (!RequestValidator.isBlankRequestParams(request.username()))
-            throw new AbsentRequiredFieldException(ErrorMessageConstant.Request.BLANK_USERNAME);
+            throw new AbsentRequiredFieldException(ErrorMessage.Request.BLANK_USERNAME);
 
         if (!RequestValidator.isBlankRequestParams(request.password()))
-            throw new AbsentRequiredFieldException(ErrorMessageConstant.Request.BLANK_PASSWORD);
+            throw new AbsentRequiredFieldException(ErrorMessage.Request.BLANK_PASSWORD);
 
         if (!request.password().equals(request.confirmPassword()))
-            throw new MismatchedConfirmPasswordException(ErrorMessageConstant.User.MISMATCHED_PASSWORD);
+            throw new MismatchedConfirmPasswordException(ErrorMessage.User.MISMATCHED_PASSWORD);
 
         if (userRepository.findUserByUsername(request.username()).isPresent())
-            throw new DuplicateUsernameException(ErrorMessageConstant.Request.DUPLICATE_USERNAME);
+            throw new DuplicateUsernameException(ErrorMessage.Request.DUPLICATE_USERNAME);
 
         User user = User.builder()
                         .username(request.username())

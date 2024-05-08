@@ -2,8 +2,8 @@ package shop.haui_megatech.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import shop.haui_megatech.constant.ErrorMessageConstant;
-import shop.haui_megatech.constant.SuccessMessageConstant;
+import shop.haui_megatech.constant.ErrorMessage;
+import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.BrandDTO;
 import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
@@ -30,9 +30,9 @@ public class BrandServiceImpl implements BrandService {
 
         return CommonResponseDTO.<BrandDTO>builder()
                                 .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Brand.FOUND))
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Brand.FOUND))
                                 .item(BrandMapper.INSTANCE.toBrandDTO(found.orElseThrow(
-                                              () -> new NotFoundException(ErrorMessageConstant.Brand.NOT_FOUND))
+                                              () -> new NotFoundException(ErrorMessage.Brand.NOT_FOUND))
                                       )
                                 )
                                 .build();

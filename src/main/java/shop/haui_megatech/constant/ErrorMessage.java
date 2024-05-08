@@ -1,6 +1,6 @@
 package shop.haui_megatech.constant;
 
-public class ErrorMessageConstant {
+public class ErrorMessage {
 
     public static class User {
         public static final String NOT_FOUND                 = "user.error.not-found";

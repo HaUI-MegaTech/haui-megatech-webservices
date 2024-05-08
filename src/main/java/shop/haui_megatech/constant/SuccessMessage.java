@@ -1,6 +1,6 @@
 package shop.haui_megatech.constant;
 
-public class SuccessMessageConstant {
+public class SuccessMessage {
 
     public static class User {
         public static final String ADDED_ONE           = "user.success.added-one";

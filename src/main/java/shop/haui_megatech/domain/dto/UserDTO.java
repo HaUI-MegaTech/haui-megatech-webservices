@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;
-import shop.haui_megatech.constant.ErrorMessageConstant;
+import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.domain.entity.Address;
 import shop.haui_megatech.domain.entity.Gender;
 
@@ -49,7 +49,7 @@ public record UserDTO() {
     ) {}
 
     public record AddRequest(
-            @Size(min = 4, message = ErrorMessageConstant.User.DEFICIENT_USERNAME_LENGTH)
+            @Size(min = 4, message = ErrorMessage.User.DEFICIENT_USERNAME_LENGTH)
             String username,
             String password,
             String confirmPassword,

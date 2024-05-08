@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import shop.haui_megatech.annotation.RestApiV1;
-import shop.haui_megatech.constant.UrlConstant;
+import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.service.BrandService;
 import shop.haui_megatech.utility.ResponseUtil;
@@ -28,7 +28,7 @@ public class BrandRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.Brand.GET_ONE)
+    @GetMapping(Endpoint.Brand.GET_ONE)
     public ResponseEntity<?> getOne(
             @PathVariable Integer brandId
     ) {
@@ -38,7 +38,7 @@ public class BrandRestController {
 
     @Operation(summary = "Get active Brands with pagination")
     @ApiResponse(responseCode = "200", description = "OK")
-    @GetMapping(UrlConstant.Brand.GET_ACTIVE_LIST)
+    @GetMapping(Endpoint.Brand.GET_ACTIVE_LIST)
     public ResponseEntity<?> getActiveList(
             @ParameterObject PaginationDTO.Request request
     ) {

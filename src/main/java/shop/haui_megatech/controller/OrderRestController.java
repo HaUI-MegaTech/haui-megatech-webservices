@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
-import shop.haui_megatech.constant.UrlConstant;
+import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.order.*;
 import shop.haui_megatech.service.OrderService;
@@ -27,7 +27,7 @@ public class OrderRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.Order.GET_LIST_BY_USER_ID)
+    @GetMapping(Endpoint.Order.GET_LIST_BY_USER_ID)
     public ResponseEntity<?> getListOrdersByUserId(
             @RequestBody ListOrdersForUserRequestDTO requestDTO
     ) {
@@ -41,7 +41,7 @@ public class OrderRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.Order.GET_LIST_FOR_ADMIN)
+    @GetMapping(Endpoint.Order.GET_LIST_FOR_ADMIN)
     public ResponseEntity<?> getListOrdersByUserId(
             @RequestBody PaginationDTO.Request requestDTO
     ) {
@@ -55,7 +55,7 @@ public class OrderRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.Order.GET_DETAIL_FOR_USER)
+    @GetMapping(Endpoint.Order.GET_DETAIL_FOR_USER)
     public ResponseEntity<?> getDetailOrderFoUser(
             @RequestBody OrderItemForUserRequestDTO requestDTO
     ) {
@@ -69,7 +69,7 @@ public class OrderRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.Order.GET_DETAIL_FOR_ADMIN)
+    @GetMapping(Endpoint.Order.GET_DETAIL_FOR_ADMIN)
     public ResponseEntity<?> getDetailOrderForAdmin(
             @PathVariable(name = "orderId") Integer orderId
     ) {
@@ -83,7 +83,7 @@ public class OrderRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PostMapping(UrlConstant.Order.ADD_ONE_FOR_USER)
+    @PostMapping(Endpoint.Order.ADD_ONE_FOR_USER)
     public ResponseEntity<?> getDetailOrderForUser(
             @RequestBody AddOrderForUserRequestDTO requestDTO
     ) {
@@ -97,7 +97,7 @@ public class OrderRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PostMapping(UrlConstant.Order.ADD_ONE_FOR_ADMIN)
+    @PostMapping(Endpoint.Order.ADD_ONE_FOR_ADMIN)
     public ResponseEntity<?> getDetailOrderForAdmin(
             @RequestBody AddOrderForAdminRequestDTO requestDTO
     ) {
@@ -111,7 +111,7 @@ public class OrderRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PutMapping(UrlConstant.Order.UPDATED_ONE_FOR_UER)
+    @PutMapping(Endpoint.Order.UPDATED_ONE_FOR_UER)
     public ResponseEntity<?> updateOrderForUser(
             @RequestBody ModifyOrderForUserRequestDTO requestDTO
     ) {
@@ -125,7 +125,7 @@ public class OrderRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PutMapping(UrlConstant.Order.UPDATED_ONE_FOR_ADMIN)
+    @PutMapping(Endpoint.Order.UPDATED_ONE_FOR_ADMIN)
     public ResponseEntity<?> updateOrderForAdmin(
             @RequestBody ModifyOrderForAdminRequestDTO requestDTO
     ) {
@@ -139,7 +139,7 @@ public class OrderRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @DeleteMapping(UrlConstant.Order.DELETE_ONE_ORDER)
+    @DeleteMapping(Endpoint.Order.DELETE_ONE_ORDER)
     public ResponseEntity<?> deleteOrderForAdmin(
             @PathVariable(name = "orderId") int orderId
     ) {

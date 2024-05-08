@@ -1,6 +1,6 @@
 package shop.haui_megatech.constant;
 
-public class UrlConstant {
+public class Endpoint {
     public static final  String API_V1      = "/api/v1";
     private static final String ACTIVE      = "/active";
     private static final String DELETED     = "/deleted";

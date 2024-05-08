@@ -2,7 +2,7 @@ package shop.haui_megatech.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import shop.haui_megatech.constant.SuccessMessageConstant;
+import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.LocationDTO;
 import shop.haui_megatech.domain.entity.location.District;
 import shop.haui_megatech.domain.entity.location.Province;
@@ -23,7 +23,7 @@ public class LocationServiceImpl implements LocationService {
     public LocationDTO.Response<Province> getProvinces() {
         return LocationDTO.Response
                 .<Province>builder()
-                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Location.FOUND))
+                .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
                 .items(provinceRepository.findAll())
                 .build();
     }
@@ -32,7 +32,7 @@ public class LocationServiceImpl implements LocationService {
     public LocationDTO.Response<District> getDistrictsByProvince(String code) {
         return LocationDTO.Response
                 .<District>builder()
-                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Location.FOUND))
+                .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
                 .items(provinceRepository.findById(code).orElseThrow().getDistricts())
                 .build();
     }
@@ -41,7 +41,7 @@ public class LocationServiceImpl implements LocationService {
     public LocationDTO.Response<Ward> getWardsByDistrict(String code) {
         return LocationDTO.Response
                 .<Ward>builder()
-                .message(messageSourceUtil.getMessage(SuccessMessageConstant.Location.FOUND))
+                .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
                 .items(districtRepository.findById(code).orElseThrow().getWards())
                 .build();
     }

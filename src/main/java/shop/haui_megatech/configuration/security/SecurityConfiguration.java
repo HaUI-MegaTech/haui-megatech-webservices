@@ -17,8 +17,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import shop.haui_megatech.configuration.security.filter.JwtAuthenticationFilter;
-import shop.haui_megatech.constant.ErrorMessageConstant;
-import shop.haui_megatech.constant.UrlConstant;
+import shop.haui_megatech.constant.ErrorMessage;
+import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.utility.MessageSourceUtil;
 
@@ -33,16 +33,16 @@ public class SecurityConfiguration {
     private final AuthenticationProvider  authenticationProvider;
     private final String[]                PUBLIC_ENDPOINTS    = {
             "/swagger-ui" + CATCH_ALL_WILDCARDS,
-            UrlConstant.API_V1 + UrlConstant.Auth.PREFIX + CATCH_ALL_WILDCARDS,
+            Endpoint.API_V1 + Endpoint.Auth.PREFIX + CATCH_ALL_WILDCARDS,
             "/v3/api-docs" + CATCH_ALL_WILDCARDS,
-            UrlConstant.API_V1 + UrlConstant.Product.GET_ACTIVE_LIST,
-            UrlConstant.API_V1 + UrlConstant.Product.GET_DETAIL_ONE,
-            UrlConstant.API_V1 + UrlConstant.Brand.GET_ONE,
-            UrlConstant.API_V1 + UrlConstant.Brand.GET_ACTIVE_LIST,
+            Endpoint.API_V1 + Endpoint.Product.GET_ACTIVE_LIST,
+            Endpoint.API_V1 + Endpoint.Product.GET_DETAIL_ONE,
+            Endpoint.API_V1 + Endpoint.Brand.GET_ONE,
+            Endpoint.API_V1 + Endpoint.Brand.GET_ACTIVE_LIST,
             "/api/v1/outer-search",
             "/api/v1/getDataProductByLink",
             "/api/v1/getDataCommentByLink",
-            UrlConstant.API_V1 + UrlConstant.Order.PREFIX + CATCH_ALL_WILDCARDS
+            Endpoint.API_V1 + Endpoint.Order.PREFIX + CATCH_ALL_WILDCARDS
     };
     private final List<String>            WHITE_LIST_ORIGINS  = List.of(
             "http://localhost:3000",
@@ -75,7 +75,7 @@ public class SecurityConfiguration {
                                                    CommonResponseDTO.builder()
                                                                     .success(false)
                                                                     .message(messageSourceUtil.getMessage(
-                                                                            ErrorMessageConstant.Auth.AUTHENTICATE
+                                                                            ErrorMessage.Auth.AUTHENTICATE
                                                                     ))
                                                                     .build();
 

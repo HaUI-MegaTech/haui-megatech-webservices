@@ -10,7 +10,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
-import shop.haui_megatech.constant.UrlConstant;
+import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.ProductDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
@@ -31,7 +31,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(UrlConstant.Product.GET_DETAIL_ONE)
+    @GetMapping(Endpoint.Product.GET_DETAIL_ONE)
     public ResponseEntity<?> getOne(
             @PathVariable Integer productId
     ) {
@@ -41,7 +41,7 @@ public class ProductRestController {
 
     @Operation(summary = "Filter active Products by brand ids, price range with pagination")
     @ApiResponse(responseCode = "200", description = "OK")
-    @GetMapping(UrlConstant.Product.GET_ACTIVE_LIST)
+    @GetMapping(Endpoint.Product.GET_ACTIVE_LIST)
     public ResponseEntity<?> getActiveList(
             @ParameterObject PaginationDTO.Request request,
             @RequestBody(required = false) ProductDTO.FilterRequest filter
@@ -61,7 +61,7 @@ public class ProductRestController {
             }
     )
 
-    @GetMapping(UrlConstant.Product.GET_HIDDEN_LIST)
+    @GetMapping(Endpoint.Product.GET_HIDDEN_LIST)
     public ResponseEntity<?> getHiddenList(
             @ParameterObject PaginationDTO.Request request
     ) {
@@ -79,7 +79,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "When has not been authorized"),
             }
     )
-    @GetMapping(UrlConstant.Product.GET_DELETED_LIST)
+    @GetMapping(Endpoint.Product.GET_DELETED_LIST)
     public ResponseEntity<?> getDeletedList(
             @ParameterObject PaginationDTO.Request request
     ) {
@@ -97,7 +97,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Passing unmatched datatype or unauthorized")
             }
     )
-    @PostMapping(UrlConstant.Product.ADD_ONE)
+    @PostMapping(Endpoint.Product.ADD_ONE)
     public ResponseEntity<?> addOne(
             @RequestBody ProductDTO.AddRequest request
     ) {
@@ -115,7 +115,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "When has not been authorized"),
             }
     )
-    @PostMapping(UrlConstant.Product.IMPORT_EXCEL)
+    @PostMapping(Endpoint.Product.IMPORT_EXCEL)
     public ResponseEntity<?> importExcel(
             @ParameterObject ImportDataRequestDTO request
     ) {
@@ -133,7 +133,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "When has not been authorized"),
             }
     )
-    @PostMapping(UrlConstant.Product.IMPORT_CSV)
+    @PostMapping(Endpoint.Product.IMPORT_CSV)
     public ResponseEntity<?> importCsv(
             @ParameterObject ImportDataRequestDTO request
     ) {
@@ -151,7 +151,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Passing unmatched datatype or unauthorized"),
             }
     )
-    @PutMapping(UrlConstant.Product.UPDATE_ONE)
+    @PutMapping(Endpoint.Product.UPDATE_ONE)
     public ResponseEntity<?> updateOne(
             @PathVariable Integer productId,
             @RequestBody ProductDTO.UpdateRequest request) {
@@ -169,7 +169,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Passing unmatched datatype or unauthorized"),
             }
     )
-    @PutMapping(UrlConstant.Product.UPDATE_LIST_FROM_EXCEL)
+    @PutMapping(Endpoint.Product.UPDATE_LIST_FROM_EXCEL)
     public ResponseEntity<?> updateListFromExcel(
             @ParameterObject ImportDataRequestDTO request
     ) {
@@ -187,7 +187,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             }
     )
-    @PatchMapping(UrlConstant.Product.SOFT_DELETE_ONE)
+    @PatchMapping(Endpoint.Product.SOFT_DELETE_ONE)
     public ResponseEntity<?> softDeleteOne(
             @PathVariable Integer productId
     ) {
@@ -205,7 +205,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             }
     )
-    @PatchMapping(UrlConstant.Product.SOFT_DELETE_LIST)
+    @PatchMapping(Endpoint.Product.SOFT_DELETE_LIST)
     public ResponseEntity<?> softDeleteList(
             @RequestBody ListIdsRequestDTO request
     ) {
@@ -223,7 +223,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             }
     )
-    @PatchMapping(UrlConstant.Product.RESTORE_ONE)
+    @PatchMapping(Endpoint.Product.RESTORE_ONE)
     public ResponseEntity<?> restoreOne(
             @PathVariable Integer productId
     ) {
@@ -241,7 +241,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             }
     )
-    @PatchMapping(UrlConstant.Product.RESTORE_LIST)
+    @PatchMapping(Endpoint.Product.RESTORE_LIST)
     public ResponseEntity<?> restoreList(
             @RequestBody ListIdsRequestDTO request
     ) {
@@ -259,7 +259,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             }
     )
-    @PatchMapping(UrlConstant.Product.HIDE_ONE)
+    @PatchMapping(Endpoint.Product.HIDE_ONE)
     public ResponseEntity<?> hideOne(
             @PathVariable Integer productId
     ) {
@@ -277,7 +277,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             }
     )
-    @PatchMapping(UrlConstant.Product.HIDE_LIST)
+    @PatchMapping(Endpoint.Product.HIDE_LIST)
     public ResponseEntity<?> hideList(
             @RequestBody ListIdsRequestDTO request
     ) {
@@ -295,7 +295,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             }
     )
-    @PatchMapping(UrlConstant.Product.EXPOSE_ONE)
+    @PatchMapping(Endpoint.Product.EXPOSE_ONE)
     public ResponseEntity<?> exposeOne(
             @PathVariable Integer productId
     ) {
@@ -313,7 +313,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             }
     )
-    @PatchMapping(UrlConstant.Product.EXPOSE_LIST)
+    @PatchMapping(Endpoint.Product.EXPOSE_LIST)
     public ResponseEntity<?> exposeList(
             @RequestBody ListIdsRequestDTO request
     ) {
@@ -331,7 +331,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Unauthorized"),
             }
     )
-    @DeleteMapping(UrlConstant.Product.HARD_DELETE_ONE)
+    @DeleteMapping(Endpoint.Product.HARD_DELETE_ONE)
     public ResponseEntity<?> hardDeleteOne(
             @PathVariable Integer productId
     ) {
@@ -349,7 +349,7 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             }
     )
-    @DeleteMapping(UrlConstant.Product.HARD_DELETE_LIST)
+    @DeleteMapping(Endpoint.Product.HARD_DELETE_LIST)
     public ResponseEntity<?> hardDeleteList(
             @RequestBody ListIdsRequestDTO request
     ) {

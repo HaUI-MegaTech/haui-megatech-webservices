@@ -12,10 +12,13 @@ import shop.haui_megatech.domain.dto.AuthenticationDTO;
 import shop.haui_megatech.domain.dto.UserDTO;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.UserMapper;
+import shop.haui_megatech.exception.AbsentRequiredFieldException;
+import shop.haui_megatech.exception.DuplicateUsernameException;
 import shop.haui_megatech.exception.MismatchedConfirmPasswordException;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.service.AuthenticationService;
 import shop.haui_megatech.utility.JwtTokenUtil;
+import shop.haui_megatech.validator.RequestValidator;
 
 import java.util.Optional;
 
@@ -29,8 +32,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationDTO.Response register(UserDTO.AddRequest request) {
+        if (!RequestValidator.isBlankRequestParams(request.username()))
+            throw new AbsentRequiredFieldException(ErrorMessageConstant.Request.BLANK_USERNAME);
+
+        if (!RequestValidator.isBlankRequestParams(request.password()))
+            throw new AbsentRequiredFieldException(ErrorMessageConstant.Request.BLANK_PASSWORD);
+
         if (!request.password().equals(request.confirmPassword()))
             throw new MismatchedConfirmPasswordException(ErrorMessageConstant.User.MISMATCHED_PASSWORD);
+
+        if (userRepository.findUserByUsername(request.username()).isPresent())
+            throw new DuplicateUsernameException(ErrorMessageConstant.Request.DUPLICATE_USERNAME);
 
         User user = User.builder()
                         .username(request.username())
@@ -40,10 +52,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .email(request.email())
                         .phoneNumber(request.phoneNumber())
                         .build();
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
         String jwtToken = jwtUtil.generateToken(user);
         return AuthenticationDTO.Response.builder()
                                          .token(jwtToken)
+                                         .user(UserMapper.INSTANCE.toUserDetailDTO(savedUser))
                                          .build();
     }
 

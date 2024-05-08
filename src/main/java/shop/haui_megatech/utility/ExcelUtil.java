@@ -17,7 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ExcelUtil {
-    private static final String   TYPE                  = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    private static final String   TYPE                  =
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     private static final String   SHEET                 = "Sheet1";
     private static final String[] USER_HEADER           = {"Username", "Email", "Phone number"};
     private static final String[] UPDATE_PRODUCT_HEADER = {
@@ -36,7 +37,7 @@ public class ExcelUtil {
 
             "dimension_weight", "material",
 
-            "battery_capacity", "charger_capacity", "os", "launch_date"
+            "battery_capacity", "charger_capacity", "os", "launch_date", "post"
     };
 
     public static boolean notHasExcelFormat(MultipartFile file) {
@@ -234,10 +235,13 @@ public class ExcelUtil {
                         case 40:
                             product.setLaunchDate((int) currentCell.getNumericCellValue());
                             break;
+                        case 41:
+                            product.setArticle(currentCell.getStringCellValue());
+                            break;
 
                         default:
                             if (currentCell.getStringCellValue() != null
-                                    && !currentCell.getStringCellValue().isBlank()) {
+                                && !currentCell.getStringCellValue().isBlank()) {
                                 if (product.getImages() == null) {
                                     product.setImages(new ArrayList<>());
                                 }

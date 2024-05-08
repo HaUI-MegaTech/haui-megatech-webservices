@@ -72,6 +72,8 @@ public record ProductDTO() {
 
             ProductDTO.BrandResponse brand,
 
+            String article,
+
             List<ImageDTO> images
     ) {}
 

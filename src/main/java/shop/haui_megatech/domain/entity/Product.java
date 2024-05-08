@@ -88,6 +88,8 @@ public class Product {
     private Boolean hidden;
     private Boolean deleted;
 
+    private String article;
+
     @JoinColumn(name = "brand_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private Brand brand;

@@ -57,4 +57,10 @@ public class SuccessMessage {
     public static class Location {
         public static final String FOUND = "location.success.found";
     }
+
+    public static class Address {
+        public static final String ADDED   = "address.success.added";
+        public static final String UPDATED = "address.success.updated";
+        public static final String DELETED = "address.success.deleted";
+    }
 }

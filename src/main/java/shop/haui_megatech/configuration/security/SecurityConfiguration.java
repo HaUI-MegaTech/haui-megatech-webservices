@@ -17,8 +17,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import shop.haui_megatech.configuration.security.filter.JwtAuthenticationFilter;
-import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.Endpoint;
+import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.utility.MessageSourceUtil;
 

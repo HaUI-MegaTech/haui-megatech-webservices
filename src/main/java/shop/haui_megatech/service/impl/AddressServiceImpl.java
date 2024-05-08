@@ -1,0 +1,118 @@
+package shop.haui_megatech.service.impl;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import shop.haui_megatech.constant.ErrorMessage;
+import shop.haui_megatech.constant.SuccessMessage;
+import shop.haui_megatech.domain.dto.AddressDTO;
+import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.entity.Address;
+import shop.haui_megatech.domain.entity.User;
+import shop.haui_megatech.domain.mapper.AddressMapper;
+import shop.haui_megatech.exception.AppException;
+import shop.haui_megatech.repository.AddressRepository;
+import shop.haui_megatech.repository.UserRepository;
+import shop.haui_megatech.service.AddressService;
+import shop.haui_megatech.utility.AuthenticationUtil;
+import shop.haui_megatech.utility.MessageSourceUtil;
+
+import java.time.Instant;
+import java.util.*;
+
+@Service
+@RequiredArgsConstructor
+public class AddressServiceImpl implements AddressService {
+    private final UserRepository    userRepository;
+    private final AddressRepository addressRepository;
+    private final MessageSourceUtil messageSourceUtil;
+
+    @Override
+    public CommonResponseDTO<?> addOne(Integer userId, AddressDTO.Request request) {
+        User requestedUser = AuthenticationUtil.getRequestedUser();
+        if (requestedUser == null)
+            throw new AppException(ErrorMessage.Auth.UNAUTHORIZED);
+
+        if (!Objects.equals(requestedUser.getId(), userId))
+            throw new AppException(ErrorMessage.Auth.MALFORMED);
+        Address address = AddressMapper.INSTANCE.toAddress(request);
+        address.setUser(requestedUser);
+        requestedUser.getAddresses().add(address);
+        requestedUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));
+        userRepository.save(requestedUser);
+
+        return CommonResponseDTO.builder()
+                                .success(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Address.ADDED))
+                                .build();
+    }
+
+    @Override
+    public CommonResponseDTO<?> updateOne(Integer userId, Integer addressId, AddressDTO.Request request) {
+        User requestedUser = AuthenticationUtil.getRequestedUser();
+        if (requestedUser == null)
+            throw new AppException(ErrorMessage.Auth.UNAUTHORIZED);
+
+        if (!Objects.equals(requestedUser.getId(), userId))
+            throw new AppException(ErrorMessage.Auth.MALFORMED);
+
+        requestedUser.getAddresses()
+                     .stream()
+                     .filter(item -> item.getId().equals(addressId))
+                     .findFirst()
+                     .ifPresent(item -> {
+                         if (request.province() != null && request.provinceCode() != null) {
+                             item.setProvince(request.province());
+                             item.setProvinceCode(request.provinceCode());
+                         }
+                         if (request.district() != null && request.districtCode() != null) {
+                             item.setDistrict(request.district());
+                             item.setDistrictCode(request.districtCode());
+                         }
+                         if (request.ward() != null && request.wardCode() != null) {
+                             item.setWard(request.ward());
+                             item.setWardCode(request.wardCode());
+                         }
+                         if (request.detail() != null) {
+                             item.setDetail(request.detail());
+                         }
+                     });
+        requestedUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));
+        userRepository.save(requestedUser);
+
+        return CommonResponseDTO.builder()
+                                .success(true)
+                                .message(messageSourceUtil.getMessage(SuccessMessage.Address.UPDATED))
+                                .build();
+    }
+
+    @Override
+    public CommonResponseDTO<?> delete(Integer userId, String addressIds) {
+        User requestedUser = AuthenticationUtil.getRequestedUser();
+        if (requestedUser == null)
+            throw new AppException(ErrorMessage.Auth.UNAUTHORIZED);
+
+        if (!Objects.equals(requestedUser.getId(), userId))
+            throw new AppException(ErrorMessage.Auth.MALFORMED);
+
+        List<Integer> ids = Arrays.stream(addressIds.split(","))
+                                  .map(String::trim)
+                                  .map(Integer::valueOf)
+                                  .toList();
+
+        List<Integer> checkedIds = new ArrayList<>(
+                requestedUser.getAddresses()
+                             .parallelStream()
+                             .map(Address::getId)
+                             .filter(ids::contains)
+                             .toList()
+        );
+
+        addressRepository.deleteAddressByIds(checkedIds);
+
+        return CommonResponseDTO
+                .builder()
+                .success(true)
+                .message(messageSourceUtil.getMessage(SuccessMessage.Address.DELETED, checkedIds.size()))
+                .build();
+    }
+}

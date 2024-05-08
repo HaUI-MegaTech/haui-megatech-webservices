@@ -34,7 +34,7 @@ public class User implements UserDetails {
     private String avatarImageUrl;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Address> addresses;
 
     private Date lastUpdated;

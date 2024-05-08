@@ -149,11 +149,13 @@ public class CartItemServiceImpl implements CartItemService {
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
-        ArrayList<Integer> checkedCartItemIds = new ArrayList<>(foundUser.get().getCartItems()
-                                                                         .parallelStream()
-                                                                         .map(CartItem::getId)
-                                                                         .filter(request.ids()::contains)
-                                                                         .toList()
+        ArrayList<Integer> checkedCartItemIds = new ArrayList<>(
+                foundUser.get()
+                         .getCartItems()
+                         .parallelStream()
+                         .map(CartItem::getId)
+                         .filter(request.ids()::contains)
+                         .toList()
         );
 
         cartItemRepository.deleteAllByIds(checkedCartItemIds);

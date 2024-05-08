@@ -40,6 +40,8 @@ public class ErrorMessage {
     public static class Auth {
         public static final String AUTHENTICATE  = "auth.error.authenticate";
         public static final String EXPIRED_TOKEN = "auth.error.expired-token";
+        public static final String UNAUTHORIZED  = "auth.error.unauthorized";
+        public static final String MALFORMED     = "auth.error.malformed";
     }
 
     public static class Import {

@@ -88,4 +88,12 @@ public class GlobalExceptionHandler {
                                                         .message(messageSourceUtil.getMessage(ex.getMessage()))
                                                         .build());
     }
+
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<?> handleAppException(AppException ex) {
+        return ResponseUtil.badRequest(CommonResponseDTO.builder()
+                                                        .success(false)
+                                                        .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                        .build());
+    }
 }

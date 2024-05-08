@@ -29,12 +29,12 @@ class UserRestControllerTest {
     @Disabled
     public void givenBlankUsername_whenCreateUser_thenReturn400BadRequest() throws Exception {
         // setup
-        AddUserRequestDTO request = AddUserRequestDTO.builder()
-                                                     .firstName("Hoang")
-                                                     .lastName("Nguyen Viet")
-                                                     .password("123")
-                                                     .confirmPassword("123")
-                                                     .build();
+//        AddUserRequestDTO request = AddUserRequestDTO.builder()
+//                                                     .firstName("Hoang")
+//                                                     .lastName("Nguyen Viet")
+//                                                     .password("123")
+//                                                     .confirmPassword("123")
+//                                                     .build();
 //        String requestBody = objectMapper.writeValueAsString(request);
 
         // run

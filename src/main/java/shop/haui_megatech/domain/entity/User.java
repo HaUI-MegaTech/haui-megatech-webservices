@@ -3,7 +3,6 @@ package shop.haui_megatech.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +37,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Address> addresses;
 
-    @LastModifiedDate
     private Date lastUpdated;
 
     @CreatedDate
@@ -47,7 +45,6 @@ public class User implements UserDetails {
     private Date    lastLogined;
     private Integer logined;
 
-    @LastModifiedDate
     private Date    whenDeleted;
     private Boolean deleted;
 

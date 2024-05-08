@@ -83,13 +83,13 @@ public class UrlConstant {
         public static final String PREFIX           = "/orders";
         public static final String GET_LIST_BY_USER_ID    = PREFIX;
         public static final String GET_LIST_FOR_ADMIN     = PREFIX + ADMIN;
-        public static final String GET_DETAIL_FOR_USER = PREFIX + "/detail";
+        public static final String GET_DETAIL_FOR_USER = PREFIX + "/detail/{orderId}";
         public static final String GET_DETAIL_FOR_ADMIN = PREFIX + ADMIN + "/detail" +"/{orderId}";
         public static final String ADD_ONE_FOR_USER          = PREFIX + "/addOne";
         public static final String ADD_ONE_FOR_ADMIN         = PREFIX + ADMIN + "/addOne";
         public static final String UPDATED_ONE_FOR_UER       = PREFIX + "/updatedOne";
         public static final String UPDATED_ONE_FOR_ADMIN     = PREFIX + ADMIN + "/updatedOne";
-        public static final String DELETE_ONE_ORDER    = PREFIX + DELETED + "/{orderId}";
+        public static final String DELETE_ONE_ORDER    = PREFIX + ADMIN + DELETED+ "/{orderId}";
     }
     public static final class Auth {
         public static final String PREFIX       = "/auth";

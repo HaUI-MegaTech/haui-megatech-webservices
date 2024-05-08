@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface OrderService
 {
-    PaginationResponseDTO<?> getListOrderForUser (ListOrdersForUserRequestDTO requestDTO);
+    PaginationResponseDTO<?> getListOrderForUser (PaginationRequestDTO requestDTO);
     PaginationResponseDTO<?> getListOrderForAdmin (PaginationRequestDTO requestDTO);
-    CommonResponseDTO<OrderItemResponseDTO> getOrderDetailForUser (OrderItemForUserRequestDTO requestDTO);
+    CommonResponseDTO<OrderItemResponseDTO> getOrderDetailForUser (int orderId);
     CommonResponseDTO<OrderItemResponseDTO> getOrderDetailForAdmin (Integer orderId);
     CommonResponseDTO<OrderBaseDTO> addOrderForUser(AddOrderForUserRequestDTO requestDTO);
     CommonResponseDTO<OrderBaseDTO> addOrderForAdmin(AddOrderForAdminRequestDTO requestDTO);

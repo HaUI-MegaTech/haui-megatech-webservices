@@ -16,7 +16,7 @@ public record AddOrderForAdminRequestDTO(
         PaymentMethod paymentMethod,
         Date payTime,
         Date orderTime,
-        Date deliverTime,
+        int deliverTime,
         float orderWeight,
         String address,
         OrderStatus status,

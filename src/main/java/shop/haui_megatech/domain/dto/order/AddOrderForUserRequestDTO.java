@@ -1,5 +1,6 @@
 package shop.haui_megatech.domain.dto.order;
 
+import jakarta.persistence.Column;
 import shop.haui_megatech.domain.dto.order_detail.OrderDetailRequestDTO;
 import shop.haui_megatech.domain.entity.OrderStatus;
 import shop.haui_megatech.domain.entity.PaymentMethod;
@@ -8,15 +9,12 @@ import java.util.Date;
 import java.util.List;
 
 public record AddOrderForUserRequestDTO(
-        String token,
-        float shippingCost,
+        @Column(name = "sub_total")
         float subTotal,
         float tax,
-        float total,
+        @Column(name = "payment_method")
         PaymentMethod paymentMethod,
-        Date payTime,
-        Date orderTime,
-        Date deliverTime,
+        @Column(name = "order_weight")
         float orderWeight,
         String address,
         OrderStatus status,

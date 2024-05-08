@@ -40,7 +40,7 @@ public class OrderRepositoryTest {
         Order mainOrder = new Order();
         mainOrder.setUser(user);
         mainOrder.setTotal(200);
-        mainOrder.setPaymentMethod(PaymentMethod.THE_TIN_DUNG);
+        mainOrder.setPaymentMethod(PaymentMethod.COD);
 
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setProduct(product);

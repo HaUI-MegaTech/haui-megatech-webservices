@@ -11,6 +11,7 @@ public record AuthenticationDTO() {
 
     @Builder
     public record Response(
-            String token
+            String token,
+            UserDTO.DetailResponse user
     ) {}
 }

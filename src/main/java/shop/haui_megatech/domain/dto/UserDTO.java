@@ -44,13 +44,9 @@ public record UserDTO() {
 
             @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm a z")
             Date lastLogined,
-            Integer logined,
-
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm a z")
-            Date whenDeleted,
-            Boolean deleted
+            Integer logined
     ) {}
-    
+
     public record AddRequest(
             @Size(min = 4, message = ErrorMessageConstant.User.DEFICIENT_USERNAME_LENGTH)
             String username,

@@ -11,6 +11,7 @@ import shop.haui_megatech.constant.ErrorMessageConstant;
 import shop.haui_megatech.domain.dto.AuthenticationDTO;
 import shop.haui_megatech.domain.dto.UserDTO;
 import shop.haui_megatech.domain.entity.User;
+import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.exception.MismatchedConfirmPasswordException;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.service.AuthenticationService;
@@ -58,6 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String jwtToken = jwtUtil.generateToken(user);
         return AuthenticationDTO.Response.builder()
                                          .token(jwtToken)
+                                         .user(UserMapper.INSTANCE.toUserDetailDTO(user))
                                          .build();
     }
 

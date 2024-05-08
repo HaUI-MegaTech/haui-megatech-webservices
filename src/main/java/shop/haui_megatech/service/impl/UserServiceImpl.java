@@ -20,6 +20,7 @@ import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.exception.*;
 import shop.haui_megatech.job.AutoMailSender;
 import shop.haui_megatech.repository.UserRepository;
+import shop.haui_megatech.service.FileUploadService;
 import shop.haui_megatech.service.UserService;
 import shop.haui_megatech.utility.CsvUtil;
 import shop.haui_megatech.utility.ExcelUtil;
@@ -28,6 +29,8 @@ import shop.haui_megatech.utility.RandomUtil;
 import shop.haui_megatech.validator.RequestValidator;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,6 +43,7 @@ public class UserServiceImpl implements UserService {
     private final MessageSourceUtil messageSourceUtil;
     private final PasswordEncoder   passwordEncoder;
     private final AutoMailSender    autoMailSender;
+    private final FileUploadService fileUploadService;
 
     @Override
     public CommonResponseDTO<UserDTO.DetailResponse> getOne(Integer userId) {
@@ -140,10 +144,18 @@ public class UserServiceImpl implements UserService {
 
         if (request.firstName() != null) foundUser.setFirstName(request.firstName());
         if (request.lastName() != null) foundUser.setLastName(request.lastName());
-        if (request.avatar() != null) foundUser.setAvatarImageUrl(request.avatar());
+        if (request.avatar() != null) {
+            String avatarImageUrl;
+            try {
+                avatarImageUrl = fileUploadService.uploadFile(request.avatar());
+            } catch (IOException e) {
+                throw new RuntimeException("Co loi trong qua trinh luu anh.");
+            }
+            foundUser.setAvatarImageUrl(avatarImageUrl);
+        }
         if (request.email() != null) foundUser.setEmail(request.email());
         if (request.phoneNumber() != null) foundUser.setPhoneNumber(request.phoneNumber());
-
+        foundUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));
         userRepository.save(foundUser);
 
         return CommonResponseDTO.builder()

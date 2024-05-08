@@ -104,7 +104,7 @@ public class UserRestController {
     @PutMapping(UrlConstant.User.UPDATE_INFO)
     public ResponseEntity<?> updateInfo(
             @PathVariable Integer userId,
-            @RequestBody(required = false) UserDTO.UpdateInfoRequest request
+            @ModelAttribute UserDTO.UpdateInfoRequest request
     ) {
         return ResponseUtil.ok(userService.updateOne(userId, request));
     }

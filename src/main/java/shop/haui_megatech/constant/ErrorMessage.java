@@ -7,6 +7,7 @@ public class ErrorMessage {
         public static final String WRONG_PASSWORD            = "user.error.wrong-password";
         public static final String MISMATCHED_PASSWORD       = "user.error.mismatched-password";
         public static final String DEFICIENT_USERNAME_LENGTH = "user.error.deficient-username-length";
+        public static final String UPDATE_INFO               = "user.error.update-info";
     }
 
     public static class Product {
@@ -37,6 +38,13 @@ public class ErrorMessage {
     }
 
     public static class Auth {
-        public static final String AUTHENTICATE = "auth.error.authenticate";
+        public static final String AUTHENTICATE  = "auth.error.authenticate";
+        public static final String EXPIRED_TOKEN = "auth.error.expired-token";
+    }
+
+    public static class Import {
+        public static final String PROCESS_EXCEL = "import.error.process-excel";
+        public static final String PROCESS_CSV   = "import.error.process-csv";
+
     }
 }

@@ -228,7 +228,7 @@ public class ProductServiceImpl implements ProductService {
                                     ))
                                     .build();
         } catch (IOException e) {
-            throw new RuntimeException("Excel data is failed to store: " + e.getMessage());
+            throw new RuntimeException(ErrorMessage.Import.PROCESS_EXCEL);
         }
     }
 
@@ -248,7 +248,7 @@ public class ProductServiceImpl implements ProductService {
                                     ))
                                     .build();
         } catch (IOException ex) {
-            throw new RuntimeException("Data is not store successfully: " + ex.getMessage());
+            throw new RuntimeException(ErrorMessage.Import.PROCESS_CSV);
         }
     }
 

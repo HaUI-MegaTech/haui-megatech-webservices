@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
                                     ))
                                     .build();
         } catch (IOException e) {
-            throw new RuntimeException("Excel data is failed to store: " + e.getMessage());
+            throw new RuntimeException(ErrorMessage.Import.PROCESS_EXCEL);
         }
     }
 
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
                                     ))
                                     .build();
         } catch (IOException ex) {
-            throw new RuntimeException("Data is not store successfully: " + ex.getMessage());
+            throw new RuntimeException(ErrorMessage.Import.PROCESS_CSV);
         }
     }
 
@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
             try {
                 avatarImageUrl = fileUploadService.uploadFile(request.avatar());
             } catch (IOException e) {
-                throw new RuntimeException("Co loi trong qua trinh luu anh.");
+                throw new RuntimeException(ErrorMessage.User.UPDATE_INFO);
             }
             foundUser.setAvatarImageUrl(avatarImageUrl);
         }

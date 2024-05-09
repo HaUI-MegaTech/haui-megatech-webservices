@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;
+import shop.haui_megatech.constant.DatetimeFormat;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.domain.entity.Address;
 import shop.haui_megatech.domain.entity.Gender;
@@ -37,13 +38,25 @@ public record UserDTO() {
             String phoneNumber,
             List<Address> addresses,
 
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm a z")
+            @JsonFormat(
+                    shape = JsonFormat.Shape.STRING,
+                    pattern = DatetimeFormat.INDOCHINA_DATETIME_FORMAT,
+                    timezone = DatetimeFormat.VIETNAM_TIMEZONE
+            )
             Date lastUpdated,
 
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm a z")
+            @JsonFormat(
+                    shape = JsonFormat.Shape.STRING,
+                    pattern = DatetimeFormat.INDOCHINA_DATETIME_FORMAT,
+                    timezone = DatetimeFormat.VIETNAM_TIMEZONE
+            )
             Date whenCreated,
 
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm a z")
+            @JsonFormat(
+                    shape = JsonFormat.Shape.STRING,
+                    pattern = DatetimeFormat.INDOCHINA_DATETIME_FORMAT,
+                    timezone = DatetimeFormat.VIETNAM_TIMEZONE
+            )
             Date lastLogined,
             Integer logined
     ) {}

@@ -20,6 +20,8 @@ import shop.haui_megatech.service.AuthenticationService;
 import shop.haui_megatech.utility.JwtTokenUtil;
 import shop.haui_megatech.validator.RequestValidator;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -70,9 +72,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
         User user = userRepository.findActiveUserByUsername(request.username()).orElseThrow();
         String jwtToken = jwtUtil.generateToken(user);
+        user.setLastLogined(new Date(Instant.now().toEpochMilli()));
+        user.setLogined(user.getLogined() == null ? 1 : user.getLogined() + 1);
+        User updatedUser = userRepository.save(user);
         return AuthenticationDTO.Response.builder()
                                          .token(jwtToken)
-                                         .user(UserMapper.INSTANCE.toUserDetailDTO(user))
+                                         .user(UserMapper.INSTANCE.toUserDetailDTO(updatedUser))
                                          .build();
     }
 

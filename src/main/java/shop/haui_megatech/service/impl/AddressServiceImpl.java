@@ -75,6 +75,7 @@ public class AddressServiceImpl implements AddressService {
                          if (request.detail() != null) {
                              item.setDetail(request.detail());
                          }
+                         item.setLastUpdated(new Date(Instant.now().toEpochMilli()));
                      });
         requestedUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));
         userRepository.save(requestedUser);

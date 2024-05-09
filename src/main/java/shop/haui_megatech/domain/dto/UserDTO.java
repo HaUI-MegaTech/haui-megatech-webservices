@@ -6,7 +6,6 @@ import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;
 import shop.haui_megatech.constant.DatetimeFormat;
 import shop.haui_megatech.constant.ErrorMessage;
-import shop.haui_megatech.domain.entity.Address;
 import shop.haui_megatech.domain.entity.Gender;
 
 import java.util.Date;
@@ -36,7 +35,7 @@ public record UserDTO() {
             String email,
             String avatarImageUrl,
             String phoneNumber,
-            List<Address> addresses,
+            List<AddressDTO.Response> addresses,
 
             @JsonFormat(
                     shape = JsonFormat.Shape.STRING,

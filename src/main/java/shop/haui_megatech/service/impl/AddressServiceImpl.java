@@ -35,6 +35,7 @@ public class AddressServiceImpl implements AddressService {
         if (!Objects.equals(requestedUser.getId(), userId))
             throw new AppException(ErrorMessage.Auth.MALFORMED);
         Address address = AddressMapper.INSTANCE.toAddress(request);
+        address.setWhenCreated(new Date(Instant.now().toEpochMilli()));
         address.setUser(requestedUser);
         requestedUser.getAddresses().add(address);
         requestedUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));

@@ -20,7 +20,7 @@ import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.OrderRepository;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.service.OrderService;
-import shop.haui_megatech.utility.JwtTokenUtil;
+import shop.haui_megatech.utility.AuthenticationUtil;
 import shop.haui_megatech.utility.MessageSourceUtil;
 
 import java.util.List;
@@ -30,40 +30,38 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final MessageSourceUtil messageSourceUtil;
-    private final JwtTokenUtil      jwtTokenUtil;
     private final OrderMapper       orderMapper;
     private final UserRepository    userRepository;
     private final OrderRepository   orderRepository;
 
     @Override
-    public PaginationDTO.Response<?> getListOrderForUser(ListOrdersForUserRequestDTO requestDTO) {
-        String username = jwtTokenUtil.extractUsername(requestDTO.token());
-
-        Optional<User> foundUser = userRepository.findActiveUserByUsername(username);
+    public PaginationDTO.Response<?> getListOrderForUser(PaginationDTO.Request requestDTO) {
+        Optional<User> foundUser =
+                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
-        if (requestDTO.paginationRequestDTO().index() < 0)
+        if (requestDTO.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
-        Sort sort = requestDTO.paginationRequestDTO().direction().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(requestDTO.paginationRequestDTO().fields())
+        Sort sort = requestDTO.direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(requestDTO.fields())
                           .ascending()
-                    : Sort.by(requestDTO.paginationRequestDTO().fields())
+                    : Sort.by(requestDTO.fields())
                           .descending();
 
         Pageable pageable =
-                PageRequest.of(requestDTO.paginationRequestDTO().index(), requestDTO.paginationRequestDTO().limit(), sort);
+                PageRequest.of(requestDTO.index(), requestDTO.limit(), sort);
 
-        Page<Order> page = requestDTO.paginationRequestDTO().keyword() == null
+        Page<Order> page = requestDTO.keyword() == null
                            ? orderRepository.findOrderByUserId(foundUser.get().getId(), pageable)
-                           : orderRepository.searchOrderForUser(requestDTO.paginationRequestDTO().keyword(), foundUser.get().getId(), pageable);
+                           : orderRepository.searchOrderForUser(requestDTO.keyword(), foundUser.get().getId(), pageable);
 
         List<Order> orders = page.getContent();
         return PaginationDTO.Response.<OrderBaseDTO>builder()
-                                     .keyword(requestDTO.paginationRequestDTO().keyword())
-                                     .pageIndex(requestDTO.paginationRequestDTO().index())
+                                     .keyword(requestDTO.keyword())
+                                     .pageIndex(requestDTO.index())
                                      .pageSize((short) page.getNumberOfElements())
                                      .totalItems(page.getTotalElements())
                                      .totalPages(page.getTotalPages())
@@ -85,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
                           .descending();
 
         Pageable pageable = PageRequest.of(requestDTO.index(), requestDTO.limit(), sort);
-
+        System.out.println(requestDTO.keyword());
         Page<Order> page = requestDTO.keyword() == null
                            ? orderRepository.findByAll(pageable)
                            : orderRepository.searchOrderForAdmin(requestDTO.keyword(), pageable);
@@ -104,14 +102,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public CommonResponseDTO<OrderItemResponseDTO> getOrderDetailForUser(OrderItemForUserRequestDTO requestDTO) {
-        String username = jwtTokenUtil.extractUsername(requestDTO.token());
-
-        Optional<User> foundUser = userRepository.findActiveUserByUsername(username);
+    public CommonResponseDTO<OrderItemResponseDTO> getOrderDetailForUser(Integer orderId) {
+        Optional<User> foundUser =
+                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
-        Order order = orderRepository.findOrderDetailById_UserId(requestDTO.orderId(), foundUser.get().getId()).get();
+        Order order = orderRepository.findOrderDetailById_UserId(orderId, foundUser.get().getId()).get();
         return CommonResponseDTO.<OrderItemResponseDTO>builder()
                                 .success(true)
                                 .message("Get Order Detail For User")
@@ -132,9 +129,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public CommonResponseDTO<OrderBaseDTO> addOrderForUser(AddOrderForUserRequestDTO requestDTO) {
-        String username = jwtTokenUtil.extractUsername(requestDTO.token());
-
-        Optional<User> foundUser = userRepository.findActiveUserByUsername(username);
+        Optional<User> foundUser =
+                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
@@ -162,9 +158,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public CommonResponseDTO<OrderBaseDTO> updateOrderForUser(ModifyOrderForUserRequestDTO requestDTO) {
-        String username = jwtTokenUtil.extractUsername(requestDTO.addOrderForUserRequestDTO().token());
-
-        Optional<User> foundUser = userRepository.findActiveUserByUsername(username);
+        Optional<User> foundUser =
+                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
@@ -172,7 +167,10 @@ public class OrderServiceImpl implements OrderService {
         if (order == null)
             throw new NotFoundException(ErrorMessage.Order.NOT_FOUND);
 
+        orderRepository.deleteById(order.getId());
+
         Order orderUpdate = orderMapper.addOrderRequestForUserDTOtoOrder(requestDTO.addOrderForUserRequestDTO());
+
         orderUpdate.setId(order.getId());
         orderUpdate.setUser(foundUser.get());
         Order saveOrder = orderRepository.save(orderUpdate);
@@ -192,6 +190,8 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findOrderDetailById_UserId(requestDTO.orderId(), foundUser.get().getId()).get();
         if (order == null)
             throw new NotFoundException(ErrorMessage.Order.NOT_FOUND);
+
+        orderRepository.deleteById(order.getId());
 
         Order orderUpdate = orderMapper.addOrderRequestForAdminDTOtoOrder(requestDTO.addOrderForAdminRequestDTO());
         orderUpdate.setId(order.getId());

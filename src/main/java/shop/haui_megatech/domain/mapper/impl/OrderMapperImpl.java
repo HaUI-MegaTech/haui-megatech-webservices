@@ -7,15 +7,17 @@ import shop.haui_megatech.domain.dto.order.AddOrderForAdminRequestDTO;
 import shop.haui_megatech.domain.dto.order.AddOrderForUserRequestDTO;
 import shop.haui_megatech.domain.dto.order.OrderBaseDTO;
 import shop.haui_megatech.domain.dto.order.OrderItemResponseDTO;
-import shop.haui_megatech.domain.entity.Order;
-import shop.haui_megatech.domain.entity.User;
+import shop.haui_megatech.domain.dto.order_detail.OrderDetailRequestDTO;
+import shop.haui_megatech.domain.entity.*;
 import shop.haui_megatech.domain.mapper.OrderDetailMapper;
 import shop.haui_megatech.domain.mapper.OrderMapper;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.utility.DecimalFormatUtil;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -27,22 +29,30 @@ public class OrderMapperImpl implements OrderMapper {
 
     @Override
     public Order addOrderRequestForUserDTOtoOrder(AddOrderForUserRequestDTO requestDTO) {
-        return Order.builder()
-                    .shippingCost(requestDTO.shippingCost())
-                    .subTotal(requestDTO.subTotal())
-                    .tax(requestDTO.tax())
-                    .total(requestDTO.total())
-                    .paymentMethod(requestDTO.paymentMethod())
-                    .payTime(new Date())
-                    .orderTime(new Date())
-                    .deliverTime(new Date())
-                    .orderWeight(requestDTO.orderWeight())
-                    .address(requestDTO.address())
-                    .status(requestDTO.status())
-                    .orderDetails(requestDTO.orderDetailRequestDTOList()
-                                            .stream()
-                                            .map(orderDetailMapper::orderDetailRequestDTOtoOrderDetail).toList())
-                    .build();
+        float shippingCost = 200000;
+        if (requestDTO.orderWeight() < 5) shippingCost = 100000;
+
+        Date payTime = null;
+        if (requestDTO.paymentMethod() == PaymentMethod.PAYPAL) payTime = new Date();
+
+        Order order = Order.builder()
+                           .shippingCost(shippingCost)
+                           .subTotal(requestDTO.subTotal())
+                           .tax(requestDTO.tax())
+                           .total(requestDTO.subTotal() + requestDTO.tax())
+                           .paymentMethod(requestDTO.paymentMethod())
+                           .payTime(payTime)
+                           .orderTime(new Date())
+                           .deliverTime(0)
+                           .orderWeight(requestDTO.orderWeight())
+                           .address(requestDTO.address())
+                           .status(OrderStatus.NEW)
+                           .build();
+        List<OrderDetail> list = new ArrayList<OrderDetail>();
+        for (OrderDetailRequestDTO item : requestDTO.orderDetailRequestDTOList())
+            list.add(orderDetailMapper.orderDetailRequestDTOtoOrderDetail(item, order));
+        order.setOrderDetails(list);
+        return order;
     }
 
     @Override
@@ -50,23 +60,25 @@ public class OrderMapperImpl implements OrderMapper {
         Optional<User> foundUser = userRepository.findById(requestDTO.userId());
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
-        return Order.builder()
-                    .shippingCost(requestDTO.shippingCost())
-                    .subTotal(requestDTO.subTotal())
-                    .tax(requestDTO.tax())
-                    .total(requestDTO.total())
-                    .paymentMethod(requestDTO.paymentMethod())
-                    .payTime(new Date())
-                    .orderTime(new Date())
-                    .deliverTime(new Date())
-                    .orderWeight(requestDTO.orderWeight())
-                    .address(requestDTO.address())
-                    .status(requestDTO.status())
-                    .orderDetails(requestDTO.orderDetailRequestDTOList()
-                                            .stream()
-                                            .map(orderDetailMapper::orderDetailRequestDTOtoOrderDetail).toList())
-                    .user(foundUser.get())
-                    .build();
+        Order order = Order.builder()
+                           .shippingCost(requestDTO.shippingCost())
+                           .subTotal(requestDTO.subTotal())
+                           .tax(requestDTO.tax())
+                           .total(requestDTO.total())
+                           .paymentMethod(requestDTO.paymentMethod())
+                           .payTime(requestDTO.payTime())
+                           .orderTime(requestDTO.orderTime())
+                           .deliverTime(requestDTO.deliverTime())
+                           .orderWeight(requestDTO.orderWeight())
+                           .address(requestDTO.address())
+                           .status(requestDTO.status())
+                           .user(foundUser.get())
+                           .build();
+        List<OrderDetail> list = new ArrayList<OrderDetail>();
+        for (OrderDetailRequestDTO item : requestDTO.orderDetailRequestDTOList())
+            list.add(orderDetailMapper.orderDetailRequestDTOtoOrderDetail(item, order));
+        order.setOrderDetails(list);
+        return order;
     }
 
     @Override
@@ -78,6 +90,7 @@ public class OrderMapperImpl implements OrderMapper {
                            .address(order.getAddress())
                            .paymentMethod(order.getPaymentMethod())
                            .orderStatus(order.getStatus())
+                           .orderTime(order.getOrderTime())
                            .total(order.getTotal())
                            .build();
     }
@@ -85,6 +98,7 @@ public class OrderMapperImpl implements OrderMapper {
     @Override
     public OrderItemResponseDTO orderItemResponseDto(Order order) {
         return OrderItemResponseDTO.builder()
+                                   .orderId(order.getId())
                                    .shippingCost(decimalFormatUtil.format(order.getShippingCost()))
                                    .subTotal(decimalFormatUtil.format(order.getSubTotal()))
                                    .tax(decimalFormatUtil.format(order.getTax()))

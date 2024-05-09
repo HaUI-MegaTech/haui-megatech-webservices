@@ -5,11 +5,11 @@ import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.order.*;
 
 public interface OrderService {
-    PaginationDTO.Response<?> getListOrderForUser(ListOrdersForUserRequestDTO requestDTO);
+    PaginationDTO.Response<?> getListOrderForUser(PaginationDTO.Request requestDTO);
 
     PaginationDTO.Response<?> getListOrderForAdmin(PaginationDTO.Request requestDTO);
 
-    CommonResponseDTO<OrderItemResponseDTO> getOrderDetailForUser(OrderItemForUserRequestDTO requestDTO);
+    CommonResponseDTO<OrderItemResponseDTO> getOrderDetailForUser(Integer userId);
 
     CommonResponseDTO<OrderItemResponseDTO> getOrderDetailForAdmin(Integer orderId);
 

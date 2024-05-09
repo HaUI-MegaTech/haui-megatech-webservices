@@ -6,6 +6,7 @@ import lombok.Builder;
 public record OrderOrderDetailResponseDTO(
         int quatity,
         String price,
-        String proName
+        String proName,
+        int proId
 ) {
 }

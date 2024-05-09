@@ -6,11 +6,11 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Role {
-    CUSTOMER(1),
-    STAFF(2),
-    MANAGER(3),
-    ADMIN(4),
-    PRESIDENT(5);
+    ROLE_CUSTOMER(1),
+    ROLE_STAFF(2),
+    ROLE_MANAGER(3),
+    ROLE_ADMIN(4),
+    ROLE_PRESIDENT(5);
 
     private final Integer priority;
 }

@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 @Builder
 public record OrderItemResponseDTO(
+        int orderId,
         String shippingCost,
         String subTotal,
         String tax,
@@ -16,7 +17,7 @@ public record OrderItemResponseDTO(
         PaymentMethod paymentMethod,
         Date payTime,
         Date orderTime,
-        Date deliverTime,
+        int deliverTime,
         float orderWeight,
         String address,
         OrderStatus status,

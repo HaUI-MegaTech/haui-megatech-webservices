@@ -121,4 +121,12 @@ public class Endpoint {
         public static final String DELETE      = User.PREFIX + User.USER_ID + PREFIX + ADDRESS_IDS;
     }
 
+    public static final class Feedback {
+        public static final String PREFIX      = "/feedbacks";
+        public static final String FEEDBACK_ID = "/{feedbackId}";
+        public static final String ADD_ONE     = User.PREFIX + User.USER_ID + PREFIX;
+        public static final String UPDATE_ONE  = User.PREFIX + User.USER_ID + PREFIX + FEEDBACK_ID;
+        public static final String DELETE_ONE  = User.PREFIX + User.USER_ID + PREFIX + FEEDBACK_ID;
+    }
+
 }

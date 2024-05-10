@@ -34,7 +34,9 @@ public class JwtTokenUtil {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return this.generateToken(new HashMap<>(), userDetails);
+        return this.generateToken(new HashMap<>() {{
+            put("id", userDetails.getUsername());
+        }}, userDetails);
     }
 
     public String generateToken(
@@ -42,6 +44,7 @@ public class JwtTokenUtil {
             UserDetails userDetails
     ) {
         return Jwts.builder()
+                   .setId("Hello this id token id")
                    .setClaims(extraClaims)
                    .setSubject(userDetails.getUsername())
                    .setIssuedAt(new Date(Instant.now().toEpochMilli()))

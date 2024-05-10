@@ -25,6 +25,12 @@ public record ProductDTO() {
     ) {}
 
     @Builder
+    public record MinimizedResponse(
+            String name,
+            String mainImageUrl
+    ) {}
+
+    @Builder
     public record DetailResponse(
             Integer id,
             String name,

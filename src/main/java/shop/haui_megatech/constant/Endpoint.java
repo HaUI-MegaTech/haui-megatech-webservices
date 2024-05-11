@@ -131,4 +131,9 @@ public class Endpoint {
         public static final String DELETE_ONE          = User.PREFIX + User.USER_ID + PREFIX + FEEDBACK_ID;
     }
 
+    public static final class Payment {
+        public static final String CREATE   = "/create-payment";
+        public static final String CALLBACK = "/callback-payment";
+    }
+
 }

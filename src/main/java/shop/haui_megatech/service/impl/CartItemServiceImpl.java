@@ -163,20 +163,23 @@ public class CartItemServiceImpl implements CartItemService {
         return CommonResponseDTO.<UserDTO>builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                 SuccessMessage.Cart.HARD_DELETED_LIST,
-                                                 checkedCartItemIds.size()
-                                         )
+                                                SuccessMessage.Cart.HARD_DELETED_LIST,
+                                                checkedCartItemIds.size()
+                                        )
                                 )
                                 .build();
     }
 
 
     @Override
-    public PaginationDTO.Response<CartItemDTO.Response> getCartItems(PaginationDTO.Request request) {
+    public PaginationDTO.Response<CartItemDTO.Response> getListByUser(Integer userId, PaginationDTO.Request request) {
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
+
+        if (!Objects.equals(foundUser.get().getId(), userId))
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)

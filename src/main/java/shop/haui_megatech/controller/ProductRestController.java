@@ -60,7 +60,6 @@ public class ProductRestController {
                     @ApiResponse(responseCode = "403", description = "When has not been authorized"),
             }
     )
-
     @GetMapping(Endpoint.Product.GET_HIDDEN_LIST)
     public ResponseEntity<?> getHiddenList(
             @ParameterObject PaginationDTO.Request request

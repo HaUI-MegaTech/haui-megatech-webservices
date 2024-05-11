@@ -9,5 +9,5 @@ import shop.haui_megatech.service.base.Updatable;
 public interface CartItemService extends Addable<CartItemDTO.Request>,
                                          Updatable<CartItemDTO.Request>,
                                          HardDeletable {
-    PaginationDTO.Response<CartItemDTO.Response> getCartItems(PaginationDTO.Request request);
+    PaginationDTO.Response<CartItemDTO.Response> getListByUser(Integer userId, PaginationDTO.Request request);
 }

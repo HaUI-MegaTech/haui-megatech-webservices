@@ -2,6 +2,7 @@ package shop.haui_megatech.domain.dto;
 
 import lombok.Builder;
 import shop.haui_megatech.domain.dto.image.ImageDTO;
+import shop.haui_megatech.domain.entity.SimilarProduct;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public record ProductDTO() {
     ) {}
 
     @Builder
-    public record DetailResponse(
+    public record FullResponse(
             Integer id,
             String name,
             Float oldPrice,
@@ -80,7 +81,9 @@ public record ProductDTO() {
 
             String article,
 
-            List<ImageDTO> images
+            List<ImageDTO> images,
+
+            List<SimilarProduct> similarProducts
     ) {}
 
     public record BrandResponse(

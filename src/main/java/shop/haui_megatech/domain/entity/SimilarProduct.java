@@ -19,7 +19,7 @@ public class SimilarProduct {
     private String  productUrl;
     private String  productName;
     private String  productImageUrl;
-    private Float   price;
+    private String  price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

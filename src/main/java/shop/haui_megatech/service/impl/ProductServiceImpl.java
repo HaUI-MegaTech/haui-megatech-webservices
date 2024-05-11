@@ -39,13 +39,13 @@ public class ProductServiceImpl implements ProductService {
     private final MessageSourceUtil messageSourceUtil;
 
     @Override
-    public CommonResponseDTO<ProductDTO.DetailResponse> getOne(Integer id) {
+    public CommonResponseDTO<ProductDTO.FullResponse> getOne(Integer id) {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
             throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
-        return CommonResponseDTO.<ProductDTO.DetailResponse>builder()
+        return CommonResponseDTO.<ProductDTO.FullResponse>builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessage.Product.FOUND))
                                 .item(ProductMapper.INSTANCE.toProductDetailDTO(found.get()))
@@ -206,8 +206,8 @@ public class ProductServiceImpl implements ProductService {
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(SuccessMessage.Product.ADDED_ONE))
                                 .item(ProductMapper.INSTANCE.toProductSummaryDTO(
-                                              productRepository.save(ProductMapper.INSTANCE.toProduct(request))
-                                      )
+                                                productRepository.save(ProductMapper.INSTANCE.toProduct(request))
+                                        )
                                 )
                                 .build();
     }
@@ -296,9 +296,9 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                 SuccessMessage.Product.HARD_DELETED_LIST,
-                                                 request.ids().size()
-                                         )
+                                                SuccessMessage.Product.HARD_DELETED_LIST,
+                                                request.ids().size()
+                                        )
                                 )
                                 .build();
     }
@@ -351,9 +351,9 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                 SuccessMessage.Product.HIDED_LIST,
-                                                 foundProducts.size()
-                                         )
+                                                SuccessMessage.Product.HIDED_LIST,
+                                                foundProducts.size()
+                                        )
                                 )
                                 .build();
     }
@@ -417,9 +417,9 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                 SuccessMessage.Product.RESTORED_LIST,
-                                                 foundProducts.size()
-                                         )
+                                                SuccessMessage.Product.RESTORED_LIST,
+                                                foundProducts.size()
+                                        )
                                 )
                                 .build();
     }
@@ -452,9 +452,9 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                 SuccessMessage.Product.EXPOSED_LIST,
-                                                 foundProducts.size()
-                                         )
+                                                SuccessMessage.Product.EXPOSED_LIST,
+                                                foundProducts.size()
+                                        )
                                 )
                                 .build();
     }
@@ -487,9 +487,9 @@ public class ProductServiceImpl implements ProductService {
         return CommonResponseDTO.builder()
                                 .success(true)
                                 .message(messageSourceUtil.getMessage(
-                                                 SuccessMessage.Product.SOFT_DELETED_LIST,
-                                                 foundProducts.size()
-                                         )
+                                                SuccessMessage.Product.SOFT_DELETED_LIST,
+                                                foundProducts.size()
+                                        )
                                 )
                                 .build();
     }

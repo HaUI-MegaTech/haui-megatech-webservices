@@ -29,11 +29,12 @@ public class CartItemRestController {
         return cartItemService.addOne(request);
     }
 
-    @GetMapping(Endpoint.CartItem.GET_LIST)
-    public PaginationDTO.Response<CartItemDTO.Response> getCartItems(
+    @GetMapping(Endpoint.CartItem.GET_LIST_BY_USER)
+    public PaginationDTO.Response<CartItemDTO.Response> getListByUser(
+            @PathVariable Integer userId,
             @ParameterObject PaginationDTO.Request request
     ) {
-        return cartItemService.getCartItems(request);
+        return cartItemService.getListByUser(userId, request);
     }
 
     @PutMapping(Endpoint.CartItem.UPDATE_ONE)

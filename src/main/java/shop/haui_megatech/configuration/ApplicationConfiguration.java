@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.web.client.RestTemplate;
 import shop.haui_megatech.controller.Cse_Image;
 import shop.haui_megatech.controller.Item;
@@ -31,6 +32,7 @@ import shop.haui_megatech.repository.UserRepository;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,6 +72,7 @@ public class ApplicationConfiguration {
     public DecimalFormat decimalFormat() {
         return new DecimalFormat();
     }
+
 
     @Bean
     public CommandLineRunner commandLineRunner() {

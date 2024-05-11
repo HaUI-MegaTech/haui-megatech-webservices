@@ -23,7 +23,7 @@ public interface ProductMapper {
     )
     ProductDTO.SummaryResponse toProductSummaryDTO(Product product);
 
-    ProductDTO.DetailResponse toProductDetailDTO(Product product);
+    ProductDTO.FullResponse toProductDetailDTO(Product product);
 
     Product toProduct(ProductDTO.AddRequest request);
 

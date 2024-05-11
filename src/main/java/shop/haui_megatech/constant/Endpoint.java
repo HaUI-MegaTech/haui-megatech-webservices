@@ -63,13 +63,13 @@ public class Endpoint {
     }
 
     public static final class CartItem {
-        public static final String PREFIX     = "/cart-items";
-        public static final String ID         = "/{cartItemId}";
-        public static final String IDS        = "/{cartItemIds}";
-        public static final String GET_LIST   = PREFIX;
-        public static final String ADD_ONE    = PREFIX;
-        public static final String UPDATE_ONE = PREFIX + ID;
-        public static final String DELETE     = PREFIX + IDS;
+        public static final String PREFIX           = "/cart-items";
+        public static final String ID               = "/{cartItemId}";
+        public static final String IDS              = "/{cartItemIds}";
+        public static final String GET_LIST_BY_USER = User.PREFIX + User.USER_ID + PREFIX;
+        public static final String ADD_ONE          = PREFIX;
+        public static final String UPDATE_ONE       = PREFIX + ID;
+        public static final String DELETE           = PREFIX + IDS;
     }
 
     public static final class Brand {
@@ -129,6 +129,11 @@ public class Endpoint {
         public static final String ADD_ONE             = User.PREFIX + User.USER_ID + PREFIX;
         public static final String UPDATE_ONE          = User.PREFIX + User.USER_ID + PREFIX + FEEDBACK_ID;
         public static final String DELETE_ONE          = User.PREFIX + User.USER_ID + PREFIX + FEEDBACK_ID;
+    }
+
+    public static final class Payment {
+        public static final String CREATE   = "/create-payment";
+        public static final String CALLBACK = "/callback-payment";
     }
 
 }

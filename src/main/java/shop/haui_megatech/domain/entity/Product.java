@@ -100,7 +100,7 @@ public class Product {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
     private List<SimilarProduct> similarProducts;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Feedback> feedbacks;
     private Float          averageRating;
 }

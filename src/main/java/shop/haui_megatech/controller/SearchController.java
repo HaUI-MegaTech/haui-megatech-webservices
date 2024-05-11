@@ -18,63 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-record PageMap(List<Cse_Image> cse_image) {}
-
-record Cse_Image(String src) {
-}
-
-class Item {
-    private String  link;
-    private String  title;
-    private PageMap pagemap;
-    private String  price;
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public PageMap getPagemap() {
-        return pagemap;
-    }
-
-    public void setPagemap(PageMap pagemap) {
-        this.pagemap = pagemap;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-}
-
-class SearchResult {
-    private List<Item> items;
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
-}
-
-//http://localhost:8080/api/v1?compare={tenSP}
+//http://localhost:8080/api/v1/outer-search/?compare={tenSP}
 @RestController
 @RequestMapping(path = "/api/v1")
 public class SearchController {

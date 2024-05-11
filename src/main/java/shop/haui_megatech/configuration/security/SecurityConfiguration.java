@@ -42,7 +42,8 @@ public class SecurityConfiguration {
             "/api/v1/outer-search",
             "/api/v1/getDataProductByLink",
             "/api/v1/getDataCommentByLink",
-            Endpoint.API_V1 + Endpoint.Order.PREFIX + CATCH_ALL_WILDCARDS
+            Endpoint.API_V1 + Endpoint.Order.PREFIX + CATCH_ALL_WILDCARDS,
+            Endpoint.API_V1 + Endpoint.Feedback.GET_LIST_BY_PRODUCT
     };
     private final List<String>            WHITE_LIST_ORIGINS  = List.of(
             "http://localhost:3000",

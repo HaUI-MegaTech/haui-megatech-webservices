@@ -49,4 +49,9 @@ public class ErrorMessage {
         public static final String PROCESS_CSV   = "import.error.process-csv";
 
     }
+
+    public static class Feedback {
+        public static final String EXCEED_UPDATE_COUNT = "feedback.error.exceed-update-count";
+        public static final String NOT_FOUND           = "feedback.error.not-found";
+    }
 }

@@ -63,4 +63,9 @@ public class SuccessMessage {
         public static final String UPDATED = "address.success.updated";
         public static final String DELETED = "address.success.deleted";
     }
+
+    public static class Feedback {
+        public static final String ADDED_ONE   = "feedback.success.added-one";
+        public static final String UPDATED_ONE = "feedback.success.updated-one";
+    }
 }

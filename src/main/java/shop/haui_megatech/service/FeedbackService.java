@@ -11,5 +11,7 @@ public interface FeedbackService {
 
     CommonResponseDTO<?> delete(Integer userId, String feedbackIds);
 
-    PaginationDTO.Response<FeedbackDTO.Response> getList(PaginationDTO.Request request);
+    PaginationDTO.Response<FeedbackDTO.UserResponse> getListByUserId(Integer userId, PaginationDTO.Request request);
+
+    PaginationDTO.Response<FeedbackDTO.ProductResponse> getListByProductId(Integer productId, PaginationDTO.Request request);
 }

@@ -30,7 +30,7 @@ public class PaymentServiceImpl implements PaymentService {
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", paymentConfiguration.getVnp_Version());
         vnp_Params.put("vnp_Command", paymentConfiguration.getVnp_Command());
-        vnp_Params.put("vnp_TmnCode", paymentConfiguration.vnp_TmnCode);
+        vnp_Params.put("vnp_TmnCode", paymentConfiguration.getVnp_TmnCode());
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
 
@@ -47,7 +47,7 @@ public class PaymentServiceImpl implements PaymentService {
         } else {
             vnp_Params.put("vnp_Locale", "vn");
         }
-        vnp_Params.put("vnp_ReturnUrl", paymentConfiguration.vnp_ReturnUrl);
+        vnp_Params.put("vnp_ReturnUrl", paymentConfiguration.getVnp_ReturnUrl());
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
@@ -59,14 +59,14 @@ public class PaymentServiceImpl implements PaymentService {
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        List fieldNames = new ArrayList(vnp_Params.keySet());
+        List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
         Collections.sort(fieldNames);
         StringBuilder hashData = new StringBuilder();
         StringBuilder query = new StringBuilder();
-        Iterator itr = fieldNames.iterator();
+        Iterator<String> itr = fieldNames.iterator();
         while (itr.hasNext()) {
-            String fieldName = (String) itr.next();
-            String fieldValue = (String) vnp_Params.get(fieldName);
+            String fieldName = itr.next();
+            String fieldValue = vnp_Params.get(fieldName);
             if ((fieldValue != null) && (!fieldValue.isEmpty())) {
                 //Build hash data
                 hashData.append(fieldName);
@@ -82,14 +82,14 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
         String queryUrl = query.toString();
-        String vnp_SecureHash = PaymentUtil.hmacSHA512(paymentConfiguration.secretKey, hashData.toString());
+        String vnp_SecureHash = PaymentUtil.hmacSHA512(paymentConfiguration.getSecretKey(), hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = paymentConfiguration.getVnp_PayUrl() + "?" + queryUrl;
 
         return PaymentDTO.Response
                 .builder()
                 .success(true)
-                .message("Thanh toan thanh cong")
+                .message("Ban dang thuc hien chuc nang thanh toan")
                 .url(paymentUrl)
                 .build();
     }

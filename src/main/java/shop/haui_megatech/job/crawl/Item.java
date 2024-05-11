@@ -1,4 +1,4 @@
-package shop.haui_megatech.controller;
+package shop.haui_megatech.job.crawl;
 
 public class Item {
     private String  link;

@@ -1,6 +1,6 @@
-package shop.haui_megatech.controller;
+package shop.haui_megatech.job.crawl;
 
-public class Cse_Image {
+public class CseImage {
     private String src;
 
     public String getSrc() {

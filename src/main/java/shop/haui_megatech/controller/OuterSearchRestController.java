@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import shop.haui_megatech.job.crawl.Item;
+import shop.haui_megatech.job.crawl.SearchResult;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +22,7 @@ import java.util.regex.Pattern;
 //http://localhost:8080/api/v1/outer-search/?compare={tenSP}
 @RestController
 @RequestMapping(path = "/api/v1")
-public class SearchController {
+public class OuterSearchRestController {
 
     private static final String API_KEY          = "AIzaSyBvQShdKz6SVuFY94HW9XOs4joQ0YS9DgU";
     private static final String SEARCH_ENGINE_ID = "04427d5135e124d17";

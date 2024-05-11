@@ -15,15 +15,15 @@ import java.util.TimeZone;
 @Getter
 public class PaymentConfiguration {
     @Value("${vnp.pay-url}")
-    public  String vnp_PayUrl;
+    private String vnp_PayUrl;
     @Value("${vnp.return-url}")
-    public  String vnp_ReturnUrl;
+    private String vnp_ReturnUrl;
     @Value("${vnp.tmn-code}")
-    public  String vnp_TmnCode;
+    private String vnp_TmnCode;
     @Value("${vnp.secret-key}")
-    public  String secretKey;
+    private String secretKey;
     @Value("${vnp.api-url}")
-    public  String vnp_ApiUrl;
+    private String vnp_ApiUrl;
     @Value("${vnp.version}")
     private String vnp_Version;
     @Value("${vnp.command}")

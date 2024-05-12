@@ -1,7 +1,7 @@
 package shop.haui_megatech.domain.dto.user;
 
 import lombok.Builder;
-import shop.haui_megatech.domain.entity.Gender;
+import shop.haui_megatech.domain.entity.enums.Gender;
 
 @Builder
 public record BriefUserResponseDTO(

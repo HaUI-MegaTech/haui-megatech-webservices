@@ -1,4 +1,4 @@
-package shop.haui_megatech.domain.entity;
+package shop.haui_megatech.domain.entity.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

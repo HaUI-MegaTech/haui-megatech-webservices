@@ -2,6 +2,7 @@ package shop.haui_megatech.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import shop.haui_megatech.domain.entity.enums.PaymentMethod;
 
 import java.util.Date;
 import java.util.List;

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import shop.haui_megatech.constant.DatetimeFormat;
 import shop.haui_megatech.domain.dto.address.AddressRequestDTO;
-import shop.haui_megatech.domain.entity.Gender;
+import shop.haui_megatech.domain.entity.enums.Gender;
 
 import java.util.Date;
 import java.util.List;

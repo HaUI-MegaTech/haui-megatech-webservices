@@ -4,7 +4,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
-import shop.haui_megatech.domain.dto.ProductDTO;
+import shop.haui_megatech.domain.dto.product.AddProductRequestDTO;
+import shop.haui_megatech.domain.dto.product.BriefProductResponseDTO;
+import shop.haui_megatech.domain.dto.product.FullProductResponseDTO;
 import shop.haui_megatech.domain.entity.Product;
 
 @Mapper
@@ -21,10 +23,10 @@ public interface ProductMapper {
                     @Mapping(target = "battery", source = "batteryCapacity"),
             }
     )
-    ProductDTO.SummaryResponse toProductSummaryDTO(Product product);
+    BriefProductResponseDTO toBriefProductResponseDTO(Product product);
 
-    ProductDTO.FullResponse toProductDetailDTO(Product product);
+    FullProductResponseDTO toFullProductResponseDTO(Product product);
 
-    Product toProduct(ProductDTO.AddRequest request);
+    Product toProduct(AddProductRequestDTO request);
 
 }

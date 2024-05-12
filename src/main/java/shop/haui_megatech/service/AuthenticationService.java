@@ -1,12 +1,13 @@
 package shop.haui_megatech.service;
 
-import shop.haui_megatech.domain.dto.AuthenticationDTO;
-import shop.haui_megatech.domain.dto.UserDTO;
+import shop.haui_megatech.domain.dto.auth.AuthenticationRequestDTO;
+import shop.haui_megatech.domain.dto.auth.AuthenticationResponseDTO;
+import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 
 public interface AuthenticationService {
-    AuthenticationDTO.Response register(UserDTO.AddRequest request);
+    AuthenticationResponseDTO register(AddUserRequestDTO request);
 
-    AuthenticationDTO.Response authenticate(AuthenticationDTO.Request request);
+    AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request);
 
-    AuthenticationDTO.Response refresh(AuthenticationDTO.Request request);
+    AuthenticationResponseDTO refresh(AuthenticationRequestDTO request);
 }

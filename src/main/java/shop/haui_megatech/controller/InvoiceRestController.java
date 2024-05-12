@@ -10,11 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
-import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.order.AddOrderForAdminRequestDTO;
 import shop.haui_megatech.domain.dto.order.AddOrderForUserRequestDTO;
 import shop.haui_megatech.domain.dto.order.ModifyOrderForAdminRequestDTO;
 import shop.haui_megatech.domain.dto.order.ModifyOrderForUserRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.service.InvoiceService;
 import shop.haui_megatech.utility.ResponseUtil;
 
@@ -33,7 +33,7 @@ public class InvoiceRestController {
     )
     @GetMapping(Endpoint.Invoice.GET_LIST_BY_USER_ID)
     public ResponseEntity<?> getListInvoicesByUserIdForUser(
-            @ParameterObject PaginationDTO.Request requestDTO
+            @ParameterObject PaginationRequestDTO requestDTO
     ) {
         return ResponseUtil.ok(invoiceService.getListInvoiceForUser(requestDTO));
     }
@@ -47,7 +47,7 @@ public class InvoiceRestController {
     )
     @GetMapping(Endpoint.Invoice.GET_LIST_FOR_ADMIN)
     public ResponseEntity<?> getListinvoicesByUserIdforAdmin(
-            @ParameterObject PaginationDTO.Request requestDTO
+            @ParameterObject PaginationRequestDTO requestDTO
     ) {
         return ResponseUtil.ok(invoiceService.getListInvoiceForAdmin(requestDTO));
     }

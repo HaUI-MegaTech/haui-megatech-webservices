@@ -9,9 +9,12 @@ import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessage;
-import shop.haui_megatech.domain.dto.FeedbackDTO;
-import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.feedback.BriefFeedbackForProduct;
+import shop.haui_megatech.domain.dto.feedback.BriefFeedbackForUser;
+import shop.haui_megatech.domain.dto.feedback.FeedbackRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.entity.Feedback;
 import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.domain.entity.User;
@@ -39,12 +42,12 @@ public class FeedbackServiceImpl implements FeedbackService {
     private final MessageSourceUtil  messageSourceUtil;
 
     @Override
-    public CommonResponseDTO<?> addOne(FeedbackDTO.AddRequest request) {
+    public CommonResponseDTO<?> addOne(Integer productId, FeedbackRequestDTO request) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
         if (requestedUser == null)
             throw new AppException(ErrorMessage.Auth.UNAUTHORIZED);
 
-        Optional<Product> foundProduct = productRepository.findById(request.productId());
+        Optional<Product> foundProduct = productRepository.findById(productId);
 
         if (foundProduct.isEmpty())
             throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
@@ -68,7 +71,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public CommonResponseDTO<?> updateOne(Integer userId, Integer feedbackId, FeedbackDTO.UpdateRequest request) {
+    public CommonResponseDTO<?> updateOne(Integer productId, Integer feedbackId, FeedbackRequestDTO request) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
         if (requestedUser == null)
             throw new AppException(ErrorMessage.Auth.UNAUTHORIZED);
@@ -117,9 +120,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public PaginationDTO.Response<FeedbackDTO.UserResponse> getListByUserId(
+    public PaginationResponseDTO<BriefFeedbackForUser> getListByUserId(
             Integer userId,
-            PaginationDTO.Request request
+            PaginationRequestDTO request
     ) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
@@ -136,23 +139,25 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         List<Feedback> feedbacks = page.getContent();
 
-        return PaginationDTO.Response
-                .<FeedbackDTO.UserResponse>builder()
+        return PaginationResponseDTO
+                .<BriefFeedbackForUser>builder()
                 .keyword(request.keyword())
                 .pageIndex(request.index())
                 .pageSize(request.limit())
                 .totalItems(page.getTotalElements())
                 .totalPages(page.getTotalPages())
-                .items(feedbacks.parallelStream()
-                                .map(FeedbackMapper.INSTANCE::toUserFeedbackDTO)
-                                .collect(Collectors.toList()))
+                .items(feedbacks
+                        .parallelStream()
+                        .map(FeedbackMapper.INSTANCE::toBriefFeedbackForUser)
+                        .collect(Collectors.toList())
+                )
                 .build();
     }
 
     @Override
-    public PaginationDTO.Response<FeedbackDTO.ProductResponse> getListByProductId(
+    public PaginationResponseDTO<BriefFeedbackForProduct> getListByProductId(
             Integer productId,
-            PaginationDTO.Request request
+            PaginationRequestDTO request
     ) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
@@ -169,16 +174,18 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         List<Feedback> feedbacks = page.getContent();
 
-        return PaginationDTO.Response
-                .<FeedbackDTO.ProductResponse>builder()
+        return PaginationResponseDTO
+                .<BriefFeedbackForProduct>builder()
                 .keyword(request.keyword())
                 .pageIndex(request.index())
                 .pageSize(request.limit())
                 .totalItems(page.getTotalElements())
                 .totalPages(page.getTotalPages())
-                .items(feedbacks.parallelStream()
-                                .map(FeedbackMapper.INSTANCE::toProductFeedbackDTO)
-                                .collect(Collectors.toList()))
+                .items(feedbacks
+                        .parallelStream()
+                        .map(FeedbackMapper.INSTANCE::toBriefFeedbackForProduct)
+                        .collect(Collectors.toList())
+                )
                 .build();
     }
 }

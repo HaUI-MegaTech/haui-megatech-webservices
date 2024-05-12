@@ -12,10 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
-import shop.haui_megatech.domain.dto.PaginationDTO;
-import shop.haui_megatech.domain.dto.UserDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
+import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
 import shop.haui_megatech.service.UserService;
 import shop.haui_megatech.utility.ResponseUtil;
 
@@ -53,7 +55,7 @@ public class UserRestController {
     )
     @PostMapping(Endpoint.User.ADD_ONE)
     public ResponseEntity<?> addOne(
-            @RequestBody @Valid UserDTO.AddRequest request
+            @RequestBody @Valid AddUserRequestDTO request
     ) {
         return ResponseUtil.created(userService.addOne(request));
     }
@@ -104,7 +106,7 @@ public class UserRestController {
     @PutMapping(Endpoint.User.UPDATE_INFO)
     public ResponseEntity<?> updateInfo(
             @PathVariable Integer userId,
-            @ModelAttribute UserDTO.UpdateInfoRequest request
+            @ModelAttribute UpdateUserInfoRequest request
     ) {
         return ResponseUtil.ok(userService.updateOne(userId, request));
     }
@@ -123,7 +125,7 @@ public class UserRestController {
     @PatchMapping(Endpoint.User.UPDATE_PASSWORD)
     public ResponseEntity<?> updatePassword(
             @PathVariable Integer userId,
-            @RequestBody UserDTO.UpdatePasswordRequest request
+            @RequestBody UpdateUserPasswordRequest request
     ) {
         return ResponseUtil.ok(userService.updatePassword(userId, request));
     }
@@ -265,7 +267,7 @@ public class UserRestController {
             }
     )
     @GetMapping(Endpoint.User.GET_ACTIVE_LIST)
-    public ResponseEntity<?> getActiveList(@ParameterObject PaginationDTO.Request request) {
+    public ResponseEntity<?> getActiveList(@ParameterObject PaginationRequestDTO request) {
         return ResponseUtil.ok(userService.getList(request));
     }
 
@@ -278,7 +280,7 @@ public class UserRestController {
             }
     )
     @GetMapping(Endpoint.User.GET_DELETED_LIST)
-    public ResponseEntity<?> getDeletedList(@ParameterObject PaginationDTO.Request request) {
+    public ResponseEntity<?> getDeletedList(@ParameterObject PaginationRequestDTO request) {
         return ResponseUtil.ok(userService.getDeletedList(request));
     }
 }

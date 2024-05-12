@@ -1,4 +1,4 @@
-package shop.haui_megatech.domain.dto;
+package shop.haui_megatech.domain.dto.invoice;
 
 import lombok.Builder;
 
@@ -10,6 +10,6 @@ public record InvoiceItemDTO() {
 
     @Builder
     public record Response(
-            
+
     ) {}
 }

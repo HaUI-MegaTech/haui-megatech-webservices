@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.configuration.PaymentConfiguration;
-import shop.haui_megatech.domain.dto.PaymentDTO;
+import shop.haui_megatech.domain.dto.PaymentResponseDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.repository.CartItemRepository;
 import shop.haui_megatech.repository.UserRepository;
@@ -28,7 +28,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final CartItemRepository   cartItemRepository;
 
     @Override
-    public PaymentDTO.Response createPayment(HttpServletRequest request) {
+    public PaymentResponseDTO createPayment(HttpServletRequest request) {
         long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
         String bankCode = request.getParameter("bankCode");
 
@@ -94,7 +94,7 @@ public class PaymentServiceImpl implements PaymentService {
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = paymentConfiguration.getVnp_PayUrl() + "?" + queryUrl;
 
-        return PaymentDTO.Response
+        return PaymentResponseDTO
                 .builder()
                 .success(true)
                 .message("Ban dang thuc hien chuc nang thanh toan")
@@ -103,7 +103,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public CommonResponseDTO<?> resolvePayment(String ids) {
+    public void resolvePayment(String ids) {
         List<Integer> cartItemIds = Arrays.stream(ids.split(","))
                                           .map(String::trim)
                                           .map(Integer::valueOf)
@@ -111,7 +111,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         cartItemRepository.deleteAllByIds(cartItemIds);
 
-        return null;
     }
 
     @Override

@@ -3,7 +3,7 @@
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
-//import shop.haui_megatech.domain.dto.UserDTO;
+//import shop.haui_megatech.domain.dto.user.UserDTO;
 //import shop.haui_megatech.domain.entity.User;
 //
 //import static org.junit.jupiter.api.Assertions.assertEquals;

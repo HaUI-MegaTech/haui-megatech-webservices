@@ -11,10 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
-import shop.haui_megatech.domain.dto.PaginationDTO;
-import shop.haui_megatech.domain.dto.ProductDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.product.AddProductRequestDTO;
+import shop.haui_megatech.domain.dto.product.FilterProductRequestDTO;
+import shop.haui_megatech.domain.dto.product.UpdateProductRequestDTO;
 import shop.haui_megatech.service.ProductService;
 import shop.haui_megatech.utility.ResponseUtil;
 
@@ -43,8 +45,8 @@ public class ProductRestController {
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(Endpoint.Product.GET_ACTIVE_LIST)
     public ResponseEntity<?> getActiveList(
-            @ParameterObject PaginationDTO.Request request,
-            @RequestBody(required = false) ProductDTO.FilterRequest filter
+            @ParameterObject PaginationRequestDTO request,
+            @RequestBody(required = false) FilterProductRequestDTO filter
     ) {
         return ResponseUtil.ok(productService.getList(request, filter));
     }
@@ -62,7 +64,7 @@ public class ProductRestController {
     )
     @GetMapping(Endpoint.Product.GET_HIDDEN_LIST)
     public ResponseEntity<?> getHiddenList(
-            @ParameterObject PaginationDTO.Request request
+            @ParameterObject PaginationRequestDTO request
     ) {
         return ResponseUtil.ok(productService.getHiddenList(request));
     }
@@ -80,7 +82,7 @@ public class ProductRestController {
     )
     @GetMapping(Endpoint.Product.GET_DELETED_LIST)
     public ResponseEntity<?> getDeletedList(
-            @ParameterObject PaginationDTO.Request request
+            @ParameterObject PaginationRequestDTO request
     ) {
         return ResponseUtil.ok(productService.getDeletedList(request));
     }
@@ -98,7 +100,7 @@ public class ProductRestController {
     )
     @PostMapping(Endpoint.Product.ADD_ONE)
     public ResponseEntity<?> addOne(
-            @RequestBody ProductDTO.AddRequest request
+            @RequestBody AddProductRequestDTO request
     ) {
         return ResponseUtil.created(productService.addOne(request));
     }
@@ -153,7 +155,7 @@ public class ProductRestController {
     @PutMapping(Endpoint.Product.UPDATE_ONE)
     public ResponseEntity<?> updateOne(
             @PathVariable Integer productId,
-            @RequestBody ProductDTO.UpdateRequest request) {
+            @RequestBody UpdateProductRequestDTO request) {
         return ResponseUtil.ok(productService.updateOne(productId, request));
     }
 

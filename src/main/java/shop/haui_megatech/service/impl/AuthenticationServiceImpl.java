@@ -8,8 +8,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
-import shop.haui_megatech.domain.dto.AuthenticationDTO;
-import shop.haui_megatech.domain.dto.UserDTO;
+import shop.haui_megatech.domain.dto.auth.AuthenticationRequestDTO;
+import shop.haui_megatech.domain.dto.auth.AuthenticationResponseDTO;
+import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.exception.AbsentRequiredFieldException;
@@ -33,7 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtTokenUtil          jwtUtil;
 
     @Override
-    public AuthenticationDTO.Response register(UserDTO.AddRequest request) {
+    public AuthenticationResponseDTO register(AddUserRequestDTO request) {
         if (!RequestValidator.isBlankRequestParams(request.username()))
             throw new AbsentRequiredFieldException(ErrorMessage.Request.BLANK_USERNAME);
 
@@ -56,14 +57,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .build();
         User savedUser = userRepository.save(user);
         String jwtToken = jwtUtil.generateToken(user);
-        return AuthenticationDTO.Response.builder()
-                                         .token(jwtToken)
-                                         .user(UserMapper.INSTANCE.toUserDetailDTO(savedUser))
-                                         .build();
+        return AuthenticationResponseDTO
+                .builder()
+                .token(jwtToken)
+                .user(UserMapper.INSTANCE.toUserFullResponseDTO(savedUser))
+                .build();
     }
 
     @Override
-    public AuthenticationDTO.Response authenticate(AuthenticationDTO.Request request) {
+    public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.username(),
@@ -75,14 +77,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setLastLogined(new Date(Instant.now().toEpochMilli()));
         user.setLogined(user.getLogined() == null ? 1 : user.getLogined() + 1);
         User updatedUser = userRepository.save(user);
-        return AuthenticationDTO.Response.builder()
-                                         .token(jwtToken)
-                                         .user(UserMapper.INSTANCE.toUserDetailDTO(updatedUser))
-                                         .build();
+        return AuthenticationResponseDTO
+                .builder()
+                .token(jwtToken)
+                .user(UserMapper.INSTANCE.toUserFullResponseDTO(updatedUser))
+                .build();
     }
 
     @Override
-    public AuthenticationDTO.Response refresh(AuthenticationDTO.Request request) {
+    public AuthenticationResponseDTO refresh(AuthenticationRequestDTO request) {
         Optional<User> foundUser = userRepository.findActiveUserByUsername(request.username());
 
         if (foundUser.isEmpty())
@@ -91,11 +94,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (!passwordEncoder.matches(request.password(), foundUser.get().getPassword()))
             throw new BadCredentialsException(request.password());
 
-        return AuthenticationDTO.Response.builder()
-                                         .token(jwtUtil.generateToken(User.builder()
-                                                                          .username(request.username())
-                                                                          .build()))
-                                         .build();
+        return AuthenticationResponseDTO
+                .builder()
+                .token(jwtUtil.generateToken(User.builder()
+                                                 .username(request.username())
+                                                 .build()))
+                .build();
     }
 
 

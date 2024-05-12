@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
-import shop.haui_megatech.domain.dto.FeedbackDTO;
-import shop.haui_megatech.domain.dto.PaginationDTO;
+import shop.haui_megatech.domain.dto.feedback.FeedbackRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.service.FeedbackService;
 import shop.haui_megatech.utility.ResponseUtil;
 
@@ -18,25 +18,25 @@ public class FeedbackRestController {
 
     @PostMapping(Endpoint.Feedback.ADD_ONE)
     public ResponseEntity<?> addOne(
-            @PathVariable Integer userId,
-            @RequestBody FeedbackDTO.AddRequest feedback
+            @PathVariable Integer productId,
+            @RequestBody FeedbackRequestDTO feedback
     ) {
-        return ResponseUtil.created(feedbackService.addOne(feedback));
+        return ResponseUtil.created(feedbackService.addOne(productId, feedback));
     }
 
     @PutMapping(Endpoint.Feedback.UPDATE_ONE)
     public ResponseEntity<?> updateOne(
-            @PathVariable Integer userId,
+            @PathVariable Integer productId,
             @PathVariable Integer feedbackId,
-            @RequestBody FeedbackDTO.UpdateRequest feedback
+            @RequestBody FeedbackRequestDTO feedback
     ) {
-        return ResponseUtil.ok(feedbackService.updateOne(userId, feedbackId, feedback));
+        return ResponseUtil.ok(feedbackService.updateOne(productId, feedbackId, feedback));
     }
 
     @GetMapping(Endpoint.Feedback.GET_LIST_BY_USER)
     public ResponseEntity<?> getListByUser(
             @PathVariable Integer userId,
-            @ParameterObject PaginationDTO.Request request
+            @ParameterObject PaginationRequestDTO request
     ) {
         return ResponseUtil.ok(feedbackService.getListByUserId(userId, request));
     }
@@ -44,7 +44,7 @@ public class FeedbackRestController {
     @GetMapping(Endpoint.Feedback.GET_LIST_BY_PRODUCT)
     public ResponseEntity<?> getListByProduct(
             @PathVariable Integer productId,
-            @ParameterObject PaginationDTO.Request request
+            @ParameterObject PaginationRequestDTO request
     ) {
         return ResponseUtil.ok(feedbackService.getListByProductId(productId, request));
     }

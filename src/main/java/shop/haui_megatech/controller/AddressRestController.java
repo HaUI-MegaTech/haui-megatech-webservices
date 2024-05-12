@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
-import shop.haui_megatech.domain.dto.AddressDTO;
 import shop.haui_megatech.service.AddressService;
 import shop.haui_megatech.utility.ResponseUtil;
 

@@ -23,31 +23,16 @@ public class PaymentRestController {
     }
 
     @GetMapping(Endpoint.Payment.CALLBACK)
-    public void paymentCallbackHandler(HttpServletRequest request, HttpServletResponse response) {
+    public void paymentCallbackHandler(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
         String status = request.getParameter("vnp_ResponseCode");
         if (status.equals("00")) {
-            try {
-                response.sendRedirect("http://localhost:3000");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-//            return ResponseUtil.ok(
-//                    PaymentDTO.Response
-//                            .builder()
-//                            .success(true)
-//                            .message("call back thanh cong")
-//                            .url("Mot duong link nao do...")
-//                            .build()
-//            );
-//        } else {
-//            return ResponseUtil.ok(
-//                    PaymentDTO.Response
-//                            .builder()
-//                            .success(false)
-//                            .message("call back that bai")
-//                            .build()
-//            );
-//        }
+            paymentService.resolvePayment(request.getParameter("ids"));
+            response.sendRedirect("http://localhost:3000/payment/success");
+        } else {
+            response.sendRedirect("http://localhost:3000/payment/error");
         }
     }
 }

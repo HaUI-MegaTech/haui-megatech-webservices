@@ -19,7 +19,7 @@ import shop.haui_megatech.exception.InvalidRequestParamException;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.OrderRepository;
 import shop.haui_megatech.repository.UserRepository;
-import shop.haui_megatech.service.OrderService;
+import shop.haui_megatech.service.InvoiceService;
 import shop.haui_megatech.utility.AuthenticationUtil;
 import shop.haui_megatech.utility.MessageSourceUtil;
 
@@ -28,14 +28,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService {
+public class InvoiceServiceImpl implements InvoiceService {
     private final MessageSourceUtil messageSourceUtil;
     private final OrderMapper       orderMapper;
     private final UserRepository    userRepository;
     private final OrderRepository   orderRepository;
 
     @Override
-    public PaginationDTO.Response<?> getListOrderForUser(PaginationDTO.Request requestDTO) {
+    public PaginationDTO.Response<?> getListInvoiceForUser(PaginationDTO.Request requestDTO) {
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
@@ -66,13 +66,13 @@ public class OrderServiceImpl implements OrderService {
                                      .totalItems(page.getTotalElements())
                                      .totalPages(page.getTotalPages())
                                      .items(orders
-                                                    .stream()
-                                                    .map(orderMapper::orderToOrderBase).toList())
+                                             .stream()
+                                             .map(orderMapper::orderToOrderBase).toList())
                                      .build();
     }
 
     @Override
-    public PaginationDTO.Response<?> getListOrderForAdmin(PaginationDTO.Request requestDTO) {
+    public PaginationDTO.Response<?> getListInvoiceForAdmin(PaginationDTO.Request requestDTO) {
         if (requestDTO.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
@@ -96,13 +96,13 @@ public class OrderServiceImpl implements OrderService {
                                      .totalItems(page.getTotalElements())
                                      .totalPages(page.getTotalPages())
                                      .items(orders
-                                                    .stream()
-                                                    .map(orderMapper::orderToOrderBase).toList())
+                                             .stream()
+                                             .map(orderMapper::orderToOrderBase).toList())
                                      .build();
     }
 
     @Override
-    public CommonResponseDTO<OrderItemResponseDTO> getOrderDetailForUser(Integer orderId) {
+    public CommonResponseDTO<OrderItemResponseDTO> getInvoiceDetailForUser(Integer orderId) {
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
@@ -117,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public CommonResponseDTO<OrderItemResponseDTO> getOrderDetailForAdmin(Integer orderId) {
+    public CommonResponseDTO<OrderItemResponseDTO> getInvoiceDetailForAdmin(Integer orderId) {
         Order order = orderRepository.findById(orderId).get();
 
         return CommonResponseDTO.<OrderItemResponseDTO>builder()
@@ -128,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public CommonResponseDTO<OrderBaseDTO> addOrderForUser(AddOrderForUserRequestDTO requestDTO) {
+    public CommonResponseDTO<OrderBaseDTO> addInvoiceForUser(AddOrderForUserRequestDTO requestDTO) {
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
@@ -146,7 +146,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public CommonResponseDTO<OrderBaseDTO> addOrderForAdmin(AddOrderForAdminRequestDTO requestDTO) {
+    public CommonResponseDTO<OrderBaseDTO> addInvoiceForAdmin(AddOrderForAdminRequestDTO requestDTO) {
         Order order = orderMapper.addOrderRequestForAdminDTOtoOrder(requestDTO);
         Order saveOrder = orderRepository.save(order);
         return CommonResponseDTO.<OrderBaseDTO>builder()
@@ -157,7 +157,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public CommonResponseDTO<OrderBaseDTO> updateOrderForUser(ModifyOrderForUserRequestDTO requestDTO) {
+    public CommonResponseDTO<OrderBaseDTO> updateInvoiceForUser(ModifyOrderForUserRequestDTO requestDTO) {
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
@@ -182,7 +182,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public CommonResponseDTO<OrderBaseDTO> updateOrderForAdmin(ModifyOrderForAdminRequestDTO requestDTO) {
+    public CommonResponseDTO<OrderBaseDTO> updateInvoiceForAdmin(ModifyOrderForAdminRequestDTO requestDTO) {
         Optional<User> foundUser = userRepository.findById(requestDTO.addOrderForAdminRequestDTO().userId());
 
         if (foundUser.isEmpty())
@@ -205,7 +205,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public CommonResponseDTO<OrderBaseDTO> deleteOrderForAdmin(int orderId) {
+    public CommonResponseDTO<OrderBaseDTO> deleteInvoiceForAdmin(int orderId) {
         Order order = orderRepository.findById(orderId).get();
         if (order == null)
             throw new NotFoundException(ErrorMessage.Order.NOT_FOUND);

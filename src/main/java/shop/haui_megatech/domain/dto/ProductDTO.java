@@ -1,7 +1,6 @@
 package shop.haui_megatech.domain.dto;
 
 import lombok.Builder;
-import shop.haui_megatech.domain.dto.image.ImageDTO;
 import shop.haui_megatech.domain.entity.SimilarProduct;
 
 import java.util.List;

@@ -5,6 +5,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.configuration.PaymentConfiguration;
 import shop.haui_megatech.domain.dto.PaymentDTO;
+import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.repository.CartItemRepository;
+import shop.haui_megatech.repository.UserRepository;
+import shop.haui_megatech.service.CartItemService;
+import shop.haui_megatech.service.InvoiceService;
 import shop.haui_megatech.service.PaymentService;
 import shop.haui_megatech.utility.PaymentUtil;
 
@@ -17,10 +22,13 @@ import java.util.*;
 @AllArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentConfiguration paymentConfiguration;
+    private final CartItemService      cartItemService;
+    private final InvoiceService       orderService;
+    private final UserRepository       userRepository;
+    private final CartItemRepository   cartItemRepository;
 
     @Override
     public PaymentDTO.Response createPayment(HttpServletRequest request) {
-        String orderType = "other";
         long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
         String bankCode = request.getParameter("bankCode");
 
@@ -39,7 +47,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
-        vnp_Params.put("vnp_OrderType", orderType);
+        vnp_Params.put("vnp_OrderType", paymentConfiguration.getOrderType());
 
         String locate = request.getParameter("language");
         if (locate != null && !locate.isEmpty()) {
@@ -47,7 +55,7 @@ public class PaymentServiceImpl implements PaymentService {
         } else {
             vnp_Params.put("vnp_Locale", "vn");
         }
-        vnp_Params.put("vnp_ReturnUrl", paymentConfiguration.getVnp_ReturnUrl());
+        vnp_Params.put("vnp_ReturnUrl", paymentConfiguration.getVnp_ReturnUrl() + "?ids=" + request.getParameter("ids"));
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
@@ -92,5 +100,22 @@ public class PaymentServiceImpl implements PaymentService {
                 .message("Ban dang thuc hien chuc nang thanh toan")
                 .url(paymentUrl)
                 .build();
+    }
+
+    @Override
+    public CommonResponseDTO<?> resolvePayment(String ids) {
+        List<Integer> cartItemIds = Arrays.stream(ids.split(","))
+                                          .map(String::trim)
+                                          .map(Integer::valueOf)
+                                          .toList();
+
+        cartItemRepository.deleteAllByIds(cartItemIds);
+
+        return null;
+    }
+
+    @Override
+    public CommonResponseDTO<?> rejectPayment(String ids) {
+        return null;
     }
 }

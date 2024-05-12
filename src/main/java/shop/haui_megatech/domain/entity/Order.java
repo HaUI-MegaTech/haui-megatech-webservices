@@ -18,25 +18,26 @@ import java.util.List;
 @Table(name = "orders")
 @Builder
 public class Order {
+    int deliverTime;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Integer id;
+    private float   shippingCost;
+    private float   subTotal;
+    private float   tax;
+    private float   total;
 
-    private float shippingCost;
-    private float subTotal;
-    private float tax;
-    private float total;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     private Date payTime;
+
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     private Date orderTime;
-    int deliverTime;
 
     @DecimalMin(value = "0.0", message = "Trọng lượng đơn hàng không hợp lệ")
     private float orderWeight;

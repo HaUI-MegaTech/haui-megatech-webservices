@@ -1,5 +1,6 @@
 package shop.haui_megatech.service.impl;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessage;
+import shop.haui_megatech.domain.dto.MailDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
@@ -19,7 +21,7 @@ import shop.haui_megatech.domain.dto.user.*;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.exception.*;
-import shop.haui_megatech.job.AutoMailSender;
+import shop.haui_megatech.job.AutoMailer;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.service.FileUploadService;
 import shop.haui_megatech.service.UserService;
@@ -31,10 +33,7 @@ import shop.haui_megatech.validator.RequestValidator;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository    userRepository;
     private final MessageSourceUtil messageSourceUtil;
     private final PasswordEncoder   passwordEncoder;
-    private final AutoMailSender    autoMailSender;
+    private final AutoMailer        autoMailer;
     private final FileUploadService fileUploadService;
 
     @Override
@@ -313,7 +312,23 @@ public class UserServiceImpl implements UserService {
         User foundUser = found.get();
         foundUser.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(foundUser);
-        autoMailSender.sendResetPasswordMail(foundUser.getEmail(), newPassword);
+
+        Map<String, Object> variables = Map.of(
+                "username", foundUser.getUsername(),
+                "newPassword", newPassword
+        );
+
+        MailDTO mailData = MailDTO.builder()
+                                  .to(foundUser.getEmail())
+                                  .subject("Khôi phục mật khẩu")
+                                  .variables(variables)
+                                  .build();
+
+        try {
+            autoMailer.sendMailWithHtml(mailData, "reset-password.html");
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
 
         return CommonResponseDTO
                 .builder()

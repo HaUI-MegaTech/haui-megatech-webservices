@@ -11,8 +11,10 @@ import java.util.List;
 public interface AddressRepository extends JpaRepository<Address, Integer> {
 
     @Query(
-            "DELETE FROM Address a " +
-            "WHERE a.id IN :addressIds "
+            """
+            DELETE FROM Address a
+            WHERE a.id IN :addressIds
+            """
     )
     @Transactional
     @Modifying

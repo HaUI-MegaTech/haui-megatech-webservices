@@ -13,75 +13,102 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query(
-            "SELECT p FROM Product p " +
-            "WHERE (p.deleted = false OR p.deleted IS NULL) " +
-            "AND (p.hidden = false OR p.hidden IS NULL) "
+            """
+            SELECT p
+            FROM Product p
+            WHERE (p.deleted = false OR p.deleted IS NULL)
+                AND (p.hidden = false OR p.hidden IS NULL)
+            """
     )
     Page<Product> getActiveProductsPage(Pageable pageable);
 
 
     @Query(
-            "SELECT p FROM Product p " +
-            "WHERE (p.deleted = false OR p.deleted IS NULL) " +
-            "AND p.hidden = true "
+            """
+            SELECT p
+            FROM Product p
+            WHERE (p.deleted = false OR p.deleted IS NULL)
+                AND p.hidden = true
+            """
     )
     Page<Product> getHiddenProductsPage(Pageable pageable);
 
 
     @Query(
-            "SELECT p FROM Product p " +
-            "WHERE p.deleted = true "
+            """
+            SELECT p
+            FROM Product p
+            WHERE p.deleted = true
+            """
     )
     Page<Product> getDeletedProductsPage(Pageable pageable);
 
 
     @Query(
-            "SELECT p FROM Product p " +
-            "WHERE LOWER(CONCAT(p.name, p.processor, p.storage, p.memoryCapacity)) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "AND (p.deleted = false OR p.deleted IS NULL) " +
-            "AND (p.hidden = false OR p.hidden IS NULL) "
+            """
+            SELECT p
+            FROM Product p
+            WHERE LOWER(CONCAT(p.name, p.processor, p.storage, p.memoryCapacity)) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                AND (p.deleted = false OR p.deleted IS NULL)
+                AND (p.hidden = false OR p.hidden IS NULL)
+            """
     )
     Page<Product> searchActiveProductsPage(String keyword, Pageable pageable);
 
 
     @Query(
-            "SELECT p FROM Product p " +
-            "WHERE (p.name LIKE %?1% OR p.processor LIKE %?1%) " +
-            "AND p.hidden = true "
+            """
+            SELECT p
+            FROM Product p
+            WHERE (p.name LIKE %?1% OR p.processor LIKE %?1%)
+                AND p.hidden = true
+            """
     )
     Page<Product> searchHiddenProductsPage(String keyword, Pageable pageable);
 
 
     @Query(
-            "SELECT p FROM Product p " +
-            "WHERE (p.name LIKE %?1% OR p.processor LIKE %?1%) " +
-            "AND p.deleted = true "
+            """
+            SELECT p
+            FROM Product p
+            WHERE (p.name LIKE %?1% OR p.processor LIKE %?1%)
+                AND p.deleted = true
+            """
     )
     Page<Product> searchDeletedProductsPage(String keyword, Pageable pageable);
 
 
     @Query(
-            "SELECT p FROM Product p " +
-            "WHERE p.currentPrice BETWEEN :minPrice AND :maxPrice " +
-            "AND (p.deleted = false OR p.deleted IS NULL) " +
-            "AND (p.hidden = false OR p.hidden IS NULL) "
+            """
+            SELECT p
+            FROM Product p
+            WHERE p.currentPrice BETWEEN :minPrice AND :maxPrice
+                AND (p.deleted = false OR p.deleted IS NULL)
+                AND (p.hidden = false OR p.hidden IS NULL)
+            """
     )
     Page<Product> filterActiveListByPrice(Float minPrice, Float maxPrice, Pageable pageable);
 
     @Query(
-            "SELECT p FROM Product p " +
-            "WHERE (p.brand.id IN :brandIds) " +
-            "AND (p.deleted = false OR p.deleted IS NULL) " +
-            "AND (p.hidden = false OR p.hidden IS NULL) "
+            """
+            SELECT p
+            FROM Product p
+            WHERE (p.brand.id IN :brandIds)
+                AND (p.deleted = false OR p.deleted IS NULL)
+                AND (p.hidden = false OR p.hidden IS NULL)
+            """
     )
     Page<Product> filterActiveListByBrandIds(List<Integer> brandIds, Pageable pageable);
 
     @Query(
-            "SELECT p FROM Product p " +
-            "WHERE (p.brand.id IN :brandIds) " +
-            "AND (p.currentPrice BETWEEN :minPrice AND :maxPrice) " +
-            "AND (p.deleted = false OR p.deleted IS NULL) " +
-            "AND (p.hidden = false OR p.hidden IS NULL) "
+            """
+            SELECT p
+            FROM Product p
+            WHERE (p.brand.id IN :brandIds)
+                AND (p.currentPrice BETWEEN :minPrice AND :maxPrice)
+                AND (p.deleted = false OR p.deleted IS NULL)
+                AND (p.hidden = false OR p.hidden IS NULL)
+            """
     )
     Page<Product> filterActiveListByPriceAndBrandIds(
             List<Integer> brandIds,
@@ -91,11 +118,13 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     );
 
     @Query(
-            "SELECT p FROM Product p " +
-            "WHERE LOWER(CONCAT(p.name, p.processor, p.storage, p.memoryCapacity)) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "AND (p.brand.id IN :brandIds) " +
-            "AND (p.deleted = false OR p.deleted IS NULL) " +
-            "AND (p.hidden = false OR p.hidden IS NULL) "
+            """
+            SELECT p FROM Product p
+            WHERE LOWER(CONCAT(p.name, p.processor, p.storage, p.memoryCapacity)) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                AND (p.brand.id IN :brandIds)
+                AND (p.deleted = false OR p.deleted IS NULL)
+                AND (p.hidden = false OR p.hidden IS NULL)
+            """
     )
     Page<Product> filterActiveListByKeywordAndBrandIds(
             String keyword,
@@ -104,11 +133,13 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     );
 
     @Query(
-            "SELECT p FROM Product p " +
-            "WHERE LOWER(CONCAT(p.name, p.processor, p.storage, p.memoryCapacity)) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "AND (p.currentPrice BETWEEN :minPrice AND :maxPrice) " +
-            "AND (p.deleted = false OR p.deleted IS NULL) " +
-            "AND (p.hidden = false OR p.hidden IS NULL) "
+            """
+            SELECT p FROM Product p
+            WHERE LOWER(CONCAT(p.name, p.processor, p.storage, p.memoryCapacity)) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                AND (p.currentPrice BETWEEN :minPrice AND :maxPrice)
+                AND (p.deleted = false OR p.deleted IS NULL)
+                AND (p.hidden = false OR p.hidden IS NULL)
+            """
     )
     Page<Product> filterActiveListByKeywordAndPrice(
             String keyword,
@@ -118,12 +149,14 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     );
 
     @Query(
-            "SELECT p FROM Product p " +
-            "WHERE LOWER(CONCAT(p.name, p.processor, p.storage, p.memoryCapacity)) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "AND (p.brand.id IN :brandIds) " +
-            "AND (p.currentPrice BETWEEN :minPrice AND :maxPrice) " +
-            "AND (p.deleted = false OR p.deleted IS NULL) " +
-            "AND (p.hidden = false OR p.hidden IS NULL) "
+            """
+            SELECT p FROM Product p
+            WHERE LOWER(CONCAT(p.name, p.processor, p.storage, p.memoryCapacity)) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                AND (p.brand.id IN :brandIds)
+                AND (p.currentPrice BETWEEN :minPrice AND :maxPrice)
+                AND (p.deleted = false OR p.deleted IS NULL)
+                AND (p.hidden = false OR p.hidden IS NULL)
+            """
     )
     Page<Product> filterActiveListByKeywordAndBrandIdsAndPrice(
             String keyword,

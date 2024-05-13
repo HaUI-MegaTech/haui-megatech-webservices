@@ -1,4 +1,4 @@
-package shop.haui_megatech.job;
+package shop.haui_megatech.utility;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

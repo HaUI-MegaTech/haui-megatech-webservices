@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
+import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.service.PaymentService;
+import shop.haui_megatech.utility.AuthenticationUtil;
 import shop.haui_megatech.utility.ResponseUtil;
 
 import java.io.IOException;
@@ -29,7 +31,11 @@ public class PaymentRestController {
     ) throws IOException {
         String status = request.getParameter("vnp_ResponseCode");
         if (status.equals("00")) {
-            paymentService.resolvePayment(request.getParameter("ids"));
+            paymentService.resolvePayment(
+                    request.getParameter("ids"),
+                    Integer.valueOf(request.getParameter("userId")),
+                    Integer.valueOf(request.getParameter("addressId"))
+            );
             response.sendRedirect("http://localhost:3000/payment/success");
         } else {
             response.sendRedirect("http://localhost:3000/payment/error");

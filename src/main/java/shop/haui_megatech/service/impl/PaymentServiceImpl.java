@@ -4,31 +4,41 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.configuration.PaymentConfiguration;
+import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.domain.dto.PaymentResponseDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
-import shop.haui_megatech.repository.CartItemRepository;
-import shop.haui_megatech.repository.UserRepository;
+import shop.haui_megatech.domain.entity.CartItem;
+import shop.haui_megatech.domain.entity.Order;
+import shop.haui_megatech.domain.entity.OrderDetail;
+import shop.haui_megatech.domain.entity.User;
+import shop.haui_megatech.domain.entity.enums.OrderStatus;
+import shop.haui_megatech.domain.entity.enums.PaymentMethod;
+import shop.haui_megatech.exception.NotFoundException;
+import shop.haui_megatech.repository.*;
 import shop.haui_megatech.service.CartItemService;
-import shop.haui_megatech.service.InvoiceService;
+import shop.haui_megatech.service.OrderService;
 import shop.haui_megatech.service.PaymentService;
+import shop.haui_megatech.utility.AuthenticationUtil;
 import shop.haui_megatech.utility.PaymentUtil;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentConfiguration paymentConfiguration;
-    private final CartItemService      cartItemService;
-    private final InvoiceService       orderService;
     private final UserRepository       userRepository;
     private final CartItemRepository   cartItemRepository;
+    private final OrderRepository      orderRepository;
+    private final AddressRepository    addressRepository;
 
     @Override
     public PaymentResponseDTO createPayment(HttpServletRequest request) {
+        User requestedUser = AuthenticationUtil.getRequestedUser();
         long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
         String bankCode = request.getParameter("bankCode");
 
@@ -55,7 +65,11 @@ public class PaymentServiceImpl implements PaymentService {
         } else {
             vnp_Params.put("vnp_Locale", "vn");
         }
-        vnp_Params.put("vnp_ReturnUrl", paymentConfiguration.getVnp_ReturnUrl() + "?ids=" + request.getParameter("ids"));
+        vnp_Params.put("vnp_ReturnUrl", paymentConfiguration.getVnp_ReturnUrl() +
+                                        "?ids=" + request.getParameter("ids") +
+                                        "&addressId=" + request.getParameter("addressId") +
+                                        "&userId=" + requestedUser.getId()
+        );
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
@@ -103,14 +117,48 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public void resolvePayment(String ids) {
+    public void resolvePayment(String ids, Integer userId, Integer addressId) {
         List<Integer> cartItemIds = Arrays.stream(ids.split(","))
                                           .map(String::trim)
                                           .map(Integer::valueOf)
                                           .toList();
 
-        cartItemRepository.deleteAllByIds(cartItemIds);
+        Order order = Order.builder()
+                           .paymentMethod(PaymentMethod.THE_TIN_DUNG)
+                           .payTime(new Date(Instant.now().toEpochMilli()))
+                           .orderTime(new Date(Instant.now().toEpochMilli()))
+                           .status(OrderStatus.PAID)
+                           .tax(0.1f)
+                           .address(addressRepository
+                                   .findById(addressId)
+                                   .orElseThrow(() ->
+                                           new NotFoundException(ErrorMessage.Address.NOT_FOUND)
+                                   )
+                           )
+                           .build();
 
+        List<CartItem> cartItems = cartItemRepository.findAllById(cartItemIds);
+
+        List<OrderDetail> orderDetails = cartItems.parallelStream()
+                                                  .map(item -> OrderDetail.builder()
+                                                                          .quantity(item.getQuantity())
+                                                                          .price(item.getQuantity() * item.getProduct().getCurrentPrice())
+                                                                          .order(null)
+                                                                          .product(item.getProduct())
+                                                                          .build()
+                                                  )
+                                                  .toList();
+        order.setOrderDetails(orderDetails);
+        order.setSubTotal((float) orderDetails.parallelStream().mapToDouble(OrderDetail::getPrice).sum());
+        order.setTotal(order.getSubTotal() * (order.getTax() + 1));
+        order.setUser(userRepository.findById(userId)
+                                    .orElseThrow(() -> new NotFoundException(ErrorMessage.User.NOT_FOUND))
+        );
+
+        orderDetails.forEach(orderDetail -> orderDetail.setOrder(order));
+        order.setOrderDetails(orderDetails);
+        orderRepository.save(order);
+        cartItemRepository.deleteAllByIds(cartItemIds);
     }
 
     @Override

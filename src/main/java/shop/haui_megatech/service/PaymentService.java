@@ -7,7 +7,7 @@ import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 public interface PaymentService {
     PaymentResponseDTO createPayment(HttpServletRequest request);
 
-    void resolvePayment(String ids);
+    void resolvePayment(String ids, Integer userId, Integer addressId);
 
     CommonResponseDTO<?> rejectPayment(String ids);
 }

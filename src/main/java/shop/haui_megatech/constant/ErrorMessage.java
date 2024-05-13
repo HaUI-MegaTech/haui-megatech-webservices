@@ -54,4 +54,8 @@ public class ErrorMessage {
         public static final String EXCEED_UPDATE_COUNT = "feedback.error.exceed-update-count";
         public static final String NOT_FOUND           = "feedback.error.not-found";
     }
+
+    public static class Address {
+        public static final String NOT_FOUND = "address.error.not-found";
+    }
 }

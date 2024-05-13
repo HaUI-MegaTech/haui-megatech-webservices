@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "addresses")
@@ -34,4 +35,6 @@ public class Address {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+
 }

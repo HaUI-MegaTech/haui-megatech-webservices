@@ -15,138 +15,138 @@ import shop.haui_megatech.domain.dto.order.AddOrderForUserRequestDTO;
 import shop.haui_megatech.domain.dto.order.ModifyOrderForAdminRequestDTO;
 import shop.haui_megatech.domain.dto.order.ModifyOrderForUserRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.service.InvoiceService;
+import shop.haui_megatech.service.OrderService;
 import shop.haui_megatech.utility.ResponseUtil;
 
 @RestApiV1
 @RequiredArgsConstructor
-@Tag(name = "invoices Management REST API")
-public class InvoiceRestController {
-    private final InvoiceService invoiceService;
+@Tag(name = "Orders Management REST API")
+public class OrderRestController {
+    private final OrderService OrderService;
 
-    @Operation(summary = "Get an list invoices for User")
+    @Operation(summary = "Get an list Orders for User")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(Endpoint.Invoice.GET_LIST_BY_USER_ID)
-    public ResponseEntity<?> getListInvoicesByUserIdForUser(
+    @GetMapping(Endpoint.Order.GET_LIST_BY_USER_ID)
+    public ResponseEntity<?> getListOrdersByUserIdForUser(
             @ParameterObject PaginationRequestDTO requestDTO
     ) {
-        return ResponseUtil.ok(invoiceService.getListInvoiceForUser(requestDTO));
+        return ResponseUtil.ok(OrderService.getListOrderForUser(requestDTO));
     }
 
-    @Operation(summary = "Get an list invoices for Admin")
+    @Operation(summary = "Get an list Orders for Admin")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(Endpoint.Invoice.GET_LIST_FOR_ADMIN)
-    public ResponseEntity<?> getListinvoicesByUserIdforAdmin(
+    @GetMapping(Endpoint.Order.GET_LIST_FOR_ADMIN)
+    public ResponseEntity<?> getListOrdersByUserIdforAdmin(
             @ParameterObject PaginationRequestDTO requestDTO
     ) {
-        return ResponseUtil.ok(invoiceService.getListInvoiceForAdmin(requestDTO));
+        return ResponseUtil.ok(OrderService.getListOrderForAdmin(requestDTO));
     }
 
-    @Operation(summary = "Get an Detail invoices for User")
+    @Operation(summary = "Get an Detail Orders for User")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(Endpoint.Invoice.GET_DETAIL_FOR_USER)
-    public ResponseEntity<?> getDetailInvoiceForUser(
-            @PathVariable(name = "invoiceId") Integer invoiceId
+    @GetMapping(Endpoint.Order.GET_DETAIL_FOR_USER)
+    public ResponseEntity<?> getDetailOrderForUser(
+            @PathVariable(name = "OrderId") Integer OrderId
     ) {
-        return ResponseUtil.ok(invoiceService.getInvoiceDetailForUser(invoiceId));
+        return ResponseUtil.ok(OrderService.getOrderDetailForUser(OrderId));
     }
 
-    @Operation(summary = "Get an Detail invoices for Admin")
+    @Operation(summary = "Get an Detail Orders for Admin")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(Endpoint.Invoice.GET_DETAIL_FOR_ADMIN)
-    public ResponseEntity<?> getDetailInvoiceForAdmin(
-            @PathVariable(name = "invoiceId") Integer invoiceId
+    @GetMapping(Endpoint.Order.GET_DETAIL_FOR_ADMIN)
+    public ResponseEntity<?> getDetailOrderForAdmin(
+            @PathVariable(name = "OrderId") Integer OrderId
     ) {
-        return ResponseUtil.ok(invoiceService.getInvoiceDetailForAdmin(invoiceId));
+        return ResponseUtil.ok(OrderService.getOrderDetailForAdmin(OrderId));
     }
 
-    @Operation(summary = "Add an invoice for User")
+    @Operation(summary = "Add an Order for User")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PostMapping(Endpoint.Invoice.ADD_ONE_FOR_USER)
-    public ResponseEntity<?> getDetailInvoiceForUser(
+    @PostMapping(Endpoint.Order.ADD_ONE_FOR_USER)
+    public ResponseEntity<?> getDetailOrderForUser(
             @RequestBody AddOrderForUserRequestDTO requestDTO
     ) {
-        return ResponseUtil.ok(invoiceService.addInvoiceForUser(requestDTO));
+        return ResponseUtil.ok(OrderService.addOrderForUser(requestDTO));
     }
 
-    @Operation(summary = "Add an invoice for Admin")
+    @Operation(summary = "Add an Order for Admin")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PostMapping(Endpoint.Invoice.ADD_ONE_FOR_ADMIN)
-    public ResponseEntity<?> getDetailinvoiceForAdmin(
+    @PostMapping(Endpoint.Order.ADD_ONE_FOR_ADMIN)
+    public ResponseEntity<?> getDetailOrderForAdmin(
             @RequestBody AddOrderForAdminRequestDTO requestDTO
     ) {
-        return ResponseUtil.ok(invoiceService.addInvoiceForAdmin(requestDTO));
+        return ResponseUtil.ok(OrderService.addOrderForAdmin(requestDTO));
     }
 
-    @Operation(summary = "Update an invoice for User")
+    @Operation(summary = "Update an Order for User")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PutMapping(Endpoint.Invoice.UPDATED_ONE_FOR_UER)
-    public ResponseEntity<?> updateinvoiceForUser(
+    @PutMapping(Endpoint.Order.UPDATED_ONE_FOR_UER)
+    public ResponseEntity<?> updateOrderForUser(
             @RequestBody ModifyOrderForUserRequestDTO requestDTO
     ) {
-        return ResponseUtil.ok(invoiceService.updateInvoiceForUser(requestDTO));
+        return ResponseUtil.ok(OrderService.updateOrderForUser(requestDTO));
     }
 
-    @Operation(summary = "Update an invoice for Admin")
+    @Operation(summary = "Update an Order for Admin")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PutMapping(Endpoint.Invoice.UPDATED_ONE_FOR_ADMIN)
-    public ResponseEntity<?> updateinvoiceForAdmin(
+    @PutMapping(Endpoint.Order.UPDATED_ONE_FOR_ADMIN)
+    public ResponseEntity<?> updateOrderForAdmin(
             @RequestBody ModifyOrderForAdminRequestDTO requestDTO
     ) {
-        return ResponseUtil.ok(invoiceService.updateInvoiceForAdmin(requestDTO));
+        return ResponseUtil.ok(OrderService.updateOrderForAdmin(requestDTO));
     }
 
-    @Operation(summary = "Delete an invoice for Admin")
+    @Operation(summary = "Delete an Order for Admin")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @DeleteMapping(Endpoint.Invoice.DELETE_ONE_ORDER)
-    public ResponseEntity<?> deleteinvoiceForAdmin(
-            @PathVariable(name = "invoiceId") int invoiceId
+    @DeleteMapping(Endpoint.Order.DELETE_ONE_ORDER)
+    public ResponseEntity<?> deleteOrderForAdmin(
+            @PathVariable(name = "OrderId") int OrderId
     ) {
-        return ResponseUtil.ok(invoiceService.deleteInvoiceForAdmin(invoiceId));
+        return ResponseUtil.ok(OrderService.deleteOrderForAdmin(OrderId));
     }
 }

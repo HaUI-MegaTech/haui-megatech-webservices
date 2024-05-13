@@ -44,13 +44,15 @@ public class Order {
     @DecimalMin(value = "0.0", message = "Trọng lượng đơn hàng không hợp lệ")
     private float orderWeight;
 
-    private String address;
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderDetail> orderDetails = new ArrayList<>();
+    private List<OrderDetail> orderDetails;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

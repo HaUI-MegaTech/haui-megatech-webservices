@@ -78,7 +78,7 @@ public class Endpoint {
         public static final String GET_ACTIVE_LIST = PREFIX + ACTIVE;
     }
 
-    public static final class Invoice {
+    public static final class Order {
         public static final String PREFIX                = "/orders";
         public static final String GET_LIST_BY_USER_ID   = PREFIX;
         public static final String GET_LIST_FOR_ADMIN    = PREFIX + ADMIN;

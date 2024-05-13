@@ -1,6 +1,7 @@
 package shop.haui_megatech.domain.dto.order;
 
 import shop.haui_megatech.domain.dto.order_detail.OrderDetailRequestDTO;
+import shop.haui_megatech.domain.entity.Address;
 import shop.haui_megatech.domain.entity.enums.OrderStatus;
 import shop.haui_megatech.domain.entity.enums.PaymentMethod;
 
@@ -18,7 +19,7 @@ public record AddOrderForAdminRequestDTO(
         Date orderTime,
         int deliverTime,
         float orderWeight,
-        String address,
+        Address address,
         OrderStatus status,
         List<OrderDetailRequestDTO> orderDetailRequestDTOList
 ) {

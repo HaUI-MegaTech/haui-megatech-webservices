@@ -37,7 +37,7 @@ public class OrderMapperImpl implements OrderMapper {
         if (requestDTO.orderWeight() < 5) shippingCost = 100000;
 
         Date payTime = null;
-        if (requestDTO.paymentMethod() == PaymentMethod.ONLINE) payTime = new Date();
+        if (requestDTO.paymentMethod() == PaymentMethod.THE_TIN_DUNG) payTime = new Date();
 
         Order order = Order.builder()
                            .shippingCost(shippingCost)

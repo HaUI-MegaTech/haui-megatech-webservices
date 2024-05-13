@@ -42,7 +42,6 @@ public class SecurityConfiguration {
             "/api/v1/outer-search",
             "/api/v1/getDataProductByLink",
             "/api/v1/getDataCommentByLink",
-            Endpoint.API_V1 + Endpoint.Invoice.PREFIX + CATCH_ALL_WILDCARDS,
             Endpoint.API_V1 + Endpoint.Feedback.GET_LIST_BY_PRODUCT,
             Endpoint.API_V1 + Endpoint.Payment.CALLBACK
     };

@@ -13,14 +13,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import shop.haui_megatech.configuration.security.SecurityConfiguration;
 import shop.haui_megatech.utility.JwtTokenUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private static final String             AUTH_PREFIX = "Bearer ";
+    private static final String             AUTH_PREFIX     = "Bearer ";
+    private final        List<String>       bypassEndpoints = Arrays.asList(SecurityConfiguration.PUBLIC_ENDPOINTS);
     private final        UserDetailsService userDetailsService;
     private final        JwtTokenUtil       jwtUtil;
 
@@ -34,6 +39,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String username;
         if (authHeader == null || !authHeader.startsWith(AUTH_PREFIX)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (this.isBypassRequest(request)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -56,5 +65,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isBypassRequest(HttpServletRequest request) {
+        return bypassEndpoints.contains(request.getRequestURI());
     }
 }

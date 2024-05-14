@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+import java.util.List;
+
 @Entity
 @Table(name = "addresses")
 @AllArgsConstructor
@@ -25,9 +28,13 @@ public class Address {
     private String  ward;
     private String  wardCode;
     private String  detail;
+    private Date    whenCreated;
+    private Date    lastUpdated;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+
 }

@@ -2,11 +2,13 @@ package shop.haui_megatech.domain.dto.order;
 
 import lombok.Builder;
 import shop.haui_megatech.domain.dto.order_detail.OrderOrderDetailResponseDTO;
-import shop.haui_megatech.domain.entity.OrderStatus;
-import shop.haui_megatech.domain.entity.PaymentMethod;
+import shop.haui_megatech.domain.entity.Address;
+import shop.haui_megatech.domain.entity.enums.OrderStatus;
+import shop.haui_megatech.domain.entity.enums.PaymentMethod;
 
 import java.util.Date;
 import java.util.List;
+
 @Builder
 public record OrderItemResponseDTO(
         int orderId,
@@ -19,7 +21,7 @@ public record OrderItemResponseDTO(
         Date orderTime,
         int deliverTime,
         float orderWeight,
-        String address,
+        Address address,
         OrderStatus status,
         List<OrderOrderDetailResponseDTO> orderOrderDetailResponseDTO
 ) {

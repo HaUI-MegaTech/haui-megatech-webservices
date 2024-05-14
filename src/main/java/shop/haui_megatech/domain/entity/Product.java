@@ -76,6 +76,8 @@ public class Product {
     private Integer imported;
     private Float   importPrice;
 
+    private Integer remaining;
+
     private Integer dailyViews;
     private Integer weeklyViews;
     private Integer monthlyViews;
@@ -100,7 +102,7 @@ public class Product {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
     private List<SimilarProduct> similarProducts;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Feedback> feedbacks;
     private Float          averageRating;
 }

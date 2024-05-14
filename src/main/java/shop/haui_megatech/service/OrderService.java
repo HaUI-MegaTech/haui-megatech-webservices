@@ -1,13 +1,14 @@
 package shop.haui_megatech.service;
 
-import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.order.*;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 
 public interface OrderService {
-    PaginationDTO.Response<?> getListOrderForUser(PaginationDTO.Request requestDTO);
+    PaginationResponseDTO<?> getListOrderForUser(PaginationRequestDTO requestDTO);
 
-    PaginationDTO.Response<?> getListOrderForAdmin(PaginationDTO.Request requestDTO);
+    PaginationResponseDTO<?> getListOrderForAdmin(PaginationRequestDTO requestDTO);
 
     CommonResponseDTO<OrderItemResponseDTO> getOrderDetailForUser(Integer userId);
 

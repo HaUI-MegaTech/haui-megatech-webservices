@@ -10,11 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
-import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.order.AddOrderForAdminRequestDTO;
 import shop.haui_megatech.domain.dto.order.AddOrderForUserRequestDTO;
 import shop.haui_megatech.domain.dto.order.ModifyOrderForAdminRequestDTO;
 import shop.haui_megatech.domain.dto.order.ModifyOrderForUserRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.service.OrderService;
 import shop.haui_megatech.utility.ResponseUtil;
 
@@ -22,7 +22,7 @@ import shop.haui_megatech.utility.ResponseUtil;
 @RequiredArgsConstructor
 @Tag(name = "Orders Management REST API")
 public class OrderRestController {
-    private final OrderService orderService;
+    private final OrderService OrderService;
 
     @Operation(summary = "Get an list Orders for User")
     @ApiResponses(
@@ -32,10 +32,10 @@ public class OrderRestController {
             }
     )
     @GetMapping(Endpoint.Order.GET_LIST_BY_USER_ID)
-    public ResponseEntity<?> getListOrdersByUserIdforUser(
-            @ParameterObject PaginationDTO.Request requestDTO
+    public ResponseEntity<?> getListOrdersByUserIdForUser(
+            @ParameterObject PaginationRequestDTO requestDTO
     ) {
-        return ResponseUtil.ok(orderService.getListOrderForUser(requestDTO));
+        return ResponseUtil.ok(OrderService.getListOrderForUser(requestDTO));
     }
 
     @Operation(summary = "Get an list Orders for Admin")
@@ -47,9 +47,9 @@ public class OrderRestController {
     )
     @GetMapping(Endpoint.Order.GET_LIST_FOR_ADMIN)
     public ResponseEntity<?> getListOrdersByUserIdforAdmin(
-            @ParameterObject PaginationDTO.Request requestDTO
+            @ParameterObject PaginationRequestDTO requestDTO
     ) {
-        return ResponseUtil.ok(orderService.getListOrderForAdmin(requestDTO));
+        return ResponseUtil.ok(OrderService.getListOrderForAdmin(requestDTO));
     }
 
     @Operation(summary = "Get an Detail Orders for User")
@@ -60,10 +60,10 @@ public class OrderRestController {
             }
     )
     @GetMapping(Endpoint.Order.GET_DETAIL_FOR_USER)
-    public ResponseEntity<?> getDetailOrderFoUser(
-            @PathVariable(name = "orderId") Integer orderId
+    public ResponseEntity<?> getDetailOrderForUser(
+            @PathVariable(name = "OrderId") Integer OrderId
     ) {
-        return ResponseUtil.ok(orderService.getOrderDetailForUser(orderId));
+        return ResponseUtil.ok(OrderService.getOrderDetailForUser(OrderId));
     }
 
     @Operation(summary = "Get an Detail Orders for Admin")
@@ -75,9 +75,9 @@ public class OrderRestController {
     )
     @GetMapping(Endpoint.Order.GET_DETAIL_FOR_ADMIN)
     public ResponseEntity<?> getDetailOrderForAdmin(
-            @PathVariable(name = "orderId") Integer orderId
+            @PathVariable(name = "OrderId") Integer OrderId
     ) {
-        return ResponseUtil.ok(orderService.getOrderDetailForAdmin(orderId));
+        return ResponseUtil.ok(OrderService.getOrderDetailForAdmin(OrderId));
     }
 
     @Operation(summary = "Add an Order for User")
@@ -91,7 +91,7 @@ public class OrderRestController {
     public ResponseEntity<?> getDetailOrderForUser(
             @RequestBody AddOrderForUserRequestDTO requestDTO
     ) {
-        return ResponseUtil.ok(orderService.addOrderForUser(requestDTO));
+        return ResponseUtil.ok(OrderService.addOrderForUser(requestDTO));
     }
 
     @Operation(summary = "Add an Order for Admin")
@@ -105,7 +105,7 @@ public class OrderRestController {
     public ResponseEntity<?> getDetailOrderForAdmin(
             @RequestBody AddOrderForAdminRequestDTO requestDTO
     ) {
-        return ResponseUtil.ok(orderService.addOrderForAdmin(requestDTO));
+        return ResponseUtil.ok(OrderService.addOrderForAdmin(requestDTO));
     }
 
     @Operation(summary = "Update an Order for User")
@@ -119,7 +119,7 @@ public class OrderRestController {
     public ResponseEntity<?> updateOrderForUser(
             @RequestBody ModifyOrderForUserRequestDTO requestDTO
     ) {
-        return ResponseUtil.ok(orderService.updateOrderForUser(requestDTO));
+        return ResponseUtil.ok(OrderService.updateOrderForUser(requestDTO));
     }
 
     @Operation(summary = "Update an Order for Admin")
@@ -133,7 +133,7 @@ public class OrderRestController {
     public ResponseEntity<?> updateOrderForAdmin(
             @RequestBody ModifyOrderForAdminRequestDTO requestDTO
     ) {
-        return ResponseUtil.ok(orderService.updateOrderForAdmin(requestDTO));
+        return ResponseUtil.ok(OrderService.updateOrderForAdmin(requestDTO));
     }
 
     @Operation(summary = "Delete an Order for Admin")
@@ -145,8 +145,8 @@ public class OrderRestController {
     )
     @DeleteMapping(Endpoint.Order.DELETE_ONE_ORDER)
     public ResponseEntity<?> deleteOrderForAdmin(
-            @PathVariable(name = "orderId") int orderId
+            @PathVariable(name = "OrderId") int OrderId
     ) {
-        return ResponseUtil.ok(orderService.deleteOrderForAdmin(orderId));
+        return ResponseUtil.ok(OrderService.deleteOrderForAdmin(OrderId));
     }
 }

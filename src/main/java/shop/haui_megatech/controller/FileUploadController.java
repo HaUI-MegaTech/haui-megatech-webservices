@@ -19,7 +19,7 @@ public class FileUploadController {
     private final FileUploadService fileUploadService;
 
     @PostMapping("/upload-file")
-    public ResponseEntity<?> uploadFile(@RequestParam("image") MultipartFile multipartFile) {
+    public ResponseEntity<?> uploadFile(@RequestParam("static/images") MultipartFile multipartFile) {
         String imageURL;
         try {
             imageURL = fileUploadService.uploadFile(multipartFile);

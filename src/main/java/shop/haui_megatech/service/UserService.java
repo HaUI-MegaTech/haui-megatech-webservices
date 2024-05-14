@@ -1,17 +1,20 @@
 package shop.haui_megatech.service;
 
-import shop.haui_megatech.domain.dto.UserDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
+import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
+import shop.haui_megatech.domain.dto.user.BriefUserResponseDTO;
+import shop.haui_megatech.domain.dto.user.UpdateUserInfoRequest;
+import shop.haui_megatech.domain.dto.user.UpdateUserPasswordRequest;
 import shop.haui_megatech.service.base.*;
 
-public interface UserService extends Addable<UserDTO.AddRequest>,
-                                     Gettable<UserDTO.Response>,
-                                     Updatable<UserDTO.UpdateInfoRequest>,
+public interface UserService extends Addable<AddUserRequestDTO>,
+                                     Gettable<BriefUserResponseDTO>,
+                                     Updatable<UpdateUserInfoRequest>,
                                      Importable,
                                      HardDeletable,
-                                     SoftDeletable<UserDTO.Response> {
-    CommonResponseDTO<?> updatePassword(Integer userId, UserDTO.UpdatePasswordRequest request);
+                                     SoftDeletable<BriefUserResponseDTO> {
+    CommonResponseDTO<?> updatePassword(Integer userId, UpdateUserPasswordRequest request);
 
     CommonResponseDTO<?> resetPasswordOne(Integer userId);
 

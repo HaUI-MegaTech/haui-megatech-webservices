@@ -28,10 +28,8 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-    private final String                  CATCH_ALL_WILDCARDS = "/**";
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AuthenticationProvider  authenticationProvider;
-    private final String[]                PUBLIC_ENDPOINTS    = {
+    private static final String                  CATCH_ALL_WILDCARDS = "/**";
+    public static final  String[]                PUBLIC_ENDPOINTS    = {
             "/swagger-ui" + CATCH_ALL_WILDCARDS,
             Endpoint.API_V1 + Endpoint.Auth.PREFIX + CATCH_ALL_WILDCARDS,
             "/v3/api-docs" + CATCH_ALL_WILDCARDS,
@@ -42,9 +40,12 @@ public class SecurityConfiguration {
             "/api/v1/outer-search",
             "/api/v1/getDataProductByLink",
             "/api/v1/getDataCommentByLink",
-            Endpoint.API_V1 + Endpoint.Order.PREFIX + CATCH_ALL_WILDCARDS
+            Endpoint.API_V1 + Endpoint.Feedback.GET_LIST_BY_PRODUCT,
+            Endpoint.API_V1 + Endpoint.Payment.CALLBACK
     };
-    private final List<String>            WHITE_LIST_ORIGINS  = List.of(
+    private final        JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final        AuthenticationProvider  authenticationProvider;
+    private final        List<String>            WHITE_LIST_ORIGINS  = List.of(
             "http://localhost:3000",
             "http://localhost:3001"
     );

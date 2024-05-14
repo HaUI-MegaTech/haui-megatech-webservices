@@ -202,6 +202,12 @@
             <artifactId>cloudinary-core</artifactId>
             <version>1.38.0</version>
         </dependency>
+
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

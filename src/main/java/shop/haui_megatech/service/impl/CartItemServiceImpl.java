@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessage;
-import shop.haui_megatech.domain.dto.CartItemDTO;
-import shop.haui_megatech.domain.dto.PaginationDTO;
-import shop.haui_megatech.domain.dto.UserDTO;
+import shop.haui_megatech.domain.dto.cart.BriefCartItemResponseDTO;
+import shop.haui_megatech.domain.dto.cart.CartItemRequestDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
+import shop.haui_megatech.domain.dto.user.FullUserResponseDTO;
 import shop.haui_megatech.domain.entity.CartItem;
 import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.domain.entity.User;
@@ -42,77 +44,72 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepository;
 
     @Override
-    public CommonResponseDTO<?> addOne(CartItemDTO.Request request) {
+    public CommonResponseDTO<?> addOne(Integer productId, CartItemRequestDTO request) {
         if (request.quantity() <= 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
-        Optional<User> foundUser =
-                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
+        User requestedUser = AuthenticationUtil.getRequestedUser();
 
-        if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
-
-        Optional<Product> foundProduct = productRepository.findById(request.productId());
+        Optional<Product> foundProduct = productRepository.findById(productId);
 
         if (foundProduct.isEmpty())
             throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
-        Optional<CartItem> existedCartItem = foundUser.get().getCartItems()
-                                                      .parallelStream()
-                                                      .filter(item -> item.getProduct().getId().equals(request.productId()))
-                                                      .findFirst();
+        Optional<CartItem> existedCartItem = requestedUser.getCartItems()
+                                                          .stream()
+                                                          .filter(item -> item.getProduct().getId().equals(productId))
+                                                          .findFirst();
 
         if (existedCartItem.isPresent()) {
             existedCartItem.get().setQuantity(existedCartItem.get().getQuantity() + request.quantity());
             cartItemRepository.save(existedCartItem.get());
-            return CommonResponseDTO.<UserDTO>builder()
-                                    .success(true)
-                                    .message(messageSourceUtil.getMessage(SuccessMessage.Cart.ADDED_ONE))
-                                    .build();
+            return CommonResponseDTO
+                    .<FullUserResponseDTO>builder()
+                    .success(true)
+                    .message(messageSourceUtil.getMessage(SuccessMessage.Cart.ADDED_ONE))
+                    .build();
         }
 
 
         cartItemRepository.save(CartItem.builder()
                                         .product(foundProduct.get())
-                                        .user(foundUser.get())
+                                        .user(requestedUser)
                                         .quantity(request.quantity())
                                         .build());
 
-        return CommonResponseDTO.<UserDTO>builder()
-                                .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessage.Cart.ADDED_ONE))
-                                .build();
+        return CommonResponseDTO
+                .builder()
+                .success(true)
+                .message(messageSourceUtil.getMessage(SuccessMessage.Cart.ADDED_ONE))
+                .build();
     }
 
     @Override
-    public CommonResponseDTO<?> updateOne(Integer id, CartItemDTO.Request request) {
+    public CommonResponseDTO<?> updateOne(Integer productId, Integer cartItemId, CartItemRequestDTO request) {
         if (request.quantity() <= 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
-        Optional<CartItem> foundCartItem = cartItemRepository.findById(id);
+        Optional<CartItem> foundCartItem = cartItemRepository.findById(cartItemId);
         if (foundCartItem.isEmpty())
             throw new NotFoundException(ErrorMessage.Cart.NOT_FOUND);
 
-        Optional<User> foundUser =
-                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
+        User requestedUser = AuthenticationUtil.getRequestedUser();
 
-        if (foundUser.isEmpty())
+        if (!Objects.equals(foundCartItem.get().getUser().getId(), requestedUser.getId()))
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
-        if (!Objects.equals(foundCartItem.get().getUser().getId(), foundUser.get().getId()))
-            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
-
-        Optional<Product> foundProduct = productRepository.findById(request.productId());
+        Optional<Product> foundProduct = productRepository.findById(productId);
         if (foundProduct.isEmpty())
             throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
         foundCartItem.get().setQuantity(request.quantity());
         cartItemRepository.save(foundCartItem.get());
 
-        return CommonResponseDTO.<UserDTO>builder()
-                                .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessage.Cart.UPDATED_ONE))
-                                .build();
+        return CommonResponseDTO.
+                builder()
+                .success(true)
+                .message(messageSourceUtil.getMessage(SuccessMessage.Cart.UPDATED_ONE))
+                .build();
     }
 
     @Override
@@ -120,18 +117,20 @@ public class CartItemServiceImpl implements CartItemService {
         if (cartItemId < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_ID);
 
-        Optional<User> foundUser =
-                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
+        Optional<User> foundUser = userRepository.findActiveUserByUsername(
+                AuthenticationUtil.getRequestedUser().getUsername()
+        );
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         cartItemRepository.deleteById(cartItemId);
 
-        return CommonResponseDTO.<UserDTO>builder()
-                                .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessage.Cart.HARD_DELETED_ONE))
-                                .build();
+        return CommonResponseDTO.
+                builder()
+                .success(true)
+                .message(messageSourceUtil.getMessage(SuccessMessage.Cart.HARD_DELETED_ONE))
+                .build();
     }
 
     @Override
@@ -160,23 +159,28 @@ public class CartItemServiceImpl implements CartItemService {
 
         cartItemRepository.deleteAllByIds(checkedCartItemIds);
 
-        return CommonResponseDTO.<UserDTO>builder()
-                                .success(true)
-                                .message(messageSourceUtil.getMessage(
-                                                 SuccessMessage.Cart.HARD_DELETED_LIST,
-                                                 checkedCartItemIds.size()
-                                         )
-                                )
-                                .build();
+        return CommonResponseDTO.
+                builder()
+                .success(true)
+                .message(
+                        messageSourceUtil.getMessage(
+                                SuccessMessage.Cart.HARD_DELETED_LIST,
+                                checkedCartItemIds.size()
+                        )
+                )
+                .build();
     }
 
 
     @Override
-    public PaginationDTO.Response<CartItemDTO.Response> getCartItems(PaginationDTO.Request request) {
+    public PaginationResponseDTO<BriefCartItemResponseDTO> getListByUser(Integer userId, PaginationRequestDTO request) {
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
+            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
+
+        if (!Objects.equals(foundUser.get().getId(), userId))
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
@@ -193,34 +197,43 @@ public class CartItemServiceImpl implements CartItemService {
             int pageCount = 0;
             for (String keyword : keywords) {
                 ++pageCount;
-                Page<CartItem> page =
-                        cartItemRepository.searchCartItemsByUserIdAndKeyword(keyword, foundUser.get().getId(), pageable);
+                Page<CartItem> page = cartItemRepository.searchCartItemsByUserIdAndKeyword(
+                        keyword,
+                        foundUser.get().getId(),
+                        pageable
+                );
                 cartItems.addAll(page.getContent());
             }
-            return PaginationDTO.Response.<CartItemDTO.Response>builder()
-                                         .keyword(request.keyword())
-                                         .pageIndex(request.index())
-                                         .pageSize(request.limit())
-                                         .totalItems((long) cartItems.size())
-                                         .totalPages(pageCount)
-                                         .items(cartItems.parallelStream()
-                                                         .map(CartItemMapper.INSTANCE::toCartItemResponseDTO)
-                                                         .collect(Collectors.toList()))
-                                         .build();
+            return PaginationResponseDTO
+                    .<BriefCartItemResponseDTO>builder()
+                    .keyword(request.keyword())
+                    .pageIndex(request.index())
+                    .pageSize(request.limit())
+                    .totalItems((long) cartItems.size())
+                    .totalPages(pageCount)
+                    .items(cartItems
+                            .parallelStream()
+                            .map(CartItemMapper.INSTANCE::toBriefCartItemResponseDTO)
+                            .collect(Collectors.toList())
+                    )
+                    .build();
         }
 
         Page<CartItem> page = cartItemRepository.getCartItemsByUserId(foundUser.get().getId(), pageable);
 
         List<CartItem> cartItems = page.getContent();
 
-        return PaginationDTO.Response.<CartItemDTO.Response>builder()
-                                     .pageIndex(request.index())
-                                     .pageSize((short) page.getNumberOfElements())
-                                     .totalItems(page.getTotalElements())
-                                     .totalPages(page.getTotalPages())
-                                     .items(cartItems.parallelStream()
-                                                     .map(CartItemMapper.INSTANCE::toCartItemResponseDTO)
-                                                     .collect(Collectors.toList()))
-                                     .build();
+        return PaginationResponseDTO
+                .<BriefCartItemResponseDTO>builder()
+                .pageIndex(request.index())
+                .pageSize((short) page.getNumberOfElements())
+                .totalItems(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .items(cartItems
+                        .parallelStream()
+                        .map(CartItemMapper.INSTANCE::toBriefCartItemResponseDTO)
+                        .collect(Collectors.toList())
+                )
+                .build();
     }
 }

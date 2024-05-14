@@ -7,10 +7,12 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
-import shop.haui_megatech.domain.dto.CartItemDTO;
-import shop.haui_megatech.domain.dto.PaginationDTO;
+import shop.haui_megatech.domain.dto.cart.BriefCartItemResponseDTO;
+import shop.haui_megatech.domain.dto.cart.CartItemRequestDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.service.CartItemService;
 
 import java.util.List;
@@ -24,38 +26,42 @@ public class CartItemRestController {
 
     @PostMapping(Endpoint.CartItem.ADD_ONE)
     public CommonResponseDTO<?> addCartItem(
-            @RequestBody CartItemDTO.Request request
+            @PathVariable Integer productId,
+            @RequestBody CartItemRequestDTO request
     ) {
-        return cartItemService.addOne(request);
+        return cartItemService.addOne(productId, request);
     }
 
-    @GetMapping(Endpoint.CartItem.GET_LIST)
-    public PaginationDTO.Response<CartItemDTO.Response> getCartItems(
-            @ParameterObject PaginationDTO.Request request
+    @GetMapping(Endpoint.CartItem.GET_LIST_BY_USER)
+    public PaginationResponseDTO<BriefCartItemResponseDTO> getListByUser(
+            @PathVariable Integer userId,
+            @ParameterObject PaginationRequestDTO request
     ) {
-        return cartItemService.getCartItems(request);
+        return cartItemService.getListByUser(userId, request);
     }
 
     @PutMapping(Endpoint.CartItem.UPDATE_ONE)
     public CommonResponseDTO<?> updateCartItem(
+            @PathVariable Integer productId,
             @PathVariable Integer cartItemId,
-            @RequestBody CartItemDTO.Request request
+            @RequestBody CartItemRequestDTO request
     ) {
-        return cartItemService.updateOne(cartItemId, request);
+        return cartItemService.updateOne(productId, cartItemId, request);
     }
 
     @DeleteMapping(Endpoint.CartItem.DELETE)
     public CommonResponseDTO<?> deleteCartItems(
-            @PathVariable String cartItemIds
+            @RequestParam String ids
     ) {
         return cartItemService.hardDeleteList(
-                ListIdsRequestDTO.builder()
-                                 .ids(List.of(cartItemIds.split(","))
-                                          .parallelStream()
-                                          .map(Integer::parseInt)
-                                          .toList()
-                                 )
-                                 .build()
+                ListIdsRequestDTO
+                        .builder()
+                        .ids(List.of(ids.split(","))
+                                 .parallelStream()
+                                 .map(Integer::parseInt)
+                                 .toList()
+                        )
+                        .build()
         );
     }
 }

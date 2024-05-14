@@ -13,8 +13,11 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(
-            "SELECT u FROM User u " +
-            "WHERE u.username = :username AND (u.deleted = false OR u.deleted IS NULL)"
+            """
+            SELECT u FROM User u
+            WHERE u.username = :username
+                AND (u.deleted = false OR u.deleted IS NULL)
+            """
     )
     Optional<User> findActiveUserByUsername(String username);
 
@@ -23,31 +26,39 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 
     @Query(
-            "SELECT u FROM User u " +
-            "WHERE u.deleted = false OR u.deleted IS NULL"
+            """
+            SELECT u FROM User u
+            WHERE u.deleted = false OR u.deleted IS NULL
+            """
     )
     Page<User> getAllActiveUsers(Pageable pageable);
 
 
     @Query(
-            "SELECT u FROM User u " +
-            "WHERE u.deleted = true"
+            """
+            SELECT u FROM User u
+            WHERE u.deleted = true
+            """
     )
     Page<User> getAllDeletedUsers(Pageable pageable);
 
 
     @Query(
-            "SELECT u FROM User u " +
-            "WHERE (u.username LIKE %?1% OR u.email LIKE %?1%) " +
-            "AND (u.deleted = false OR u.deleted IS NULL)"
+            """
+            SELECT u FROM User u
+            WHERE (u.username LIKE %?1% OR u.email LIKE %?1%)
+                AND (u.deleted = false OR u.deleted IS NULL)
+            """
     )
     Page<User> searchActiveUsers(String keyword, Pageable pageable);
 
 
     @Query(
-            "SELECT u FROM User u " +
-            "WHERE (u.username LIKE %?1% OR u.email LIKE %?1%) " +
-            "AND u.deleted = true"
+            """
+            SELECT u FROM User u
+            WHERE (u.username LIKE %?1% OR u.email LIKE %?1%)
+                AND u.deleted = true
+            """
     )
     Page<User> searchDeletedUsers(String keyword, Pageable pageable);
 }

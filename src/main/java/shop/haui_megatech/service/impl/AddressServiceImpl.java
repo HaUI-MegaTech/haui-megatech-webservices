@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.SuccessMessage;
-import shop.haui_megatech.domain.dto.AddressDTO;
+import shop.haui_megatech.domain.dto.address.AddressRequestDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.entity.Address;
 import shop.haui_megatech.domain.entity.User;
@@ -27,7 +27,7 @@ public class AddressServiceImpl implements AddressService {
     private final MessageSourceUtil messageSourceUtil;
 
     @Override
-    public CommonResponseDTO<?> addOne(Integer userId, AddressDTO.Request request) {
+    public CommonResponseDTO<?> addOne(Integer userId, AddressRequestDTO request) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
         if (requestedUser == null)
             throw new AppException(ErrorMessage.Auth.UNAUTHORIZED);
@@ -35,6 +35,7 @@ public class AddressServiceImpl implements AddressService {
         if (!Objects.equals(requestedUser.getId(), userId))
             throw new AppException(ErrorMessage.Auth.MALFORMED);
         Address address = AddressMapper.INSTANCE.toAddress(request);
+        address.setWhenCreated(new Date(Instant.now().toEpochMilli()));
         address.setUser(requestedUser);
         requestedUser.getAddresses().add(address);
         requestedUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));
@@ -47,7 +48,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public CommonResponseDTO<?> updateOne(Integer userId, Integer addressId, AddressDTO.Request request) {
+    public CommonResponseDTO<?> updateOne(Integer userId, Integer addressId, AddressRequestDTO request) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
         if (requestedUser == null)
             throw new AppException(ErrorMessage.Auth.UNAUTHORIZED);
@@ -75,6 +76,7 @@ public class AddressServiceImpl implements AddressService {
                          if (request.detail() != null) {
                              item.setDetail(request.detail());
                          }
+                         item.setLastUpdated(new Date(Instant.now().toEpochMilli()));
                      });
         requestedUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));
         userRepository.save(requestedUser);

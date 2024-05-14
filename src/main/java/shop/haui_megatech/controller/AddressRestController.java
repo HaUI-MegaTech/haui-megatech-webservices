@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
-import shop.haui_megatech.domain.dto.AddressDTO;
+import shop.haui_megatech.domain.dto.address.AddressRequestDTO;
 import shop.haui_megatech.service.AddressService;
 import shop.haui_megatech.utility.ResponseUtil;
 
@@ -21,7 +21,7 @@ public class AddressRestController {
     @PostMapping(Endpoint.Address.ADD_ONE)
     public ResponseEntity<?> addOne(
             @PathVariable Integer userId,
-            @RequestBody AddressDTO.Request request
+            @RequestBody AddressRequestDTO request
     ) {
         return ResponseUtil.created(addressService.addOne(userId, request));
     }
@@ -30,7 +30,7 @@ public class AddressRestController {
     public ResponseEntity<?> updateOne(
             @PathVariable Integer userId,
             @PathVariable Integer addressId,
-            @RequestBody AddressDTO.Request request
+            @RequestBody AddressRequestDTO request
     ) {
         return ResponseUtil.ok(addressService.updateOne(userId, addressId, request));
     }

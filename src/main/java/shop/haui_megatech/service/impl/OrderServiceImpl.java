@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessage;
-import shop.haui_megatech.domain.dto.PaginationDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.order.*;
+import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.entity.Order;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.OrderMapper;
@@ -35,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository   orderRepository;
 
     @Override
-    public PaginationDTO.Response<?> getListOrderForUser(PaginationDTO.Request requestDTO) {
+    public PaginationResponseDTO<?> getListOrderForUser(PaginationRequestDTO requestDTO) {
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
@@ -59,20 +60,20 @@ public class OrderServiceImpl implements OrderService {
                            : orderRepository.searchOrderForUser(requestDTO.keyword(), foundUser.get().getId(), pageable);
 
         List<Order> orders = page.getContent();
-        return PaginationDTO.Response.<OrderBaseDTO>builder()
-                                     .keyword(requestDTO.keyword())
-                                     .pageIndex(requestDTO.index())
-                                     .pageSize((short) page.getNumberOfElements())
-                                     .totalItems(page.getTotalElements())
-                                     .totalPages(page.getTotalPages())
-                                     .items(orders
-                                                    .stream()
-                                                    .map(orderMapper::orderToOrderBase).toList())
-                                     .build();
+        return PaginationResponseDTO.<OrderBaseDTO>builder()
+                                    .keyword(requestDTO.keyword())
+                                    .pageIndex(requestDTO.index())
+                                    .pageSize((short) page.getNumberOfElements())
+                                    .totalItems(page.getTotalElements())
+                                    .totalPages(page.getTotalPages())
+                                    .items(orders
+                                            .stream()
+                                            .map(orderMapper::orderToOrderBase).toList())
+                                    .build();
     }
 
     @Override
-    public PaginationDTO.Response<?> getListOrderForAdmin(PaginationDTO.Request requestDTO) {
+    public PaginationResponseDTO<?> getListOrderForAdmin(PaginationRequestDTO requestDTO) {
         if (requestDTO.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
@@ -89,16 +90,16 @@ public class OrderServiceImpl implements OrderService {
                            : orderRepository.searchOrderForAdmin(requestDTO.keyword(), pageable);
 
         List<Order> orders = page.getContent();
-        return PaginationDTO.Response.<OrderBaseDTO>builder()
-                                     .keyword(requestDTO.keyword())
-                                     .pageIndex(requestDTO.index())
-                                     .pageSize((short) page.getNumberOfElements())
-                                     .totalItems(page.getTotalElements())
-                                     .totalPages(page.getTotalPages())
-                                     .items(orders
-                                                    .stream()
-                                                    .map(orderMapper::orderToOrderBase).toList())
-                                     .build();
+        return PaginationResponseDTO.<OrderBaseDTO>builder()
+                                    .keyword(requestDTO.keyword())
+                                    .pageIndex(requestDTO.index())
+                                    .pageSize((short) page.getNumberOfElements())
+                                    .totalItems(page.getTotalElements())
+                                    .totalPages(page.getTotalPages())
+                                    .items(orders
+                                            .stream()
+                                            .map(orderMapper::orderToOrderBase).toList())
+                                    .build();
     }
 
     @Override

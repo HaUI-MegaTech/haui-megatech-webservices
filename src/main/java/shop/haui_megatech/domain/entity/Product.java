@@ -105,4 +105,5 @@ public class Product {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Feedback> feedbacks;
     private Float          averageRating;
+    private Integer        feedbacksCount;
 }

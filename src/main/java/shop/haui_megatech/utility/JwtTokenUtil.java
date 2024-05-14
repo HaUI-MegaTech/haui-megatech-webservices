@@ -49,8 +49,8 @@ public class JwtTokenUtil {
                    .setSubject(userDetails.getUsername())
                    .setIssuedAt(new Date(Instant.now().toEpochMilli()))
                    .setExpiration(new Date(
-                                          Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()
-                                  )
+                                   Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()
+                           )
                    )
                    .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                    .compact();

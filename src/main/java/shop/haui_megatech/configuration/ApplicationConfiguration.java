@@ -15,6 +15,7 @@ import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.utility.FakeDataGenerator;
+import shop.haui_megatech.utility.MyCustomUtil;
 
 import java.text.DecimalFormat;
 
@@ -58,9 +59,11 @@ public class ApplicationConfiguration {
 //    }
 
     @Bean
-    public CommandLineRunner commandLineRunner(FakeDataGenerator fakeDataGenerator) {
+    public CommandLineRunner commandLineRunner(FakeDataGenerator fakeDataGenerator, MyCustomUtil myCustomUtil) {
         return args -> {
 //            fakeDataGenerator.fakeProductData();
+//            myCustomUtil.calculateProductRatingAverage();
+//            myCustomUtil.countProductFeedbacks();
         };
     }
 }

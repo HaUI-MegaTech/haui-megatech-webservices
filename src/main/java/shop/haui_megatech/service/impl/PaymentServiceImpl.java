@@ -35,6 +35,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final CartItemRepository   cartItemRepository;
     private final OrderRepository      orderRepository;
     private final AddressRepository    addressRepository;
+    private final ProductRepository    productRepository;
 
     @Override
     public PaymentResponseDTO createPayment(HttpServletRequest request) {
@@ -118,10 +119,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public void resolvePayment(String ids, Integer userId, Integer addressId) {
-        List<Integer> cartItemIds = Arrays.stream(ids.split(","))
-                                          .map(String::trim)
-                                          .map(Integer::valueOf)
-                                          .toList();
+        List<Integer> selectedCartItemIds = Arrays.stream(ids.split(","))
+                                                  .map(String::trim)
+                                                  .map(Integer::valueOf)
+                                                  .toList();
 
         Order order = Order.builder()
                            .paymentMethod(PaymentMethod.THE_TIN_DUNG)
@@ -137,28 +138,39 @@ public class PaymentServiceImpl implements PaymentService {
                            )
                            .build();
 
-        List<CartItem> cartItems = cartItemRepository.findAllById(cartItemIds);
+        List<CartItem> selectedCartItems = cartItemRepository.findAllById(selectedCartItemIds);
 
-        List<OrderDetail> orderDetails = cartItems.parallelStream()
-                                                  .map(item -> OrderDetail.builder()
-                                                                          .quantity(item.getQuantity())
-                                                                          .price(item.getQuantity() * item.getProduct().getCurrentPrice())
-                                                                          .order(null)
-                                                                          .product(item.getProduct())
-                                                                          .build()
-                                                  )
-                                                  .toList();
+        List<OrderDetail> orderDetails =
+                selectedCartItems
+                        .parallelStream()
+                        .map(item -> OrderDetail.builder()
+                                                .quantity(item.getQuantity())
+                                                .price(item.getQuantity() * item.getProduct().getCurrentPrice())
+                                                .order(null)
+                                                .product(item.getProduct())
+                                                .build()
+                        )
+                        .toList();
         order.setOrderDetails(orderDetails);
         order.setSubTotal((float) orderDetails.parallelStream().mapToDouble(OrderDetail::getPrice).sum());
         order.setTotal(order.getSubTotal() * (order.getTax() + 1));
         order.setUser(userRepository.findById(userId)
                                     .orElseThrow(() -> new NotFoundException(ErrorMessage.User.NOT_FOUND))
         );
+        selectedCartItems.forEach(item -> {
+            int curProdTotalSold = item.getProduct().getTotalSold();
+            curProdTotalSold += item.getQuantity();
+            int remaining = item.getProduct().getRemaining();
+            remaining -= item.getQuantity();
+            item.getProduct().setTotalSold(curProdTotalSold);
+            item.getProduct().setRemaining(remaining);
+            productRepository.save(item.getProduct());
+        });
 
         orderDetails.forEach(orderDetail -> orderDetail.setOrder(order));
         order.setOrderDetails(orderDetails);
         orderRepository.save(order);
-        cartItemRepository.deleteAllByIds(cartItemIds);
+        cartItemRepository.deleteAllByIds(selectedCartItemIds);
     }
 
     @Override

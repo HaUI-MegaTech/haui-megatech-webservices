@@ -1,6 +1,7 @@
 package shop.haui_megatech.configuration;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,14 +15,14 @@ import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.job.crawl.ExternalCrawler;
 import shop.haui_megatech.repository.UserRepository;
+import shop.haui_megatech.utility.FakeDataGenerator;
 
 import java.text.DecimalFormat;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
-    private final UserRepository  userRepository;
-    private final ExternalCrawler externalCrawler;
+    private final UserRepository userRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -56,4 +57,11 @@ public class ApplicationConfiguration {
 //    public CommandLineRunner commandLineRunner() {
 //        return args -> externalCrawler.crawl();
 //    }
+
+    @Bean
+    public CommandLineRunner commandLineRunner(FakeDataGenerator fakeDataGenerator) {
+        return args -> {
+//            fakeDataGenerator.fakeProductData();
+        };
+    }
 }

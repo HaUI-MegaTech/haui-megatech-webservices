@@ -26,9 +26,10 @@ public class CartItemRestController {
 
     @PostMapping(Endpoint.CartItem.ADD_ONE)
     public CommonResponseDTO<?> addCartItem(
+            @PathVariable Integer productId,
             @RequestBody CartItemRequestDTO request
     ) {
-        return cartItemService.addOne(request);
+        return cartItemService.addOne(productId, request);
     }
 
     @GetMapping(Endpoint.CartItem.GET_LIST_BY_USER)
@@ -41,10 +42,11 @@ public class CartItemRestController {
 
     @PutMapping(Endpoint.CartItem.UPDATE_ONE)
     public CommonResponseDTO<?> updateCartItem(
+            @PathVariable Integer productId,
             @PathVariable Integer cartItemId,
             @RequestBody CartItemRequestDTO request
     ) {
-        return cartItemService.updateOne(cartItemId, request);
+        return cartItemService.updateOne(productId, cartItemId, request);
     }
 
     @DeleteMapping(Endpoint.CartItem.DELETE)

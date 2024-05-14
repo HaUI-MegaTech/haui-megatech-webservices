@@ -13,6 +13,7 @@ public record FullProductResponseDTO(
         Float oldPrice,
         Float currentPrice,
         Integer discountPercent,
+        Integer remaining,
 
         String processor,
         Integer cores,

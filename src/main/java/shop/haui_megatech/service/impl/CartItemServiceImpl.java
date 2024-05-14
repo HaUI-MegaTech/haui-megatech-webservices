@@ -44,25 +44,21 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepository;
 
     @Override
-    public CommonResponseDTO<?> addOne(CartItemRequestDTO request) {
+    public CommonResponseDTO<?> addOne(Integer productId, CartItemRequestDTO request) {
         if (request.quantity() <= 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
-        Optional<User> foundUser =
-                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
+        User requestedUser = AuthenticationUtil.getRequestedUser();
 
-        if (foundUser.isEmpty())
-            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
-
-        Optional<Product> foundProduct = productRepository.findById(request.productId());
+        Optional<Product> foundProduct = productRepository.findById(productId);
 
         if (foundProduct.isEmpty())
             throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
-        Optional<CartItem> existedCartItem = foundUser.get().getCartItems()
-                                                      .parallelStream()
-                                                      .filter(item -> item.getProduct().getId().equals(request.productId()))
-                                                      .findFirst();
+        Optional<CartItem> existedCartItem = requestedUser.getCartItems()
+                                                          .stream()
+                                                          .filter(item -> item.getProduct().getId().equals(productId))
+                                                          .findFirst();
 
         if (existedCartItem.isPresent()) {
             existedCartItem.get().setQuantity(existedCartItem.get().getQuantity() + request.quantity());
@@ -77,7 +73,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         cartItemRepository.save(CartItem.builder()
                                         .product(foundProduct.get())
-                                        .user(foundUser.get())
+                                        .user(requestedUser)
                                         .quantity(request.quantity())
                                         .build());
 
@@ -89,24 +85,20 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CommonResponseDTO<?> updateOne(Integer id, CartItemRequestDTO request) {
+    public CommonResponseDTO<?> updateOne(Integer productId, Integer cartItemId, CartItemRequestDTO request) {
         if (request.quantity() <= 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
-        Optional<CartItem> foundCartItem = cartItemRepository.findById(id);
+        Optional<CartItem> foundCartItem = cartItemRepository.findById(cartItemId);
         if (foundCartItem.isEmpty())
             throw new NotFoundException(ErrorMessage.Cart.NOT_FOUND);
 
-        Optional<User> foundUser =
-                userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
+        User requestedUser = AuthenticationUtil.getRequestedUser();
 
-        if (foundUser.isEmpty())
+        if (!Objects.equals(foundCartItem.get().getUser().getId(), requestedUser.getId()))
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
-        if (!Objects.equals(foundCartItem.get().getUser().getId(), foundUser.get().getId()))
-            throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
-
-        Optional<Product> foundProduct = productRepository.findById(request.productId());
+        Optional<Product> foundProduct = productRepository.findById(productId);
         if (foundProduct.isEmpty())
             throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 

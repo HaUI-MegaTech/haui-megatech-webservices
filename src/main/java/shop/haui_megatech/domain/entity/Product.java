@@ -76,6 +76,8 @@ public class Product {
     private Integer imported;
     private Float   importPrice;
 
+    private Integer remaining;
+
     private Integer dailyViews;
     private Integer weeklyViews;
     private Integer monthlyViews;

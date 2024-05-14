@@ -49,12 +49,12 @@ public class User implements UserDetails {
     private Date    whenDeleted;
     private Boolean deleted;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CartItem> cartItems;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Feedback> feedbacks;
-    
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

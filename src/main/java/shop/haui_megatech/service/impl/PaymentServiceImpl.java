@@ -15,8 +15,6 @@ import shop.haui_megatech.domain.entity.enums.OrderStatus;
 import shop.haui_megatech.domain.entity.enums.PaymentMethod;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.*;
-import shop.haui_megatech.service.CartItemService;
-import shop.haui_megatech.service.OrderService;
 import shop.haui_megatech.service.PaymentService;
 import shop.haui_megatech.utility.AuthenticationUtil;
 import shop.haui_megatech.utility.PaymentUtil;

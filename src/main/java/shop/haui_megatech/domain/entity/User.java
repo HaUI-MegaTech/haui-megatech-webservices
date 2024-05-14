@@ -7,11 +7,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import shop.haui_megatech.domain.entity.enums.Authority;
 import shop.haui_megatech.domain.entity.enums.Gender;
 import shop.haui_megatech.domain.entity.enums.Role;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;

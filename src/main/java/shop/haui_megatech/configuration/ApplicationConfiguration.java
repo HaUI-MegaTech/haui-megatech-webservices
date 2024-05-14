@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.exception.NotFoundException;
-import shop.haui_megatech.job.crawl.ExternalCrawler;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.utility.FakeDataGenerator;
 

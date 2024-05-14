@@ -17,7 +17,6 @@ import shop.haui_megatech.configuration.security.SecurityConfiguration;
 import shop.haui_megatech.utility.JwtTokenUtil;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

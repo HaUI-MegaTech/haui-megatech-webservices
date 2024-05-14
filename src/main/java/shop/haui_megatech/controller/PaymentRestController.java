@@ -4,13 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
-import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.service.PaymentService;
-import shop.haui_megatech.utility.AuthenticationUtil;
 import shop.haui_megatech.utility.ResponseUtil;
 
 import java.io.IOException;

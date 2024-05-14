@@ -4,11 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -127,6 +125,8 @@ public class SecurityConfiguration {
                            .requestMatchers(GET, Endpoint.V1.Location.GET_ALL_PROVINCES).permitAll()
                            .requestMatchers(GET, Endpoint.V1.Location.GET_ALL_DISTRICTS).permitAll()
                            .requestMatchers(GET, Endpoint.V1.Location.GET_ALL_WARDS).permitAll()
+
+                           // Order
                            .requestMatchers(GET, Endpoint.V1.Order.GET_LIST_BY_USER_ID).hasAuthority(Authority.READ_ORDER.getName())
                            .requestMatchers(GET, Endpoint.V1.Order.GET_LIST_FOR_ADMIN).hasAuthority(Authority.READ_ORDER.getName())
                            .requestMatchers(GET, Endpoint.V1.Order.GET_DETAIL_FOR_USER).hasAuthority(Authority.READ_ORDER.getName())

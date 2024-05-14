@@ -10,6 +10,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @RestController
-@RequestMapping(Endpoint.API_V1)
 public @interface RestApiV1 {
 }

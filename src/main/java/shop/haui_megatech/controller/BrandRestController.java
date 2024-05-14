@@ -28,7 +28,7 @@ public class BrandRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(Endpoint.Brand.GET_ONE)
+    @GetMapping(Endpoint.V1.Brand.GET_ONE)
     public ResponseEntity<?> getOne(
             @PathVariable Integer brandId
     ) {
@@ -38,7 +38,7 @@ public class BrandRestController {
 
     @Operation(summary = "Get active Brands with pagination")
     @ApiResponse(responseCode = "200", description = "OK")
-    @GetMapping(Endpoint.Brand.GET_ACTIVE_LIST)
+    @GetMapping(Endpoint.V1.Brand.GET_ACTIVE_LIST)
     public ResponseEntity<?> getActiveList(
             @ParameterObject PaginationRequestDTO request
     ) {

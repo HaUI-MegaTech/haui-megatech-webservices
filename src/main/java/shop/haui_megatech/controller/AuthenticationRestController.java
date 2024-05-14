@@ -18,21 +18,21 @@ import shop.haui_megatech.utility.ResponseUtil;
 public class AuthenticationRestController {
     private final AuthenticationService service;
 
-    @PostMapping(Endpoint.Auth.REGISTER)
+    @PostMapping(Endpoint.V1.Auth.REGISTER)
     public ResponseEntity<?> register(
             @RequestBody AddUserRequestDTO request
     ) {
         return ResponseUtil.ok(service.register(request));
     }
 
-    @PostMapping(Endpoint.Auth.AUTHENTICATE)
+    @PostMapping(Endpoint.V1.Auth.AUTHENTICATE)
     public ResponseEntity<?> authenticate(
             @RequestBody AuthenticationRequestDTO request
     ) {
         return ResponseUtil.ok(service.authenticate(request));
     }
 
-    @PostMapping(Endpoint.Auth.REFRESH)
+    @PostMapping(Endpoint.V1.Auth.REFRESH)
     public ResponseEntity<?> refresh(
             @RequestBody AuthenticationRequestDTO request
     ) {

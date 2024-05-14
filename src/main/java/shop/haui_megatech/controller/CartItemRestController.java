@@ -24,7 +24,7 @@ import java.util.List;
 public class CartItemRestController {
     private final CartItemService cartItemService;
 
-    @PostMapping(Endpoint.CartItem.ADD_ONE)
+    @PostMapping(Endpoint.V1.CartItem.ADD_ONE)
     public CommonResponseDTO<?> addCartItem(
             @PathVariable Integer productId,
             @RequestBody CartItemRequestDTO request
@@ -32,7 +32,7 @@ public class CartItemRestController {
         return cartItemService.addOne(productId, request);
     }
 
-    @GetMapping(Endpoint.CartItem.GET_LIST_BY_USER)
+    @GetMapping(Endpoint.V1.CartItem.GET_LIST_BY_USER)
     public PaginationResponseDTO<BriefCartItemResponseDTO> getListByUser(
             @PathVariable Integer userId,
             @ParameterObject PaginationRequestDTO request
@@ -40,7 +40,7 @@ public class CartItemRestController {
         return cartItemService.getListByUser(userId, request);
     }
 
-    @PutMapping(Endpoint.CartItem.UPDATE_ONE)
+    @PutMapping(Endpoint.V1.CartItem.UPDATE_ONE)
     public CommonResponseDTO<?> updateCartItem(
             @PathVariable Integer productId,
             @PathVariable Integer cartItemId,
@@ -49,7 +49,7 @@ public class CartItemRestController {
         return cartItemService.updateOne(productId, cartItemId, request);
     }
 
-    @DeleteMapping(Endpoint.CartItem.DELETE)
+    @DeleteMapping(Endpoint.V1.CartItem.DELETE)
     public CommonResponseDTO<?> deleteCartItems(
             @RequestParam String ids
     ) {

@@ -5,10 +5,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
@@ -36,7 +38,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @GetMapping(Endpoint.User.GET_ONE)
+    @GetMapping(Endpoint.V1.User.GET_ONE)
     public ResponseEntity<?> getOne(
             @PathVariable Integer userId
     ) {
@@ -53,7 +55,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             }
     )
-    @PostMapping(Endpoint.User.ADD_ONE)
+    @PostMapping(Endpoint.V1.User.ADD_ONE)
     public ResponseEntity<?> addOne(
             @RequestBody @Valid AddUserRequestDTO request
     ) {
@@ -70,7 +72,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             }
     )
-    @PostMapping(Endpoint.User.IMPORT_EXCEL)
+    @PostMapping(Endpoint.V1.User.IMPORT_EXCEL)
     public ResponseEntity<?> importExcel(
             @ParameterObject ImportDataRequestDTO request
     ) {
@@ -87,7 +89,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             }
     )
-    @PostMapping(Endpoint.User.IMPORT_CSV)
+    @PostMapping(Endpoint.V1.User.IMPORT_CSV)
     public ResponseEntity<?> importCsv(
             @ParameterObject ImportDataRequestDTO request
     ) {
@@ -103,7 +105,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PutMapping(Endpoint.User.UPDATE_INFO)
+    @PutMapping(Endpoint.V1.User.UPDATE_INFO)
     public ResponseEntity<?> updateInfo(
             @PathVariable Integer userId,
             @ModelAttribute UpdateUserInfoRequest request
@@ -122,7 +124,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error")
             }
     )
-    @PatchMapping(Endpoint.User.UPDATE_PASSWORD)
+    @PatchMapping(Endpoint.V1.User.UPDATE_PASSWORD)
     public ResponseEntity<?> updatePassword(
             @PathVariable Integer userId,
             @RequestBody UpdateUserPasswordRequest request
@@ -139,7 +141,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(Endpoint.User.SOFT_DELETE_ONE)
+    @PatchMapping(Endpoint.V1.User.SOFT_DELETE_ONE)
     public ResponseEntity<?> softDeleteOne(
             @PathVariable Integer userId
     ) {
@@ -155,7 +157,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(Endpoint.User.SOFT_DELETE_LIST)
+    @PatchMapping(Endpoint.V1.User.SOFT_DELETE_LIST)
     public ResponseEntity<?> softDeleteList(
             @RequestBody ListIdsRequestDTO request
     ) {
@@ -171,7 +173,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @DeleteMapping(Endpoint.User.HARD_DELETE_ONE)
+    @DeleteMapping(Endpoint.V1.User.HARD_DELETE_ONE)
     public ResponseEntity<?> hardDeleteOne(
             @PathVariable Integer userId
     ) {
@@ -187,7 +189,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @DeleteMapping(Endpoint.User.HARD_DELETE_LIST)
+    @DeleteMapping(Endpoint.V1.User.HARD_DELETE_LIST)
     public ResponseEntity<?> hardDeleteList(
             @RequestBody ListIdsRequestDTO request
     ) {
@@ -203,7 +205,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(Endpoint.User.RESTORE_ONE)
+    @PatchMapping(Endpoint.V1.User.RESTORE_ONE)
     public ResponseEntity<?> restoreOne(
             @PathVariable Integer userId
     ) {
@@ -219,7 +221,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(Endpoint.User.RESTORE_LIST)
+    @PatchMapping(Endpoint.V1.User.RESTORE_LIST)
     public ResponseEntity<?> restoreList(
             @RequestBody ListIdsRequestDTO request
     ) {
@@ -235,7 +237,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(Endpoint.User.RESET_PASSWORD_ONE)
+    @PatchMapping(Endpoint.V1.User.RESET_PASSWORD_ONE)
     public ResponseEntity<?> resetPasswordOne(
             @PathVariable Integer userId
     ) {
@@ -251,7 +253,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "Not Found")
             }
     )
-    @PatchMapping(Endpoint.User.RESET_PASSWORD_LIST)
+    @PatchMapping(Endpoint.V1.User.RESET_PASSWORD_LIST)
     public ResponseEntity<?> resetPasswordList(
             @RequestBody ListIdsRequestDTO request
     ) {
@@ -266,7 +268,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden")
             }
     )
-    @GetMapping(Endpoint.User.GET_ACTIVE_LIST)
+    @GetMapping(Endpoint.V1.User.GET_ACTIVE_LIST)
     public ResponseEntity<?> getActiveList(@ParameterObject PaginationRequestDTO request) {
         return ResponseUtil.ok(userService.getList(request));
     }
@@ -279,7 +281,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "403", description = "Forbidden")
             }
     )
-    @GetMapping(Endpoint.User.GET_DELETED_LIST)
+    @GetMapping(Endpoint.V1.User.GET_DELETED_LIST)
     public ResponseEntity<?> getDeletedList(@ParameterObject PaginationRequestDTO request) {
         return ResponseUtil.ok(userService.getDeletedList(request));
     }

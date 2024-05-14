@@ -5,9 +5,13 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import shop.haui_megatech.domain.entity.enums.Authority;
 import shop.haui_megatech.domain.entity.enums.Gender;
+import shop.haui_megatech.domain.entity.enums.Role;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -43,8 +47,8 @@ public class User implements UserDetails {
     @CreatedDate
     private Date whenCreated;
 
-    private Date    lastLogined;
-    private Integer logined;
+    private Date    lastLoggedIn;
+    private Integer loggedIn;
 
     private Date    whenDeleted;
     private Boolean deleted;
@@ -55,9 +59,15 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Feedback> feedbacks;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return role.getAuthorities()
+                   .parallelStream()
+                   .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+                   .toList();
     }
 
     @Override

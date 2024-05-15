@@ -110,7 +110,7 @@ public class SecurityConfiguration {
                            .requestMatchers(GET, Endpoint.V1.Brand.GET_ACTIVE_LIST).hasAuthority(Authority.READ_BRAND.getName())
 
                            // Cart Item
-                           .requestMatchers(GET, Endpoint.V1.CartItem.GET_LIST_BY_USER).hasAuthority(Authority.READ_CART_ITEM.getName())
+                           .requestMatchers(GET, Endpoint.V1.CartItem.GET_LIST).hasAuthority(Authority.READ_CART_ITEM.getName())
                            .requestMatchers(POST, Endpoint.V1.CartItem.ADD_ONE).hasAuthority(Authority.CREATE_CART_ITEM.getName())
                            .requestMatchers(PUT, Endpoint.V1.CartItem.UPDATE_ONE).hasAuthority(Authority.UPDATE_CART_ITEM.getName())
                            .requestMatchers(DELETE, Endpoint.V1.CartItem.DELETE).hasAuthority(Authority.DELETE_CART_ITEM.getName())
@@ -133,7 +133,7 @@ public class SecurityConfiguration {
                            .requestMatchers(GET, Endpoint.V1.Order.GET_DETAIL_FOR_ADMIN).hasAuthority(Authority.READ_ORDER.getName())
 
                            // Payment
-                           .requestMatchers(GET, Endpoint.V1.Payment.CREATE).hasAuthority(Authority.CREATE_PAYMENT.getName())
+                           .requestMatchers(POST, Endpoint.V1.Payment.CREATE).hasAuthority(Authority.CREATE_PAYMENT.getName())
                            .requestMatchers(GET, Endpoint.V1.Payment.CALLBACK).permitAll()
 
                            // Authentication

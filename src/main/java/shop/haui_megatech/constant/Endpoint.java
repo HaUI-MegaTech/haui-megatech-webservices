@@ -40,12 +40,13 @@ public class Endpoint {
         }
 
         public static final class CartItem {
-            public static final String PREFIX           = "/cart-items";
-            public static final String ID               = "/{cartItemId}";
-            public static final String GET_LIST_BY_USER = User.PREFIX + User.USER_ID + PREFIX;
-            public static final String ADD_ONE          = Product.PREFIX + Product.PRODUCT_ID + PREFIX;
-            public static final String UPDATE_ONE       = Product.PREFIX + Product.PRODUCT_ID + PREFIX + ID;
-            public static final String DELETE           = V1.PREFIX + PREFIX;
+            public static final String PREFIX     = "/cart-items";
+            public static final String ID         = "/{cartItemId}";
+            public static final String IDS        = "/{cartItemIds}";
+            public static final String GET_LIST   = V1.PREFIX + PREFIX;
+            public static final String ADD_ONE    = Product.PREFIX + Product.PRODUCT_ID + PREFIX;
+            public static final String UPDATE_ONE = Product.PREFIX + Product.PRODUCT_ID + PREFIX + ID;
+            public static final String DELETE     = V1.PREFIX + PREFIX + IDS;
         }
 
         public static final class Product {

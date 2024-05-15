@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.service.PaymentService;
@@ -17,7 +18,7 @@ import java.io.IOException;
 public class PaymentRestController {
     private final PaymentService paymentService;
 
-    @GetMapping(Endpoint.V1.Payment.CREATE)
+    @PostMapping(Endpoint.V1.Payment.CREATE)
     public ResponseEntity<?> createPayment(HttpServletRequest request) {
         return ResponseUtil.ok(paymentService.createPayment(request));
     }

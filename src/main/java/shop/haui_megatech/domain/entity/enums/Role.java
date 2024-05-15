@@ -41,7 +41,8 @@ public enum Role {
             Authority.CREATE_PRODUCT,
             Authority.UPDATE_PRODUCT,
 
-            Authority.UPDATE_INFO
+            Authority.UPDATE_INFO,
+            Authority.CREATE_PAYMENT
     )),
 
     MANAGER(Set.of(
@@ -71,7 +72,14 @@ public enum Role {
             Authority.RESET_PASSWORD,
             Authority.UPDATE_PASSWORD,
             Authority.IMPORT_EXCEL_USER,
-            Authority.IMPORT_CSV_USER
+            Authority.IMPORT_CSV_USER,
+
+            Authority.READ_CART_ITEM,
+            Authority.CREATE_CART_ITEM,
+            Authority.UPDATE_CART_ITEM,
+            Authority.DELETE_CART_ITEM,
+
+            Authority.CREATE_PAYMENT
     )),
 
     ADMINISTRATOR(Set.of(

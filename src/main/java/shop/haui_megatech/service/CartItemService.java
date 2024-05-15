@@ -12,5 +12,5 @@ public interface CartItemService extends HardDeletable {
 
     CommonResponseDTO<?> updateOne(Integer productId, Integer cartItemId, CartItemRequestDTO request);
 
-    PaginationResponseDTO<BriefCartItemResponseDTO> getListByUser(Integer userId, PaginationRequestDTO request);
+    PaginationResponseDTO<BriefCartItemResponseDTO> getListByUser(PaginationRequestDTO request);
 }

@@ -36,12 +36,11 @@ public class CartItemRestController {
     }
 
     @Operation(summary = "API Get a list of CartItems by User Id ")
-    @GetMapping(Endpoint.V1.CartItem.GET_LIST_BY_USER)
+    @GetMapping(Endpoint.V1.CartItem.GET_LIST)
     public PaginationResponseDTO<BriefCartItemResponseDTO> getListByUser(
-            @PathVariable Integer userId,
             @ParameterObject PaginationRequestDTO request
     ) {
-        return cartItemService.getListByUser(userId, request);
+        return cartItemService.getListByUser(request);
     }
 
 
@@ -58,12 +57,12 @@ public class CartItemRestController {
     @Operation(summary = "API Delete a CartItem")
     @DeleteMapping(Endpoint.V1.CartItem.DELETE)
     public CommonResponseDTO<?> deleteCartItems(
-            @RequestParam String ids
+            @PathVariable String cartItemIds
     ) {
         return cartItemService.hardDeleteList(
                 ListIdsRequestDTO
                         .builder()
-                        .ids(List.of(ids.split(","))
+                        .ids(List.of(cartItemIds.split(","))
                                  .parallelStream()
                                  .map(Integer::parseInt)
                                  .toList()

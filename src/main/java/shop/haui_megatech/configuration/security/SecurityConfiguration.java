@@ -146,27 +146,35 @@ public class SecurityConfiguration {
                            management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                    )
                    .authenticationProvider(authenticationProvider)
-                   .exceptionHandling(
-                           httpSecurityExceptionHandlingConfigurer -> {
-                               httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(
-                                       (request, response, authException) -> {
-                                           response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                                           response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                   .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
+                       httpSecurityExceptionHandlingConfigurer
+                               .authenticationEntryPoint((request, response, authException) -> {
+                                   response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                                   response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-                                           CommonResponseDTO<?> responseBody =
-                                                   CommonResponseDTO.builder()
-                                                                    .success(false)
-                                                                    .message(messageSourceUtil.getMessage(
-                                                                            ErrorMessage.Auth.AUTHENTICATE
-                                                                    ))
-                                                                    .build();
+                                   CommonResponseDTO<?> responseBody =
+                                           CommonResponseDTO.builder()
+                                                            .success(false)
+                                                            .message(messageSourceUtil.getMessage(ErrorMessage.Auth.AUTHENTICATE))
+                                                            .build();
 
-                                           ObjectMapper objectMapper = new ObjectMapper();
-                                           response.getWriter().write(objectMapper.writeValueAsString(responseBody));
-                                       }
-                               );
-                           }
-                   )
+                                   ObjectMapper objectMapper = new ObjectMapper();
+                                   response.getWriter().write(objectMapper.writeValueAsString(responseBody));
+                               })
+                               .accessDeniedHandler((request, response, accessDeniedException) -> {
+                                   response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                                   response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+                                   CommonResponseDTO<?> responseBody =
+                                           CommonResponseDTO.builder()
+                                                            .success(false)
+                                                            .message(messageSourceUtil.getMessage(ErrorMessage.Auth.UNAUTHORIZED))
+                                                            .build();
+
+                                   ObjectMapper objectMapper = new ObjectMapper();
+                                   response.getWriter().write(objectMapper.writeValueAsString(responseBody));
+                               });
+                   })
                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                    .build();
     }

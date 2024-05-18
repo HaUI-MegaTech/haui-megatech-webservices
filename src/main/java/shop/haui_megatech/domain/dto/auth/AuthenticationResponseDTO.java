@@ -5,6 +5,8 @@ import shop.haui_megatech.domain.dto.user.FullUserResponseDTO;
 
 @Builder
 public record AuthenticationResponseDTO(
+        Boolean success,
+        String message,
         String token,
         FullUserResponseDTO loggedInUser
 ) {

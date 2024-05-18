@@ -1,9 +1,6 @@
 package shop.haui_megatech.utility;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -43,14 +40,19 @@ public class JwtTokenUtil {
             log.error(messageSourceUtil.getMessage(ErrorMessage.Auth.EXPIRED_TOKEN));
         } catch (SignatureException e) {
             log.error(messageSourceUtil.getMessage(ErrorMessage.Auth.MALFORMED));
+        } catch (MalformedJwtException e) {
+            log.error(messageSourceUtil.getMessage(ErrorMessage.Auth.MALFORMED));
         }
         return null;
     }
 
     public String generateToken(UserDetails userDetails) {
-        return this.generateToken(new HashMap<>() {{
-            put("id", userDetails.getUsername());
-        }}, userDetails);
+        return this.generateToken(
+                Map.ofEntries(
+                        Map.entry("id", userDetails.getUsername())
+                ),
+                userDetails
+        );
     }
 
     public String generateToken(
@@ -85,8 +87,11 @@ public class JwtTokenUtil {
         return this.extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token) throws ExpiredJwtException, SignatureException {
-
+    private Claims extractAllClaims(
+            String token
+    ) throws ExpiredJwtException,
+             SignatureException,
+             MalformedJwtException {
         return Jwts.parserBuilder()
                    .setSigningKey(this.getSignInKey())
                    .build()

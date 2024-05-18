@@ -8,8 +8,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
+import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.auth.AuthenticationRequestDTO;
 import shop.haui_megatech.domain.dto.auth.AuthenticationResponseDTO;
+import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.entity.enums.Role;
@@ -20,6 +22,7 @@ import shop.haui_megatech.exception.MismatchedConfirmPasswordException;
 import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.service.AuthenticationService;
 import shop.haui_megatech.utility.JwtTokenUtil;
+import shop.haui_megatech.utility.MessageSourceUtil;
 import shop.haui_megatech.validator.RequestValidator;
 
 import java.time.Instant;
@@ -33,6 +36,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder       passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil          jwtUtil;
+    private final MessageSourceUtil     messageSourceUtil;
 
     @Override
     public AuthenticationResponseDTO register(AddUserRequestDTO request) {
@@ -61,6 +65,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String jwtToken = jwtUtil.generateToken(user);
         return AuthenticationResponseDTO
                 .builder()
+                .success(true)
                 .token(jwtToken)
                 .loggedInUser(UserMapper.INSTANCE.toUserFullResponseDTO(savedUser))
                 .build();
@@ -68,39 +73,39 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request) {
+        User user = userRepository.findActiveUserByUsername(request.username()).orElseThrow();
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.username(),
                         request.password()
                 )
         );
-        User user = userRepository.findActiveUserByUsername(request.username()).orElseThrow();
+
         String jwtToken = jwtUtil.generateToken(user);
         user.setLastLoggedIn(new Date(Instant.now().toEpochMilli()));
         user.setLoggedIn(user.getLoggedIn() == null ? 1 : user.getLoggedIn() + 1);
         User updatedUser = userRepository.save(user);
         return AuthenticationResponseDTO
                 .builder()
+                .success(true)
+                .message(messageSourceUtil.getMessage(SuccessMessage.Auth.AUTHENTICATED))
                 .token(jwtToken)
                 .loggedInUser(UserMapper.INSTANCE.toUserFullResponseDTO(updatedUser))
                 .build();
     }
 
     @Override
-    public AuthenticationResponseDTO refresh(AuthenticationRequestDTO request) {
-        Optional<User> foundUser = userRepository.findActiveUserByUsername(request.username());
+    public AuthenticationResponseDTO refresh(String token) {
+        String username = jwtUtil.extractUsername(token);
 
-        if (foundUser.isEmpty())
-            throw new UsernameNotFoundException(request.username());
-
-        if (!passwordEncoder.matches(request.password(), foundUser.get().getPassword()))
-            throw new BadCredentialsException(request.password());
+        User user = userRepository.findUserByUsername(username).orElseThrow();
+        String newAccessToken = jwtUtil.generateToken(user);
 
         return AuthenticationResponseDTO
                 .builder()
-                .token(jwtUtil.generateToken(User.builder()
-                                                 .username(request.username())
-                                                 .build()))
+                .success(true)
+                .token(newAccessToken)
                 .build();
     }
 

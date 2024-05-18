@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.domain.dto.auth.AuthenticationRequestDTO;
@@ -34,9 +35,8 @@ public class AuthenticationRestController {
 
     @PostMapping(Endpoint.V1.Auth.REFRESH)
     public ResponseEntity<?> refresh(
-            @RequestBody AuthenticationRequestDTO request
+            @RequestParam String token
     ) {
-        return ResponseUtil.ok(service.refresh(request));
+        return ResponseUtil.ok(service.refresh(token));
     }
-
 }

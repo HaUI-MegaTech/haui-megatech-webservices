@@ -2,6 +2,7 @@ package shop.haui_megatech.service;
 
 import shop.haui_megatech.domain.dto.auth.AuthenticationRequestDTO;
 import shop.haui_megatech.domain.dto.auth.AuthenticationResponseDTO;
+import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 
 public interface AuthenticationService {
@@ -9,5 +10,5 @@ public interface AuthenticationService {
 
     AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request);
 
-    AuthenticationResponseDTO refresh(AuthenticationRequestDTO request);
+    AuthenticationResponseDTO refresh(String token);
 }

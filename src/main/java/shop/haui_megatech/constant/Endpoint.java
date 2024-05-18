@@ -136,6 +136,12 @@ public class Endpoint {
             public static final String CREATE   = V1.PREFIX + "/create-payment";
             public static final String CALLBACK = V1.PREFIX + "/callback-payment";
         }
+
+        public static final class ActivityLog {
+            public static final String PREFIX   = V1.PREFIX + "/activity-logs";
+            public static final String GET_LIST = PREFIX;
+
+        }
     }
 
 

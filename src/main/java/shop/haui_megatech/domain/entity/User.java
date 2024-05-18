@@ -57,6 +57,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Feedback> feedbacks;
 
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ActivityLog> activityLogs;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

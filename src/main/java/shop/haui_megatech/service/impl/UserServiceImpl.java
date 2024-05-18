@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     private final FileUploadService fileUploadService;
 
     @Override
-    public CommonResponseDTO<FullUserResponseDTO> getOne(Integer userId) {
+    public CommonResponseDTO<FullUserResponseDTO> getOneUser(Integer userId) {
         Optional<User> foundUser = userRepository.findById(userId);
 
         if (foundUser.isEmpty())
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> addOne(AddUserRequestDTO request) {
+    public CommonResponseDTO<?> addOneUser(AddUserRequestDTO request) {
         if (!RequestValidator.isBlankRequestParams(request.username()))
             throw new AbsentRequiredFieldException(ErrorMessage.Request.BLANK_USERNAME);
 
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> importExcel(ImportDataRequestDTO request) {
+    public CommonResponseDTO<?> importExcelUser(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> importCsv(ImportDataRequestDTO request) {
+    public CommonResponseDTO<?> importCsvUser(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> updateOne(
+    public CommonResponseDTO<?> updateInfoUser(
             Integer userId,
             UpdateUserInfoRequest request
     ) {
@@ -172,7 +172,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> updatePassword(
+    public CommonResponseDTO<?> updatePasswordUser(
             Integer userId,
             UpdateUserPasswordRequest request
     ) {
@@ -200,7 +200,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> softDeleteOne(Integer userId) {
+    public CommonResponseDTO<?> softDeleteOneUser(Integer userId) {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
@@ -218,7 +218,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> softDeleteList(ListIdsRequestDTO request) {
+    public CommonResponseDTO<?> softDeleteListUsers(ListIdsRequestDTO request) {
         List<User> foundUsers = userRepository.findAllById(request.ids());
 
         foundUsers.parallelStream().forEach(item -> item.setDeleted(true));
@@ -236,7 +236,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteOne(Integer id) {
+    public CommonResponseDTO<?> hardDeleteOneUser(Integer id) {
         Optional<User> found = userRepository.findById(id);
 
         if (found.isEmpty())
@@ -252,7 +252,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteList(ListIdsRequestDTO request) {
+    public CommonResponseDTO<?> hardDeleteListUsers(ListIdsRequestDTO request) {
         userRepository.deleteAllById(request.ids());
 
         return CommonResponseDTO
@@ -266,7 +266,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> restoreOne(Integer userId) {
+    public CommonResponseDTO<?> restoreOneUser(Integer userId) {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
@@ -283,7 +283,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> restoreList(ListIdsRequestDTO request) {
+    public CommonResponseDTO<?> restoreListUsers(ListIdsRequestDTO request) {
         List<User> foundUsers = userRepository.findAllById(request.ids());
 
         foundUsers.parallelStream().forEach(item -> item.setDeleted(false));
@@ -301,7 +301,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> resetPasswordOne(Integer userId) {
+    public CommonResponseDTO<?> resetPasswordOneUser(Integer userId) {
         String newPassword = RandomUtil.randomPassword();
 
         Optional<User> found = userRepository.findById(userId);
@@ -341,11 +341,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> resetPasswordList(ListIdsRequestDTO request) {
+    public CommonResponseDTO<?> resetPasswordListUsers(ListIdsRequestDTO request) {
         List<User> foundUsers = userRepository.findAllById(request.ids());
 
         foundUsers.parallelStream().forEach(item -> {
-            this.resetPasswordOne(item.getId());
+            this.resetPasswordOneUser(item.getId());
         });
 
         return CommonResponseDTO
@@ -359,7 +359,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PaginationResponseDTO<BriefUserResponseDTO> getList(PaginationRequestDTO request) {
+    public PaginationResponseDTO<BriefUserResponseDTO> getListActiveUsers(PaginationRequestDTO request) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
@@ -391,7 +391,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PaginationResponseDTO<BriefUserResponseDTO> getDeletedList(PaginationRequestDTO request) {
+    public PaginationResponseDTO<BriefUserResponseDTO> getDeletedListUsers(PaginationRequestDTO request) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 

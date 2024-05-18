@@ -2,9 +2,11 @@ package shop.haui_megatech.domain.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
+import org.springframework.security.core.GrantedAuthority;
 import shop.haui_megatech.constant.DatetimeFormat;
 import shop.haui_megatech.domain.dto.address.AddressRequestDTO;
 import shop.haui_megatech.domain.entity.enums.Gender;
+import shop.haui_megatech.domain.entity.enums.Role;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +42,9 @@ public record FullUserResponseDTO(
                 pattern = DatetimeFormat.INDOCHINA_DATETIME_FORMAT,
                 timezone = DatetimeFormat.VIETNAM_TIMEZONE
         )
-        Date lastLogined,
-        Integer logined
+        Date lastLoggedIn,
+        Integer loggedIn,
+        Role role,
+        List<GrantedAuthority> authorities
 ) {
 }

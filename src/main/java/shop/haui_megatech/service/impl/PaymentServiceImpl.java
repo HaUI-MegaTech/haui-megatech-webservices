@@ -15,8 +15,6 @@ import shop.haui_megatech.domain.entity.enums.OrderStatus;
 import shop.haui_megatech.domain.entity.enums.PaymentMethod;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.*;
-import shop.haui_megatech.service.CartItemService;
-import shop.haui_megatech.service.OrderService;
 import shop.haui_megatech.service.PaymentService;
 import shop.haui_megatech.utility.AuthenticationUtil;
 import shop.haui_megatech.utility.PaymentUtil;
@@ -40,7 +38,18 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentResponseDTO createPayment(HttpServletRequest request) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
-        long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
+        String ids = request.getParameter("ids");
+        List<Integer> cartItemIds = Arrays.stream(ids.split(","))
+                                          .map(String::trim)
+                                          .map(Integer::valueOf)
+                                          .toList();
+        List<CartItem> cartItems = cartItemRepository.findAllById(cartItemIds);
+        Long amount = (long) cartItems.stream()
+                                      .mapToDouble(item ->
+                                              item.getQuantity() * item.getProduct().getCurrentPrice()
+                                      )
+                                      .sum() * 100L;
+
         String bankCode = request.getParameter("bankCode");
 
         String vnp_TxnRef = PaymentUtil.getRandomNumber(8);
@@ -67,7 +76,7 @@ public class PaymentServiceImpl implements PaymentService {
             vnp_Params.put("vnp_Locale", "vn");
         }
         vnp_Params.put("vnp_ReturnUrl", paymentConfiguration.getVnp_ReturnUrl() +
-                                        "?ids=" + request.getParameter("ids") +
+                                        "?ids=" + ids +
                                         "&addressId=" + request.getParameter("addressId") +
                                         "&userId=" + requestedUser.getId()
         );

@@ -5,11 +5,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
-import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.service.PaymentService;
-import shop.haui_megatech.utility.AuthenticationUtil;
 import shop.haui_megatech.utility.ResponseUtil;
 
 import java.io.IOException;
@@ -19,12 +18,12 @@ import java.io.IOException;
 public class PaymentRestController {
     private final PaymentService paymentService;
 
-    @GetMapping(Endpoint.Payment.CREATE)
+    @PostMapping(Endpoint.V1.Payment.CREATE)
     public ResponseEntity<?> createPayment(HttpServletRequest request) {
         return ResponseUtil.ok(paymentService.createPayment(request));
     }
 
-    @GetMapping(Endpoint.Payment.CALLBACK)
+    @GetMapping(Endpoint.V1.Payment.CALLBACK)
     public void paymentCallbackHandler(
             HttpServletRequest request,
             HttpServletResponse response

@@ -1,5 +1,6 @@
 package shop.haui_megatech.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,9 @@ import java.util.List;
 public class CartItemRestController {
     private final CartItemService cartItemService;
 
-    @PostMapping(Endpoint.CartItem.ADD_ONE)
+
+    @Operation(summary = "API Add a CartItem")
+    @PostMapping(Endpoint.V1.CartItem.ADD_ONE)
     public CommonResponseDTO<?> addCartItem(
             @PathVariable Integer productId,
             @RequestBody CartItemRequestDTO request
@@ -32,15 +35,17 @@ public class CartItemRestController {
         return cartItemService.addOne(productId, request);
     }
 
-    @GetMapping(Endpoint.CartItem.GET_LIST_BY_USER)
+    @Operation(summary = "API Get a list of CartItems by User Id ")
+    @GetMapping(Endpoint.V1.CartItem.GET_LIST)
     public PaginationResponseDTO<BriefCartItemResponseDTO> getListByUser(
-            @PathVariable Integer userId,
             @ParameterObject PaginationRequestDTO request
     ) {
-        return cartItemService.getListByUser(userId, request);
+        return cartItemService.getListByUser(request);
     }
 
-    @PutMapping(Endpoint.CartItem.UPDATE_ONE)
+
+    @Operation(summary = "API Update a CartItem")
+    @PutMapping(Endpoint.V1.CartItem.UPDATE_ONE)
     public CommonResponseDTO<?> updateCartItem(
             @PathVariable Integer productId,
             @PathVariable Integer cartItemId,
@@ -49,14 +54,15 @@ public class CartItemRestController {
         return cartItemService.updateOne(productId, cartItemId, request);
     }
 
-    @DeleteMapping(Endpoint.CartItem.DELETE)
+    @Operation(summary = "API Delete a CartItem")
+    @DeleteMapping(Endpoint.V1.CartItem.DELETE)
     public CommonResponseDTO<?> deleteCartItems(
-            @RequestParam String ids
+            @PathVariable String cartItemIds
     ) {
         return cartItemService.hardDeleteList(
                 ListIdsRequestDTO
                         .builder()
-                        .ids(List.of(ids.split(","))
+                        .ids(List.of(cartItemIds.split(","))
                                  .parallelStream()
                                  .map(Integer::parseInt)
                                  .toList()

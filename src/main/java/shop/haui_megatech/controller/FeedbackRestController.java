@@ -1,5 +1,10 @@
 package shop.haui_megatech.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +18,21 @@ import shop.haui_megatech.utility.ResponseUtil;
 
 @RestApiV1
 @RequiredArgsConstructor
+@Tag(name = "Feedbacks Management REST API")
 public class FeedbackRestController {
     private final FeedbackService feedbackService;
 
-    @PostMapping(Endpoint.Feedback.ADD_ONE)
+    @Operation(
+            summary = "API Add Feedback",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "When has not been authorized"),
+            }
+    )
+    @PostMapping(Endpoint.V1.Feedback.ADD_ONE)
     public ResponseEntity<?> addOne(
             @PathVariable Integer productId,
             @RequestBody FeedbackRequestDTO feedback
@@ -24,7 +40,18 @@ public class FeedbackRestController {
         return ResponseUtil.created(feedbackService.addOne(productId, feedback));
     }
 
-    @PutMapping(Endpoint.Feedback.UPDATE_ONE)
+
+    @Operation(
+            summary = "API Update Feedback",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "When has not been authorized"),
+            }
+    )
+    @PutMapping(Endpoint.V1.Feedback.UPDATE_ONE)
     public ResponseEntity<?> updateOne(
             @PathVariable Integer productId,
             @PathVariable Integer feedbackId,
@@ -33,7 +60,18 @@ public class FeedbackRestController {
         return ResponseUtil.ok(feedbackService.updateOne(productId, feedbackId, feedback));
     }
 
-    @GetMapping(Endpoint.Feedback.GET_LIST_BY_USER)
+
+    @Operation(
+            summary = "API Get Feedbacks by User Id",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "When has not been authorized"),
+            }
+    )
+    @GetMapping(Endpoint.V1.Feedback.GET_LIST_BY_USER)
     public ResponseEntity<?> getListByUser(
             @PathVariable Integer userId,
             @ParameterObject PaginationRequestDTO request
@@ -41,7 +79,9 @@ public class FeedbackRestController {
         return ResponseUtil.ok(feedbackService.getListByUserId(userId, request));
     }
 
-    @GetMapping(Endpoint.Feedback.GET_LIST_BY_PRODUCT)
+
+    @Operation(summary = "API Get Feedback by Product Id")
+    @GetMapping(Endpoint.V1.Feedback.GET_LIST_BY_PRODUCT)
     public ResponseEntity<?> getListByProduct(
             @PathVariable Integer productId,
             @ParameterObject PaginationRequestDTO request

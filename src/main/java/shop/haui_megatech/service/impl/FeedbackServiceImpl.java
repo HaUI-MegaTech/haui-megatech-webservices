@@ -24,6 +24,7 @@ import shop.haui_megatech.exception.InvalidRequestParamException;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.FeedbackRepository;
 import shop.haui_megatech.repository.ProductRepository;
+import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.service.FeedbackService;
 import shop.haui_megatech.utility.AuthenticationUtil;
 import shop.haui_megatech.utility.MessageSourceUtil;
@@ -52,6 +53,13 @@ public class FeedbackServiceImpl implements FeedbackService {
         if (foundProduct.isEmpty())
             throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
+        float currentAverageRating = foundProduct.get().getAverageRating();
+        int currentFeedbacks = foundProduct.get().getFeedbacks().size();
+        float newAverageRating = (currentAverageRating * currentFeedbacks + request.rating()) / (currentFeedbacks + 1);
+        foundProduct.get().setAverageRating(newAverageRating);
+        foundProduct.get().setFeedbacksCount(currentFeedbacks + 1);
+        productRepository.save(foundProduct.get());
+
         Feedback newFeedback = Feedback.builder()
                                        .alias(request.alias())
                                        .content(request.content())
@@ -62,6 +70,7 @@ public class FeedbackServiceImpl implements FeedbackService {
                                        .build();
 
         feedbackRepository.save(newFeedback);
+
 
         return CommonResponseDTO
                 .builder()

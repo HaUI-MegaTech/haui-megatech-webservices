@@ -52,6 +52,8 @@ public record FullProductResponseDTO(
         String chargerCapacity,
         String os,
         Integer launchDate,
+        Float averageRating,
+        Integer feedbacksCount,
 
         BrandInFullProductResponseDTO brand,
 

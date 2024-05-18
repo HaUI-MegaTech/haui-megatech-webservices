@@ -1,7 +1,5 @@
 package shop.haui_megatech.domain.entity.enums;
 
-import lombok.Getter;
-
 public enum OrderStatus {
     NEW,
     CANCELLED,

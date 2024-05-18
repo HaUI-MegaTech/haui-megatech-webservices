@@ -12,6 +12,7 @@ import shop.haui_megatech.domain.dto.auth.AuthenticationRequestDTO;
 import shop.haui_megatech.domain.dto.auth.AuthenticationResponseDTO;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.entity.User;
+import shop.haui_megatech.domain.entity.enums.Role;
 import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.exception.AbsentRequiredFieldException;
 import shop.haui_megatech.exception.DuplicateUsernameException;
@@ -54,13 +55,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .lastName(request.lastName())
                         .email(request.email())
                         .phoneNumber(request.phoneNumber())
+                        .role(Role.CUSTOMER)
                         .build();
         User savedUser = userRepository.save(user);
         String jwtToken = jwtUtil.generateToken(user);
         return AuthenticationResponseDTO
                 .builder()
                 .token(jwtToken)
-                .user(UserMapper.INSTANCE.toUserFullResponseDTO(savedUser))
+                .loggedInUser(UserMapper.INSTANCE.toUserFullResponseDTO(savedUser))
                 .build();
     }
 
@@ -74,13 +76,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
         User user = userRepository.findActiveUserByUsername(request.username()).orElseThrow();
         String jwtToken = jwtUtil.generateToken(user);
-        user.setLastLogined(new Date(Instant.now().toEpochMilli()));
-        user.setLogined(user.getLogined() == null ? 1 : user.getLogined() + 1);
+        user.setLastLoggedIn(new Date(Instant.now().toEpochMilli()));
+        user.setLoggedIn(user.getLoggedIn() == null ? 1 : user.getLoggedIn() + 1);
         User updatedUser = userRepository.save(user);
         return AuthenticationResponseDTO
                 .builder()
                 .token(jwtToken)
-                .user(UserMapper.INSTANCE.toUserFullResponseDTO(updatedUser))
+                .loggedInUser(UserMapper.INSTANCE.toUserFullResponseDTO(updatedUser))
                 .build();
     }
 

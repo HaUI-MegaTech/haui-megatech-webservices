@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,10 +25,12 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private static final String             AUTH_PREFIX     = "Bearer ";
-    private final        List<String>       bypassEndpoints = Arrays.asList(SecurityConfiguration.PUBLIC_ENDPOINTS);
-    private final        UserDetailsService userDetailsService;
-    private final        JwtTokenUtil       jwtUtil;
+    private static final String AUTH_PREFIX = "Bearer ";
+
+    private final UserDetailsService userDetailsService;
+    private final JwtTokenUtil       jwtUtil;
+
+    private final List<String> bypassEndpoints = Arrays.asList(SecurityConfiguration.PUBLIC_ENDPOINTS);
 
     @Override
     protected void doFilterInternal(
@@ -35,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String jwt;
         final String username;
         if (authHeader == null || !authHeader.startsWith(AUTH_PREFIX)) {

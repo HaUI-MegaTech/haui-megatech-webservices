@@ -60,6 +60,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ActivityLog> activityLogs;
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Token> tokens;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

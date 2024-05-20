@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -31,8 +33,8 @@ import static org.springframework.http.HttpMethod.*;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-    private static final String                  CATCH_ALL_WILDCARDS = "/**";
-    public static final  String[]                PUBLIC_ENDPOINTS    = {
+    private static final String   CATCH_ALL_WILDCARDS = "/**";
+    public static final  String[] PUBLIC_ENDPOINTS    = {
             "/swagger-ui" + CATCH_ALL_WILDCARDS,
             Endpoint.V1.Auth.PREFIX + CATCH_ALL_WILDCARDS,
             "/v3/api-docs" + CATCH_ALL_WILDCARDS,
@@ -46,11 +48,29 @@ public class SecurityConfiguration {
             Endpoint.V1.Feedback.GET_LIST_BY_PRODUCT,
             Endpoint.V1.Payment.CALLBACK
     };
-    private final        JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final        AuthenticationProvider  authenticationProvider;
-    private final        List<String>            WHITE_LIST_ORIGINS  = List.of(
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationProvider  authenticationProvider;
+
+    private final List<String> WHITE_LIST_ORIGINS   = List.of(
             "http://localhost:3000",
             "http://localhost:3001"
+    );
+    private final List<String> ALLOWED_HTTP_METHODS = List.of(
+            GET.toString(),
+            POST.toString(),
+            PUT.toString(),
+            PATCH.toString(),
+            DELETE.toString()
+    );
+    private final List<String> ALLOWED_HEADERS      = List.of(
+            HttpHeaders.AUTHORIZATION,
+            HttpHeaders.ACCEPT_LANGUAGE,
+            HttpHeaders.CONTENT_TYPE
+    );
+    private final List<String> EXPOSED_HEADERS      = List.of(
+            HttpHeaders.AUTHORIZATION,
+            HttpHeaders.ACCEPT_LANGUAGE
     );
 
     @Bean
@@ -183,9 +203,9 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(WHITE_LIST_ORIGINS);
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Accept-Language", "Content-Type"));
-        configuration.setExposedHeaders(List.of("Authorization", "Accept-Language"));
+        configuration.setAllowedMethods(ALLOWED_HTTP_METHODS);
+        configuration.setAllowedHeaders(ALLOWED_HEADERS);
+        configuration.setExposedHeaders(EXPOSED_HEADERS);
         configuration.setMaxAge((long) (24 * 60 * 60));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

@@ -2,10 +2,12 @@ package shop.haui_megatech.service.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.configuration.PaymentConfiguration;
 import shop.haui_megatech.constant.ErrorMessage;
-import shop.haui_megatech.domain.dto.PaymentResponseDTO;
+import shop.haui_megatech.domain.dto.payment.CreatePaymentRequestDTO;
+import shop.haui_megatech.domain.dto.payment.PaymentResponseDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.entity.CartItem;
 import shop.haui_megatech.domain.entity.Order;
@@ -36,10 +38,10 @@ public class PaymentServiceImpl implements PaymentService {
     private final ProductRepository    productRepository;
 
     @Override
-    public PaymentResponseDTO createPayment(HttpServletRequest request) {
+    public PaymentResponseDTO createPayment(HttpServletRequest httpServletRequest, CreatePaymentRequestDTO request) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
-        String ids = request.getParameter("ids");
-        List<Integer> cartItemIds = Arrays.stream(ids.split(","))
+//        String ids = request.getParameter("ids");
+        List<Integer> cartItemIds = Arrays.stream(request.ids().split(","))
                                           .map(String::trim)
                                           .map(Integer::valueOf)
                                           .toList();
@@ -50,10 +52,11 @@ public class PaymentServiceImpl implements PaymentService {
                                       )
                                       .sum() * 100L;
 
-        String bankCode = request.getParameter("bankCode");
+//        String bankCode = request.getParameter("bankCode");
+        String bankCode = "NCB";
 
         String vnp_TxnRef = PaymentUtil.getRandomNumber(8);
-        String vnp_IpAddr = PaymentUtil.getIpAddress(request);
+        String vnp_IpAddr = PaymentUtil.getIpAddress(httpServletRequest);
 
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", paymentConfiguration.getVnp_Version());
@@ -69,15 +72,16 @@ public class PaymentServiceImpl implements PaymentService {
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
         vnp_Params.put("vnp_OrderType", paymentConfiguration.getOrderType());
 
-        String locate = request.getParameter("language");
+//        String locate = request.getParameter("language");
+        String locate = LocaleContextHolder.getLocale().toString();
         if (locate != null && !locate.isEmpty()) {
             vnp_Params.put("vnp_Locale", locate);
         } else {
             vnp_Params.put("vnp_Locale", "vn");
         }
         vnp_Params.put("vnp_ReturnUrl", paymentConfiguration.getVnp_ReturnUrl() +
-                                        "?ids=" + ids +
-                                        "&addressId=" + request.getParameter("addressId") +
+                                        "?ids=" + request.ids() +
+                                        "&addressId=" + request.addressId() +
                                         "&userId=" + requestedUser.getId()
         );
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
@@ -121,7 +125,6 @@ public class PaymentServiceImpl implements PaymentService {
         return PaymentResponseDTO
                 .builder()
                 .success(true)
-                .message("Ban dang thuc hien chuc nang thanh toan")
                 .url(paymentUrl)
                 .build();
     }

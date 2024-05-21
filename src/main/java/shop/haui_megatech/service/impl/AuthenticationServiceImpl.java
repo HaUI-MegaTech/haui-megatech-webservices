@@ -84,7 +84,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User savedUser = userRepository.save(user);
         String jwtToken = jwtUtil.generateToken(user);
 
-
         return AuthenticationResponseDTO
                 .builder()
                 .success(true)
@@ -110,6 +109,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setLastLoggedIn(new Date(Instant.now().toEpochMilli()));
         user.setLoggedIn(user.getLoggedIn() == null ? 1 : user.getLoggedIn() + 1);
         User updatedUser = userRepository.save(user);
+
+        LoginStatisticServiceImpl.modified = true;
+        ++LoginStatisticServiceImpl.counter;
+
         return AuthenticationResponseDTO
                 .builder()
                 .success(true)

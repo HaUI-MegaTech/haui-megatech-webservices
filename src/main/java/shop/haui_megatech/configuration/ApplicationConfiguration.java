@@ -14,15 +14,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.UserRepository;
+import shop.haui_megatech.service.LoginStatisticService;
 import shop.haui_megatech.utility.FakeDataGenerator;
 import shop.haui_megatech.utility.MyCustomUtil;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
-    private final UserRepository userRepository;
+    private final UserRepository        userRepository;
+    private final LoginStatisticService loginStatisticService;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -64,6 +69,14 @@ public class ApplicationConfiguration {
 //            fakeDataGenerator.fakeProductData();
 //            myCustomUtil.calculateProductRatingAverage();
 //            myCustomUtil.countProductFeedbacks();
+        };
+    }
+
+    @Bean
+    public CommandLineRunner launchLoginStatisticService() {
+        return args -> {
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+            scheduler.scheduleAtFixedRate(loginStatisticService::saveOrUpdate, 0, 5, TimeUnit.MINUTES);
         };
     }
 }

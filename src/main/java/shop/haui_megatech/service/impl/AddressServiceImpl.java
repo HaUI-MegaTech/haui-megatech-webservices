@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.address.AddressRequestDTO;
+import shop.haui_megatech.domain.dto.address.AddressResponseDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.pagination.NoPaginationResponseDTO;
 import shop.haui_megatech.domain.entity.Address;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.AddressMapper;
@@ -115,6 +117,16 @@ public class AddressServiceImpl implements AddressService {
                 .builder()
                 .success(true)
                 .message(messageSourceUtil.getMessage(SuccessMessage.Address.DELETED, checkedIds.size()))
+                .build();
+    }
+
+    @Override
+    public NoPaginationResponseDTO<AddressResponseDTO> getAllByUserId(Integer userId) {
+        List<Address> list = addressRepository.findAllByUserId(userId);
+        return NoPaginationResponseDTO
+                .<AddressResponseDTO>builder()
+                .success(true)
+                .items(list.stream().map(AddressMapper.INSTANCE::toAddressResponseDTO).toList())
                 .build();
     }
 }

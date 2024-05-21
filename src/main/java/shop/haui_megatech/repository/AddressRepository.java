@@ -19,4 +19,13 @@ public interface AddressRepository extends JpaRepository<Address, Integer> {
     @Transactional
     @Modifying
     void deleteAddressByIds(List<Integer> addressIds);
+
+    @Query(
+            """
+            SELECT a
+            FROM Address a
+            WHERE a.user.id = :userId
+            """
+    )
+    List<Address> findAllByUserId(int userId);
 }

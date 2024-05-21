@@ -113,13 +113,13 @@ public class Endpoint {
         }
 
         public static final class Address {
-            public static final String PREFIX      = "/addresses";
-            public static final String ADDRESS_ID  = "/{addressId}";
-            public static final String ADDRESS_IDS = "/{addressIds}";
-            public static final String GET_LIST    = User.PREFIX + User.USER_ID + PREFIX;
-            public static final String ADD_ONE     = User.PREFIX + User.USER_ID + PREFIX;
-            public static final String UPDATE_ONE  = User.PREFIX + User.USER_ID + PREFIX + ADDRESS_ID;
-            public static final String DELETE      = User.PREFIX + User.USER_ID + PREFIX + ADDRESS_IDS;
+            public static final String PREFIX              = "/addresses";
+            public static final String ADDRESS_ID          = "/{addressId}";
+            public static final String ADDRESS_IDS         = "/{addressIds}";
+            public static final String GET_LIST_BY_USER_ID = User.PREFIX + User.USER_ID + PREFIX;
+            public static final String ADD_ONE             = User.PREFIX + User.USER_ID + PREFIX;
+            public static final String UPDATE_ONE          = User.PREFIX + User.USER_ID + PREFIX + ADDRESS_ID;
+            public static final String DELETE              = User.PREFIX + User.USER_ID + PREFIX + ADDRESS_IDS;
         }
 
         public static final class Feedback {

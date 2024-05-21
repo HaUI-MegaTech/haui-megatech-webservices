@@ -58,4 +58,14 @@ public class AddressRestController {
     ) {
         return ResponseUtil.ok(addressService.delete(userId, addressIds));
     }
+
+
+    @Operation(
+            summary = "API Get all Addresses by User Id",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @GetMapping(Endpoint.V1.Address.GET_LIST_BY_USER_ID)
+    public ResponseEntity<?> getAllByUserId(@PathVariable Integer userId) {
+        return ResponseUtil.ok(addressService.getAllByUserId(userId));
+    }
 }

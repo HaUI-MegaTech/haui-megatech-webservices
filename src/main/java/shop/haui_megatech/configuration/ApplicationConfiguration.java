@@ -26,8 +26,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
-    private final UserRepository        userRepository;
-    private final LoginStatisticService loginStatisticService;
+    private final UserRepository userRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -56,27 +55,5 @@ public class ApplicationConfiguration {
     @Bean
     public DecimalFormat decimalFormat() {
         return new DecimalFormat();
-    }
-
-//    @Bean
-//    public CommandLineRunner commandLineRunner() {
-//        return args -> externalCrawler.crawl();
-//    }
-
-    @Bean
-    public CommandLineRunner commandLineRunner(FakeDataGenerator fakeDataGenerator, MyCustomUtil myCustomUtil) {
-        return args -> {
-//            fakeDataGenerator.fakeProductData();
-//            myCustomUtil.calculateProductRatingAverage();
-//            myCustomUtil.countProductFeedbacks();
-        };
-    }
-
-    @Bean
-    public CommandLineRunner launchLoginStatisticService() {
-        return args -> {
-            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-            scheduler.scheduleAtFixedRate(loginStatisticService::saveOrUpdate, 0, 5, TimeUnit.MINUTES);
-        };
     }
 }

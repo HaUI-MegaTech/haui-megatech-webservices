@@ -8,6 +8,7 @@ public class ErrorMessage {
         public static final String MISMATCHED_PASSWORD       = "user.error.mismatched-password";
         public static final String DEFICIENT_USERNAME_LENGTH = "user.error.deficient-username-length";
         public static final String UPDATE_INFO               = "user.error.update-info";
+        public static final String MISSING_EMAIL_FIELD       = "user.error.missing-email-field";
     }
 
     public static class Product {
@@ -38,10 +39,13 @@ public class ErrorMessage {
     }
 
     public static class Auth {
-        public static final String AUTHENTICATE  = "auth.error.authenticate";
-        public static final String EXPIRED_TOKEN = "auth.error.expired-token";
-        public static final String UNAUTHORIZED  = "auth.error.unauthorized";
-        public static final String MALFORMED     = "auth.error.malformed";
+        public static final String AUTHENTICATE        = "auth.error.authenticate";
+        public static final String EXPIRED_TOKEN       = "auth.error.expired-token";
+        public static final String UNAUTHORIZED        = "auth.error.unauthorized";
+        public static final String MALFORMED           = "auth.error.malformed";
+        public static final String SESSION_EXPIRED     = "auth.error.session-expired";
+        public static final String ABNORMAL_USER_AGENT = "auth.error.abnormal-user-agent";
+        public static final String ABNORMAL_IP_ADDRESS = "auth.error.abnormal-ip-address";
     }
 
     public static class Import {

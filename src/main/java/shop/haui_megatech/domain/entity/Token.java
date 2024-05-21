@@ -1,10 +1,7 @@
 package shop.haui_megatech.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
@@ -15,19 +12,21 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Token {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "token_id")
-    private Integer id;
+    private String id;
 
-    private String  token;
+    private String ipAddress;
+    private String userAgent;
+
     @CreatedDate
-    private Date    whenCreated;
-    private Date    whenExpired;
-    private Boolean revoked;
+    private Date whenCreated;
+    private Date whenExpired;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User owner;
 }

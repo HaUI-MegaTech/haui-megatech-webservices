@@ -4,29 +4,31 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import io.jsonwebtoken.security.WeakKeyException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import shop.haui_megatech.constant.ErrorMessage;
-import shop.haui_megatech.exception.AppException;
 
 import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class JwtTokenUtil {
     private final MessageSourceUtil messageSourceUtil;
-    @Value("${app.jwt.secret-key}")
-    private       String            SECRET_KEY;
 
-    public JwtTokenUtil(MessageSourceUtil messageSourceUtil) {this.messageSourceUtil = messageSourceUtil;}
+    @Value("${app.jwt.secret-key}")
+    private String SECRET_KEY;
+    @Value("${app.jwt.ttl-in-seconds}")
+    private Long   JWT_TTL_IN_SECONDS;
 
     public String extractUsername(String token) {
         return this.extractClaim(token, Claims::getSubject);
@@ -65,9 +67,10 @@ public class JwtTokenUtil {
                    .setSubject(userDetails.getUsername())
                    .setIssuedAt(new Date(Instant.now().toEpochMilli()))
                    .setExpiration(new Date(
-                                   Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()
-                           )
-                   )
+                           Instant.now()
+                                  .plus(JWT_TTL_IN_SECONDS, ChronoUnit.SECONDS)
+                                  .toEpochMilli()
+                   ))
                    .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                    .compact();
     }

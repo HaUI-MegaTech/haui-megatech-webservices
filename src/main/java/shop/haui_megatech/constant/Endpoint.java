@@ -98,7 +98,7 @@ public class Endpoint {
             public static final String REGISTER     = PREFIX + "/register";
             public static final String AUTHENTICATE = PREFIX + "/authenticate";
             public static final String REFRESH      = PREFIX + "/refresh";
-
+            public static final String LOGOUT       = PREFIX + "/logout";
         }
 
         public static final class Location {

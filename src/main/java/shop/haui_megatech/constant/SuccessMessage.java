@@ -71,5 +71,6 @@ public class SuccessMessage {
 
     public static class Auth {
         public static final String AUTHENTICATED = "auth.success.authenticated";
+        public static final String LOGGED_OUT    = "auth.success.logged-out";
     }
 }

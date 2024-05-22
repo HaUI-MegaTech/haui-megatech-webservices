@@ -34,4 +34,9 @@ public class HomeRestController {
     public ResponseEntity<?> getTotalSoldProduct() {
         return ResponseUtil.ok(homeService.getTotalSoldProducts());
     }
+
+    @GetMapping(Endpoint.V1.Product.TOTAL_REVENUE)
+    public ResponseEntity<?> getTotalProductRevenue() {
+        return ResponseUtil.ok(homeService.getTotalProductRevenue());
+    }
 }

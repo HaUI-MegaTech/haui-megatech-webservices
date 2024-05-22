@@ -82,4 +82,20 @@ public class HomeServiceImpl implements HomeService {
                 .item(total)
                 .build();
     }
+
+    @Override
+    public CommonResponseDTO<?> getTotalProductRevenue() {
+        List<Product> list = productRepository.findAll();
+        Double totalRevenue = list.stream()
+                                  .mapToDouble(item ->
+                                          item.getTotalSold() * (item.getCurrentPrice() - item.getImportPrice())
+                                  )
+                                  .sum();
+
+        return CommonResponseDTO
+                .builder()
+                .success(true)
+                .item(totalRevenue)
+                .build();
+    }
 }

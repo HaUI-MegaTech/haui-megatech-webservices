@@ -73,6 +73,7 @@ public class Endpoint {
             public static final String HARD_DELETE_LIST       = PREFIX + HARD_DELETE;
             public static final String TOP_SOLD               = PREFIX + "/top-sold";
             public static final String TOTAL_SOLD             = PREFIX + "/total-sold";
+            public static final String TOTAL_REVENUE          = PREFIX + "/total-revenue";
         }
 
         public static final class Brand {

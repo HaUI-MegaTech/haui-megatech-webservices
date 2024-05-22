@@ -96,7 +96,7 @@ public class Product {
     @ManyToOne(fetch = FetchType.EAGER)
     private Brand brand;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Image> images;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")

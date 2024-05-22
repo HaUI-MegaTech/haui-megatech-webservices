@@ -142,6 +142,13 @@ public class Endpoint {
             public static final String GET_LIST = PREFIX;
 
         }
+
+        public static final class LoginStatistic {
+            public static final String PREFIX            = V1.PREFIX + "/login-statistics";
+            public static final String GET_LIST_BY_DAY   = PREFIX + "/daily";
+            public static final String GET_LIST_BY_MONTH = PREFIX + "/monthly";
+            public static final String GET_LIST_BY_YEAR  = PREFIX + "/yearly";
+        }
     }
 
 

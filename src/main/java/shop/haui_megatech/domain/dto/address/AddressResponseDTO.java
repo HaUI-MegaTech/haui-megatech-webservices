@@ -16,13 +16,13 @@ public record AddressResponseDTO(
         String detail,
         @JsonFormat(
                 shape = JsonFormat.Shape.STRING,
-                pattern = DatetimeFormat.INDOCHINA_DATETIME_FORMAT,
+                pattern = DatetimeFormat.INDOCHINA_FULL_DATETIME_FORMAT,
                 timezone = DatetimeFormat.VIETNAM_TIMEZONE
         )
         Date whenCreated,
         @JsonFormat(
                 shape = JsonFormat.Shape.STRING,
-                pattern = DatetimeFormat.INDOCHINA_DATETIME_FORMAT,
+                pattern = DatetimeFormat.INDOCHINA_FULL_DATETIME_FORMAT,
                 timezone = DatetimeFormat.VIETNAM_TIMEZONE
         )
         Date lastUpdated

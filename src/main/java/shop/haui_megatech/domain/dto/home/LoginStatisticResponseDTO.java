@@ -1,20 +1,17 @@
-package shop.haui_megatech.domain.dto.feedback;
+package shop.haui_megatech.domain.dto.home;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import shop.haui_megatech.constant.DatetimeFormat;
 
 import java.util.Date;
 
-public record BriefFeedbackForProduct(
-        Integer id,
-        String alias,
-        String content,
-        Byte rating,
+public record LoginStatisticResponseDTO(
         @JsonFormat(
                 shape = JsonFormat.Shape.STRING,
-                pattern = DatetimeFormat.INDOCHINA_FULL_DATETIME_FORMAT,
+                pattern = DatetimeFormat.INDOCHINA_DATETIME_FORMAT,
                 timezone = DatetimeFormat.VIETNAM_TIMEZONE
         )
-        Date whenCreated
+        Date date,
+        Integer loggedIn
 ) {
 }

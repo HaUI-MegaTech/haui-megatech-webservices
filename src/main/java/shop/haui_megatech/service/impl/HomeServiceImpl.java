@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.home.ProductCountByBrandResponseDTO;
 import shop.haui_megatech.domain.dto.pagination.NoPaginationResponseDTO;
 import shop.haui_megatech.domain.dto.product.BriefProductResponseDTO;
@@ -62,11 +63,23 @@ public class HomeServiceImpl implements HomeService {
                                            .newPrice(item.getCurrentPrice())
                                            .totalSold(item.getTotalSold())
                                            .mainImageUrl(item.getMainImageUrl())
-                                           .revenue((long) (item.getTotalSold() * (item.getCurrentPrice() - item.getImportPrice())))
+                                           .revenue((double) (item.getTotalSold() * (item.getCurrentPrice() - item.getImportPrice())))
                                            .build()
                            )
                            .toList()
                 )
+                .build();
+    }
+
+    @Override
+    public CommonResponseDTO<?> getTotalSoldProducts() {
+        List<Product> list = productRepository.findAll();
+        Integer total = list.stream().mapToInt(Product::getTotalSold).sum();
+
+        return CommonResponseDTO
+                .builder()
+                .success(true)
+                .item(total)
                 .build();
     }
 }

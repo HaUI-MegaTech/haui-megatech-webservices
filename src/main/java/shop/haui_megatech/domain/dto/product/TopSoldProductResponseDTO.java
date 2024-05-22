@@ -9,6 +9,6 @@ public record TopSoldProductResponseDTO(
         Float newPrice,
         Integer totalSold,
         String mainImageUrl,
-        Long revenue
+        Double revenue
 ) {
 }

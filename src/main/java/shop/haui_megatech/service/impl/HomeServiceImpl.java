@@ -12,9 +12,14 @@ import shop.haui_megatech.domain.dto.pagination.NoPaginationResponseDTO;
 import shop.haui_megatech.domain.dto.product.BriefProductResponseDTO;
 import shop.haui_megatech.domain.dto.product.TopSoldProductResponseDTO;
 import shop.haui_megatech.domain.entity.Brand;
+import shop.haui_megatech.domain.entity.LoginStatistic;
 import shop.haui_megatech.domain.entity.Product;
+import shop.haui_megatech.domain.entity.User;
+import shop.haui_megatech.domain.entity.enums.Role;
 import shop.haui_megatech.repository.BrandRepository;
+import shop.haui_megatech.repository.LoginStatisticRepository;
 import shop.haui_megatech.repository.ProductRepository;
+import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.service.HomeService;
 
 import java.util.List;
@@ -22,8 +27,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class HomeServiceImpl implements HomeService {
-    private final BrandRepository   brandRepository;
-    private final ProductRepository productRepository;
+    private final BrandRepository          brandRepository;
+    private final ProductRepository        productRepository;
+    private final UserRepository           userRepository;
+    private final LoginStatisticRepository loginStatisticRepository;
 
     @Override
     public NoPaginationResponseDTO<ProductCountByBrandResponseDTO> getProductCountByBrand() {
@@ -98,4 +105,30 @@ public class HomeServiceImpl implements HomeService {
                 .item(totalRevenue)
                 .build();
     }
+
+    @Override
+    public CommonResponseDTO<?> getTotalCustomers() {
+        List<User> list = userRepository.findAll();
+        list.removeIf(item -> !item.getRole().equals(Role.CUSTOMER));
+
+        return CommonResponseDTO
+                .builder()
+                .success(true)
+                .item(list.size())
+                .build();
+    }
+
+    @Override
+    public CommonResponseDTO<?> getTotalLoggedIn() {
+        List<LoginStatistic> list = loginStatisticRepository.findAll();
+        Integer total = list.stream().mapToInt(LoginStatistic::getLoggedIn).sum();
+
+        return CommonResponseDTO
+                .builder()
+                .success(true)
+                .item(total)
+                .build();
+    }
+
+
 }

@@ -13,4 +13,8 @@ public interface HomeService {
     CommonResponseDTO<?> getTotalSoldProducts();
 
     CommonResponseDTO<?> getTotalProductRevenue();
+
+    CommonResponseDTO<?> getTotalCustomers();
+
+    CommonResponseDTO<?> getTotalLoggedIn();
 }

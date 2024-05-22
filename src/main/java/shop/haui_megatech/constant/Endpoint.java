@@ -37,6 +37,7 @@ public class Endpoint {
             public static final String RESTORE_LIST        = PREFIX + RESTORE;
             public static final String HARD_DELETE_ONE     = PREFIX + HARD_DELETE + USER_ID;
             public static final String HARD_DELETE_LIST    = PREFIX + HARD_DELETE;
+            public static final String TOTAL_CUSTOMERS     = PREFIX + "/total-customers";
         }
 
         public static final class CartItem {
@@ -152,6 +153,7 @@ public class Endpoint {
             public static final String GET_LIST_BY_DAY   = PREFIX + "/daily";
             public static final String GET_LIST_BY_MONTH = PREFIX + "/monthly";
             public static final String GET_LIST_BY_YEAR  = PREFIX + "/yearly";
+            public static final String GET_TOTAL         = PREFIX + "/total";
         }
     }
 

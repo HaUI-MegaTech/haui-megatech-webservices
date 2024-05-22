@@ -25,6 +25,6 @@ public class Brand {
     @Temporal(TemporalType.TIMESTAMP)
     private Date    whenCreated;
 
-    @OneToMany(mappedBy = "brand")
+    @OneToMany(mappedBy = "brand", fetch = FetchType.EAGER)
     private List<Product> products;
 }

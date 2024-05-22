@@ -24,4 +24,9 @@ public class HomeRestController {
     public ResponseEntity<?> getBrandStatistics() {
         return ResponseUtil.ok(homeService.getProductCountByBrand());
     }
+
+    @GetMapping(Endpoint.V1.Product.TOP_SOLD)
+    public ResponseEntity<?> getTopSoldProduct() {
+        return ResponseUtil.ok(homeService.getTopSoldProducts());
+    }
 }

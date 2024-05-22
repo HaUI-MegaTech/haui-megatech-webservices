@@ -16,6 +16,9 @@ public record BriefProductResponseDTO(
         Integer discountPercent,
         String ram,
         String storage,
-        String mainImageUrl
+        String mainImageUrl,
+        Integer totalSold,
+        Float averageRating,
+        Integer feedbacksCount
 ) {
 }

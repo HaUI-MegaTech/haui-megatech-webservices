@@ -71,6 +71,7 @@ public class Endpoint {
             public static final String RESTORE_LIST           = PREFIX + RESTORE;
             public static final String HARD_DELETE_ONE        = PREFIX + HARD_DELETE + PRODUCT_ID;
             public static final String HARD_DELETE_LIST       = PREFIX + HARD_DELETE;
+            public static final String TOP_SOLD               = PREFIX + "/top-sold";
         }
 
         public static final class Brand {

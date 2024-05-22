@@ -40,9 +40,9 @@ public class PaymentRestController {
                     Integer.valueOf(request.getParameter("userId")),
                     Integer.valueOf(request.getParameter("addressId"))
             );
-            response.sendRedirect("http://localhost:3000/payment/success");
+            response.sendRedirect("http://localhost:3000/payment-success");
         } else {
-            response.sendRedirect("http://localhost:3000/payment/error");
+            response.sendRedirect("http://localhost:3000/payment-error");
         }
     }
 }

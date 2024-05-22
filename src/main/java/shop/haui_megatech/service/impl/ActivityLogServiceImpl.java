@@ -54,12 +54,7 @@ public class ActivityLogServiceImpl implements ActivityLogService {
                         .map(item -> ActivityLogResponseDTO
                                 .builder()
                                 .id(item.getId())
-                                .subject(String.format(
-                                        "%s (%s %s)",
-                                        item.getSubject().getUsername(),
-                                        item.getSubject().getFirstName(),
-                                        item.getSubject().getLastName()
-                                ))
+                                .subject(item.getSubject().getUsername())
                                 .operation(messageSourceUtil.getMessage(item.getOperation()))
                                 .success(item.getSuccess())
                                 .whenCreated(item.getWhenCreated())

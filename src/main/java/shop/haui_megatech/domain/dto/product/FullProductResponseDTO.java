@@ -54,6 +54,7 @@ public record FullProductResponseDTO(
         Integer launchDate,
         Float averageRating,
         Integer feedbacksCount,
+        Integer totalSold,
 
         BrandInFullProductResponseDTO brand,
 

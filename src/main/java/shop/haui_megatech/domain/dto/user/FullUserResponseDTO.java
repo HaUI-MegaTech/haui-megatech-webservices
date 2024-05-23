@@ -21,7 +21,6 @@ public record FullUserResponseDTO(
         String email,
         String avatarImageUrl,
         String phoneNumber,
-        List<AddressRequestDTO> addresses,
 
         @JsonFormat(
                 shape = JsonFormat.Shape.STRING,

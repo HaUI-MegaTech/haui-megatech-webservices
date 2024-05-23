@@ -84,6 +84,7 @@ public class Endpoint {
             public static final String GET_ACTIVE_LIST   = PREFIX + ACTIVE;
             public static final String GET_STATISTIC     = PREFIX + "/statistics";
             public static final String GET_TOTAL_REVENUE = PREFIX + "/total-revenue";
+            public static final String GET_TOTAL_SOLD    = PREFIX + "/total-sold";
         }
 
         public static final class Order {

@@ -7,4 +7,6 @@ import shop.haui_megatech.service.base.Gettable;
 
 public interface BrandService extends Gettable<BrandResponseDTO> {
     NoPaginationResponseDTO<BrandStatisticResponseDTO> getTotalRevenue();
+
+    NoPaginationResponseDTO<BrandStatisticResponseDTO> getTotalSold();
 }

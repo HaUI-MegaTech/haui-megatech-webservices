@@ -1,22 +1,9 @@
 package shop.haui_megatech.configuration;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import shop.haui_megatech.domain.entity.LoginStatistic;
-import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.repository.LoginStatisticRepository;
 import shop.haui_megatech.repository.ProductRepository;
-import shop.haui_megatech.utility.FakeDataGenerator;
-import shop.haui_megatech.utility.MyCustomUtil;
-import shop.haui_megatech.utility.RandomUtil;
-import shop.haui_megatech.utility.RandomValueGenerator;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor

@@ -1,7 +1,5 @@
 package shop.haui_megatech.service.impl;
 
-import com.cloudinary.api.exceptions.NotFound;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,7 +27,6 @@ import shop.haui_megatech.validator.RequestValidator;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
 

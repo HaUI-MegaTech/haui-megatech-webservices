@@ -1,8 +1,8 @@
 package shop.haui_megatech.service;
 
-import shop.haui_megatech.domain.dto.order.*;
-import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.order.*;
 
 public interface OrderService {
     GlobalResponseDTO<?> getListOrderForUser(PaginationRequestDTO requestDTO);

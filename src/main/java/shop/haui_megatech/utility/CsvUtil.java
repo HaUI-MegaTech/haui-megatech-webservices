@@ -25,11 +25,12 @@ public class CsvUtil {
     }
 
     public static List<User> csvToUsers(InputStream is) {
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-             CSVParser csvParser = new CSVParser(bufferedReader,
-                                                 CSVFormat.DEFAULT.withFirstRecordAsHeader()
-                                                                  .withIgnoreHeaderCase()
-                                                                  .withTrim())
+        try (
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+                CSVParser csvParser = new CSVParser(bufferedReader,
+                        CSVFormat.DEFAULT.withFirstRecordAsHeader()
+                                         .withIgnoreHeaderCase()
+                                         .withTrim())
         ) {
             List<User> users = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
@@ -47,11 +48,12 @@ public class CsvUtil {
     }
 
     public static List<Product> csvToProducts(InputStream is) {
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-             CSVParser csvParser = new CSVParser(bufferedReader,
-                                                 CSVFormat.DEFAULT.withFirstRecordAsHeader()
-                                                                  .withIgnoreHeaderCase()
-                                                                  .withTrim())
+        try (
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+                CSVParser csvParser = new CSVParser(bufferedReader,
+                        CSVFormat.DEFAULT.withFirstRecordAsHeader()
+                                         .withIgnoreHeaderCase()
+                                         .withTrim())
         ) {
             List<Product> products = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();

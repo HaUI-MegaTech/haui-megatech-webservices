@@ -1,7 +1,7 @@
 package shop.haui_megatech.service;
 
-import shop.haui_megatech.domain.dto.home.LoginStatisticResponseDTO;
 import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+import shop.haui_megatech.domain.dto.home.LoginStatisticResponseDTO;
 
 import java.util.List;
 

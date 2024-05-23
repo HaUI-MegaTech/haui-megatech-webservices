@@ -1,7 +1,6 @@
 package shop.haui_megatech.configuration;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.xmlbeans.impl.tool.CommandLine;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,8 +8,6 @@ import shop.haui_megatech.domain.entity.Token;
 import shop.haui_megatech.repository.TokenRepository;
 import shop.haui_megatech.service.LoginStatisticService;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;

@@ -3,8 +3,8 @@ package shop.haui_megatech.service;
 import shop.haui_megatech.domain.dto.feedback.BriefFeedbackForProduct;
 import shop.haui_megatech.domain.dto.feedback.BriefFeedbackForUser;
 import shop.haui_megatech.domain.dto.feedback.FeedbackRequestDTO;
-import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
 
 import java.util.List;
 

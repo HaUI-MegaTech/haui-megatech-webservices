@@ -7,8 +7,11 @@ import shop.haui_megatech.domain.dto.order.OrderItemResponseDTO;
 import shop.haui_megatech.domain.entity.Order;
 
 public interface OrderMapper {
-    Order addOrderRequestForUserDTOtoOrder (AddOrderForUserRequestDTO requestDTO);
-    Order addOrderRequestForAdminDTOtoOrder (AddOrderForAdminRequestDTO requestDTO);
-    OrderBaseDTO orderToOrderBase (Order order);
+    Order addOrderRequestForUserDTOtoOrder(AddOrderForUserRequestDTO requestDTO);
+
+    Order addOrderRequestForAdminDTOtoOrder(AddOrderForAdminRequestDTO requestDTO);
+
+    OrderBaseDTO orderToOrderBase(Order order);
+
     OrderItemResponseDTO orderItemResponseDto(Order order);
 }

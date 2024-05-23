@@ -1,7 +1,6 @@
 package shop.haui_megatech.configuration;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,14 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.UserRepository;
-import shop.haui_megatech.service.LoginStatisticService;
-import shop.haui_megatech.utility.FakeDataGenerator;
-import shop.haui_megatech.utility.MyCustomUtil;
 
 import java.text.DecimalFormat;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 @RequiredArgsConstructor

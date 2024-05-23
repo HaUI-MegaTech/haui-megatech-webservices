@@ -18,9 +18,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class QRCodeGeneratorUtil {
-    public static void generateQRCode(String contentQr, String folder, String nameQr, OutputStream outputStream) throws WriterException, IOException, JSONException {
-        String qrCodePath = "src/main/resources/"+folder+"/";
-        String qrCodeName = qrCodePath+nameQr;
+    public static void generateQRCode(String contentQr, String folder, String nameQr, OutputStream outputStream)
+            throws WriterException, IOException, JSONException {
+        String qrCodePath = "src/main/resources/" + folder + "/";
+        String qrCodeName = qrCodePath + nameQr;
 
         var qrCodeWriter = new QRCodeWriter();
 
@@ -31,7 +32,7 @@ public class QRCodeGeneratorUtil {
 
         BufferedImage logo = MatrixToImageWriter.toBufferedImage(bitMatrix, imageConfig);
         // Getting logo image
-        BufferedImage logoImage = ImageIO.read( new File("src\\main\\resources\\logo.jpg"));
+        BufferedImage logoImage = ImageIO.read(new File("src\\main\\resources\\logo.jpg"));
         int finalImageHeight = logo.getHeight() - logoImage.getHeight();
         int finalImageWidth = logo.getWidth() - logoImage.getWidth();
         //Merging both images
@@ -42,10 +43,11 @@ public class QRCodeGeneratorUtil {
         graphics.drawImage(logoImage, (int) Math.round(finalImageWidth / 2), (int) Math.round(finalImageHeight / 2), null);
 
         ImageIO.write(finalImage, "PNG", outputStream);
-        ImageIO.write(finalImage, "PNG", new File(qrCodeName+".png"));
+        ImageIO.write(finalImage, "PNG", new File(qrCodeName + ".png"));
 
         System.out.println("QR Code with Logo Generated Successfully");
     }
+
     public static String decodeQr(byte[] data) throws IOException, NotFoundException {
         Result result = new MultiFormatReader()
                 .decode(new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(

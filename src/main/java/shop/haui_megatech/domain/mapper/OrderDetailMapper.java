@@ -7,7 +7,9 @@ import shop.haui_megatech.domain.entity.Order;
 import shop.haui_megatech.domain.entity.OrderDetail;
 
 public interface OrderDetailMapper {
-    OrderDetail orderDetailRequestDTOtoOrderDetail (OrderDetailRequestDTO requestDTO, Order order);
+    OrderDetail orderDetailRequestDTOtoOrderDetail(OrderDetailRequestDTO requestDTO, Order order);
+
     OrderDetailResponseDTO orderDetailToOrderDetailResponseDTO(OrderDetail orderDetail);
+
     OrderOrderDetailResponseDTO orderDetailToOrderOrderDetailResponseDto(OrderDetail orderDetail);
 }

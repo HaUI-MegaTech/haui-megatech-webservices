@@ -49,4 +49,9 @@ public class HomeRestController {
     public ResponseEntity<?> getTotalLoggedIn() {
         return ResponseUtil.ok(homeService.getTotalLoggedIn());
     }
+
+    @GetMapping(Endpoint.V1.Order.GET_LATEST_ORDERS)
+    public ResponseEntity<?> getLatestOrders() {
+        return ResponseUtil.ok(homeService.getLatestOrder());
+    }
 }

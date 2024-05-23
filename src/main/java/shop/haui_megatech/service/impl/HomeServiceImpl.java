@@ -8,18 +8,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.home.ProductCountByBrandResponseDTO;
+import shop.haui_megatech.domain.dto.order.LatestOrderResponseDTO;
 import shop.haui_megatech.domain.dto.pagination.NoPaginationResponseDTO;
 import shop.haui_megatech.domain.dto.product.BriefProductResponseDTO;
 import shop.haui_megatech.domain.dto.product.TopSoldProductResponseDTO;
-import shop.haui_megatech.domain.entity.Brand;
-import shop.haui_megatech.domain.entity.LoginStatistic;
-import shop.haui_megatech.domain.entity.Product;
-import shop.haui_megatech.domain.entity.User;
+import shop.haui_megatech.domain.entity.*;
 import shop.haui_megatech.domain.entity.enums.Role;
-import shop.haui_megatech.repository.BrandRepository;
-import shop.haui_megatech.repository.LoginStatisticRepository;
-import shop.haui_megatech.repository.ProductRepository;
-import shop.haui_megatech.repository.UserRepository;
+import shop.haui_megatech.repository.*;
 import shop.haui_megatech.service.HomeService;
 
 import java.util.List;
@@ -31,6 +26,7 @@ public class HomeServiceImpl implements HomeService {
     private final ProductRepository        productRepository;
     private final UserRepository           userRepository;
     private final LoginStatisticRepository loginStatisticRepository;
+    private final OrderRepository          orderRepository;
 
     @Override
     public NoPaginationResponseDTO<ProductCountByBrandResponseDTO> getProductCountByBrand() {
@@ -127,6 +123,37 @@ public class HomeServiceImpl implements HomeService {
                 .builder()
                 .success(true)
                 .item(total)
+                .build();
+    }
+
+    @Override
+    public NoPaginationResponseDTO<LatestOrderResponseDTO> getLatestOrder() {
+        Sort sort = Sort.by("id").descending();
+        Pageable pageable = PageRequest.of(0, 10, sort);
+        Page<Order> page = orderRepository.findAll(pageable);
+        List<Order> list = page.getContent();
+
+        return NoPaginationResponseDTO
+                .<LatestOrderResponseDTO>builder()
+                .success(true)
+                .items(list.stream()
+                           .map(item ->
+                                   LatestOrderResponseDTO
+                                           .builder()
+                                           .id(item.getId())
+                                           .customer(String.format(
+                                                   "%s %s (%s)",
+                                                   item.getUser().getFirstName(),
+                                                   item.getUser().getLastName(),
+                                                   item.getUser().getUsername()
+                                           ))
+                                           .orderTime(item.getOrderTime())
+                                           .total((double) item.getTotal())
+                                           .status(item.getStatus())
+                                           .build()
+                           )
+                           .toList()
+                )
                 .build();
     }
 

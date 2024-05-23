@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
 import shop.haui_megatech.service.BrandService;
 import shop.haui_megatech.utility.ResponseUtil;
 

@@ -3,7 +3,8 @@ package shop.haui_megatech.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.SuccessMessage;
-import shop.haui_megatech.domain.dto.pagination.NoPaginationResponseDTO;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+import shop.haui_megatech.domain.dto.global.MetaDTO;
 import shop.haui_megatech.domain.entity.location.District;
 import shop.haui_megatech.domain.entity.location.Province;
 import shop.haui_megatech.domain.entity.location.Ward;
@@ -11,6 +12,8 @@ import shop.haui_megatech.repository.DistrictRepository;
 import shop.haui_megatech.repository.ProvinceRepository;
 import shop.haui_megatech.service.LocationService;
 import shop.haui_megatech.utility.MessageSourceUtil;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,29 +23,38 @@ public class LocationServiceImpl implements LocationService {
     private final MessageSourceUtil  messageSourceUtil;
 
     @Override
-    public NoPaginationResponseDTO<Province> getProvinces() {
-        return NoPaginationResponseDTO
-                .<Province>builder()
-                .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
-                .items(provinceRepository.findAll())
+    public GlobalResponseDTO<List<Province>> getProvinces() {
+        return GlobalResponseDTO
+                .<List<Province>>builder()
+                .meta(MetaDTO.builder()
+                             .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
+                             .build()
+                )
+                .data(provinceRepository.findAll())
                 .build();
     }
 
     @Override
-    public NoPaginationResponseDTO<District> getDistrictsByProvince(String code) {
-        return NoPaginationResponseDTO
-                .<District>builder()
-                .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
-                .items(provinceRepository.findById(code).orElseThrow().getDistricts())
+    public GlobalResponseDTO<List<District>> getDistrictsByProvince(String code) {
+        return GlobalResponseDTO
+                .<List<District>>builder()
+                .meta(MetaDTO.builder()
+                             .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
+                             .build())
+                .data(provinceRepository.findById(code).orElseThrow().getDistricts())
                 .build();
     }
 
     @Override
-    public NoPaginationResponseDTO<Ward> getWardsByDistrict(String code) {
-        return NoPaginationResponseDTO
-                .<Ward>builder()
-                .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
-                .items(districtRepository.findById(code).orElseThrow().getWards())
+    public GlobalResponseDTO<List<Ward>> getWardsByDistrict(String code) {
+        return GlobalResponseDTO
+                .<List<Ward>>builder()
+                .meta(MetaDTO
+                        .builder()
+                        .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
+                        .build()
+                )
+                .data(districtRepository.findById(code).orElseThrow().getWards())
                 .build();
     }
 }

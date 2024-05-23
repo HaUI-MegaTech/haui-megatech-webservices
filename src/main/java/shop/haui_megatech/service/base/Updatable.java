@@ -1,7 +1,7 @@
 package shop.haui_megatech.service.base;
 
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
 
 public interface Updatable<T> {
-    CommonResponseDTO<?> updateOne(Integer id, T request);
+    GlobalResponseDTO<?> updateOne(Integer id, T request);
 }

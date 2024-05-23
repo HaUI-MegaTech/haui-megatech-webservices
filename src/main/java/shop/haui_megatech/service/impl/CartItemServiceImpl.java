@@ -11,10 +11,8 @@ import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.cart.BriefCartItemResponseDTO;
 import shop.haui_megatech.domain.dto.cart.CartItemRequestDTO;
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
+import shop.haui_megatech.domain.dto.global.*;
 import shop.haui_megatech.domain.dto.user.FullUserResponseDTO;
 import shop.haui_megatech.domain.entity.CartItem;
 import shop.haui_megatech.domain.entity.Product;
@@ -44,7 +42,7 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepository;
 
     @Override
-    public CommonResponseDTO<?> addOne(Integer productId, CartItemRequestDTO request) {
+    public GlobalResponseDTO<?> addOne(Integer productId, CartItemRequestDTO request) {
         if (request.quantity() <= 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
@@ -63,10 +61,13 @@ public class CartItemServiceImpl implements CartItemService {
         if (existedCartItem.isPresent()) {
             existedCartItem.get().setQuantity(existedCartItem.get().getQuantity() + request.quantity());
             cartItemRepository.save(existedCartItem.get());
-            return CommonResponseDTO
+            return GlobalResponseDTO
                     .<FullUserResponseDTO>builder()
-                    .success(true)
-                    .message(messageSourceUtil.getMessage(SuccessMessage.Cart.ADDED_ONE))
+                    .meta(MetaDTO.builder()
+                                 .status(Status.SUCCESS)
+                                 .message(messageSourceUtil.getMessage(SuccessMessage.Cart.ADDED_ONE))
+                                 .build()
+                    )
                     .build();
         }
 
@@ -77,15 +78,18 @@ public class CartItemServiceImpl implements CartItemService {
                                         .quantity(request.quantity())
                                         .build());
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.Cart.ADDED_ONE))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.Cart.ADDED_ONE))
+                        .build())
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> updateOne(Integer productId, Integer cartItemId, CartItemRequestDTO request) {
+    public GlobalResponseDTO<?> updateOne(Integer productId, Integer cartItemId, CartItemRequestDTO request) {
         if (request.quantity() <= 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_QUANTITY);
 
@@ -105,15 +109,19 @@ public class CartItemServiceImpl implements CartItemService {
         foundCartItem.get().setQuantity(request.quantity());
         cartItemRepository.save(foundCartItem.get());
 
-        return CommonResponseDTO.
-                builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.Cart.UPDATED_ONE))
+        return GlobalResponseDTO
+                .builder()
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.Cart.UPDATED_ONE))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteOne(Integer cartItemId) {
+    public GlobalResponseDTO<?> hardDeleteOne(Integer cartItemId) {
         if (cartItemId < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_ID);
 
@@ -126,15 +134,19 @@ public class CartItemServiceImpl implements CartItemService {
 
         cartItemRepository.deleteById(cartItemId);
 
-        return CommonResponseDTO.
-                builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.Cart.HARD_DELETED_ONE))
+        return GlobalResponseDTO
+                .builder()
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.Cart.HARD_DELETED_ONE))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteList(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<?> hardDeleteList(ListIdsRequestDTO request) {
         request.ids().parallelStream().forEach(item -> {
             if (item < 0)
                 throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_CART_ITEM_ID);
@@ -155,20 +167,24 @@ public class CartItemServiceImpl implements CartItemService {
 
         cartItemRepository.deleteAllByIds(checkedCartItemIds);
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(
-                                SuccessMessage.Cart.HARD_DELETED_LIST,
-                                checkedCartItemIds.size()
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(
+                                        SuccessMessage.Cart.HARD_DELETED_LIST,
+                                        checkedCartItemIds.size()
+                                )
                         )
+                        .build()
                 )
                 .build();
     }
 
 
     @Override
-    public PaginationResponseDTO<BriefCartItemResponseDTO> getListByUser(PaginationRequestDTO request) {
+    public GlobalResponseDTO<List<BriefCartItemResponseDTO>> getListByUser(PaginationRequestDTO request) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
 
         if (requestedUser == null)
@@ -195,14 +211,21 @@ public class CartItemServiceImpl implements CartItemService {
                 );
                 cartItems.addAll(page.getContent());
             }
-            return PaginationResponseDTO
-                    .<BriefCartItemResponseDTO>builder()
-                    .keyword(request.keyword())
-                    .pageIndex(request.index())
-                    .pageSize(request.limit())
-                    .totalItems((long) cartItems.size())
-                    .totalPages(pageCount)
-                    .items(cartItems
+            return GlobalResponseDTO
+                    .<List<BriefCartItemResponseDTO>>builder()
+                    .meta(MetaDTO.builder()
+                                 .status(Status.SUCCESS)
+                                 .pagination(PaginationDTO.builder()
+                                                          .keyword(request.keyword())
+                                                          .pageIndex(request.index())
+                                                          .pageSize(request.limit())
+                                                          .totalItems((long) cartItems.size())
+                                                          .totalPages(pageCount)
+                                                          .build()
+                                 )
+                                 .build()
+                    )
+                    .data(cartItems
                             .parallelStream()
                             .map(CartItemMapper.INSTANCE::toBriefCartItemResponseDTO)
                             .collect(Collectors.toList())
@@ -214,13 +237,21 @@ public class CartItemServiceImpl implements CartItemService {
 
         List<CartItem> cartItems = page.getContent();
 
-        return PaginationResponseDTO
-                .<BriefCartItemResponseDTO>builder()
-                .pageIndex(request.index())
-                .pageSize((short) page.getNumberOfElements())
-                .totalItems(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .items(cartItems
+        return GlobalResponseDTO
+                .<List<BriefCartItemResponseDTO>>builder()
+                .meta(MetaDTO
+                        .builder()
+                        .pagination(PaginationDTO
+                                .builder()
+                                .pageIndex(request.index())
+                                .pageSize((short) page.getNumberOfElements())
+                                .totalItems(page.getTotalElements())
+                                .totalPages(page.getTotalPages())
+                                .build()
+                        )
+                        .build()
+                )
+                .data(cartItems
                         .parallelStream()
                         .map(CartItemMapper.INSTANCE::toBriefCartItemResponseDTO)
                         .collect(Collectors.toList())

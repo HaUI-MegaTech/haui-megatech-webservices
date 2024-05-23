@@ -12,11 +12,9 @@ import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.MailDTO;
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
+import shop.haui_megatech.domain.dto.global.*;
 import shop.haui_megatech.domain.dto.user.*;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.UserMapper;
@@ -46,22 +44,25 @@ public class UserServiceImpl implements UserService {
     private final FileUploadService fileUploadService;
 
     @Override
-    public CommonResponseDTO<FullUserResponseDTO> getOneUser(Integer userId) {
+    public GlobalResponseDTO<FullUserResponseDTO> getOneUser(Integer userId) {
         Optional<User> foundUser = userRepository.findById(userId);
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .<FullUserResponseDTO>builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.User.FOUND))
-                .item(UserMapper.INSTANCE.toUserFullResponseDTO(foundUser.get()))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.FOUND))
+                        .build())
+                .data(UserMapper.INSTANCE.toUserFullResponseDTO(foundUser.get()))
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> addOneUser(AddUserRequestDTO request) {
+    public GlobalResponseDTO<?> addOneUser(AddUserRequestDTO request) {
         if (!RequestValidator.isBlankRequestParams(request.username()))
             throw new AbsentRequiredFieldException(ErrorMessage.Request.BLANK_USERNAME);
 
@@ -74,11 +75,15 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findUserByUsername(request.username()).isPresent())
             throw new DuplicateUsernameException(ErrorMessage.Request.DUPLICATE_USERNAME);
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .<BriefUserResponseDTO>builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.User.ADDED_ONE))
-                .item(UserMapper.INSTANCE.toBriefUserResponseDTO(
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.ADDED_ONE))
+                        .build()
+                )
+                .data(UserMapper.INSTANCE.toBriefUserResponseDTO(
                         userRepository.save(
                                 User.builder()
                                     .username(request.username())
@@ -92,20 +97,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> importExcelUser(ImportDataRequestDTO request) {
+    public GlobalResponseDTO<?> importExcelUser(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
         try {
             List<User> users = ExcelUtil.excelToUsers(request.file().getInputStream());
             List<User> savedUsers = userRepository.saveAll(users);
-            return CommonResponseDTO
+            return GlobalResponseDTO
                     .builder()
-                    .success(true)
-                    .message(messageSourceUtil.getMessage(
-                            SuccessMessage.User.IMPORTED_LIST,
-                            savedUsers.size()
-                    ))
+                    .meta(MetaDTO
+                            .builder()
+                            .status(Status.SUCCESS)
+                            .message(messageSourceUtil.getMessage(
+                                    SuccessMessage.User.IMPORTED_LIST,
+                                    savedUsers.size()
+                            ))
+                            .build()
+                    )
                     .build();
         } catch (IOException e) {
             throw new RuntimeException(ErrorMessage.Import.PROCESS_EXCEL);
@@ -113,20 +122,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> importCsvUser(ImportDataRequestDTO request) {
+    public GlobalResponseDTO<?> importCsvUser(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
         try {
             List<User> users = CsvUtil.csvToUsers(request.file().getInputStream());
             List<User> savedUsers = userRepository.saveAll(users);
-            return CommonResponseDTO
+            return GlobalResponseDTO
                     .builder()
-                    .success(true)
-                    .message(messageSourceUtil.getMessage(
-                            SuccessMessage.User.IMPORTED_LIST,
-                            savedUsers.size()
-                    ))
+                    .meta(MetaDTO
+                            .builder()
+                            .status(Status.SUCCESS)
+                            .message(messageSourceUtil.getMessage(
+                                    SuccessMessage.User.IMPORTED_LIST,
+                                    savedUsers.size()
+                            ))
+                            .build()
+                    )
                     .build();
         } catch (IOException ex) {
             throw new RuntimeException(ErrorMessage.Import.PROCESS_CSV);
@@ -134,7 +147,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponseDTO<?> updateInfoUser(
+    public GlobalResponseDTO<?> updateInfoUser(
             Integer userId,
             UpdateUserInfoRequest request
     ) {
@@ -164,15 +177,19 @@ public class UserServiceImpl implements UserService {
         foundUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));
         userRepository.save(foundUser);
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.User.INFO_UPDATED))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.INFO_UPDATED))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> updatePasswordUser(
+    public GlobalResponseDTO<?> updatePasswordUser(
             Integer userId,
             UpdateUserPasswordRequest request
     ) {
@@ -192,15 +209,19 @@ public class UserServiceImpl implements UserService {
         foundUser.setPassword(passwordEncoder.encode(request.newPassword()));
         userRepository.save(foundUser);
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.User.PASSWORD_UPDATED))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.PASSWORD_UPDATED))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> softDeleteOneUser(Integer userId) {
+    public GlobalResponseDTO<?> softDeleteOneUser(Integer userId) {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
@@ -210,33 +231,41 @@ public class UserServiceImpl implements UserService {
         foundUser.setDeleted(true);
         userRepository.save(foundUser);
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.User.SOFT_DELETED_ONE))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.SOFT_DELETED_ONE))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> softDeleteListUsers(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<?> softDeleteListUsers(ListIdsRequestDTO request) {
         List<User> foundUsers = userRepository.findAllById(request.ids());
 
         foundUsers.parallelStream().forEach(item -> item.setDeleted(true));
 
         userRepository.saveAll(foundUsers);
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(
-                        SuccessMessage.User.SOFT_DELETED_LIST,
-                        foundUsers.size()
-                ))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(
+                                SuccessMessage.User.SOFT_DELETED_LIST,
+                                foundUsers.size()
+                        ))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteOneUser(Integer id) {
+    public GlobalResponseDTO<?> hardDeleteOneUser(Integer id) {
         Optional<User> found = userRepository.findById(id);
 
         if (found.isEmpty())
@@ -244,29 +273,37 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(found.get());
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.User.HARD_DELETED_ONE))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.HARD_DELETED_ONE))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> hardDeleteListUsers(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<?> hardDeleteListUsers(ListIdsRequestDTO request) {
         userRepository.deleteAllById(request.ids());
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(
-                        SuccessMessage.User.HARD_DELETED_LIST,
-                        request.ids().size()
-                ))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(
+                                SuccessMessage.User.HARD_DELETED_LIST,
+                                request.ids().size()
+                        ))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> restoreOneUser(Integer userId) {
+    public GlobalResponseDTO<?> restoreOneUser(Integer userId) {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
@@ -275,33 +312,41 @@ public class UserServiceImpl implements UserService {
         found.get().setDeleted(false);
         userRepository.save(found.get());
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.User.RESTORED_ONE))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.RESTORED_ONE))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> restoreListUsers(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<?> restoreListUsers(ListIdsRequestDTO request) {
         List<User> foundUsers = userRepository.findAllById(request.ids());
 
         foundUsers.parallelStream().forEach(item -> item.setDeleted(false));
 
         userRepository.saveAll(foundUsers);
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(
-                        SuccessMessage.User.RESTORED_LIST,
-                        foundUsers.size()
-                ))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(
+                                SuccessMessage.User.RESTORED_LIST,
+                                foundUsers.size()
+                        ))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> resetPasswordOneUser(Integer userId) {
+    public GlobalResponseDTO<?> resetPasswordOneUser(Integer userId) {
         String newPassword = RandomUtil.randomPassword();
 
         Optional<User> found = userRepository.findById(userId);
@@ -330,36 +375,44 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException(e);
         }
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(
-                        SuccessMessage.User.RESET_PASSWORD_ONE,
-                        foundUser.getUsername()
-                ))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(
+                                SuccessMessage.User.RESET_PASSWORD_ONE,
+                                foundUser.getUsername()
+                        ))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> resetPasswordListUsers(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<?> resetPasswordListUsers(ListIdsRequestDTO request) {
         List<User> foundUsers = userRepository.findAllById(request.ids());
 
         foundUsers.parallelStream().forEach(item -> {
             this.resetPasswordOneUser(item.getId());
         });
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(
-                        SuccessMessage.User.RESET_PASSWORD_LIST,
-                        foundUsers.size()
-                ))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(
+                                SuccessMessage.User.RESET_PASSWORD_LIST,
+                                foundUsers.size()
+                        ))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public PaginationResponseDTO<BriefUserResponseDTO> getListActiveUsers(PaginationRequestDTO request) {
+    public GlobalResponseDTO<List<BriefUserResponseDTO>> getListActiveUsers(PaginationRequestDTO request) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
@@ -377,21 +430,29 @@ public class UserServiceImpl implements UserService {
 
         List<User> users = page.getContent();
 
-        return PaginationResponseDTO
-                .<BriefUserResponseDTO>builder()
-                .keyword(request.keyword())
-                .pageIndex(request.index())
-                .pageSize((short) page.getNumberOfElements())
-                .totalItems(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .items(users.parallelStream()
-                            .map(UserMapper.INSTANCE::toBriefUserResponseDTO)
-                            .collect(Collectors.toList()))
+        return GlobalResponseDTO
+                .<List<BriefUserResponseDTO>>builder()
+                .meta(MetaDTO
+                        .builder()
+                        .pagination(PaginationDTO
+                                .builder()
+                                .keyword(request.keyword())
+                                .pageIndex(request.index())
+                                .pageSize((short) page.getNumberOfElements())
+                                .totalItems(page.getTotalElements())
+                                .totalPages(page.getTotalPages())
+                                .build()
+                        )
+                        .build()
+                )
+                .data(users.parallelStream()
+                           .map(UserMapper.INSTANCE::toBriefUserResponseDTO)
+                           .collect(Collectors.toList()))
                 .build();
     }
 
     @Override
-    public PaginationResponseDTO<BriefUserResponseDTO> getDeletedListUsers(PaginationRequestDTO request) {
+    public GlobalResponseDTO<List<BriefUserResponseDTO>> getDeletedListUsers(PaginationRequestDTO request) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
@@ -409,16 +470,22 @@ public class UserServiceImpl implements UserService {
 
         List<User> users = page.getContent();
 
-        return PaginationResponseDTO
-                .<BriefUserResponseDTO>builder()
-                .keyword(request.keyword())
-                .pageIndex(request.index())
-                .pageSize((short) page.getNumberOfElements())
-                .totalItems(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .items(users.parallelStream()
-                            .map(UserMapper.INSTANCE::toBriefUserResponseDTO)
-                            .collect(Collectors.toList()))
+        return GlobalResponseDTO
+                .<List<BriefUserResponseDTO>>builder()
+                .meta(MetaDTO
+                        .builder()
+                        .pagination(PaginationDTO
+                                .builder()
+                                .keyword(request.keyword())
+                                .pageIndex(request.index())
+                                .pageSize((short) page.getNumberOfElements())
+                                .totalItems(page.getTotalElements())
+                                .totalPages(page.getTotalPages())
+                                .build())
+                        .build())
+                .data(users.parallelStream()
+                           .map(UserMapper.INSTANCE::toBriefUserResponseDTO)
+                           .collect(Collectors.toList()))
                 .build();
     }
 }

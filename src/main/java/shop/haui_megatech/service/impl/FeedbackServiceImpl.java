@@ -9,12 +9,10 @@ import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessage;
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.feedback.BriefFeedbackForProduct;
 import shop.haui_megatech.domain.dto.feedback.BriefFeedbackForUser;
 import shop.haui_megatech.domain.dto.feedback.FeedbackRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
+import shop.haui_megatech.domain.dto.global.*;
 import shop.haui_megatech.domain.entity.Feedback;
 import shop.haui_megatech.domain.entity.Product;
 import shop.haui_megatech.domain.entity.User;
@@ -24,7 +22,6 @@ import shop.haui_megatech.exception.InvalidRequestParamException;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.FeedbackRepository;
 import shop.haui_megatech.repository.ProductRepository;
-import shop.haui_megatech.repository.UserRepository;
 import shop.haui_megatech.service.FeedbackService;
 import shop.haui_megatech.utility.AuthenticationUtil;
 import shop.haui_megatech.utility.MessageSourceUtil;
@@ -43,7 +40,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     private final MessageSourceUtil  messageSourceUtil;
 
     @Override
-    public CommonResponseDTO<?> addOne(Integer productId, FeedbackRequestDTO request) {
+    public GlobalResponseDTO<?> addOne(Integer productId, FeedbackRequestDTO request) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
         if (requestedUser == null)
             throw new AppException(ErrorMessage.Auth.UNAUTHORIZED);
@@ -72,15 +69,19 @@ public class FeedbackServiceImpl implements FeedbackService {
         feedbackRepository.save(newFeedback);
 
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.Feedback.ADDED_ONE))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.Feedback.ADDED_ONE))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> updateOne(Integer productId, Integer feedbackId, FeedbackRequestDTO request) {
+    public GlobalResponseDTO<?> updateOne(Integer productId, Integer feedbackId, FeedbackRequestDTO request) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
         if (requestedUser == null)
             throw new AppException(ErrorMessage.Auth.UNAUTHORIZED);
@@ -107,29 +108,37 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         feedbackRepository.save(foundFeedback.get());
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.Feedback.UPDATED_ONE))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.Feedback.UPDATED_ONE))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> delete(Integer userId, String feedbackIds) {
+    public GlobalResponseDTO<?> delete(Integer userId, String feedbackIds) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
 
         if (requestedUser == null)
             throw new NotFoundException(ErrorMessage.Feedback.NOT_FOUND);
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.Feedback.UPDATED_ONE))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.Feedback.UPDATED_ONE))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public PaginationResponseDTO<BriefFeedbackForUser> getListByUserId(
+    public GlobalResponseDTO<List<BriefFeedbackForUser>> getListByUserId(
             Integer userId,
             PaginationRequestDTO request
     ) {
@@ -148,14 +157,21 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         List<Feedback> feedbacks = page.getContent();
 
-        return PaginationResponseDTO
-                .<BriefFeedbackForUser>builder()
-                .keyword(request.keyword())
-                .pageIndex(request.index())
-                .pageSize(request.limit())
-                .totalItems(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .items(feedbacks
+        return GlobalResponseDTO
+                .<List<BriefFeedbackForUser>>builder()
+                .meta(MetaDTO
+                        .builder()
+                        .pagination(PaginationDTO
+                                .builder()
+                                .keyword(request.keyword())
+                                .pageIndex(request.index())
+                                .pageSize(request.limit())
+                                .totalItems(page.getTotalElements())
+                                .totalPages(page.getTotalPages())
+                                .build())
+                        .build()
+                )
+                .data(feedbacks
                         .parallelStream()
                         .map(FeedbackMapper.INSTANCE::toBriefFeedbackForUser)
                         .collect(Collectors.toList())
@@ -164,7 +180,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public PaginationResponseDTO<BriefFeedbackForProduct> getListByProductId(
+    public GlobalResponseDTO<List<BriefFeedbackForProduct>> getListByProductId(
             Integer productId,
             PaginationRequestDTO request
     ) {
@@ -183,14 +199,20 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         List<Feedback> feedbacks = page.getContent();
 
-        return PaginationResponseDTO
-                .<BriefFeedbackForProduct>builder()
-                .keyword(request.keyword())
-                .pageIndex(request.index())
-                .pageSize(request.limit())
-                .totalItems(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .items(feedbacks
+        return GlobalResponseDTO
+                .<List<BriefFeedbackForProduct>>builder()
+                .meta(MetaDTO
+                        .builder()
+                        .pagination(PaginationDTO
+                                .builder()
+                                .keyword(request.keyword())
+                                .pageIndex(request.index())
+                                .pageSize(request.limit())
+                                .totalItems(page.getTotalElements())
+                                .totalPages(page.getTotalPages())
+                                .build())
+                        .build())
+                .data(feedbacks
                         .parallelStream()
                         .map(FeedbackMapper.INSTANCE::toBriefFeedbackForProduct)
                         .collect(Collectors.toList())

@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -21,7 +20,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import shop.haui_megatech.configuration.security.filter.JwtAuthenticationFilter;
 import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.constant.ErrorMessage;
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+import shop.haui_megatech.domain.dto.global.MetaDTO;
+import shop.haui_megatech.domain.dto.global.Status;
 import shop.haui_megatech.domain.entity.enums.Authority;
 import shop.haui_megatech.utility.MessageSourceUtil;
 
@@ -172,10 +173,13 @@ public class SecurityConfiguration {
                                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
                                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-                                   CommonResponseDTO<?> responseBody =
-                                           CommonResponseDTO.builder()
-                                                            .success(false)
-                                                            .message(messageSourceUtil.getMessage(ErrorMessage.Auth.AUTHENTICATE))
+                                   GlobalResponseDTO<?> responseBody =
+                                           GlobalResponseDTO.builder()
+                                                            .meta(MetaDTO
+                                                                    .builder()
+                                                                    .status(Status.SUCCESS)
+                                                                    .message(messageSourceUtil.getMessage(ErrorMessage.Auth.AUTHENTICATE))
+                                                                    .build())
                                                             .build();
 
                                    ObjectMapper objectMapper = new ObjectMapper();
@@ -185,10 +189,14 @@ public class SecurityConfiguration {
                                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
                                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-                                   CommonResponseDTO<?> responseBody =
-                                           CommonResponseDTO.builder()
-                                                            .success(false)
-                                                            .message(messageSourceUtil.getMessage(ErrorMessage.Auth.UNAUTHORIZED))
+                                   GlobalResponseDTO<?> responseBody =
+                                           GlobalResponseDTO.builder()
+                                                            .meta(MetaDTO
+                                                                    .builder()
+                                                                    .status(Status.SUCCESS)
+                                                                    .message(messageSourceUtil.getMessage(ErrorMessage.Auth.UNAUTHORIZED))
+                                                                    .build()
+                                                            )
                                                             .build();
 
                                    ObjectMapper objectMapper = new ObjectMapper();

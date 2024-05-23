@@ -6,11 +6,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.home.ProductCountByBrandResponseDTO;
 import shop.haui_megatech.domain.dto.order.LatestOrderResponseDTO;
-import shop.haui_megatech.domain.dto.pagination.NoPaginationResponseDTO;
-import shop.haui_megatech.domain.dto.product.BriefProductResponseDTO;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+import shop.haui_megatech.domain.dto.global.MetaDTO;
+import shop.haui_megatech.domain.dto.global.Status;
 import shop.haui_megatech.domain.dto.product.TopSoldProductResponseDTO;
 import shop.haui_megatech.domain.entity.*;
 import shop.haui_megatech.domain.entity.enums.Role;
@@ -29,65 +29,71 @@ public class HomeServiceImpl implements HomeService {
     private final OrderRepository          orderRepository;
 
     @Override
-    public NoPaginationResponseDTO<ProductCountByBrandResponseDTO> getProductCountByBrand() {
+    public GlobalResponseDTO<List<ProductCountByBrandResponseDTO>> getProductCountByBrand() {
         List<Brand> brands = brandRepository.findAll();
 
-        return NoPaginationResponseDTO
-                .<ProductCountByBrandResponseDTO>builder()
-                .success(true)
-                .items(brands.parallelStream()
-                             .map(item ->
-                                     ProductCountByBrandResponseDTO
-                                             .builder()
-                                             .name(item.getName())
-                                             .count(item.getProducts().size())
-                                             .build()
-                             )
-                             .toList()
+        return GlobalResponseDTO
+                .<List<ProductCountByBrandResponseDTO>>builder()
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .build())
+                .data(brands.parallelStream()
+                            .map(item ->
+                                    ProductCountByBrandResponseDTO
+                                            .builder()
+                                            .name(item.getName())
+                                            .count(item.getProducts().size())
+                                            .build()
+                            )
+                            .toList()
                 )
                 .build();
     }
 
     @Override
-    public NoPaginationResponseDTO<TopSoldProductResponseDTO> getTopSoldProducts() {
+    public GlobalResponseDTO<List<TopSoldProductResponseDTO>> getTopSoldProducts() {
         Sort sort = Sort.by("totalSold").descending();
         Pageable pageable = PageRequest.of(0, 10, sort);
         Page<Product> page = productRepository.findAll(pageable);
         List<Product> list = page.getContent();
-        return NoPaginationResponseDTO
-                .<TopSoldProductResponseDTO>builder()
-                .success(true)
-                .items(list.parallelStream()
-                           .map(item ->
-                                   TopSoldProductResponseDTO
-                                           .builder()
-                                           .id(item.getId())
-                                           .name(item.getName())
-                                           .newPrice(item.getCurrentPrice())
-                                           .totalSold(item.getTotalSold())
-                                           .mainImageUrl(item.getMainImageUrl())
-                                           .revenue((double) (item.getTotalSold() * (item.getCurrentPrice() - item.getImportPrice())))
-                                           .build()
-                           )
-                           .toList()
+        return GlobalResponseDTO
+                .<List<TopSoldProductResponseDTO>>builder()
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .build())
+                .data(list.parallelStream()
+                          .map(item ->
+                                  TopSoldProductResponseDTO
+                                          .builder()
+                                          .id(item.getId())
+                                          .name(item.getName())
+                                          .newPrice(item.getCurrentPrice())
+                                          .totalSold(item.getTotalSold())
+                                          .mainImageUrl(item.getMainImageUrl())
+                                          .revenue((double) (item.getTotalSold() * (item.getCurrentPrice() - item.getImportPrice())))
+                                          .build()
+                          )
+                          .toList()
                 )
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> getTotalSoldProducts() {
+    public GlobalResponseDTO<?> getTotalSoldProducts() {
         List<Product> list = productRepository.findAll();
         Integer total = list.stream().mapToInt(Product::getTotalSold).sum();
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .item(total)
+                .meta(MetaDTO.builder().status(Status.SUCCESS).build())
+                .data(total)
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> getTotalProductRevenue() {
+    public GlobalResponseDTO<?> getTotalProductRevenue() {
         List<Product> list = productRepository.findAll();
         Double totalRevenue = list.stream()
                                   .mapToDouble(item ->
@@ -95,64 +101,68 @@ public class HomeServiceImpl implements HomeService {
                                   )
                                   .sum();
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .item(totalRevenue)
+                .meta(MetaDTO.builder().status(Status.SUCCESS).build())
+                .data(totalRevenue)
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> getTotalCustomers() {
+    public GlobalResponseDTO<?> getTotalCustomers() {
         List<User> list = userRepository.findAll();
         list.removeIf(item -> !item.getRole().equals(Role.CUSTOMER));
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .item(list.size())
+                .meta(MetaDTO.builder().status(Status.SUCCESS).build())
+                .data(list.size())
                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> getTotalLoggedIn() {
+    public GlobalResponseDTO<?> getTotalLoggedIn() {
         List<LoginStatistic> list = loginStatisticRepository.findAll();
         Integer total = list.stream().mapToInt(LoginStatistic::getLoggedIn).sum();
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .item(total)
+                .meta(MetaDTO.builder().status(Status.SUCCESS).build())
+                .data(total)
                 .build();
     }
 
     @Override
-    public NoPaginationResponseDTO<LatestOrderResponseDTO> getLatestOrder() {
+    public GlobalResponseDTO<List<LatestOrderResponseDTO>> getLatestOrder() {
         Sort sort = Sort.by("id").descending();
         Pageable pageable = PageRequest.of(0, 10, sort);
         Page<Order> page = orderRepository.findAll(pageable);
         List<Order> list = page.getContent();
 
-        return NoPaginationResponseDTO
-                .<LatestOrderResponseDTO>builder()
-                .success(true)
-                .items(list.stream()
-                           .map(item ->
-                                   LatestOrderResponseDTO
-                                           .builder()
-                                           .id(item.getId())
-                                           .customer(String.format(
-                                                   "%s %s (%s)",
-                                                   item.getUser().getFirstName(),
-                                                   item.getUser().getLastName(),
-                                                   item.getUser().getUsername()
-                                           ))
-                                           .orderTime(item.getOrderTime())
-                                           .total((double) item.getTotal())
-                                           .status(item.getStatus())
-                                           .build()
-                           )
-                           .toList()
+        return GlobalResponseDTO
+                .<List<LatestOrderResponseDTO>>builder()
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .build()
+                )
+                .data(list.stream()
+                          .map(item ->
+                                  LatestOrderResponseDTO
+                                          .builder()
+                                          .id(item.getId())
+                                          .customer(String.format(
+                                                  "%s %s (%s)",
+                                                  item.getUser().getFirstName(),
+                                                  item.getUser().getLastName(),
+                                                  item.getUser().getUsername()
+                                          ))
+                                          .orderTime(item.getOrderTime())
+                                          .total((double) item.getTotal())
+                                          .status(item.getStatus())
+                                          .build()
+                          )
+                          .toList()
                 )
                 .build();
     }

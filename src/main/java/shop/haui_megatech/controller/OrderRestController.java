@@ -14,7 +14,7 @@ import shop.haui_megatech.domain.dto.order.AddOrderForAdminRequestDTO;
 import shop.haui_megatech.domain.dto.order.AddOrderForUserRequestDTO;
 import shop.haui_megatech.domain.dto.order.ModifyOrderForAdminRequestDTO;
 import shop.haui_megatech.domain.dto.order.ModifyOrderForUserRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
 import shop.haui_megatech.service.OrderService;
 import shop.haui_megatech.utility.ResponseUtil;
 

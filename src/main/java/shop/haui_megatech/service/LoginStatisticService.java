@@ -1,11 +1,12 @@
 package shop.haui_megatech.service;
 
 import shop.haui_megatech.domain.dto.home.LoginStatisticResponseDTO;
-import shop.haui_megatech.domain.dto.pagination.NoPaginationResponseDTO;
-import shop.haui_megatech.domain.entity.LoginStatistic;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+
+import java.util.List;
 
 public interface LoginStatisticService {
     void saveOrUpdate();
 
-    NoPaginationResponseDTO<LoginStatisticResponseDTO> getListByDay();
+    GlobalResponseDTO<List<LoginStatisticResponseDTO>> getListByDay();
 }

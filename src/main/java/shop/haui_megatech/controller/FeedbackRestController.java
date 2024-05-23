@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.domain.dto.feedback.FeedbackRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
 import shop.haui_megatech.service.FeedbackService;
 import shop.haui_megatech.utility.ResponseUtil;
 

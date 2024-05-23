@@ -1,14 +1,16 @@
 package shop.haui_megatech.service;
 
-import shop.haui_megatech.domain.dto.pagination.NoPaginationResponseDTO;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
 import shop.haui_megatech.domain.entity.location.District;
 import shop.haui_megatech.domain.entity.location.Province;
 import shop.haui_megatech.domain.entity.location.Ward;
 
+import java.util.List;
+
 public interface LocationService {
-    NoPaginationResponseDTO<Province> getProvinces();
+    GlobalResponseDTO<List<Province>> getProvinces();
 
-    NoPaginationResponseDTO<District> getDistrictsByProvince(String code);
+    GlobalResponseDTO<List<District>> getDistrictsByProvince(String code);
 
-    NoPaginationResponseDTO<Ward> getWardsByDistrict(String code);
+    GlobalResponseDTO<List<Ward>> getWardsByDistrict(String code);
 }

@@ -1,10 +1,10 @@
 package shop.haui_megatech.service.base;
 
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
 
 public interface Exposable {
-    CommonResponseDTO<?> exposeOne(Integer id);
+    GlobalResponseDTO<?> exposeOne(Integer id);
 
-    CommonResponseDTO<?> exposeList(ListIdsRequestDTO request);
+    GlobalResponseDTO<?> exposeList(ListIdsRequestDTO request);
 }

@@ -10,10 +10,9 @@ import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.domain.dto.cart.BriefCartItemResponseDTO;
 import shop.haui_megatech.domain.dto.cart.CartItemRequestDTO;
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
+import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
 import shop.haui_megatech.service.CartItemService;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class CartItemRestController {
 
     @Operation(summary = "API Add a CartItem")
     @PostMapping(Endpoint.V1.CartItem.ADD_ONE)
-    public CommonResponseDTO<?> addCartItem(
+    public GlobalResponseDTO<?> addCartItem(
             @PathVariable Integer productId,
             @RequestBody CartItemRequestDTO request
     ) {
@@ -37,7 +36,7 @@ public class CartItemRestController {
 
     @Operation(summary = "API Get a list of CartItems by User Id ")
     @GetMapping(Endpoint.V1.CartItem.GET_LIST)
-    public PaginationResponseDTO<BriefCartItemResponseDTO> getListByUser(
+    public GlobalResponseDTO<List<BriefCartItemResponseDTO>> getListByUser(
             @ParameterObject PaginationRequestDTO request
     ) {
         return cartItemService.getListByUser(request);
@@ -46,7 +45,7 @@ public class CartItemRestController {
 
     @Operation(summary = "API Update a CartItem")
     @PutMapping(Endpoint.V1.CartItem.UPDATE_ONE)
-    public CommonResponseDTO<?> updateCartItem(
+    public GlobalResponseDTO<?> updateCartItem(
             @PathVariable Integer productId,
             @PathVariable Integer cartItemId,
             @RequestBody CartItemRequestDTO request
@@ -56,7 +55,7 @@ public class CartItemRestController {
 
     @Operation(summary = "API Delete a CartItem")
     @DeleteMapping(Endpoint.V1.CartItem.DELETE)
-    public CommonResponseDTO<?> deleteCartItems(
+    public GlobalResponseDTO<?> deleteCartItems(
             @PathVariable String cartItemIds
     ) {
         return cartItemService.hardDeleteList(

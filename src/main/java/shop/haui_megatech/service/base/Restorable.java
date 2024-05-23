@@ -1,10 +1,10 @@
 package shop.haui_megatech.service.base;
 
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
 
 public interface Restorable {
-    CommonResponseDTO<?> restoreOne(Integer id);
+    GlobalResponseDTO<?> restoreOne(Integer id);
 
-    CommonResponseDTO<?> restoreList(ListIdsRequestDTO request);
+    GlobalResponseDTO<?> restoreList(ListIdsRequestDTO request);
 }

@@ -1,10 +1,10 @@
 package shop.haui_megatech.service.base;
 
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
 
 public interface HardDeletable {
-    CommonResponseDTO<?> hardDeleteOne(Integer id);
+    GlobalResponseDTO<?> hardDeleteOne(Integer id);
 
-    CommonResponseDTO<?> hardDeleteList(ListIdsRequestDTO request);
+    GlobalResponseDTO<?> hardDeleteList(ListIdsRequestDTO request);
 }

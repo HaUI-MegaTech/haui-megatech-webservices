@@ -6,8 +6,9 @@ import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.address.AddressRequestDTO;
 import shop.haui_megatech.domain.dto.address.AddressResponseDTO;
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
-import shop.haui_megatech.domain.dto.pagination.NoPaginationResponseDTO;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+import shop.haui_megatech.domain.dto.global.MetaDTO;
+import shop.haui_megatech.domain.dto.global.Status;
 import shop.haui_megatech.domain.entity.Address;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.AddressMapper;
@@ -29,7 +30,7 @@ public class AddressServiceImpl implements AddressService {
     private final MessageSourceUtil messageSourceUtil;
 
     @Override
-    public CommonResponseDTO<?> addOne(Integer userId, AddressRequestDTO request) {
+    public GlobalResponseDTO<?> addOne(Integer userId, AddressRequestDTO request) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
         if (requestedUser == null)
             throw new AppException(ErrorMessage.Auth.UNAUTHORIZED);
@@ -43,14 +44,18 @@ public class AddressServiceImpl implements AddressService {
         requestedUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));
         userRepository.save(requestedUser);
 
-        return CommonResponseDTO.builder()
-                                .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessage.Address.ADDED))
+        return GlobalResponseDTO.builder()
+                                .meta(MetaDTO
+                                        .builder()
+                                        .status(Status.SUCCESS)
+                                        .message(messageSourceUtil.getMessage(SuccessMessage.Address.ADDED))
+                                        .build()
+                                )
                                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> updateOne(Integer userId, Integer addressId, AddressRequestDTO request) {
+    public GlobalResponseDTO<?> updateOne(Integer userId, Integer addressId, AddressRequestDTO request) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
         if (requestedUser == null)
             throw new AppException(ErrorMessage.Auth.UNAUTHORIZED);
@@ -83,14 +88,18 @@ public class AddressServiceImpl implements AddressService {
         requestedUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));
         userRepository.save(requestedUser);
 
-        return CommonResponseDTO.builder()
-                                .success(true)
-                                .message(messageSourceUtil.getMessage(SuccessMessage.Address.UPDATED))
+        return GlobalResponseDTO.builder()
+                                .meta(MetaDTO
+                                        .builder()
+                                        .status(Status.SUCCESS)
+                                        .message(messageSourceUtil.getMessage(SuccessMessage.Address.UPDATED))
+                                        .build()
+                                )
                                 .build();
     }
 
     @Override
-    public CommonResponseDTO<?> delete(Integer userId, String addressIds) {
+    public GlobalResponseDTO<?> delete(Integer userId, String addressIds) {
         User requestedUser = AuthenticationUtil.getRequestedUser();
         if (requestedUser == null)
             throw new AppException(ErrorMessage.Auth.UNAUTHORIZED);
@@ -113,20 +122,24 @@ public class AddressServiceImpl implements AddressService {
 
         addressRepository.deleteAddressByIds(checkedIds);
 
-        return CommonResponseDTO
+        return GlobalResponseDTO
                 .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.Address.DELETED, checkedIds.size()))
+                .meta(MetaDTO
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.Address.DELETED, checkedIds.size()))
+                        .build()
+                )
                 .build();
     }
 
     @Override
-    public NoPaginationResponseDTO<AddressResponseDTO> getAllByUserId(Integer userId) {
+    public GlobalResponseDTO<List<AddressResponseDTO>> getAllByUserId(Integer userId) {
         List<Address> list = addressRepository.findAllByUserId(userId);
-        return NoPaginationResponseDTO
-                .<AddressResponseDTO>builder()
-                .success(true)
-                .items(list.stream().map(AddressMapper.INSTANCE::toAddressResponseDTO).toList())
+        return GlobalResponseDTO
+                .<List<AddressResponseDTO>>builder()
+                .meta(MetaDTO.builder().status(Status.SUCCESS).build())
+                .data(list.stream().map(AddressMapper.INSTANCE::toAddressResponseDTO).toList())
                 .build();
     }
 }

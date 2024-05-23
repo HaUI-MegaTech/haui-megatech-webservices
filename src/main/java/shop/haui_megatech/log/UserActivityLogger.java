@@ -1,20 +1,16 @@
 package shop.haui_megatech.log;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-import shop.haui_megatech.controller.UserRestController;
-import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+import shop.haui_megatech.domain.dto.global.Status;
 import shop.haui_megatech.domain.entity.ActivityLog;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.repository.ActivityLogRepository;
 import shop.haui_megatech.utility.AuthenticationUtil;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -52,13 +48,13 @@ public class UserActivityLogger {
         if (loggedOperation != null
             && requestedUser != null
             && result != null
-            && result instanceof CommonResponseDTO
+            && result instanceof GlobalResponseDTO
         ) {
             activityLogRepository.save(
                     ActivityLog.builder()
                                .subject(requestedUser)
                                .operation(loggedOperation)
-                               .success(CommonResponseDTO.class.cast(result).success())
+                               .success(GlobalResponseDTO.class.cast(result).meta().status().equals(Status.SUCCESS))
                                .build()
             );
         }

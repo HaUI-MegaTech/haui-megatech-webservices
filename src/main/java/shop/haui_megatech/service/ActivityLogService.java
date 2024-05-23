@@ -1,9 +1,11 @@
 package shop.haui_megatech.service;
 
 import shop.haui_megatech.domain.dto.log.ActivityLogResponseDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
+import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+
+import java.util.List;
 
 public interface ActivityLogService {
-    PaginationResponseDTO<ActivityLogResponseDTO> getList(PaginationRequestDTO request);
+    GlobalResponseDTO<List<ActivityLogResponseDTO>> getList(PaginationRequestDTO request);
 }

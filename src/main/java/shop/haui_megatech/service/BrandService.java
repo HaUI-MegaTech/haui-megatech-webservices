@@ -9,4 +9,6 @@ public interface BrandService extends Gettable<BrandResponseDTO> {
     NoPaginationResponseDTO<BrandStatisticResponseDTO> getTotalRevenue();
 
     NoPaginationResponseDTO<BrandStatisticResponseDTO> getTotalSold();
+
+    NoPaginationResponseDTO<BrandStatisticResponseDTO> getTotalView();
 }

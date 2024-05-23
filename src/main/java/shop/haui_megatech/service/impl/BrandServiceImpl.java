@@ -104,4 +104,28 @@ public class BrandServiceImpl implements BrandService {
                 .items(data)
                 .build();
     }
+
+    @Override
+    public NoPaginationResponseDTO<BrandStatisticResponseDTO> getTotalView() {
+        List<Brand> list = brandRepository.findAll();
+        List<BrandStatisticResponseDTO> data =
+                list.parallelStream()
+                    .map(brand -> BrandStatisticResponseDTO
+                            .builder()
+                            .name(brand.getName())
+                            .value(brand.getProducts()
+                                        .parallelStream()
+                                        .mapToLong(product -> product.getTotalViews())
+                                        .sum()
+                            )
+                            .build()
+                    )
+                    .toList();
+
+        return NoPaginationResponseDTO
+                .<BrandStatisticResponseDTO>builder()
+                .success(true)
+                .items(data)
+                .build();
+    }
 }

@@ -54,4 +54,9 @@ public class BrandRestController {
     public ResponseEntity<?> getTotalSold() {
         return ResponseUtil.ok(brandService.getTotalSold());
     }
+
+    @GetMapping(Endpoint.V1.Brand.GET_TOTAL_VIEW)
+    public ResponseEntity<?> getTotalView() {
+        return ResponseUtil.ok(brandService.getTotalView());
+    }
 }

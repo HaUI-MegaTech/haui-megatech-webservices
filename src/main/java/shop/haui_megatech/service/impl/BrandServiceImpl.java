@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.brand.BrandResponseDTO;
+import shop.haui_megatech.domain.dto.brand.BrandStatisticResponseDTO;
 import shop.haui_megatech.domain.dto.common.CommonResponseDTO;
+import shop.haui_megatech.domain.dto.pagination.NoPaginationResponseDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.pagination.PaginationResponseDTO;
 import shop.haui_megatech.domain.entity.Brand;
@@ -50,6 +52,32 @@ public class BrandServiceImpl implements BrandService {
                         .map(BrandMapper.INSTANCE::toBrandResponseDTO)
                         .collect(Collectors.toList())
                 )
+                .build();
+    }
+
+    @Override
+    public NoPaginationResponseDTO<BrandStatisticResponseDTO> getTotalRevenue() {
+        List<Brand> list = brandRepository.findAll();
+        List<BrandStatisticResponseDTO> data =
+                list.parallelStream()
+                    .map(brand -> BrandStatisticResponseDTO
+                            .builder()
+                            .name(brand.getName())
+                            .value(brand.getProducts()
+                                        .parallelStream()
+                                        .mapToLong(product ->
+                                                (long) (product.getTotalSold() * (product.getCurrentPrice() - product.getImportPrice()))
+                                        )
+                                        .sum()
+                            )
+                            .build()
+                    )
+                    .toList();
+
+        return NoPaginationResponseDTO
+                .<BrandStatisticResponseDTO>builder()
+                .success(true)
+                .items(data)
                 .build();
     }
 }

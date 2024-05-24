@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
-import shop.haui_megatech.domain.dto.global.MetaDTO;
+import shop.haui_megatech.domain.dto.global.NoPaginatedMeta;
 import shop.haui_megatech.domain.dto.global.Status;
 import shop.haui_megatech.domain.dto.home.LoginStatisticResponseDTO;
 import shop.haui_megatech.domain.entity.LoginStatistic;
@@ -63,17 +63,17 @@ public class LoginStatisticServiceImpl implements LoginStatisticService {
     }
 
     @Override
-    public GlobalResponseDTO<List<LoginStatisticResponseDTO>> getListByDay() {
+    public GlobalResponseDTO<NoPaginatedMeta, List<LoginStatisticResponseDTO>> getListByDay() {
         Sort sort = Sort.by("date").descending();
         Pageable pageable = PageRequest.of(0, 7, sort);
         Page<LoginStatistic> page = loginStatisticRepository.findAll(pageable);
         List<LoginStatistic> list = page.getContent();
 
         return GlobalResponseDTO
-                .<List<LoginStatisticResponseDTO>>builder()
-                .meta(MetaDTO.builder()
-                             .status(Status.SUCCESS)
-                             .build())
+                .<NoPaginatedMeta, List<LoginStatisticResponseDTO>>builder()
+                .meta(NoPaginatedMeta.builder()
+                                     .status(Status.SUCCESS)
+                                     .build())
                 .data(list.parallelStream()
                           .map(LoginStatisticMapper.INSTANCE::toLoginStatisticResponseDTO)
                           .collect(Collectors.toList())

@@ -6,7 +6,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
-import shop.haui_megatech.domain.dto.global.Status;
 import shop.haui_megatech.domain.entity.ActivityLog;
 import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.repository.ActivityLogRepository;
@@ -55,7 +54,7 @@ public class UserActivityLogger {
                     ActivityLog.builder()
                                .subject(requestedUser)
                                .operation(loggedOperation)
-                               .success(GlobalResponseDTO.class.cast(result).meta().status().equals(Status.SUCCESS))
+//                               .success(Objects.equals(GlobalResponseDTO.class.cast(result).meta().status(), Status.SUCCESS))
                                .build()
             );
         }

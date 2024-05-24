@@ -6,10 +6,7 @@ import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.brand.BrandResponseDTO;
 import shop.haui_megatech.domain.dto.brand.BrandStatisticResponseDTO;
-import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
-import shop.haui_megatech.domain.dto.global.MetaDTO;
-import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.global.Status;
+import shop.haui_megatech.domain.dto.global.*;
 import shop.haui_megatech.domain.entity.Brand;
 import shop.haui_megatech.domain.mapper.BrandMapper;
 import shop.haui_megatech.exception.NotFoundException;
@@ -28,12 +25,12 @@ public class BrandServiceImpl implements BrandService {
     private final MessageSourceUtil messageSourceUtil;
 
     @Override
-    public GlobalResponseDTO<?> getOne(Integer id) {
+    public GlobalResponseDTO<NoPaginatedMeta, BrandResponseDTO> getOne(Integer id) {
         Optional<Brand> found = brandRepository.findById(id);
 
         return GlobalResponseDTO
-                .<BrandResponseDTO>builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BrandResponseDTO>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.Brand.FOUND))
@@ -47,10 +44,10 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public GlobalResponseDTO<List<BrandResponseDTO>> getList(PaginationRequestDTO request) {
+    public GlobalResponseDTO<PaginatedMeta, List<BrandResponseDTO>> getList(PaginationRequestDTO request) {
         List<Brand> brands = brandRepository.findAll();
         return GlobalResponseDTO
-                .<List<BrandResponseDTO>>builder()
+                .<PaginatedMeta, List<BrandResponseDTO>>builder()
                 .data(brands
                         .parallelStream()
                         .map(BrandMapper.INSTANCE::toBrandResponseDTO)
@@ -60,7 +57,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public GlobalResponseDTO<List<BrandStatisticResponseDTO>> getTotalRevenue() {
+    public GlobalResponseDTO<NoPaginatedMeta, List<BrandStatisticResponseDTO>> getTotalRevenue() {
         List<Brand> list = brandRepository.findAll();
         List<BrandStatisticResponseDTO> data =
                 list.parallelStream()
@@ -79,14 +76,14 @@ public class BrandServiceImpl implements BrandService {
                     .toList();
 
         return GlobalResponseDTO
-                .<List<BrandStatisticResponseDTO>>builder()
-                .meta(MetaDTO.builder().status(Status.SUCCESS).build())
+                .<NoPaginatedMeta, List<BrandStatisticResponseDTO>>builder()
+                .meta(NoPaginatedMeta.builder().status(Status.SUCCESS).build())
                 .data(data)
                 .build();
     }
 
     @Override
-    public GlobalResponseDTO<List<BrandStatisticResponseDTO>> getTotalSold() {
+    public GlobalResponseDTO<NoPaginatedMeta, List<BrandStatisticResponseDTO>> getTotalSold() {
         List<Brand> list = brandRepository.findAll();
         List<BrandStatisticResponseDTO> data =
                 list.parallelStream()
@@ -103,14 +100,14 @@ public class BrandServiceImpl implements BrandService {
                     .toList();
 
         return GlobalResponseDTO
-                .<List<BrandStatisticResponseDTO>>builder()
-                .meta(MetaDTO.builder().status(Status.SUCCESS).build())
+                .<NoPaginatedMeta, List<BrandStatisticResponseDTO>>builder()
+                .meta(NoPaginatedMeta.builder().status(Status.SUCCESS).build())
                 .data(data)
                 .build();
     }
 
     @Override
-    public GlobalResponseDTO<List<BrandStatisticResponseDTO>> getTotalView() {
+    public GlobalResponseDTO<NoPaginatedMeta, List<BrandStatisticResponseDTO>> getTotalView() {
         List<Brand> list = brandRepository.findAll();
         List<BrandStatisticResponseDTO> data =
                 list.parallelStream()
@@ -127,8 +124,8 @@ public class BrandServiceImpl implements BrandService {
                     .toList();
 
         return GlobalResponseDTO
-                .<List<BrandStatisticResponseDTO>>builder()
-                .meta(MetaDTO.builder().status(Status.SUCCESS).build())
+                .<NoPaginatedMeta, List<BrandStatisticResponseDTO>>builder()
+                .meta(NoPaginatedMeta.builder().status(Status.SUCCESS).build())
                 .data(data)
                 .build();
     }

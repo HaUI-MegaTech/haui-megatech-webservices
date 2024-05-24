@@ -8,10 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.PaginationConstant;
-import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
-import shop.haui_megatech.domain.dto.global.MetaDTO;
-import shop.haui_megatech.domain.dto.global.PaginationDTO;
-import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.global.*;
 import shop.haui_megatech.domain.dto.log.ActivityLogResponseDTO;
 import shop.haui_megatech.domain.entity.ActivityLog;
 import shop.haui_megatech.exception.InvalidRequestParamException;
@@ -28,7 +25,7 @@ public class ActivityLogServiceImpl implements ActivityLogService {
     private final MessageSourceUtil     messageSourceUtil;
 
     @Override
-    public GlobalResponseDTO<List<ActivityLogResponseDTO>> getList(
+    public GlobalResponseDTO<PaginatedMeta, List<ActivityLogResponseDTO>> getList(
             PaginationRequestDTO request
     ) {
         if (request.index() < 0)
@@ -45,17 +42,17 @@ public class ActivityLogServiceImpl implements ActivityLogService {
         List<ActivityLog> activityLogs = page.getContent();
 
         return GlobalResponseDTO
-                .<List<ActivityLogResponseDTO>>builder()
-                .meta(MetaDTO.builder()
-                             .pagination(PaginationDTO
-                                     .builder()
-                                     .keyword(request.keyword())
-                                     .pageIndex(request.index())
-                                     .pageSize((short) page.getNumberOfElements())
-                                     .totalItems(page.getTotalElements())
-                                     .totalPages(page.getTotalPages())
-                                     .build())
-                             .build())
+                .<PaginatedMeta, List<ActivityLogResponseDTO>>builder()
+                .meta(PaginatedMeta.builder()
+                                   .pagination(Pagination
+                                           .builder()
+                                           .keyword(request.keyword())
+                                           .pageIndex(request.index())
+                                           .pageSize((short) page.getNumberOfElements())
+                                           .totalItems(page.getTotalElements())
+                                           .totalPages(page.getTotalPages())
+                                           .build())
+                                   .build())
                 .data(activityLogs
                         .stream()
                         .map(item -> ActivityLogResponseDTO

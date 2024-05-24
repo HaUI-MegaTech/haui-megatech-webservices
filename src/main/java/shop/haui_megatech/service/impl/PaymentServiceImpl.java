@@ -6,7 +6,9 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.configuration.PaymentConfiguration;
 import shop.haui_megatech.constant.ErrorMessage;
+import shop.haui_megatech.domain.dto.global.BlankData;
 import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+import shop.haui_megatech.domain.dto.global.NoPaginatedMeta;
 import shop.haui_megatech.domain.dto.payment.CreatePaymentRequestDTO;
 import shop.haui_megatech.domain.dto.payment.PaymentResponseDTO;
 import shop.haui_megatech.domain.entity.CartItem;
@@ -186,7 +188,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public GlobalResponseDTO<?> rejectPayment(String ids) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> rejectPayment(String ids) {
         return null;
     }
 }

@@ -44,15 +44,15 @@ public class UserServiceImpl implements UserService {
     private final FileUploadService fileUploadService;
 
     @Override
-    public GlobalResponseDTO<FullUserResponseDTO> getOneUser(Integer userId) {
+    public GlobalResponseDTO<NoPaginatedMeta, FullUserResponseDTO> getOneUser(Integer userId) {
         Optional<User> foundUser = userRepository.findById(userId);
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
 
         return GlobalResponseDTO
-                .<FullUserResponseDTO>builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, FullUserResponseDTO>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.User.FOUND))
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> addOneUser(AddUserRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BriefUserResponseDTO> addOneUser(AddUserRequestDTO request) {
         if (!RequestValidator.isBlankRequestParams(request.username()))
             throw new AbsentRequiredFieldException(ErrorMessage.Request.BLANK_USERNAME);
 
@@ -76,8 +76,8 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateUsernameException(ErrorMessage.Request.DUPLICATE_USERNAME);
 
         return GlobalResponseDTO
-                .<BriefUserResponseDTO>builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BriefUserResponseDTO>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.User.ADDED_ONE))
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> importExcelUser(ImportDataRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> importExcelUser(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
@@ -105,8 +105,8 @@ public class UserServiceImpl implements UserService {
             List<User> users = ExcelUtil.excelToUsers(request.file().getInputStream());
             List<User> savedUsers = userRepository.saveAll(users);
             return GlobalResponseDTO
-                    .builder()
-                    .meta(MetaDTO
+                    .<NoPaginatedMeta, BlankData>builder()
+                    .meta(NoPaginatedMeta
                             .builder()
                             .status(Status.SUCCESS)
                             .message(messageSourceUtil.getMessage(
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> importCsvUser(ImportDataRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> importCsvUser(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
@@ -130,8 +130,8 @@ public class UserServiceImpl implements UserService {
             List<User> users = CsvUtil.csvToUsers(request.file().getInputStream());
             List<User> savedUsers = userRepository.saveAll(users);
             return GlobalResponseDTO
-                    .builder()
-                    .meta(MetaDTO
+                    .<NoPaginatedMeta, BlankData>builder()
+                    .meta(NoPaginatedMeta
                             .builder()
                             .status(Status.SUCCESS)
                             .message(messageSourceUtil.getMessage(
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> updateInfoUser(
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> updateInfoUser(
             Integer userId,
             UpdateUserInfoRequest request
     ) {
@@ -178,8 +178,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(foundUser);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.User.INFO_UPDATED))
@@ -189,7 +189,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> updatePasswordUser(
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> updatePasswordUser(
             Integer userId,
             UpdateUserPasswordRequest request
     ) {
@@ -210,8 +210,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(foundUser);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.User.PASSWORD_UPDATED))
@@ -221,7 +221,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> softDeleteOneUser(Integer userId) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> softDeleteOneUser(Integer userId) {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
@@ -232,8 +232,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(foundUser);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.User.SOFT_DELETED_ONE))
@@ -243,7 +243,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> softDeleteListUsers(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> softDeleteListUsers(ListIdsRequestDTO request) {
         List<User> foundUsers = userRepository.findAllById(request.ids());
 
         foundUsers.parallelStream().forEach(item -> item.setDeleted(true));
@@ -251,8 +251,8 @@ public class UserServiceImpl implements UserService {
         userRepository.saveAll(foundUsers);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(
@@ -265,7 +265,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> hardDeleteOneUser(Integer id) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> hardDeleteOneUser(Integer id) {
         Optional<User> found = userRepository.findById(id);
 
         if (found.isEmpty())
@@ -274,8 +274,8 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(found.get());
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.User.HARD_DELETED_ONE))
@@ -285,12 +285,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> hardDeleteListUsers(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> hardDeleteListUsers(ListIdsRequestDTO request) {
         userRepository.deleteAllById(request.ids());
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(
@@ -303,7 +303,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> restoreOneUser(Integer userId) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> restoreOneUser(Integer userId) {
         Optional<User> found = userRepository.findById(userId);
 
         if (found.isEmpty())
@@ -313,8 +313,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(found.get());
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.User.RESTORED_ONE))
@@ -324,7 +324,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> restoreListUsers(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> restoreListUsers(ListIdsRequestDTO request) {
         List<User> foundUsers = userRepository.findAllById(request.ids());
 
         foundUsers.parallelStream().forEach(item -> item.setDeleted(false));
@@ -332,8 +332,8 @@ public class UserServiceImpl implements UserService {
         userRepository.saveAll(foundUsers);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(
@@ -346,7 +346,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> resetPasswordOneUser(Integer userId) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> resetPasswordOneUser(Integer userId) {
         String newPassword = RandomUtil.randomPassword();
 
         Optional<User> found = userRepository.findById(userId);
@@ -376,8 +376,8 @@ public class UserServiceImpl implements UserService {
         }
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(
@@ -390,7 +390,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<?> resetPasswordListUsers(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> resetPasswordListUsers(ListIdsRequestDTO request) {
         List<User> foundUsers = userRepository.findAllById(request.ids());
 
         foundUsers.parallelStream().forEach(item -> {
@@ -398,8 +398,8 @@ public class UserServiceImpl implements UserService {
         });
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(
@@ -412,7 +412,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<List<BriefUserResponseDTO>> getListActiveUsers(PaginationRequestDTO request) {
+    public GlobalResponseDTO<PaginatedMeta, List<BriefUserResponseDTO>> getListActiveUsers(PaginationRequestDTO request) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
@@ -431,10 +431,10 @@ public class UserServiceImpl implements UserService {
         List<User> users = page.getContent();
 
         return GlobalResponseDTO
-                .<List<BriefUserResponseDTO>>builder()
-                .meta(MetaDTO
+                .<PaginatedMeta, List<BriefUserResponseDTO>>builder()
+                .meta(PaginatedMeta
                         .builder()
-                        .pagination(PaginationDTO
+                        .pagination(Pagination
                                 .builder()
                                 .keyword(request.keyword())
                                 .pageIndex(request.index())
@@ -452,7 +452,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<List<BriefUserResponseDTO>> getDeletedListUsers(PaginationRequestDTO request) {
+    public GlobalResponseDTO<PaginatedMeta, List<BriefUserResponseDTO>> getDeletedListUsers(PaginationRequestDTO request) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
@@ -471,10 +471,10 @@ public class UserServiceImpl implements UserService {
         List<User> users = page.getContent();
 
         return GlobalResponseDTO
-                .<List<BriefUserResponseDTO>>builder()
-                .meta(MetaDTO
+                .<PaginatedMeta, List<BriefUserResponseDTO>>builder()
+                .meta(PaginatedMeta
                         .builder()
-                        .pagination(PaginationDTO
+                        .pagination(Pagination
                                 .builder()
                                 .keyword(request.keyword())
                                 .pageIndex(request.index())

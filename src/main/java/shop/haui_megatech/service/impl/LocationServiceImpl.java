@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
-import shop.haui_megatech.domain.dto.global.MetaDTO;
+import shop.haui_megatech.domain.dto.global.NoPaginatedMeta;
 import shop.haui_megatech.domain.entity.location.District;
 import shop.haui_megatech.domain.entity.location.Province;
 import shop.haui_megatech.domain.entity.location.Ward;
@@ -23,33 +23,33 @@ public class LocationServiceImpl implements LocationService {
     private final MessageSourceUtil  messageSourceUtil;
 
     @Override
-    public GlobalResponseDTO<List<Province>> getProvinces() {
+    public GlobalResponseDTO<NoPaginatedMeta, List<Province>> getProvinces() {
         return GlobalResponseDTO
-                .<List<Province>>builder()
-                .meta(MetaDTO.builder()
-                             .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
-                             .build()
+                .<NoPaginatedMeta, List<Province>>builder()
+                .meta(NoPaginatedMeta.builder()
+                                     .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
+                                     .build()
                 )
                 .data(provinceRepository.findAll())
                 .build();
     }
 
     @Override
-    public GlobalResponseDTO<List<District>> getDistrictsByProvince(String code) {
+    public GlobalResponseDTO<NoPaginatedMeta, List<District>> getDistrictsByProvince(String code) {
         return GlobalResponseDTO
-                .<List<District>>builder()
-                .meta(MetaDTO.builder()
-                             .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
-                             .build())
+                .<NoPaginatedMeta, List<District>>builder()
+                .meta(NoPaginatedMeta.builder()
+                                     .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
+                                     .build())
                 .data(provinceRepository.findById(code).orElseThrow().getDistricts())
                 .build();
     }
 
     @Override
-    public GlobalResponseDTO<List<Ward>> getWardsByDistrict(String code) {
+    public GlobalResponseDTO<NoPaginatedMeta, List<Ward>> getWardsByDistrict(String code) {
         return GlobalResponseDTO
-                .<List<Ward>>builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, List<Ward>>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
                         .build()

@@ -38,15 +38,15 @@ public class ProductServiceImpl implements ProductService {
     private final MessageSourceUtil messageSourceUtil;
 
     @Override
-    public GlobalResponseDTO<FullProductResponseDTO> getOne(Integer id) {
+    public GlobalResponseDTO<NoPaginatedMeta, FullProductResponseDTO> getOne(Integer id) {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
             throw new NotFoundException(ErrorMessage.Product.NOT_FOUND);
 
         return GlobalResponseDTO
-                .<FullProductResponseDTO>builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, FullProductResponseDTO>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.Product.FOUND))
@@ -58,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<List<BriefProductResponseDTO>> getList(
+    public GlobalResponseDTO<PaginatedMeta, List<BriefProductResponseDTO>> getList(
             PaginationRequestDTO request,
             FilterProductRequestDTO filter
     ) {
@@ -142,10 +142,10 @@ public class ProductServiceImpl implements ProductService {
             }
 
             return GlobalResponseDTO
-                    .<List<BriefProductResponseDTO>>builder()
-                    .meta(MetaDTO
+                    .<PaginatedMeta, List<BriefProductResponseDTO>>builder()
+                    .meta(PaginatedMeta
                             .builder()
-                            .pagination(PaginationDTO
+                            .pagination(Pagination
                                     .builder()
                                     .keyword(request.keyword())
                                     .pageIndex(request.index())
@@ -200,10 +200,10 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = page.getContent();
 
         return GlobalResponseDTO
-                .<List<BriefProductResponseDTO>>builder()
-                .meta(MetaDTO
+                .<PaginatedMeta, List<BriefProductResponseDTO>>builder()
+                .meta(PaginatedMeta
                         .builder()
-                        .pagination(PaginationDTO
+                        .pagination(Pagination
                                 .builder()
                                 .pageIndex(request.index())
                                 .pageSize((short) page.getNumberOfElements())
@@ -219,11 +219,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<BriefProductResponseDTO> addOne(AddProductRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BriefProductResponseDTO> addOne(AddProductRequestDTO request) {
 
         return GlobalResponseDTO
-                .<BriefProductResponseDTO>builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BriefProductResponseDTO>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.Product.ADDED_ONE))
@@ -236,7 +236,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<?> importExcel(ImportDataRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> importExcel(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
@@ -244,8 +244,8 @@ public class ProductServiceImpl implements ProductService {
             List<Product> products = ExcelUtil.excelToProducts(request.file().getInputStream());
             List<Product> savedProducts = productRepository.saveAll(products);
             return GlobalResponseDTO
-                    .builder()
-                    .meta(MetaDTO
+                    .<NoPaginatedMeta, BlankData>builder()
+                    .meta(NoPaginatedMeta
                             .builder()
                             .status(Status.SUCCESS)
                             .message(messageSourceUtil.getMessage(
@@ -261,7 +261,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<?> importCsv(ImportDataRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> importCsv(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
@@ -269,8 +269,8 @@ public class ProductServiceImpl implements ProductService {
             List<Product> products = CsvUtil.csvToProducts(request.file().getInputStream());
             List<Product> savedProducts = productRepository.saveAll(products);
             return GlobalResponseDTO
-                    .builder()
-                    .meta(MetaDTO
+                    .<NoPaginatedMeta, BlankData>builder()
+                    .meta(NoPaginatedMeta
                             .builder()
                             .status(Status.SUCCESS)
                             .message(messageSourceUtil.getMessage(
@@ -286,7 +286,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<?> updateOne(
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> updateOne(
             Integer id,
             UpdateProductRequestDTO request
     ) {
@@ -302,8 +302,8 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(foundProduct);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(SuccessMessage.Product.UPDATED_ONE)
@@ -313,7 +313,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<?> hardDeleteOne(Integer id) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> hardDeleteOne(Integer id) {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
@@ -322,8 +322,8 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(SuccessMessage.Product.HARD_DELETED_ONE)
@@ -333,12 +333,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<?> hardDeleteList(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> hardDeleteList(ListIdsRequestDTO request) {
         productRepository.deleteAllById(request.ids());
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(
@@ -352,7 +352,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public GlobalResponseDTO<?> updateListFromExcel(ImportDataRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> updateListFromExcel(ImportDataRequestDTO request) {
         if (ExcelUtil.notHasExcelFormat(request.file()))
             throw new MalformedFileException(ErrorMessage.Request.MALFORMED_FILE);
 
@@ -360,8 +360,8 @@ public class ProductServiceImpl implements ProductService {
             List<Product> updatedProducts = ExcelUtil.excelToProducts(request.file().getInputStream());
             List<Product> savedProducts = productRepository.saveAll(updatedProducts);
             return GlobalResponseDTO
-                    .builder()
-                    .meta(MetaDTO
+                    .<NoPaginatedMeta, BlankData>builder()
+                    .meta(NoPaginatedMeta
                             .builder()
                             .status(Status.SUCCESS)
                             .message(messageSourceUtil.getMessage(
@@ -378,7 +378,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public GlobalResponseDTO<?> hideOne(Integer id) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> hideOne(Integer id) {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
@@ -387,8 +387,8 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(SuccessMessage.Product.HIDED_ONE)
@@ -398,7 +398,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<?> hideList(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> hideList(ListIdsRequestDTO request) {
         List<Product> foundProducts = productRepository.findAllById(request.ids());
 
         foundProducts.parallelStream().forEach(item -> item.setHidden(true));
@@ -406,8 +406,8 @@ public class ProductServiceImpl implements ProductService {
         productRepository.saveAll(foundProducts);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(
@@ -420,7 +420,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<List<BriefProductResponseDTO>> getHiddenList(PaginationRequestDTO request) {
+    public GlobalResponseDTO<PaginatedMeta, List<BriefProductResponseDTO>> getHiddenList(PaginationRequestDTO request) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
@@ -439,10 +439,10 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = page.getContent();
 
         return GlobalResponseDTO
-                .<List<BriefProductResponseDTO>>builder()
-                .meta(MetaDTO
+                .<PaginatedMeta, List<BriefProductResponseDTO>>builder()
+                .meta(PaginatedMeta
                         .builder()
-                        .pagination(PaginationDTO
+                        .pagination(Pagination
                                 .builder()
                                 .keyword(request.keyword())
                                 .pageIndex(request.index())
@@ -460,7 +460,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<?> restoreOne(Integer id) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> restoreOne(Integer id) {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
@@ -471,8 +471,8 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(foundProduct);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.Product.RESTORED_ONE))
@@ -482,7 +482,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<?> restoreList(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> restoreList(ListIdsRequestDTO request) {
         List<Product> foundProducts = productRepository.findAllById(request.ids());
 
         foundProducts.parallelStream().forEach(item -> item.setDeleted(false));
@@ -490,8 +490,8 @@ public class ProductServiceImpl implements ProductService {
         productRepository.saveAll(foundProducts);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(
@@ -504,7 +504,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<?> exposeOne(Integer id) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> exposeOne(Integer id) {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
@@ -515,8 +515,8 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(foundProduct);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.Product.EXPOSED_ONE))
@@ -526,7 +526,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<?> exposeList(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> exposeList(ListIdsRequestDTO request) {
         List<Product> foundProducts = productRepository.findAllById(request.ids());
 
         foundProducts.parallelStream().forEach(item -> item.setHidden(false));
@@ -534,8 +534,8 @@ public class ProductServiceImpl implements ProductService {
         productRepository.saveAll(foundProducts);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(
@@ -548,7 +548,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<?> softDeleteOne(Integer id) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> softDeleteOne(Integer id) {
         Optional<Product> found = productRepository.findById(id);
 
         if (found.isEmpty())
@@ -559,8 +559,8 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(foundProduct);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(SuccessMessage.Product.SOFT_DELETED_ONE))
@@ -570,7 +570,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<?> softDeleteList(ListIdsRequestDTO request) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> softDeleteList(ListIdsRequestDTO request) {
         List<Product> foundProducts = productRepository.findAllById(request.ids());
 
         foundProducts.parallelStream().forEach(item -> item.setDeleted(true));
@@ -578,8 +578,8 @@ public class ProductServiceImpl implements ProductService {
         productRepository.saveAll(foundProducts);
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(
@@ -592,7 +592,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GlobalResponseDTO<List<BriefProductResponseDTO>> getDeletedList(PaginationRequestDTO request) {
+    public GlobalResponseDTO<PaginatedMeta, List<BriefProductResponseDTO>> getDeletedList(PaginationRequestDTO request) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
@@ -611,10 +611,10 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = page.getContent();
 
         return GlobalResponseDTO
-                .<List<BriefProductResponseDTO>>builder()
-                .meta(MetaDTO
+                .<PaginatedMeta, List<BriefProductResponseDTO>>builder()
+                .meta(PaginatedMeta
                         .builder()
-                        .pagination(PaginationDTO
+                        .pagination(Pagination
                                 .builder()
                                 .keyword(request.keyword())
                                 .pageIndex(request.index())

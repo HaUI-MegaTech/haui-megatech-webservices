@@ -1,25 +1,29 @@
 package shop.haui_megatech.service;
 
 import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+import shop.haui_megatech.domain.dto.global.NoPaginatedMeta;
+import shop.haui_megatech.domain.dto.global.PaginatedMeta;
 import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.order.*;
 
+import java.util.List;
+
 public interface OrderService {
-    GlobalResponseDTO<?> getListOrderForUser(PaginationRequestDTO requestDTO);
+    GlobalResponseDTO<PaginatedMeta, List<OrderBaseDTO>> getListOrderForUser(PaginationRequestDTO requestDTO);
 
-    GlobalResponseDTO<?> getListOrderForAdmin(PaginationRequestDTO requestDTO);
+    GlobalResponseDTO<PaginatedMeta, List<OrderBaseDTO>> getListOrderForAdmin(PaginationRequestDTO requestDTO);
 
-    GlobalResponseDTO<OrderItemResponseDTO> getOrderDetailForUser(Integer userId);
+    GlobalResponseDTO<NoPaginatedMeta, OrderItemResponseDTO> getOrderDetailForUser(Integer userId);
 
-    GlobalResponseDTO<OrderItemResponseDTO> getOrderDetailForAdmin(Integer orderId);
+    GlobalResponseDTO<NoPaginatedMeta, OrderItemResponseDTO> getOrderDetailForAdmin(Integer orderId);
 
-    GlobalResponseDTO<OrderBaseDTO> addOrderForUser(AddOrderForUserRequestDTO requestDTO);
+    GlobalResponseDTO<NoPaginatedMeta, OrderBaseDTO> addOrderForUser(AddOrderForUserRequestDTO requestDTO);
 
-    GlobalResponseDTO<OrderBaseDTO> addOrderForAdmin(AddOrderForAdminRequestDTO requestDTO);
+    GlobalResponseDTO<NoPaginatedMeta, OrderBaseDTO> addOrderForAdmin(AddOrderForAdminRequestDTO requestDTO);
 
-    GlobalResponseDTO<OrderBaseDTO> updateOrderForUser(ModifyOrderForUserRequestDTO requestDTO);
+    GlobalResponseDTO<NoPaginatedMeta, OrderBaseDTO> updateOrderForUser(ModifyOrderForUserRequestDTO requestDTO);
 
-    GlobalResponseDTO<OrderBaseDTO> updateOrderForAdmin(ModifyOrderForAdminRequestDTO requestDTO);
+    GlobalResponseDTO<NoPaginatedMeta, OrderBaseDTO> updateOrderForAdmin(ModifyOrderForAdminRequestDTO requestDTO);
 
-    GlobalResponseDTO<OrderBaseDTO> deleteOrderForAdmin(int orderId);
+    GlobalResponseDTO<NoPaginatedMeta, OrderBaseDTO> deleteOrderForAdmin(int orderId);
 }

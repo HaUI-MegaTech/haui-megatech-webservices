@@ -20,8 +20,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import shop.haui_megatech.configuration.security.filter.JwtAuthenticationFilter;
 import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.constant.ErrorMessage;
+import shop.haui_megatech.domain.dto.global.BlankData;
 import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
-import shop.haui_megatech.domain.dto.global.MetaDTO;
+import shop.haui_megatech.domain.dto.global.NoPaginatedMeta;
 import shop.haui_megatech.domain.dto.global.Status;
 import shop.haui_megatech.domain.entity.enums.Authority;
 import shop.haui_megatech.utility.MessageSourceUtil;
@@ -173,31 +174,33 @@ public class SecurityConfiguration {
                                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
                                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-                                   GlobalResponseDTO<?> responseBody =
-                                           GlobalResponseDTO.builder()
-                                                            .meta(MetaDTO
-                                                                    .builder()
-                                                                    .status(Status.SUCCESS)
-                                                                    .message(messageSourceUtil.getMessage(ErrorMessage.Auth.AUTHENTICATE))
-                                                                    .build())
-                                                            .build();
+                                   GlobalResponseDTO<NoPaginatedMeta, BlankData> responseBody =
+                                           GlobalResponseDTO
+                                                   .<NoPaginatedMeta, BlankData>builder()
+                                                   .meta(NoPaginatedMeta
+                                                           .builder()
+                                                           .status(Status.SUCCESS)
+                                                           .message(messageSourceUtil.getMessage(ErrorMessage.Auth.AUTHENTICATE))
+                                                           .build())
+                                                   .build();
 
                                    ObjectMapper objectMapper = new ObjectMapper();
                                    response.getWriter().write(objectMapper.writeValueAsString(responseBody));
                                })
                                .accessDeniedHandler((request, response, accessDeniedException) -> {
-                                   response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                                   response.setStatus(HttpStatus.FORBIDDEN.value());
                                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-                                   GlobalResponseDTO<?> responseBody =
-                                           GlobalResponseDTO.builder()
-                                                            .meta(MetaDTO
-                                                                    .builder()
-                                                                    .status(Status.SUCCESS)
-                                                                    .message(messageSourceUtil.getMessage(ErrorMessage.Auth.UNAUTHORIZED))
-                                                                    .build()
-                                                            )
-                                                            .build();
+                                   GlobalResponseDTO<NoPaginatedMeta, BlankData> responseBody =
+                                           GlobalResponseDTO
+                                                   .<NoPaginatedMeta, BlankData>builder()
+                                                   .meta(NoPaginatedMeta
+                                                           .builder()
+                                                           .status(Status.SUCCESS)
+                                                           .message(messageSourceUtil.getMessage(ErrorMessage.Auth.UNAUTHORIZED))
+                                                           .build()
+                                                   )
+                                                   .build();
 
                                    ObjectMapper objectMapper = new ObjectMapper();
                                    response.getWriter().write(objectMapper.writeValueAsString(responseBody));

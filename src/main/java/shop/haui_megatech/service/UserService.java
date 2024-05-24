@@ -2,48 +2,64 @@ package shop.haui_megatech.service;
 
 import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
-import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
-import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
+import shop.haui_megatech.domain.dto.global.*;
 import shop.haui_megatech.domain.dto.user.*;
 
 import java.util.List;
 
 public interface UserService {
-    GlobalResponseDTO<FullUserResponseDTO> getOneUser(Integer userId);
+    // Get
+    GlobalResponseDTO<NoPaginatedMeta, FullUserResponseDTO> getOneUser(Integer userId);
 
-    GlobalResponseDTO<?> addOneUser(AddUserRequestDTO request);
+    GlobalResponseDTO<PaginatedMeta, List<BriefUserResponseDTO>> getListActiveUsers(PaginationRequestDTO request);
 
-    GlobalResponseDTO<?> importExcelUser(ImportDataRequestDTO request);
+    GlobalResponseDTO<PaginatedMeta, List<BriefUserResponseDTO>> getDeletedListUsers(PaginationRequestDTO request);
 
-    GlobalResponseDTO<?> importCsvUser(ImportDataRequestDTO request);
 
-    GlobalResponseDTO<?> updateInfoUser(
+    // Add
+    GlobalResponseDTO<NoPaginatedMeta, BriefUserResponseDTO> addOneUser(AddUserRequestDTO request);
+
+
+    // Import
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> importExcelUser(ImportDataRequestDTO request);
+
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> importCsvUser(ImportDataRequestDTO request);
+
+
+    // Update info
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> updateInfoUser(
             Integer userId,
             UpdateUserInfoRequest request
     );
 
-    GlobalResponseDTO<?> updatePasswordUser(
+
+    // Update password
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> updatePasswordUser(
             Integer userId,
             UpdateUserPasswordRequest request
     );
 
-    GlobalResponseDTO<?> softDeleteOneUser(Integer userId);
 
-    GlobalResponseDTO<?> softDeleteListUsers(ListIdsRequestDTO request);
+    // Soft delete
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> softDeleteOneUser(Integer userId);
 
-    GlobalResponseDTO<?> hardDeleteOneUser(Integer id);
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> softDeleteListUsers(ListIdsRequestDTO request);
 
-    GlobalResponseDTO<?> hardDeleteListUsers(ListIdsRequestDTO request);
 
-    GlobalResponseDTO<?> restoreOneUser(Integer userId);
+    // Hard delete
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> hardDeleteOneUser(Integer id);
 
-    GlobalResponseDTO<?> restoreListUsers(ListIdsRequestDTO request);
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> hardDeleteListUsers(ListIdsRequestDTO request);
 
-    GlobalResponseDTO<?> resetPasswordOneUser(Integer userId);
 
-    GlobalResponseDTO<?> resetPasswordListUsers(ListIdsRequestDTO request);
+    // Restore
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> restoreOneUser(Integer userId);
 
-    GlobalResponseDTO<List<BriefUserResponseDTO>> getListActiveUsers(PaginationRequestDTO request);
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> restoreListUsers(ListIdsRequestDTO request);
 
-    GlobalResponseDTO<List<BriefUserResponseDTO>> getDeletedListUsers(PaginationRequestDTO request);
+
+    // Reset password
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> resetPasswordOneUser(Integer userId);
+
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> resetPasswordListUsers(ListIdsRequestDTO request);
 }

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
-import shop.haui_megatech.domain.dto.global.MetaDTO;
+import shop.haui_megatech.domain.dto.global.NoPaginatedMeta;
 import shop.haui_megatech.domain.dto.global.Status;
 import shop.haui_megatech.domain.dto.home.ProductCountByBrandResponseDTO;
 import shop.haui_megatech.domain.dto.order.LatestOrderResponseDTO;
@@ -29,12 +29,12 @@ public class HomeServiceImpl implements HomeService {
     private final OrderRepository          orderRepository;
 
     @Override
-    public GlobalResponseDTO<List<ProductCountByBrandResponseDTO>> getProductCountByBrand() {
+    public GlobalResponseDTO<NoPaginatedMeta, List<ProductCountByBrandResponseDTO>> getProductCountByBrand() {
         List<Brand> brands = brandRepository.findAll();
 
         return GlobalResponseDTO
-                .<List<ProductCountByBrandResponseDTO>>builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, List<ProductCountByBrandResponseDTO>>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .build())
@@ -52,14 +52,14 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public GlobalResponseDTO<List<TopSoldProductResponseDTO>> getTopSoldProducts() {
+    public GlobalResponseDTO<NoPaginatedMeta, List<TopSoldProductResponseDTO>> getTopSoldProducts() {
         Sort sort = Sort.by("totalSold").descending();
         Pageable pageable = PageRequest.of(0, 10, sort);
         Page<Product> page = productRepository.findAll(pageable);
         List<Product> list = page.getContent();
         return GlobalResponseDTO
-                .<List<TopSoldProductResponseDTO>>builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, List<TopSoldProductResponseDTO>>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .build())
@@ -81,19 +81,19 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public GlobalResponseDTO<?> getTotalSoldProducts() {
+    public GlobalResponseDTO<NoPaginatedMeta, Integer> getTotalSoldProducts() {
         List<Product> list = productRepository.findAll();
         Integer total = list.stream().mapToInt(Product::getTotalSold).sum();
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO.builder().status(Status.SUCCESS).build())
+                .<NoPaginatedMeta, Integer>builder()
+                .meta(NoPaginatedMeta.builder().status(Status.SUCCESS).build())
                 .data(total)
                 .build();
     }
 
     @Override
-    public GlobalResponseDTO<?> getTotalProductRevenue() {
+    public GlobalResponseDTO<NoPaginatedMeta, Double> getTotalProductRevenue() {
         List<Product> list = productRepository.findAll();
         Double totalRevenue = list.stream()
                                   .mapToDouble(item ->
@@ -102,46 +102,46 @@ public class HomeServiceImpl implements HomeService {
                                   .sum();
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO.builder().status(Status.SUCCESS).build())
+                .<NoPaginatedMeta, Double>builder()
+                .meta(NoPaginatedMeta.builder().status(Status.SUCCESS).build())
                 .data(totalRevenue)
                 .build();
     }
 
     @Override
-    public GlobalResponseDTO<?> getTotalCustomers() {
+    public GlobalResponseDTO<NoPaginatedMeta, Integer> getTotalCustomers() {
         List<User> list = userRepository.findAll();
         list.removeIf(item -> !item.getRole().equals(Role.CUSTOMER));
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO.builder().status(Status.SUCCESS).build())
+                .<NoPaginatedMeta, Integer>builder()
+                .meta(NoPaginatedMeta.builder().status(Status.SUCCESS).build())
                 .data(list.size())
                 .build();
     }
 
     @Override
-    public GlobalResponseDTO<?> getTotalLoggedIn() {
+    public GlobalResponseDTO<NoPaginatedMeta, Integer> getTotalLoggedIn() {
         List<LoginStatistic> list = loginStatisticRepository.findAll();
         Integer total = list.stream().mapToInt(LoginStatistic::getLoggedIn).sum();
 
         return GlobalResponseDTO
-                .builder()
-                .meta(MetaDTO.builder().status(Status.SUCCESS).build())
+                .<NoPaginatedMeta, Integer>builder()
+                .meta(NoPaginatedMeta.builder().status(Status.SUCCESS).build())
                 .data(total)
                 .build();
     }
 
     @Override
-    public GlobalResponseDTO<List<LatestOrderResponseDTO>> getLatestOrder() {
+    public GlobalResponseDTO<NoPaginatedMeta, List<LatestOrderResponseDTO>> getLatestOrder() {
         Sort sort = Sort.by("id").descending();
         Pageable pageable = PageRequest.of(0, 10, sort);
         Page<Order> page = orderRepository.findAll(pageable);
         List<Order> list = page.getContent();
 
         return GlobalResponseDTO
-                .<List<LatestOrderResponseDTO>>builder()
-                .meta(MetaDTO
+                .<NoPaginatedMeta, List<LatestOrderResponseDTO>>builder()
+                .meta(NoPaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
                         .build()

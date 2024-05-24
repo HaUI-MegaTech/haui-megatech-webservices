@@ -6,7 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
-import shop.haui_megatech.domain.dto.global.MetaDTO;
+import shop.haui_megatech.domain.dto.global.NoPaginatedMeta;
 import shop.haui_megatech.domain.dto.global.Status;
 import shop.haui_megatech.utility.MessageSourceUtil;
 import shop.haui_megatech.utility.ResponseUtil;
@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AbsentRequiredFieldException.class)
     public ResponseEntity<?> handleBlankUsernameException(AbsentRequiredFieldException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
-                                                        .meta(MetaDTO
+                                                        .meta(NoPaginatedMeta
                                                                 .builder()
                                                                 .status(Status.ERROR)
                                                                 .message(messageSourceUtil.getMessage(ex.getMessage()))
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MismatchedConfirmPasswordException.class)
     public ResponseEntity<?> handleBlankPasswordException(MismatchedConfirmPasswordException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
-                                                        .meta(MetaDTO
+                                                        .meta(NoPaginatedMeta
                                                                 .builder()
                                                                 .status(Status.ERROR)
                                                                 .message(messageSourceUtil.getMessage(ex.getMessage()))
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> handleNotFoundException(NotFoundException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
-                                                        .meta(MetaDTO
+                                                        .meta(NoPaginatedMeta
                                                                 .builder()
                                                                 .status(Status.ERROR)
                                                                 .message(messageSourceUtil.getMessage(ex.getMessage()))
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WrongPasswordException.class)
     public ResponseEntity<?> handleWrongPasswordException(WrongPasswordException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
-                                                        .meta(MetaDTO
+                                                        .meta(NoPaginatedMeta
                                                                 .builder()
                                                                 .status(Status.ERROR)
                                                                 .message(messageSourceUtil.getMessage(ex.getMessage()))
@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidRequestParamException.class)
     public ResponseEntity<?> handleInvalidRequestParamException(InvalidRequestParamException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
-                                                        .meta(MetaDTO
+                                                        .meta(NoPaginatedMeta
                                                                 .builder()
                                                                 .status(Status.ERROR)
                                                                 .message(messageSourceUtil.getMessage(ex.getMessage()))
@@ -79,7 +79,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NullRequestException.class)
     public ResponseEntity<?> handleNullRequestException(NullRequestException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
-                                                        .meta(MetaDTO
+                                                        .meta(NoPaginatedMeta
                                                                 .builder()
                                                                 .status(Status.ERROR)
                                                                 .message(messageSourceUtil.getMessage(ex.getMessage()))
@@ -91,7 +91,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateUsernameException.class)
     public ResponseEntity<?> handleDuplicateUsernameException(DuplicateUsernameException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
-                                                        .meta(MetaDTO
+                                                        .meta(NoPaginatedMeta
                                                                 .builder()
                                                                 .status(Status.ERROR)
                                                                 .message(messageSourceUtil.getMessage(ex.getMessage()))
@@ -103,7 +103,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
-                                                        .meta(MetaDTO
+                                                        .meta(NoPaginatedMeta
                                                                 .builder()
                                                                 .status(Status.ERROR)
                                                                 .message(messageSourceUtil.getMessage(ex.getMessage()))
@@ -115,7 +115,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MalformedFileException.class)
     public ResponseEntity<?> handleMalformedFileException(MalformedFileException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
-                                                        .meta(MetaDTO
+                                                        .meta(NoPaginatedMeta
                                                                 .builder()
                                                                 .status(Status.ERROR)
                                                                 .message(messageSourceUtil.getMessage(ex.getMessage()))
@@ -127,7 +127,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AppException.class)
     public ResponseEntity<?> handleAppException(AppException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
-                                                        .meta(MetaDTO
+                                                        .meta(NoPaginatedMeta
                                                                 .builder()
                                                                 .status(Status.ERROR)
                                                                 .message(messageSourceUtil.getMessage(ex.getMessage()))

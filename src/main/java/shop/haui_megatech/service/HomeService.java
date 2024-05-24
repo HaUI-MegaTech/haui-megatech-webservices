@@ -1,6 +1,7 @@
 package shop.haui_megatech.service;
 
 import shop.haui_megatech.domain.dto.global.GlobalResponseDTO;
+import shop.haui_megatech.domain.dto.global.NoPaginatedMeta;
 import shop.haui_megatech.domain.dto.home.ProductCountByBrandResponseDTO;
 import shop.haui_megatech.domain.dto.order.LatestOrderResponseDTO;
 import shop.haui_megatech.domain.dto.product.TopSoldProductResponseDTO;
@@ -8,17 +9,17 @@ import shop.haui_megatech.domain.dto.product.TopSoldProductResponseDTO;
 import java.util.List;
 
 public interface HomeService {
-    GlobalResponseDTO<List<ProductCountByBrandResponseDTO>> getProductCountByBrand();
+    GlobalResponseDTO<NoPaginatedMeta, List<ProductCountByBrandResponseDTO>> getProductCountByBrand();
 
-    GlobalResponseDTO<List<TopSoldProductResponseDTO>> getTopSoldProducts();
+    GlobalResponseDTO<NoPaginatedMeta, List<TopSoldProductResponseDTO>> getTopSoldProducts();
 
-    GlobalResponseDTO<?> getTotalSoldProducts();
+    GlobalResponseDTO<NoPaginatedMeta, Integer> getTotalSoldProducts();
 
-    GlobalResponseDTO<?> getTotalProductRevenue();
+    GlobalResponseDTO<NoPaginatedMeta, Double> getTotalProductRevenue();
 
-    GlobalResponseDTO<?> getTotalCustomers();
+    GlobalResponseDTO<NoPaginatedMeta, Integer> getTotalCustomers();
 
-    GlobalResponseDTO<?> getTotalLoggedIn();
+    GlobalResponseDTO<NoPaginatedMeta, Integer> getTotalLoggedIn();
 
-    GlobalResponseDTO<List<LatestOrderResponseDTO>> getLatestOrder();
+    GlobalResponseDTO<NoPaginatedMeta, List<LatestOrderResponseDTO>> getLatestOrder();
 }

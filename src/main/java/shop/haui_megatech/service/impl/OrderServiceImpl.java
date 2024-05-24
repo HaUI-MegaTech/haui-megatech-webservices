@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository   orderRepository;
 
     @Override
-    public GlobalResponseDTO<?> getListOrderForUser(PaginationRequestDTO requestDTO) {
+    public GlobalResponseDTO<PaginatedMeta, List<OrderBaseDTO>> getListOrderForUser(PaginationRequestDTO requestDTO) {
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
@@ -59,11 +59,11 @@ public class OrderServiceImpl implements OrderService {
 
         List<Order> orders = page.getContent();
         return GlobalResponseDTO
-                .<List<OrderBaseDTO>>builder()
-                .meta(MetaDTO
+                .<PaginatedMeta, List<OrderBaseDTO>>builder()
+                .meta(PaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
-                        .pagination(PaginationDTO
+                        .pagination(Pagination
                                 .builder()
                                 .keyword(requestDTO.keyword())
                                 .pageIndex(requestDTO.index())
@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public GlobalResponseDTO<?> getListOrderForAdmin(PaginationRequestDTO requestDTO) {
+    public GlobalResponseDTO<PaginatedMeta, List<OrderBaseDTO>> getListOrderForAdmin(PaginationRequestDTO requestDTO) {
         if (requestDTO.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
@@ -98,11 +98,11 @@ public class OrderServiceImpl implements OrderService {
 
         List<Order> orders = page.getContent();
         return GlobalResponseDTO
-                .<List<OrderBaseDTO>>builder()
-                .meta(MetaDTO
+                .<PaginatedMeta, List<OrderBaseDTO>>builder()
+                .meta(PaginatedMeta
                         .builder()
                         .status(Status.SUCCESS)
-                        .pagination(PaginationDTO
+                        .pagination(Pagination
                                 .builder()
                                 .keyword(requestDTO.keyword())
                                 .pageIndex(requestDTO.index())
@@ -119,15 +119,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public GlobalResponseDTO<OrderItemResponseDTO> getOrderDetailForUser(Integer orderId) {
+    public GlobalResponseDTO<NoPaginatedMeta, OrderItemResponseDTO> getOrderDetailForUser(Integer orderId) {
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
         Order order = orderRepository.findOrderDetailById_UserId(orderId, foundUser.get().getId()).get();
-        return GlobalResponseDTO.<OrderItemResponseDTO>builder()
-                                .meta(MetaDTO
+        return GlobalResponseDTO.<NoPaginatedMeta, OrderItemResponseDTO>builder()
+                                .meta(NoPaginatedMeta
                                         .builder()
                                         .status(Status.SUCCESS)
                                         .message("Get Order Detail For User")
@@ -138,21 +138,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public GlobalResponseDTO<OrderItemResponseDTO> getOrderDetailForAdmin(Integer orderId) {
+    public GlobalResponseDTO<NoPaginatedMeta, OrderItemResponseDTO> getOrderDetailForAdmin(Integer orderId) {
         Order order = orderRepository.findById(orderId).get();
 
-        return GlobalResponseDTO.<OrderItemResponseDTO>builder()
-                                .meta(MetaDTO.builder()
-                                             .status(Status.SUCCESS)
-                                             .message("Get Order Detail For Admin")
-                                             .build()
-                                )
-                                .data(orderMapper.orderItemResponseDto(order))
-                                .build();
+        return GlobalResponseDTO
+                .<NoPaginatedMeta, OrderItemResponseDTO>builder()
+                .meta(NoPaginatedMeta.builder()
+                                     .status(Status.SUCCESS)
+                                     .message("Get Order Detail For Admin")
+                                     .build()
+                )
+                .data(orderMapper.orderItemResponseDto(order))
+                .build();
     }
 
     @Override
-    public GlobalResponseDTO<OrderBaseDTO> addOrderForUser(AddOrderForUserRequestDTO requestDTO) {
+    public GlobalResponseDTO<NoPaginatedMeta, OrderBaseDTO> addOrderForUser(AddOrderForUserRequestDTO requestDTO) {
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
@@ -162,31 +163,32 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderMapper.addOrderRequestForUserDTOtoOrder(requestDTO);
         order.setUser(foundUser.get());
         Order saveOrder = orderRepository.save(order);
-        return GlobalResponseDTO.<OrderBaseDTO>builder()
-                                .meta(MetaDTO.builder()
-                                             .status(Status.SUCCESS)
-                                             .message(messageSourceUtil.getMessage(SuccessMessage.Order.ADDED_ONE))
-                                             .build())
+        return GlobalResponseDTO.<NoPaginatedMeta, OrderBaseDTO>builder()
+                                .meta(NoPaginatedMeta.builder()
+                                                     .status(Status.SUCCESS)
+                                                     .message(messageSourceUtil.getMessage(SuccessMessage.Order.ADDED_ONE))
+                                                     .build())
                                 .data(orderMapper.orderToOrderBase(saveOrder))
                                 .build();
     }
 
     @Override
-    public GlobalResponseDTO<OrderBaseDTO> addOrderForAdmin(AddOrderForAdminRequestDTO requestDTO) {
+    public GlobalResponseDTO<NoPaginatedMeta, OrderBaseDTO> addOrderForAdmin(AddOrderForAdminRequestDTO requestDTO) {
         Order order = orderMapper.addOrderRequestForAdminDTOtoOrder(requestDTO);
         Order saveOrder = orderRepository.save(order);
-        return GlobalResponseDTO.<OrderBaseDTO>builder()
-                                .meta(MetaDTO.builder()
-                                             .status(Status.SUCCESS)
-                                             .message(messageSourceUtil.getMessage(SuccessMessage.Order.ADDED_ONE))
+        return GlobalResponseDTO
+                .<NoPaginatedMeta, OrderBaseDTO>builder()
+                .meta(NoPaginatedMeta.builder()
+                                     .status(Status.SUCCESS)
+                                     .message(messageSourceUtil.getMessage(SuccessMessage.Order.ADDED_ONE))
 
-                                             .build())
-                                .data(orderMapper.orderToOrderBase(saveOrder))
-                                .build();
+                                     .build())
+                .data(orderMapper.orderToOrderBase(saveOrder))
+                .build();
     }
 
     @Override
-    public GlobalResponseDTO<OrderBaseDTO> updateOrderForUser(ModifyOrderForUserRequestDTO requestDTO) {
+    public GlobalResponseDTO<NoPaginatedMeta, OrderBaseDTO> updateOrderForUser(ModifyOrderForUserRequestDTO requestDTO) {
         Optional<User> foundUser =
                 userRepository.findActiveUserByUsername(AuthenticationUtil.getRequestedUser().getUsername());
 
@@ -203,17 +205,18 @@ public class OrderServiceImpl implements OrderService {
         orderUpdate.setId(order.getId());
         orderUpdate.setUser(foundUser.get());
         Order saveOrder = orderRepository.save(orderUpdate);
-        return GlobalResponseDTO.<OrderBaseDTO>builder()
-                                .meta(MetaDTO.builder()
-                                             .status(Status.SUCCESS)
-                                             .message(messageSourceUtil.getMessage(SuccessMessage.Order.UPDATED_ONE))
-                                             .build())
-                                .data(orderMapper.orderToOrderBase(saveOrder))
-                                .build();
+        return GlobalResponseDTO
+                .<NoPaginatedMeta, OrderBaseDTO>builder()
+                .meta(NoPaginatedMeta.builder()
+                                     .status(Status.SUCCESS)
+                                     .message(messageSourceUtil.getMessage(SuccessMessage.Order.UPDATED_ONE))
+                                     .build())
+                .data(orderMapper.orderToOrderBase(saveOrder))
+                .build();
     }
 
     @Override
-    public GlobalResponseDTO<OrderBaseDTO> updateOrderForAdmin(ModifyOrderForAdminRequestDTO requestDTO) {
+    public GlobalResponseDTO<NoPaginatedMeta, OrderBaseDTO> updateOrderForAdmin(ModifyOrderForAdminRequestDTO requestDTO) {
         Optional<User> foundUser = userRepository.findById(requestDTO.addOrderForAdminRequestDTO().userId());
 
         if (foundUser.isEmpty())
@@ -228,29 +231,31 @@ public class OrderServiceImpl implements OrderService {
         orderUpdate.setId(order.getId());
         orderUpdate.setUser(foundUser.get());
         Order saveOrder = orderRepository.save(orderUpdate);
-        return GlobalResponseDTO.<OrderBaseDTO>builder()
-                                .meta(MetaDTO.builder()
-                                             .status(Status.SUCCESS)
-                                             .message(messageSourceUtil.getMessage(SuccessMessage.Order.UPDATED_ONE))
-                                             .build())
-                                .data(orderMapper.orderToOrderBase(saveOrder))
-                                .build();
+        return GlobalResponseDTO
+                .<NoPaginatedMeta, OrderBaseDTO>builder()
+                .meta(NoPaginatedMeta.builder()
+                                     .status(Status.SUCCESS)
+                                     .message(messageSourceUtil.getMessage(SuccessMessage.Order.UPDATED_ONE))
+                                     .build())
+                .data(orderMapper.orderToOrderBase(saveOrder))
+                .build();
     }
 
     @Override
-    public GlobalResponseDTO<OrderBaseDTO> deleteOrderForAdmin(int orderId) {
+    public GlobalResponseDTO<NoPaginatedMeta, OrderBaseDTO> deleteOrderForAdmin(int orderId) {
         Order order = orderRepository.findById(orderId).get();
         if (order == null)
             throw new NotFoundException(ErrorMessage.Order.NOT_FOUND);
         orderRepository.deleteById(order.getId());
-        return GlobalResponseDTO.<OrderBaseDTO>builder()
-                                .meta(MetaDTO.builder()
-                                             .status(Status.SUCCESS)
-                                             .message("Delete Order")
-                                             .build()
-                                )
-                                .data(orderMapper.orderToOrderBase(order))
-                                .build();
+        return GlobalResponseDTO
+                .<NoPaginatedMeta, OrderBaseDTO>builder()
+                .meta(NoPaginatedMeta.builder()
+                                     .status(Status.SUCCESS)
+                                     .message("Delete Order")
+                                     .build()
+                )
+                .data(orderMapper.orderToOrderBase(order))
+                .build();
 
     }
 }

@@ -5,9 +5,11 @@ import lombok.Builder;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record MetaDTO(
-        Status status,
-        String message,
-        PaginationDTO pagination
+public record Pagination(
+        String keyword,
+        Integer pageIndex,
+        Short pageSize,
+        Long totalItems,
+        Integer totalPages
 ) {
 }

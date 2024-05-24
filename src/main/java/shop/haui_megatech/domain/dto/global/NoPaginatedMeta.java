@@ -5,11 +5,8 @@ import lombok.Builder;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record PaginationDTO(
-        String keyword,
-        Integer pageIndex,
-        Short pageSize,
-        Long totalItems,
-        Integer totalPages
+public record NoPaginatedMeta(
+        Status status,
+        String message
 ) {
 }

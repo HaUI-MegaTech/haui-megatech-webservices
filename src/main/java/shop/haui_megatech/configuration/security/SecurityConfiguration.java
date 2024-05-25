@@ -54,7 +54,7 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider  authenticationProvider;
 
-    private final List<String> WHITE_LIST_ORIGINS   = List.of(
+    private final List<String> ALLOWED_ORIGINS      = List.of(
             "http://localhost:3000",
             "http://localhost:3001"
     );
@@ -178,10 +178,10 @@ public class SecurityConfiguration {
                                            GlobalResponseDTO
                                                    .<NoPaginatedMeta, BlankData>builder()
                                                    .meta(NoPaginatedMeta
-                                                           .builder()
-                                                           .status(Status.SUCCESS)
-                                                           .message(messageSourceUtil.getMessage(ErrorMessage.Auth.AUTHENTICATE))
-                                                           .build())
+                                                                 .builder()
+                                                                 .status(Status.ERROR)
+                                                                 .message(messageSourceUtil.getMessage(ErrorMessage.Auth.AUTHENTICATE))
+                                                                 .build())
                                                    .build();
 
                                    ObjectMapper objectMapper = new ObjectMapper();
@@ -195,10 +195,10 @@ public class SecurityConfiguration {
                                            GlobalResponseDTO
                                                    .<NoPaginatedMeta, BlankData>builder()
                                                    .meta(NoPaginatedMeta
-                                                           .builder()
-                                                           .status(Status.SUCCESS)
-                                                           .message(messageSourceUtil.getMessage(ErrorMessage.Auth.UNAUTHORIZED))
-                                                           .build()
+                                                                 .builder()
+                                                                 .status(Status.ERROR)
+                                                                 .message(messageSourceUtil.getMessage(ErrorMessage.Auth.UNAUTHORIZED))
+                                                                 .build()
                                                    )
                                                    .build();
 
@@ -213,7 +213,7 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(WHITE_LIST_ORIGINS);
+        configuration.setAllowedOrigins(ALLOWED_ORIGINS);
         configuration.setAllowedMethods(ALLOWED_HTTP_METHODS);
         configuration.setAllowedHeaders(ALLOWED_HEADERS);
         configuration.setExposedHeaders(EXPOSED_HEADERS);

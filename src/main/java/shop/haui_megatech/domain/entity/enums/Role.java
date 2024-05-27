@@ -79,7 +79,9 @@ public enum Role {
             Authority.UPDATE_CART_ITEM,
             Authority.DELETE_CART_ITEM,
 
-            Authority.CREATE_PAYMENT
+            Authority.CREATE_PAYMENT,
+
+            Authority.READ_ORDER
     )),
 
     ADMINISTRATOR(Set.of(

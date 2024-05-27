@@ -139,7 +139,7 @@ public class PaymentServiceImpl implements PaymentService {
                                                   .toList();
 
         Order order = Order.builder()
-                           .paymentMethod(PaymentMethod.THE_TIN_DUNG)
+                           .paymentMethod(PaymentMethod.ONLINE)
                            .payTime(new Date(Instant.now().toEpochMilli()))
                            .orderTime(new Date(Instant.now().toEpochMilli()))
                            .status(OrderStatus.PAID)

@@ -61,9 +61,9 @@ public class OrderRestController {
     )
     @GetMapping(Endpoint.V1.Order.GET_DETAIL_FOR_USER)
     public ResponseEntity<?> getDetailOrderForUser(
-            @PathVariable(name = "OrderId") Integer OrderId
+            @PathVariable(name = "orderId") Integer orderId
     ) {
-        return ResponseUtil.ok(OrderService.getOrderDetailForUser(OrderId));
+        return ResponseUtil.ok(OrderService.getOrderDetailForUser(orderId));
     }
 
     @Operation(summary = "Get an Detail Orders for Admin")
@@ -75,9 +75,9 @@ public class OrderRestController {
     )
     @GetMapping(Endpoint.V1.Order.GET_DETAIL_FOR_ADMIN)
     public ResponseEntity<?> getDetailOrderForAdmin(
-            @PathVariable(name = "OrderId") Integer OrderId
+            @PathVariable(name = "orderId") Integer orderId
     ) {
-        return ResponseUtil.ok(OrderService.getOrderDetailForAdmin(OrderId));
+        return ResponseUtil.ok(OrderService.getOrderDetailForAdmin(orderId));
     }
 
     @Operation(summary = "Add an Order for User")
@@ -145,8 +145,8 @@ public class OrderRestController {
     )
     @DeleteMapping(Endpoint.V1.Order.DELETE_ONE_ORDER)
     public ResponseEntity<?> deleteOrderForAdmin(
-            @PathVariable(name = "OrderId") int OrderId
+            @PathVariable(name = "orderId") int orderId
     ) {
-        return ResponseUtil.ok(OrderService.deleteOrderForAdmin(OrderId));
+        return ResponseUtil.ok(OrderService.deleteOrderForAdmin(orderId));
     }
 }

@@ -92,7 +92,7 @@ public class Endpoint {
             public static final String PREFIX                = V1.PREFIX + "/orders";
             public static final String GET_LIST_BY_USER_ID   = PREFIX;
             public static final String GET_LIST_FOR_ADMIN    = PREFIX + ADMIN;
-            public static final String GET_DETAIL_FOR_USER   = PREFIX + "/detail";
+            public static final String GET_DETAIL_FOR_USER   = PREFIX + "/detail" + "/{orderId}";
             public static final String GET_DETAIL_FOR_ADMIN  = PREFIX + ADMIN + "/detail" + "/{orderId}";
             public static final String ADD_ONE_FOR_USER      = PREFIX + "/addOne";
             public static final String ADD_ONE_FOR_ADMIN     = PREFIX + ADMIN + "/addOne";

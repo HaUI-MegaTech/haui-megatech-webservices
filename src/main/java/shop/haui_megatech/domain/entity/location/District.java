@@ -35,7 +35,7 @@ public class District {
     @JsonIgnore
     private AdministrativeUnit administrativeUnit;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "district")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "district")
     @JsonIgnore
     private List<Ward> wards;
 }

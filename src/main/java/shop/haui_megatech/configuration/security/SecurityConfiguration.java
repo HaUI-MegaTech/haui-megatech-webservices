@@ -178,10 +178,10 @@ public class SecurityConfiguration {
                                            GlobalResponseDTO
                                                    .<NoPaginatedMeta, BlankData>builder()
                                                    .meta(NoPaginatedMeta
-                                                                 .builder()
-                                                                 .status(Status.ERROR)
-                                                                 .message(messageSourceUtil.getMessage(ErrorMessage.Auth.AUTHENTICATE))
-                                                                 .build())
+                                                           .builder()
+                                                           .status(Status.ERROR)
+                                                           .message(messageSourceUtil.getMessage(ErrorMessage.Auth.AUTHENTICATE))
+                                                           .build())
                                                    .build();
 
                                    ObjectMapper objectMapper = new ObjectMapper();
@@ -195,10 +195,10 @@ public class SecurityConfiguration {
                                            GlobalResponseDTO
                                                    .<NoPaginatedMeta, BlankData>builder()
                                                    .meta(NoPaginatedMeta
-                                                                 .builder()
-                                                                 .status(Status.ERROR)
-                                                                 .message(messageSourceUtil.getMessage(ErrorMessage.Auth.UNAUTHORIZED))
-                                                                 .build()
+                                                           .builder()
+                                                           .status(Status.ERROR)
+                                                           .message(messageSourceUtil.getMessage(ErrorMessage.Auth.UNAUTHORIZED))
+                                                           .build()
                                                    )
                                                    .build();
 

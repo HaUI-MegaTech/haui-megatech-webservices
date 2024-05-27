@@ -33,7 +33,7 @@ public class Province {
     @JsonIgnore
     private AdministrativeRegion administrativeRegion;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "province")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "province")
     @JsonIgnore
     private List<District> districts;
 }

@@ -47,12 +47,25 @@ public class ProductRestController {
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(Endpoint.V1.Product.GET_ACTIVE_LIST)
     public ResponseEntity<GlobalResponseDTO<PaginatedMeta, List<BriefProductResponseDTO>>> getActiveList(
-            @ParameterObject PaginationRequestDTO request,
-            @RequestBody(required = false) FilterProductRequestDTO filter
+            @ParameterObject FilterProductPaginationRequestDTO request
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(productService.getList(request, filter));
+                .body(productService.getList(
+                        PaginationRequestDTO
+                                .builder()
+                                .index(request.index())
+                                .direction(request.direction())
+                                .limit(request.limit())
+                                .fields(request.fields())
+                                .build(),
+                        FilterProductRequestDTO
+                                .builder()
+                                .brandIds(request.brandIds())
+                                .minPrice(request.minPrice())
+                                .maxPrice(request.maxPrice())
+                                .build()
+                ));
     }
 
 

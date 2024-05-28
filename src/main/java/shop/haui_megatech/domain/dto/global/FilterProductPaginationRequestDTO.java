@@ -1,14 +1,12 @@
 package shop.haui_megatech.domain.dto.global;
 
 import io.swagger.v3.oas.annotations.Parameter;
-import lombok.Builder;
 import org.springframework.web.bind.annotation.RequestParam;
 import shop.haui_megatech.constant.PaginationConstant;
 
 import java.util.Objects;
 
-@Builder
-public record PaginationRequestDTO(
+public record FilterProductPaginationRequestDTO(
         @RequestParam(name = "keyword", required = false)
         @Parameter(description = "Từ khóa cần tìm, có thể tìm theo nhiều từ khóa ngăn cách bởi dấu \",\"")
         String keyword,
@@ -29,7 +27,21 @@ public record PaginationRequestDTO(
         @Parameter(
                 description = "Các tiêu chí sắp xếp. Có thể sắp xếp theo nhiều tiêu chí, ngăn cách nhau bởi dấu \",\""
         )
-        String fields
+        String fields,
+
+        @RequestParam(name = "brandIds", required = false)
+        @Parameter(
+                description = "Các mã thương hiệu. Có thể lọc theo nhiều mã thương hiệu, ngăn cách nhau bởi dấu \",\""
+        )
+        String brandIds,
+
+        @RequestParam(name = "minPrice", required = false)
+        @Parameter(description = "Giá lọc thấp nhất")
+        Float minPrice,
+
+        @RequestParam(name = "maxPrice", required = false)
+        @Parameter(description = "Giá lọc cao nhất")
+        Float maxPrice
 ) {
     public Integer index() {
         return Objects.requireNonNullElse(this.index, PaginationConstant.DEFAULT_PAGE_INDEX);

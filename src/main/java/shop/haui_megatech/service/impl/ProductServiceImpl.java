@@ -47,10 +47,10 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, FullProductResponseDTO>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(messageSourceUtil.getMessage(SuccessMessage.Product.FOUND))
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(SuccessMessage.Product.FOUND))
+                              .build()
                 )
                 .data(ProductMapper.INSTANCE.toFullProductResponseDTO(found.get()))
                 .build();
@@ -64,11 +64,13 @@ public class ProductServiceImpl implements ProductService {
     ) {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
-
+        String[] fields = Arrays.stream(request.fields().split(","))
+                                .map(String::trim)
+                                .toArray(String[]::new);
         Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
-                    ? Sort.by(request.fields())
+                    ? Sort.by(fields)
                           .ascending()
-                    : Sort.by(request.fields())
+                    : Sort.by(fields)
                           .descending();
 
         Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
@@ -144,16 +146,16 @@ public class ProductServiceImpl implements ProductService {
             return GlobalResponseDTO
                     .<PaginatedMeta, List<BriefProductResponseDTO>>builder()
                     .meta(PaginatedMeta
-                            .builder()
-                            .pagination(Pagination
-                                    .builder()
-                                    .keyword(request.keyword())
-                                    .pageIndex(request.index())
-                                    .pageSize(request.limit())
-                                    .totalItems((long) products.size())
-                                    .totalPages(pageCount)
-                                    .build())
-                            .build())
+                                  .builder()
+                                  .pagination(Pagination
+                                                      .builder()
+                                                      .keyword(request.keyword())
+                                                      .pageIndex(request.index())
+                                                      .pageSize(request.limit())
+                                                      .totalItems((long) products.size())
+                                                      .totalPages(pageCount)
+                                                      .build())
+                                  .build())
                     .data(products.parallelStream()
                                   .map(ProductMapper.INSTANCE::toBriefProductResponseDTO)
                                   .collect(Collectors.toList()))
@@ -202,16 +204,16 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<PaginatedMeta, List<BriefProductResponseDTO>>builder()
                 .meta(PaginatedMeta
-                        .builder()
-                        .pagination(Pagination
-                                .builder()
-                                .pageIndex(request.index())
-                                .pageSize((short) page.getNumberOfElements())
-                                .totalItems(page.getTotalElements())
-                                .totalPages(page.getTotalPages())
-                                .build())
+                              .builder()
+                              .pagination(Pagination
+                                                  .builder()
+                                                  .pageIndex(request.index())
+                                                  .pageSize((short) page.getNumberOfElements())
+                                                  .totalItems(page.getTotalElements())
+                                                  .totalPages(page.getTotalPages())
+                                                  .build())
 
-                        .build())
+                              .build())
                 .data(products.parallelStream()
                               .map(ProductMapper.INSTANCE::toBriefProductResponseDTO)
                               .collect(Collectors.toList()))
@@ -224,10 +226,10 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BriefProductResponseDTO>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(messageSourceUtil.getMessage(SuccessMessage.Product.ADDED_ONE))
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(SuccessMessage.Product.ADDED_ONE))
+                              .build()
                 )
                 .data(ProductMapper.INSTANCE.toBriefProductResponseDTO(
                         productRepository.save(ProductMapper.INSTANCE.toProduct(request))
@@ -246,13 +248,13 @@ public class ProductServiceImpl implements ProductService {
             return GlobalResponseDTO
                     .<NoPaginatedMeta, BlankData>builder()
                     .meta(NoPaginatedMeta
-                            .builder()
-                            .status(Status.SUCCESS)
-                            .message(messageSourceUtil.getMessage(
-                                    SuccessMessage.Product.IMPORTED_LIST,
-                                    savedProducts.size()
-                            ))
-                            .build()
+                                  .builder()
+                                  .status(Status.SUCCESS)
+                                  .message(messageSourceUtil.getMessage(
+                                          SuccessMessage.Product.IMPORTED_LIST,
+                                          savedProducts.size()
+                                  ))
+                                  .build()
                     )
                     .build();
         } catch (IOException e) {
@@ -271,13 +273,13 @@ public class ProductServiceImpl implements ProductService {
             return GlobalResponseDTO
                     .<NoPaginatedMeta, BlankData>builder()
                     .meta(NoPaginatedMeta
-                            .builder()
-                            .status(Status.SUCCESS)
-                            .message(messageSourceUtil.getMessage(
-                                    SuccessMessage.Product.IMPORTED_LIST,
-                                    savedProducts.size()
-                            ))
-                            .build()
+                                  .builder()
+                                  .status(Status.SUCCESS)
+                                  .message(messageSourceUtil.getMessage(
+                                          SuccessMessage.Product.IMPORTED_LIST,
+                                          savedProducts.size()
+                                  ))
+                                  .build()
                     )
                     .build();
         } catch (IOException ex) {
@@ -304,10 +306,10 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(SuccessMessage.Product.UPDATED_ONE)
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(SuccessMessage.Product.UPDATED_ONE)
+                              .build()
                 )
                 .build();
     }
@@ -324,10 +326,10 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(SuccessMessage.Product.HARD_DELETED_ONE)
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(SuccessMessage.Product.HARD_DELETED_ONE)
+                              .build()
                 )
                 .build();
     }
@@ -339,13 +341,13 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(messageSourceUtil.getMessage(
-                                SuccessMessage.Product.HARD_DELETED_LIST,
-                                request.ids().size()
-                        ))
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(
+                                      SuccessMessage.Product.HARD_DELETED_LIST,
+                                      request.ids().size()
+                              ))
+                              .build()
                 )
                 .build();
     }
@@ -362,13 +364,13 @@ public class ProductServiceImpl implements ProductService {
             return GlobalResponseDTO
                     .<NoPaginatedMeta, BlankData>builder()
                     .meta(NoPaginatedMeta
-                            .builder()
-                            .status(Status.SUCCESS)
-                            .message(messageSourceUtil.getMessage(
-                                    SuccessMessage.Product.UPDATED_LIST_FROM_EXCEL,
-                                    savedProducts.size()
-                            ))
-                            .build()
+                                  .builder()
+                                  .status(Status.SUCCESS)
+                                  .message(messageSourceUtil.getMessage(
+                                          SuccessMessage.Product.UPDATED_LIST_FROM_EXCEL,
+                                          savedProducts.size()
+                                  ))
+                                  .build()
                     )
                     .build();
         } catch (IOException e) {
@@ -389,10 +391,10 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(SuccessMessage.Product.HIDED_ONE)
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(SuccessMessage.Product.HIDED_ONE)
+                              .build()
                 )
                 .build();
     }
@@ -408,13 +410,13 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(messageSourceUtil.getMessage(
-                                SuccessMessage.Product.HIDED_LIST,
-                                foundProducts.size()
-                        ))
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(
+                                      SuccessMessage.Product.HIDED_LIST,
+                                      foundProducts.size()
+                              ))
+                              .build()
                 )
                 .build();
     }
@@ -441,17 +443,17 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<PaginatedMeta, List<BriefProductResponseDTO>>builder()
                 .meta(PaginatedMeta
-                        .builder()
-                        .pagination(Pagination
-                                .builder()
-                                .keyword(request.keyword())
-                                .pageIndex(request.index())
-                                .pageSize((short) page.getNumberOfElements())
-                                .totalItems(page.getTotalElements())
-                                .totalPages(page.getTotalPages())
-                                .build()
-                        )
-                        .build()
+                              .builder()
+                              .pagination(Pagination
+                                                  .builder()
+                                                  .keyword(request.keyword())
+                                                  .pageIndex(request.index())
+                                                  .pageSize((short) page.getNumberOfElements())
+                                                  .totalItems(page.getTotalElements())
+                                                  .totalPages(page.getTotalPages())
+                                                  .build()
+                              )
+                              .build()
                 )
                 .data(products.parallelStream()
                               .map(ProductMapper.INSTANCE::toBriefProductResponseDTO)
@@ -473,10 +475,10 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(messageSourceUtil.getMessage(SuccessMessage.Product.RESTORED_ONE))
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(SuccessMessage.Product.RESTORED_ONE))
+                              .build()
                 )
                 .build();
     }
@@ -492,13 +494,13 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(messageSourceUtil.getMessage(
-                                SuccessMessage.Product.RESTORED_LIST,
-                                foundProducts.size()
-                        ))
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(
+                                      SuccessMessage.Product.RESTORED_LIST,
+                                      foundProducts.size()
+                              ))
+                              .build()
                 )
                 .build();
     }
@@ -517,10 +519,10 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(messageSourceUtil.getMessage(SuccessMessage.Product.EXPOSED_ONE))
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(SuccessMessage.Product.EXPOSED_ONE))
+                              .build()
                 )
                 .build();
     }
@@ -536,13 +538,13 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(messageSourceUtil.getMessage(
-                                SuccessMessage.Product.EXPOSED_LIST,
-                                foundProducts.size()
-                        ))
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(
+                                      SuccessMessage.Product.EXPOSED_LIST,
+                                      foundProducts.size()
+                              ))
+                              .build()
                 )
                 .build();
     }
@@ -561,10 +563,10 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(messageSourceUtil.getMessage(SuccessMessage.Product.SOFT_DELETED_ONE))
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(SuccessMessage.Product.SOFT_DELETED_ONE))
+                              .build()
                 )
                 .build();
     }
@@ -580,13 +582,13 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .status(Status.SUCCESS)
-                        .message(messageSourceUtil.getMessage(
-                                SuccessMessage.Product.SOFT_DELETED_LIST,
-                                foundProducts.size()
-                        ))
-                        .build()
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(
+                                      SuccessMessage.Product.SOFT_DELETED_LIST,
+                                      foundProducts.size()
+                              ))
+                              .build()
                 )
                 .build();
     }
@@ -613,16 +615,16 @@ public class ProductServiceImpl implements ProductService {
         return GlobalResponseDTO
                 .<PaginatedMeta, List<BriefProductResponseDTO>>builder()
                 .meta(PaginatedMeta
-                        .builder()
-                        .pagination(Pagination
-                                .builder()
-                                .keyword(request.keyword())
-                                .pageIndex(request.index())
-                                .pageSize((short) page.getNumberOfElements())
-                                .totalItems(page.getTotalElements())
-                                .totalPages(page.getTotalPages())
-                                .build())
-                        .build())
+                              .builder()
+                              .pagination(Pagination
+                                                  .builder()
+                                                  .keyword(request.keyword())
+                                                  .pageIndex(request.index())
+                                                  .pageSize((short) page.getNumberOfElements())
+                                                  .totalItems(page.getTotalElements())
+                                                  .totalPages(page.getTotalPages())
+                                                  .build())
+                              .build())
                 .data(products.parallelStream()
                               .map(ProductMapper.INSTANCE::toBriefProductResponseDTO)
                               .collect(Collectors.toList()))

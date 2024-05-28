@@ -58,4 +58,6 @@ public record FilterProductPaginationRequestDTO(
     public Short limit() {
         return Objects.requireNonNullElse(this.limit, PaginationConstant.DEFAULT_PAGE_SIZE);
     }
+
+    public Float minPrice() {return Objects.requireNonNullElse(this.minPrice, 0.0f);}
 }

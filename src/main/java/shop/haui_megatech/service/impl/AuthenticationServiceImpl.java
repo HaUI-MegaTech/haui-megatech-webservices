@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.auth.AuthenticationRequestDTO;
-import shop.haui_megatech.domain.dto.auth.AuthenticationResponseDTO;
 import shop.haui_megatech.domain.dto.auth.RefreshTokenRequestDTO;
+import shop.haui_megatech.domain.dto.global.*;
 import shop.haui_megatech.domain.dto.user.AddUserRequestDTO;
 import shop.haui_megatech.domain.entity.Token;
 import shop.haui_megatech.domain.entity.User;
@@ -46,9 +46,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                      .ipAddress(NetworkUtil.getClientIpAddress(request))
                      .userAgent(NetworkUtil.getUserAgent(request))
                      .whenCreated(new Date(Instant.now().toEpochMilli()))
-                     .whenExpired(new Date(Instant.now()
-                                                  .plus(7, ChronoUnit.DAYS)
-                                                  .toEpochMilli()
+                     .whenExpired(new Date(
+                             Instant.now()
+                                    .plus(7, ChronoUnit.DAYS)
+                                    .toEpochMilli()
                      ))
                      .owner(owner)
                      .build()
@@ -56,7 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponseDTO register(AddUserRequestDTO request, HttpServletRequest servletRequest) {
+    public GlobalResponseDTO<NoPaginatedMeta, AuthData> register(AddUserRequestDTO request, HttpServletRequest servletRequest) {
         if (!RequestValidator.isBlankRequestParams(request.username()))
             throw new AbsentRequiredFieldException(ErrorMessage.Request.BLANK_USERNAME);
 
@@ -81,17 +82,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User savedUser = userRepository.save(user);
         String jwtToken = jwtUtil.generateToken(user);
 
-        return AuthenticationResponseDTO
-                .builder()
-                .success(true)
-                .accessToken(jwtToken)
-                .refreshToken(generateRefreshToken(servletRequest, savedUser).getId())
-                .loggedInUser(UserMapper.INSTANCE.toUserFullResponseDTO(savedUser))
+        return GlobalResponseDTO
+                .<NoPaginatedMeta, AuthData>builder()
+                .meta(NoPaginatedMeta
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(SuccessMessage.Auth.REGISTERED))
+                              .build()
+                )
+                .data(AuthData.builder()
+                              .accessToken(jwtToken)
+                              .refreshToken(generateRefreshToken(servletRequest, savedUser).getId())
+                              .loggedInUser(UserMapper.INSTANCE.toUserFullResponseDTO(savedUser))
+                              .build()
+                )
                 .build();
     }
 
     @Override
-    public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request, HttpServletRequest servletRequest) {
+    public GlobalResponseDTO<NoPaginatedMeta, AuthData> authenticate(AuthenticationRequestDTO request, HttpServletRequest servletRequest) {
         User user = userRepository.findActiveUserByUsername(request.username())
                                   .orElseThrow(() -> new NotFoundException(ErrorMessage.User.NOT_FOUND));
 
@@ -110,18 +119,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         LoginStatisticServiceImpl.modified = true;
         ++LoginStatisticServiceImpl.counter;
 
-        return AuthenticationResponseDTO
-                .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.Auth.AUTHENTICATED))
-                .accessToken(jwtToken)
-                .refreshToken(generateRefreshToken(servletRequest, updatedUser).getId())
-                .loggedInUser(UserMapper.INSTANCE.toUserFullResponseDTO(updatedUser))
+        return GlobalResponseDTO
+                .<NoPaginatedMeta, AuthData>builder()
+                .meta(NoPaginatedMeta
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(SuccessMessage.Auth.AUTHENTICATED))
+                              .build()
+                )
+                .data(AuthData.builder()
+                              .accessToken(jwtToken)
+                              .refreshToken(generateRefreshToken(servletRequest, updatedUser).getId())
+                              .loggedInUser(UserMapper.INSTANCE.toUserFullResponseDTO(updatedUser))
+                              .build()
+                )
                 .build();
     }
 
     @Override
-    public AuthenticationResponseDTO refresh(RefreshTokenRequestDTO request, HttpServletRequest servletRequest) {
+    public GlobalResponseDTO<NoPaginatedMeta, AuthData> refresh(RefreshTokenRequestDTO request, HttpServletRequest servletRequest) {
         Optional<Token> found = tokenRepository.findById(request.refreshToken());
         if (found.isEmpty())
             throw new AppException(ErrorMessage.Auth.SESSION_EXPIRED);
@@ -141,15 +157,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         tokenRepository.save(token);
         User user = token.getOwner();
         String jwtToken = jwtUtil.generateToken(user);
-        return AuthenticationResponseDTO
-                .builder()
-                .success(true)
-                .accessToken(jwtToken)
+        return GlobalResponseDTO
+                .<NoPaginatedMeta, AuthData>builder()
+                .meta(NoPaginatedMeta
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .build()
+                )
+                .data(AuthData.builder()
+                              .accessToken(jwtToken)
+                              .build()
+                )
                 .build();
     }
 
     @Override
-    public AuthenticationResponseDTO logout(RefreshTokenRequestDTO request, HttpServletRequest servletRequest) {
+    public GlobalResponseDTO<NoPaginatedMeta, BlankData> logout(RefreshTokenRequestDTO request, HttpServletRequest servletRequest) {
         Optional<Token> found = tokenRepository.findById(request.refreshToken());
         if (found.isEmpty())
             throw new AppException(ErrorMessage.Auth.SESSION_EXPIRED);
@@ -167,10 +190,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         tokenRepository.deleteById(request.refreshToken());
 
-        return AuthenticationResponseDTO
-                .builder()
-                .success(true)
-                .message(messageSourceUtil.getMessage(SuccessMessage.Auth.LOGGED_OUT))
+        return GlobalResponseDTO
+                .<NoPaginatedMeta, BlankData>builder()
+                .meta(NoPaginatedMeta
+                              .builder()
+                              .status(Status.SUCCESS)
+                              .message(messageSourceUtil.getMessage(SuccessMessage.Auth.LOGGED_OUT))
+                              .build()
+                )
                 .build();
     }
 

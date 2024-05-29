@@ -1,4 +1,4 @@
-package shop.haui_megatech.domain.dto.auth;
+package shop.haui_megatech.domain.dto.global;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
@@ -6,9 +6,7 @@ import shop.haui_megatech.domain.dto.user.FullUserResponseDTO;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record AuthenticationResponseDTO(
-        Boolean success,
-        String message,
+public record AuthData(
         String refreshToken,
         String accessToken,
         FullUserResponseDTO loggedInUser

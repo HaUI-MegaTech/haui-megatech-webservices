@@ -1,0 +1,419 @@
+{
+	"info": {
+		"_postman_id": "612f309b-1b9f-4c0c-b81a-629cfa7de68a",
+		"name": "E2E",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "29266471-612f309b-1b9f-4c0c-b81a-629cfa7de68a"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "[1] Authenticate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "caf81164-481e-47db-9690-d2658b669db7",
+								"exec": [
+									"let accessToken = pm.response.json().data.accessToken;",
+									"pm.collectionVariables.set(\"accessToken\", accessToken);",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "0f4d7522-5ae9-4185-bc7f-ef0aa29a1ec7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[2] Get users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "80050ada-587b-48ad-9992-0c495e7fb058",
+								"exec": [
+									"let totalItemsBeforeAdding = pm.response.json().meta.pagination.totalItems;\r",
+									"pm.collectionVariables.set(\"totalItemsBeforeAdding\", totalItemsBeforeAdding);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "ebe0e645-87c2-43d8-9169-69ecd40a0657",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/users/active",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"active"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[3] Add user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0910c4c3-4b97-49ee-bb58-ee9c3504b733",
+								"exec": [
+									"let addedUserId = pm.response.json().data.id\r",
+									"\r",
+									"pm.collectionVariables.set(\"addedUserId\", addedUserId);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "f2108ef5-7a9c-4f13-8649-a1b30ea2bb59",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{$randomUserName}}\",\r\n    \"firstName\": \"{{$randomFirstName}}\",\r\n    \"lastName\": \"{{$randomLastName}}\",\r\n    \"password\": \"123\",\r\n    \"confirmPassword\": \"123\",\r\n    \"email\": \"{{$randomEmail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[4] Get users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "03d2d5c0-c8f1-4882-942f-6094529bb499",
+								"exec": [
+									"let totalItemsAfterAdding = pm.response.json().meta.pagination.totalItems;",
+									"let totalItemsBeforeAdding = pm.collectionVariables.get(\"totalItemsBeforeAdding\");",
+									"",
+									"pm.collectionVariables.set(\"totalItemsAfterAdding\", totalItemsAfterAdding);",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Total items after adding is greater than total items before adding by 1 unit\", () => {",
+									"    pm.expect(totalItemsBeforeAdding).to.equal(totalItemsAfterAdding - 1);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "de1867e0-ad19-4c3b-ac15-45451e31cb4a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/users/active",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"active"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[5] Update user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ed9ff86e-58df-419b-b9c9-e0720eeed122",
+								"exec": [
+									"pm.collectionVariables.set(\"updateFirstName\", pm.variables.get(\"{{$randomFirstName}}\"))\r",
+									"pm.collectionVariables.set(\"updateLastName\", pm.variables.get(\"{{$randomLastName}}\"))\r",
+									"pm.collectionVariables.set(\"updateEmail\", pm.variables.get(\"{{$randomEmail}}\"))\r",
+									"pm.collectionVariables.set(\"updatePhoneNumber\", pm.variables.get(\"{{$randomPhoneNumber}}\"))\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fbc1726-29a7-4788-a5c0-89669c49af92",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "facea058-2085-4dc3-b30b-7e57570bec95",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "firstName",
+									"value": "{{updateFirstName}}",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "{{updateLastName}}",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "{{updateEmail}}",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "{{updatePhoneNumber}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/users/update-info/{{addedUserId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"update-info",
+								"{{addedUserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[7] Get user by Id",
+					"id": "e64af06a-dfeb-419f-bb77-a50649103cbc",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/users/{{addedUserId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{addedUserId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "6294dc05-03a6-440c-85c0-a48628376984"
+		}
+	],
+	"variable": [
+		{
+			"id": "f13e3b1e-ef55-4083-bb98-3d8b84516a6f",
+			"key": "accessToken",
+			"value": ""
+		},
+		{
+			"id": "4db88b3d-69e3-4905-ae3d-acea5a4d5916",
+			"key": "totalItemsBeforeAdding",
+			"value": ""
+		},
+		{
+			"id": "20484954-d19a-4422-8ff7-221469f0ebdc",
+			"key": "addedUserId",
+			"value": ""
+		},
+		{
+			"id": "1e6849fd-a7a6-4067-9ce6-284d4eecea48",
+			"key": "totalItemsAfterAdding",
+			"value": ""
+		},
+		{
+			"id": "7b1ff9d9-1db7-45f2-82bf-9a59c1030f1f",
+			"key": "updateFirstName",
+			"value": ""
+		},
+		{
+			"id": "9e581ece-193a-4f22-a0f4-b00e7937a158",
+			"key": "updateLastName",
+			"value": ""
+		},
+		{
+			"id": "7a78773c-d4cc-42d7-915f-f747e4c3343a",
+			"key": "updateEmail",
+			"value": ""
+		},
+		{
+			"id": "4e3850a0-4620-4406-bbca-551e658590b6",
+			"key": "updatePhoneNumber",
+			"value": ""
+		}
+	]
+}

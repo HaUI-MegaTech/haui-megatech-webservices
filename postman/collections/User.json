@@ -8,6 +8,40 @@
 	"item": [
 		{
 			"name": "Get all users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "10e01e05-b3ca-4d2a-a35d-453c0a3ba3d9",
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Verify that the response data is not empty\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.not.be.empty;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"id": "cc2ccdfe-54b9-4c43-b1bd-ca078082cd97",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true

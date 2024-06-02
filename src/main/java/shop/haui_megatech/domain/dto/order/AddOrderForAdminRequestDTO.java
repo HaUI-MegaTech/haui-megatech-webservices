@@ -10,17 +10,9 @@ import java.util.List;
 
 public record AddOrderForAdminRequestDTO(
         int userId,
-        float shippingCost,
-        float subTotal,
         float tax,
-        float total,
         PaymentMethod paymentMethod,
-        Date payTime,
-        Date orderTime,
-        int deliverTime,
         float orderWeight,
-        Address address,
-        OrderStatus status,
         List<OrderDetailRequestDTO> orderDetailRequestDTOList
 ) {
 }

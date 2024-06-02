@@ -7,6 +7,7 @@ import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
 import shop.haui_megatech.domain.dto.order.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
     GlobalResponseDTO<PaginatedMeta, List<OrderBaseDTO>> getListOrderForUser(PaginationRequestDTO requestDTO);
@@ -26,4 +27,7 @@ public interface OrderService {
     GlobalResponseDTO<NoPaginatedMeta, OrderBaseDTO> updateOrderForAdmin(ModifyOrderForAdminRequestDTO requestDTO);
 
     GlobalResponseDTO<NoPaginatedMeta, OrderBaseDTO> deleteOrderForAdmin(int orderId);
+    GlobalResponseDTO<NoPaginatedMeta, Map<String, List<Object>>> statisticByMonth(int month, int year);
+
+    GlobalResponseDTO<NoPaginatedMeta, Map<String, List<Object>>> statisticByAdminRegion(int year);
 }

@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.order.AddOrderForAdminRequestDTO;
-import shop.haui_megatech.domain.dto.order.AddOrderForUserRequestDTO;
-import shop.haui_megatech.domain.dto.order.ModifyOrderForAdminRequestDTO;
-import shop.haui_megatech.domain.dto.order.ModifyOrderForUserRequestDTO;
+import shop.haui_megatech.domain.dto.order.*;
 import shop.haui_megatech.service.OrderService;
 import shop.haui_megatech.utility.ResponseUtil;
 
@@ -148,5 +145,33 @@ public class OrderRestController {
             @PathVariable(name = "orderId") int orderId
     ) {
         return ResponseUtil.ok(OrderService.deleteOrderForAdmin(orderId));
+    }
+    @Operation(summary = "Get statistic order by month")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
+    @GetMapping(Endpoint.V1.Order.GET_STATISTIC_BY_MONTH)
+    public ResponseEntity<?> getStatisticByMonth(
+//            @RequestParam("month") int month,
+//            @RequestParam("year") int year
+            ) {
+
+        return ResponseUtil.ok(OrderService.statisticByMonth(3, 2022));
+    }
+    @Operation(summary = "Get statistic order by administrative region")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            }
+    )
+    @GetMapping(Endpoint.V1.Order.GET_STATISTIC_BY_ADMIN_REGION)
+    public ResponseEntity<?> getStatisticAdminRegion(
+//            @RequestParam(name="year") int year
+    ) {
+        return ResponseUtil.ok(OrderService.statisticByAdminRegion(2022));
     }
 }

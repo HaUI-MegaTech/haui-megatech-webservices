@@ -64,24 +64,33 @@ public class OrderMapperImpl implements OrderMapper {
         Optional<User> foundUser = userRepository.findById(requestDTO.userId());
         if (foundUser.isEmpty())
             throw new NotFoundException(ErrorMessage.User.NOT_FOUND);
+
+        float shippingCost = 0;
+        shippingCost = requestDTO.orderWeight() > 5 ? 100000 : 0;
+
         Order order = Order.builder()
-                           .shippingCost(requestDTO.shippingCost())
-                           .subTotal(requestDTO.subTotal())
+                           .shippingCost(shippingCost)
                            .tax(requestDTO.tax())
-                           .total(requestDTO.total())
                            .paymentMethod(requestDTO.paymentMethod())
-                           .payTime(requestDTO.payTime())
-                           .orderTime(requestDTO.orderTime())
-                           .deliverTime(requestDTO.deliverTime())
+                           .payTime(new Date())
+                           .orderTime(new Date())
+                           .deliverTime(0)
                            .orderWeight(requestDTO.orderWeight())
-                           .address(requestDTO.address())
-                           .status(requestDTO.status())
+                           .address(null)
+                           .status(OrderStatus.PAID)
                            .user(foundUser.get())
                            .build();
         List<OrderDetail> list = new ArrayList<OrderDetail>();
         for (OrderDetailRequestDTO item : requestDTO.orderDetailRequestDTOList())
             list.add(orderDetailMapper.orderDetailRequestDTOtoOrderDetail(item, order));
         order.setOrderDetails(list);
+
+        float subTotal = 0;
+        for(OrderDetail item : list) subTotal += item.getPrice() * item.getQuantity();
+
+        order.setSubTotal(subTotal);
+        order.setTotal(subTotal + requestDTO.tax());
+
         return order;
     }
 

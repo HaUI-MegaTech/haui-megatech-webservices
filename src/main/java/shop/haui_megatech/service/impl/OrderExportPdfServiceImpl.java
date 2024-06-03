@@ -28,7 +28,7 @@ public class OrderExportPdfServiceImpl {
     public static PdfPCell getIRHCell(String text, int alignment) {
         FontSelector fs = new FontSelector();
         Font font = FontFactory.getFont(FontFactory.HELVETICA, 16);
-        /*	font.setColor(BaseColor.GRAY);*/
+        /* font.setColor(BaseColor.GRAY); */
         fs.addFont(font);
         Phrase phrase = fs.process(text);
         PdfPCell cell = new PdfPCell(phrase);
@@ -124,11 +124,15 @@ public class OrderExportPdfServiceImpl {
         cell.setBorder(0);
         return cell;
     }
-    //public void export(QrOrderItemResponseDTO qrcode, Order order, HttpServletResponse response)
+
+    // public void export(QrOrderItemResponseDTO qrcode, Order order,
+    // HttpServletResponse response)
     public void export(Order order, HttpServletResponse response)
             throws DocumentException, IOException, JSONException, WriterException {
-        String content = "http://192.168.0.102:8080/api/v1/orders/admin/detail/" + order.getId();
-        String folder = "QrForAPIOrderDetail";
+        // String content = "http://192.168.0.101:8080/api/v1/orders/admin/detail/" +
+        // order.getId();
+        String content = "http://27.79.130.203/api/v1/orders/admin/detail/" + order.getId();
+        String folder = "qrcode/QrForAPIOrderDetail";
         String name = "Id" + order.getId() + "-OrderDetail";
         QRCodeGeneratorUtil.generateQRCode(content, folder, name, response.getOutputStream());
 
@@ -142,19 +146,19 @@ public class OrderExportPdfServiceImpl {
         PdfWriter.getInstance(document, new FileOutputStream(path));
         document.open();
 
-        //Inserting Image in PDF
-        Image image = Image.getInstance("src/main/resources/logo1.jpg");//Header Image
-        image.scaleAbsolute(540f, 100f);//image width,height
+        // Inserting Image in PDF
+        Image image = Image.getInstance("src/main/resources/logo1.jpg");// Header Image
+        image.scaleAbsolute(540f, 100f);// image width,height
 
-        //System.out.println("src/main/resources/" + folder + "/" + name + ".png");
+        // System.out.println("src/main/resources/" + folder + "/" + name + ".png");
 
-        Image imageQr = Image.getInstance("src/main/resources/qrcode/" + folder + "/" + name + ".png");//Header Image
+        Image imageQr = Image.getInstance("src/main/resources/qrcode/" + folder + "/" + name + ".png");// Header Image
 
         imageQr.scaleAbsolute(100f, 100f);
 
         PdfPTable headerTable = new PdfPTable(2);
         headerTable.setWidthPercentage(100);
-        headerTable.setWidths(new float[]{4, 1});
+        headerTable.setWidths(new float[] { 4, 1 });
 
         PdfPCell cell1 = new PdfPCell(image, true);
         cell1.setBorder(0);
@@ -197,16 +201,16 @@ public class OrderExportPdfServiceImpl {
         lastName.setIndentationLeft(20);
         Paragraph contact = new Paragraph("Contact: " + order.getUser().getPhoneNumber());
         contact.setIndentationLeft(20);
-//        Paragraph address = new Paragraph("Address order: " + order.getAddress());
-//        address.setIndentationLeft(20);
+        // Paragraph address = new Paragraph("Address order: " + order.getAddress());
+        // address.setIndentationLeft(20);
         Paragraph orderTime = new Paragraph("Order Time: " + order.getOrderTime());
-//        address.setIndentationLeft(20);
+        // address.setIndentationLeft(20);
         Paragraph status = new Paragraph("Status: " + order.getStatus());
-//        address.setIndentationLeft(20);
+        // address.setIndentationLeft(20);
 
-        PdfPTable billTable = new PdfPTable(6); //one page contains 15 records
+        PdfPTable billTable = new PdfPTable(6); // one page contains 15 records
         billTable.setWidthPercentage(100);
-        billTable.setWidths(new float[]{1, 2, 3, 2, 1, 2});
+        billTable.setWidths(new float[] { 1, 2, 3, 2, 1, 2 });
         billTable.setSpacingBefore(30.0f);
         billTable.addCell(getBillHeaderCell("Index"));
         billTable.addCell(getBillHeaderCell("Product Id"));
@@ -219,11 +223,11 @@ public class OrderExportPdfServiceImpl {
         for (int i = 0; i < order.getOrderDetails().size(); i++) {
             billTable.addCell(getBillRowCell(String.valueOf(i + 1)));
             billTable.addCell(getBillRowCell(order.getOrderDetails().get(i).getProduct().getId().toString()));
-            billTable.addCell(getBillRowCell(order.getOrderDetails().get(i).getProduct().getName().toString()));
+            billTable.addCell(getBillRowCell(order.getOrderDetails().get(i).getProduct().getName()));
             billTable.addCell(getBillRowCell(format.format(order.getOrderDetails().get(i).getPrice())));
             billTable.addCell(getBillRowCell(order.getOrderDetails().get(i).getQuantity().toString()));
             billTable.addCell(getBillRowCell(format.format(order.getOrderDetails().get(i).getPrice()
-                                                           * order.getOrderDetails().get(i).getQuantity())));
+                    * order.getOrderDetails().get(i).getQuantity())));
         }
         System.out.println(order.getOrderDetails().size());
         if (order.getOrderDetails().size() < 10) {
@@ -241,7 +245,8 @@ public class OrderExportPdfServiceImpl {
         validity.setWidthPercentage(100);
         validity.addCell(getValidityCell(" "));
         validity.addCell(getValidityCell("Warranty"));
-        validity.addCell(getValidityCell(" * Products purchased comes with 1 year national warranty \n   (if applicable)"));
+        validity.addCell(
+                getValidityCell(" * Products purchased comes with 1 year national warranty \n   (if applicable)"));
         validity.addCell(getValidityCell(" * Warranty should be claimed only from the respective manufactures"));
         PdfPCell summaryL = new PdfPCell(validity);
         summaryL.setColspan(3);
@@ -265,10 +270,11 @@ public class OrderExportPdfServiceImpl {
         PdfPTable describer = new PdfPTable(1);
         describer.setWidthPercentage(100);
         describer.addCell(getdescCell(" "));
-        describer.addCell(getdescCell("Goods once sold will not be taken back or exchanged || Subject to product justification || Product damage no one responsible || "
-                                      + " Service only at concarned authorized service centers"));
+        describer.addCell(getdescCell(
+                "Goods once sold will not be taken back or exchanged || Subject to product justification || Product damage no one responsible || "
+                        + " Service only at concarned authorized service centers"));
 
-        document.open();//PDF document opened........
+        document.open();// PDF document opened........
 
         document.add(headerTable);
         document.add(irhTable);
@@ -276,7 +282,7 @@ public class OrderExportPdfServiceImpl {
         document.add(firstName);
         document.add(lastName);
         document.add(contact);
-        //document.add(address);
+        // document.add(address);
         document.add(orderTime);
         document.add(status);
         document.add(billTable);

@@ -17,6 +17,7 @@ import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.global.*;
 import shop.haui_megatech.domain.dto.user.*;
 import shop.haui_megatech.domain.entity.User;
+import shop.haui_megatech.domain.entity.enums.Role;
 import shop.haui_megatech.domain.mapper.UserMapper;
 import shop.haui_megatech.exception.*;
 import shop.haui_megatech.job.AutoMailer;
@@ -94,6 +95,7 @@ public class UserServiceImpl implements UserService {
                                     .password(passwordEncoder.encode(request.password()))
                                     .firstName(request.firstName())
                                     .lastName(request.lastName())
+                                    .role(Role.CUSTOMER)
                                     .build()))
                 )
                 .build();

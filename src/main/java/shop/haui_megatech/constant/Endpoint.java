@@ -104,6 +104,7 @@ public class Endpoint {
             public static final String EXPORT_PDF = PREFIX + "/exportPdf/{orderId}";
             public static final String GET_STATISTIC_BY_MONTH= PREFIX + "/statisticByMonth";
             public static final String GET_STATISTIC_BY_ADMIN_REGION = PREFIX + "/statisticByAdminRegion";
+            public static final String GET_QR                = PREFIX + "/getQr/{orderId}";
         }
 
         public static final class Auth {

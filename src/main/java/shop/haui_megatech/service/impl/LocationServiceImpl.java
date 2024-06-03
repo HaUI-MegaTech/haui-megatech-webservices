@@ -8,6 +8,7 @@ import shop.haui_megatech.domain.dto.global.NoPaginatedMeta;
 import shop.haui_megatech.domain.entity.location.District;
 import shop.haui_megatech.domain.entity.location.Province;
 import shop.haui_megatech.domain.entity.location.Ward;
+import shop.haui_megatech.exception.AppException;
 import shop.haui_megatech.repository.DistrictRepository;
 import shop.haui_megatech.repository.ProvinceRepository;
 import shop.haui_megatech.service.LocationService;
@@ -41,7 +42,7 @@ public class LocationServiceImpl implements LocationService {
                 .meta(NoPaginatedMeta.builder()
                                      .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
                                      .build())
-                .data(provinceRepository.findById(code).orElseThrow().getDistricts())
+                .data(provinceRepository.findById(code).orElseThrow(() -> new AppException("Không tìm thấy")).getDistricts())
                 .build();
     }
 
@@ -50,9 +51,9 @@ public class LocationServiceImpl implements LocationService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, List<Ward>>builder()
                 .meta(NoPaginatedMeta
-                        .builder()
-                        .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
-                        .build()
+                              .builder()
+                              .message(messageSourceUtil.getMessage(SuccessMessage.Location.FOUND))
+                              .build()
                 )
                 .data(districtRepository.findById(code).orElseThrow().getWards())
                 .build();

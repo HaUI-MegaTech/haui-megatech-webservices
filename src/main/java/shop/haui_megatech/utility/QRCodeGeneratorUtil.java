@@ -20,7 +20,7 @@ import java.io.OutputStream;
 public class QRCodeGeneratorUtil {
     public static void generateQRCode(String contentQr, String folder, String nameQr, OutputStream outputStream)
             throws WriterException, IOException, JSONException {
-        String qrCodePath = "src/main/resources/" + folder + "/";
+        String qrCodePath = "src/main/resources/qrcode/" + folder + "/";
         String qrCodeName = qrCodePath + nameQr;
 
         var qrCodeWriter = new QRCodeWriter();

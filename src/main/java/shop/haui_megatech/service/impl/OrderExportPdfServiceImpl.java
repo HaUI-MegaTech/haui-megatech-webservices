@@ -124,21 +124,21 @@ public class OrderExportPdfServiceImpl {
         cell.setBorder(0);
         return cell;
     }
-
-    public void export(QrOrderItemResponseDTO qrcode, Order order, HttpServletResponse response)
+    //public void export(QrOrderItemResponseDTO qrcode, Order order, HttpServletResponse response)
+    public void export(Order order, HttpServletResponse response)
             throws DocumentException, IOException, JSONException, WriterException {
-        String content = "http://192.168.0.101:8080/api/v1/orders/admin/detail/" + order.getId();
-        String folder = "qrcode/QrForAPIOrderDetail";
+        String content = "http://192.168.0.102:8080/api/v1/orders/admin/detail/" + order.getId();
+        String folder = "QrForAPIOrderDetail";
         String name = "Id" + order.getId() + "-OrderDetail";
         QRCodeGeneratorUtil.generateQRCode(content, folder, name, response.getOutputStream());
 
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, response.getOutputStream());
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         String formattedTime = dateFormat.format(new Date());
 
-        String path = "src/main/resources/PdfFile/Order" + order.getId() + formattedTime + ".pdf";
+        String path = "src/main/resources/pdf/Order" + order.getId() + formattedTime + ".pdf";
         PdfWriter.getInstance(document, new FileOutputStream(path));
         document.open();
 
@@ -146,9 +146,9 @@ public class OrderExportPdfServiceImpl {
         Image image = Image.getInstance("src/main/resources/logo1.jpg");//Header Image
         image.scaleAbsolute(540f, 100f);//image width,height
 
-        System.out.println("src/main/resources/" + folder + "/" + name + ".png");
+        //System.out.println("src/main/resources/" + folder + "/" + name + ".png");
 
-        Image imageQr = Image.getInstance("src/main/resources/" + folder + "/" + name + ".png");//Header Image
+        Image imageQr = Image.getInstance("src/main/resources/qrcode/" + folder + "/" + name + ".png");//Header Image
 
         imageQr.scaleAbsolute(100f, 100f);
 
@@ -197,12 +197,12 @@ public class OrderExportPdfServiceImpl {
         lastName.setIndentationLeft(20);
         Paragraph contact = new Paragraph("Contact: " + order.getUser().getPhoneNumber());
         contact.setIndentationLeft(20);
-        Paragraph address = new Paragraph("Address order: " + order.getAddress());
-        address.setIndentationLeft(20);
+//        Paragraph address = new Paragraph("Address order: " + order.getAddress());
+//        address.setIndentationLeft(20);
         Paragraph orderTime = new Paragraph("Order Time: " + order.getOrderTime());
-        address.setIndentationLeft(20);
+//        address.setIndentationLeft(20);
         Paragraph status = new Paragraph("Status: " + order.getStatus());
-        address.setIndentationLeft(20);
+//        address.setIndentationLeft(20);
 
         PdfPTable billTable = new PdfPTable(6); //one page contains 15 records
         billTable.setWidthPercentage(100);
@@ -276,7 +276,7 @@ public class OrderExportPdfServiceImpl {
         document.add(firstName);
         document.add(lastName);
         document.add(contact);
-        document.add(address);
+        //document.add(address);
         document.add(orderTime);
         document.add(status);
         document.add(billTable);

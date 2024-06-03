@@ -70,7 +70,8 @@ public class ExternalCrawler {
                     SearchResult searchResult = response.getBody();
 
                     String[] Classs = {
-                            ".product-price", ".box-price-present", ".detail-product-old-price", ".pro-price", ".price", ".productPriceMain",
+                            ".product-price", ".box-price-present", ".detail-product-old-price", ".pro-price", ".price",
+                            ".productPriceMain",
                             ".product__price--show",
                             ".giakm", ".gia-km-cu"
                     };

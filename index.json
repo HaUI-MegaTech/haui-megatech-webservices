@@ -1,0 +1,4413 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "HaUI MegaTech API Documentation",
+        "description": "This document exposes endpoint APIs to manage HaUI MegaTech system",
+        "contact": {
+            "name": "HaUI MegaTech",
+            "url": "http://haui-megatech.shop/contact",
+            "email": "contact@haui-megatech.shop"
+        },
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "Server URL in Development environment"
+        },
+        {
+            "url": "http://haui-megatech.shop",
+            "description": "Server URL in Production environment"
+        }
+    ],
+    "paths": {
+        "/api/v1/users/{userId}/addresses/{addressId}": {
+            "put": {
+                "tags": [
+                    "Addresses Management REST API"
+                ],
+                "summary": "API Update an Address",
+                "operationId": "updateOne",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "addressId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddressRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/update-info/{userId}": {
+            "put": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Update a User's info by Id",
+                "operationId": "updateInfoUser",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUserInfoRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/{productId}/feedbacks/{feedbackId}": {
+            "put": {
+                "tags": [
+                    "Feedbacks Management REST API"
+                ],
+                "summary": "API Update Feedback",
+                "operationId": "updateOne_1",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "feedbackId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FeedbackRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "When has not been authorized",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/{productId}/cart-items/{cartItemId}": {
+            "put": {
+                "tags": [
+                    "Carts Management REST API"
+                ],
+                "summary": "API Update a CartItem",
+                "operationId": "updateCartItem",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "cartItemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CartItemRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/update/{productId}": {
+            "put": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Update a Product by Id",
+                "operationId": "updateOne_2",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateProductRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/update/excel": {
+            "put": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Update a list of Products from exported excel file",
+                "operationId": "updateListFromExcel",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/orders/updatedOne": {
+            "put": {
+                "tags": [
+                    "Orders Management REST API"
+                ],
+                "summary": "Update an Order for User",
+                "operationId": "updateOrderForUser",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ModifyOrderForUserRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/orders/admin/updatedOne": {
+            "put": {
+                "tags": [
+                    "Orders Management REST API"
+                ],
+                "summary": "Update an Order for Admin",
+                "operationId": "updateOrderForAdmin",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ModifyOrderForAdminRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/upload-file": {
+            "post": {
+                "tags": [
+                    "File upload"
+                ],
+                "operationId": "uploadFile",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "static/images"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "static/images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users": {
+            "post": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Add a new User",
+                "operationId": "addOneUser",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddUserRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "204": {
+                        "description": "When has created successfully",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBriefUserResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/{userId}/addresses": {
+            "get": {
+                "tags": [
+                    "Addresses Management REST API"
+                ],
+                "summary": "API Get all Addresses by User Id",
+                "operationId": "getAllByUserId",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Addresses Management REST API"
+                ],
+                "summary": "API Add an Address",
+                "operationId": "addOne",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddressRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/import/excel": {
+            "post": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Add a list of Users using Excel file",
+                "operationId": "importExcelUser",
+                "responses": {
+                    "204": {
+                        "description": "When has created successfully",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/import/csv": {
+            "post": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Add a list of Users using Csv file",
+                "operationId": "importCsvUser",
+                "responses": {
+                    "204": {
+                        "description": "When has created successfully",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products": {
+            "post": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Create a new Product",
+                "operationId": "addOne_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddProductRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "204": {
+                        "description": "Created",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBriefProductResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/{productId}/feedbacks": {
+            "get": {
+                "tags": [
+                    "Feedbacks Management REST API"
+                ],
+                "summary": "API Get Feedback by Product Id",
+                "operationId": "getListByProduct",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Từ khóa cần tìm, có thể tìm theo nhiều từ khóa ngăn cách bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Chứa chỉ số trang cần lấy, bắt đầu từ 0",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Hướng sắp xếp: \"asc\" hoặc \"desc\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Số bản ghi mong muốn cho 1 trang",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Các tiêu chí sắp xếp. Có thể sắp xếp theo nhiều tiêu chí, ngăn cách nhau bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Feedbacks Management REST API"
+                ],
+                "summary": "API Add Feedback",
+                "operationId": "addOne_2",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FeedbackRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "When has not been authorized",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/{productId}/cart-items": {
+            "post": {
+                "tags": [
+                    "Carts Management REST API"
+                ],
+                "summary": "API Add a CartItem",
+                "operationId": "addCartItem",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CartItemRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/import/excel": {
+            "post": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Add a list of Products using Excel file",
+                "operationId": "importExcel",
+                "responses": {
+                    "204": {
+                        "description": "When has created successfully",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/import/csv": {
+            "post": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Add a list of Products using Csv file",
+                "operationId": "importCsv",
+                "responses": {
+                    "204": {
+                        "description": "When has created successfully",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/orders/admin/addOne": {
+            "post": {
+                "tags": [
+                    "Orders Management REST API"
+                ],
+                "summary": "Add an Order for Admin",
+                "operationId": "addOrderForAdmin",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddOrderForAdminRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/orders/addOne": {
+            "post": {
+                "tags": [
+                    "Orders Management REST API"
+                ],
+                "summary": "Add an Order for User",
+                "operationId": "addOrderForUser",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddOrderForUserRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/create-payment": {
+            "post": {
+                "tags": [
+                    "payment-rest-controller"
+                ],
+                "operationId": "createPayment",
+                "parameters": [
+                    {
+                        "name": "ids",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "addressId",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "operationId": "register",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddUserRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaAuthData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "operationId": "refresh",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RefreshTokenRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaAuthData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "operationId": "logout",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RefreshTokenRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/authenticate": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "operationId": "authenticate",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthenticationRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaAuthData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/update-password/{userId}": {
+            "patch": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Update a User's password by Id",
+                "operationId": "updatePasswordUser",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUserPasswordRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/soft-delete": {
+            "patch": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Temporarily delete Users by a list of Id",
+                "operationId": "softDeleteListUsers",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListIdsRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/soft-delete/{userId}": {
+            "patch": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Temporarily delete a User by Id",
+                "operationId": "softDeleteOneUser",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/restore": {
+            "patch": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Restore Users from deleted Users by a list of Id",
+                "operationId": "restoreListUsers",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListIdsRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/restore/{userId}": {
+            "patch": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Restore a User from deleted Users by Id",
+                "operationId": "restoreOneUser",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/reset-password": {
+            "patch": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Reset Users' password by a list of Id",
+                "operationId": "resetPasswordListUsers",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListIdsRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/reset-password/{userId}": {
+            "patch": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Reset User's password by Id",
+                "operationId": "resetPasswordOneUser",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/soft-delete": {
+            "patch": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Temporarily delete Products by a list of Id",
+                "operationId": "softDeleteList",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListIdsRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/soft-delete/{productId}": {
+            "patch": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Temporarily delete a Product by Id",
+                "operationId": "softDeleteOne",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/restore": {
+            "patch": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Restore Products from deleted Products by a list of Id",
+                "operationId": "restoreList",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListIdsRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/restore/{productId}": {
+            "patch": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Restore a Product from deleted Products by Id",
+                "operationId": "restoreOne",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/hide": {
+            "patch": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Hide Products from active Products by a list of Id",
+                "operationId": "hideList",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListIdsRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/hide/{productId}": {
+            "patch": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Hide a Product from active Products by Id",
+                "operationId": "hideOne",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/expose": {
+            "patch": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Expose Products to e-commercial marketplace by a list of Id",
+                "operationId": "exposeList",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListIdsRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/expose/{productId}": {
+            "patch": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Expose a Product to e-commercial marketplace by Id",
+                "operationId": "exposeOne",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/{userId}": {
+            "get": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Get a User by Id",
+                "operationId": "getOne",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaFullUserResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/{userId}/feedbacks": {
+            "get": {
+                "tags": [
+                    "Feedbacks Management REST API"
+                ],
+                "summary": "API Get Feedbacks by User Id",
+                "operationId": "getListByUser",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Từ khóa cần tìm, có thể tìm theo nhiều từ khóa ngăn cách bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Chứa chỉ số trang cần lấy, bắt đầu từ 0",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Hướng sắp xếp: \"asc\" hoặc \"desc\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Số bản ghi mong muốn cho 1 trang",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Các tiêu chí sắp xếp. Có thể sắp xếp theo nhiều tiêu chí, ngăn cách nhau bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "When has not been authorized",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/total-customers": {
+            "get": {
+                "tags": [
+                    "home-rest-controller"
+                ],
+                "operationId": "getTotalCustomers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/deleted": {
+            "get": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Get deleted Users with pagination",
+                "operationId": "getDeletedList",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Từ khóa cần tìm, có thể tìm theo nhiều từ khóa ngăn cách bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Chứa chỉ số trang cần lấy, bắt đầu từ 0",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Hướng sắp xếp: \"asc\" hoặc \"desc\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Số bản ghi mong muốn cho 1 trang",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Các tiêu chí sắp xếp. Có thể sắp xếp theo nhiều tiêu chí, ngăn cách nhau bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTOPaginatedMetaListBriefUserResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/active": {
+            "get": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Get active Users with pagination",
+                "operationId": "getActiveList",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Từ khóa cần tìm, có thể tìm theo nhiều từ khóa ngăn cách bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Chứa chỉ số trang cần lấy, bắt đầu từ 0",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Hướng sắp xếp: \"asc\" hoặc \"desc\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Số bản ghi mong muốn cho 1 trang",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Các tiêu chí sắp xếp. Có thể sắp xếp theo nhiều tiêu chí, ngăn cách nhau bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTOPaginatedMetaListBriefUserResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/provinces": {
+            "get": {
+                "tags": [
+                    "Location"
+                ],
+                "operationId": "getAllProvinces",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/provinces/{provinceCode}/districts": {
+            "get": {
+                "tags": [
+                    "Location"
+                ],
+                "operationId": "getAllDistrictsByProvince",
+                "parameters": [
+                    {
+                        "name": "provinceCode",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/provinces/{provinceCode}/districts/{districtCode}/wards": {
+            "get": {
+                "tags": [
+                    "Location"
+                ],
+                "operationId": "getAllWardsByDistrict",
+                "parameters": [
+                    {
+                        "name": "provinceCode",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "districtCode",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/{productId}": {
+            "get": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Get an active Product's details by Id",
+                "operationId": "getOne_1",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaFullProductResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/products/total-sold": {
+            "get": {
+                "tags": [
+                    "home-rest-controller"
+                ],
+                "operationId": "getTotalSoldProduct",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/products/total-revenue": {
+            "get": {
+                "tags": [
+                    "home-rest-controller"
+                ],
+                "operationId": "getTotalProductRevenue",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/products/top-sold": {
+            "get": {
+                "tags": [
+                    "home-rest-controller"
+                ],
+                "operationId": "getTopSoldProduct",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/products/hidden": {
+            "get": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Get hidden Products with pagination",
+                "operationId": "getHiddenList",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Từ khóa cần tìm, có thể tìm theo nhiều từ khóa ngăn cách bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Chứa chỉ số trang cần lấy, bắt đầu từ 0",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Hướng sắp xếp: \"asc\" hoặc \"desc\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Số bản ghi mong muốn cho 1 trang",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Các tiêu chí sắp xếp. Có thể sắp xếp theo nhiều tiêu chí, ngăn cách nhau bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTOPaginatedMetaListBriefProductResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/deleted": {
+            "get": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Get temporarily deleted Products with pagination",
+                "operationId": "getDeletedList_1",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Từ khóa cần tìm, có thể tìm theo nhiều từ khóa ngăn cách bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Chứa chỉ số trang cần lấy, bắt đầu từ 0",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Hướng sắp xếp: \"asc\" hoặc \"desc\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Số bản ghi mong muốn cho 1 trang",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Các tiêu chí sắp xếp. Có thể sắp xếp theo nhiều tiêu chí, ngăn cách nhau bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTOPaginatedMetaListBriefProductResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/active": {
+            "get": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Filter active Products by brand ids, price range with pagination",
+                "operationId": "getActiveList_1",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Từ khóa cần tìm, có thể tìm theo nhiều từ khóa ngăn cách bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Chứa chỉ số trang cần lấy, bắt đầu từ 0",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Hướng sắp xếp: \"asc\" hoặc \"desc\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Số bản ghi mong muốn cho 1 trang",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Các tiêu chí sắp xếp. Có thể sắp xếp theo nhiều tiêu chí, ngăn cách nhau bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "brandIds",
+                        "in": "query",
+                        "description": "Các mã thương hiệu. Có thể lọc theo nhiều mã thương hiệu, ngăn cách nhau bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "minPrice",
+                        "in": "query",
+                        "description": "Giá lọc thấp nhất",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "format": "float"
+                        }
+                    },
+                    {
+                        "name": "maxPrice",
+                        "in": "query",
+                        "description": "Giá lọc cao nhất",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "format": "float"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTOPaginatedMetaListBriefProductResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/outer-search": {
+            "get": {
+                "tags": [
+                    "outer-search-rest-controller"
+                ],
+                "operationId": "search",
+                "parameters": [
+                    {
+                        "name": "compare",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchResult"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/orders": {
+            "get": {
+                "tags": [
+                    "Orders Management REST API"
+                ],
+                "summary": "Get an list Orders for User",
+                "operationId": "getListOrdersByUserIdForUser",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Từ khóa cần tìm, có thể tìm theo nhiều từ khóa ngăn cách bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Chứa chỉ số trang cần lấy, bắt đầu từ 0",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Hướng sắp xếp: \"asc\" hoặc \"desc\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Số bản ghi mong muốn cho 1 trang",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Các tiêu chí sắp xếp. Có thể sắp xếp theo nhiều tiêu chí, ngăn cách nhau bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/orders/latest": {
+            "get": {
+                "tags": [
+                    "home-rest-controller"
+                ],
+                "operationId": "getLatestOrders",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/orders/detail/{orderId}": {
+            "get": {
+                "tags": [
+                    "Orders Management REST API"
+                ],
+                "summary": "Get an Detail Orders for User",
+                "operationId": "getDetailOrderForUser",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/orders/admin": {
+            "get": {
+                "tags": [
+                    "Orders Management REST API"
+                ],
+                "summary": "Get an list Orders for Admin",
+                "operationId": "getListOrdersByUserIdforAdmin",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Từ khóa cần tìm, có thể tìm theo nhiều từ khóa ngăn cách bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Chứa chỉ số trang cần lấy, bắt đầu từ 0",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Hướng sắp xếp: \"asc\" hoặc \"desc\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Số bản ghi mong muốn cho 1 trang",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Các tiêu chí sắp xếp. Có thể sắp xếp theo nhiều tiêu chí, ngăn cách nhau bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/orders/admin/detail/{orderId}": {
+            "get": {
+                "tags": [
+                    "Orders Management REST API"
+                ],
+                "summary": "Get an Detail Orders for Admin",
+                "operationId": "getDetailOrderForAdmin",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/login-statistics/total": {
+            "get": {
+                "tags": [
+                    "home-rest-controller"
+                ],
+                "operationId": "getTotalLoggedIn",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/login-statistics/daily": {
+            "get": {
+                "tags": [
+                    "home-rest-controller"
+                ],
+                "operationId": "getLoginStatisticsByDay",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/getDataProductByLink": {
+            "get": {
+                "tags": [
+                    "get-data-product-controller"
+                ],
+                "operationId": "productInformation",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/getDataCommentByLink": {
+            "get": {
+                "tags": [
+                    "get-data-comment-controller"
+                ],
+                "operationId": "productInformation_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/cart-items": {
+            "get": {
+                "tags": [
+                    "Carts Management REST API"
+                ],
+                "summary": "API Get a list of CartItems by User Id ",
+                "operationId": "getListByUser_1",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Từ khóa cần tìm, có thể tìm theo nhiều từ khóa ngăn cách bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Chứa chỉ số trang cần lấy, bắt đầu từ 0",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Hướng sắp xếp: \"asc\" hoặc \"desc\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Số bản ghi mong muốn cho 1 trang",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Các tiêu chí sắp xếp. Có thể sắp xếp theo nhiều tiêu chí, ngăn cách nhau bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTOPaginatedMetaListBriefCartItemResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/callback-payment": {
+            "get": {
+                "tags": [
+                    "payment-rest-controller"
+                ],
+                "operationId": "paymentCallbackHandler",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/brands/{brandId}": {
+            "get": {
+                "tags": [
+                    "Brands Management REST API"
+                ],
+                "summary": "Get an active Brand by Id",
+                "operationId": "getOne_2",
+                "parameters": [
+                    {
+                        "name": "brandId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/brands/total-view": {
+            "get": {
+                "tags": [
+                    "Brands Management REST API"
+                ],
+                "operationId": "getTotalView",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/brands/total-sold": {
+            "get": {
+                "tags": [
+                    "Brands Management REST API"
+                ],
+                "operationId": "getTotalSold",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/brands/total-revenue": {
+            "get": {
+                "tags": [
+                    "Brands Management REST API"
+                ],
+                "operationId": "getTotalRevenue",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/brands/statistics": {
+            "get": {
+                "tags": [
+                    "home-rest-controller"
+                ],
+                "operationId": "getBrandStatistics",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/brands/active": {
+            "get": {
+                "tags": [
+                    "Brands Management REST API"
+                ],
+                "summary": "Get active Brands with pagination",
+                "operationId": "getActiveList_2",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Từ khóa cần tìm, có thể tìm theo nhiều từ khóa ngăn cách bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Chứa chỉ số trang cần lấy, bắt đầu từ 0",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Hướng sắp xếp: \"asc\" hoặc \"desc\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Số bản ghi mong muốn cho 1 trang",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Các tiêu chí sắp xếp. Có thể sắp xếp theo nhiều tiêu chí, ngăn cách nhau bởi dấu \",\"",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/activity-logs": {
+            "get": {
+                "tags": [
+                    "activity-log-rest-controller"
+                ],
+                "operationId": "getList",
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/PaginationRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{userId}/addresses/{addressIds}": {
+            "delete": {
+                "tags": [
+                    "Addresses Management REST API"
+                ],
+                "summary": "API Delete an Address",
+                "operationId": "deleteOne",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "addressIds",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/hard-delete": {
+            "delete": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Permanently delete Users by a list of Id",
+                "operationId": "hardDeleteListUsers",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListIdsRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/hard-delete/{userId}": {
+            "delete": {
+                "tags": [
+                    "Users Management REST API"
+                ],
+                "summary": "Permanently delete a User by Id",
+                "operationId": "hardDeleteOneUser",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/hard-delete": {
+            "delete": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Permanently delete Products by a list of Id",
+                "operationId": "hardDeleteList",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListIdsRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/hard-delete/{productId}": {
+            "delete": {
+                "tags": [
+                    "Products Management REST API"
+                ],
+                "summary": "Delete a Product by Id",
+                "operationId": "hardDeleteOne",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "No Content",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/orders/deleted/{orderId}": {
+            "delete": {
+                "tags": [
+                    "Orders Management REST API"
+                ],
+                "summary": "Delete an Order for Admin",
+                "operationId": "deleteOrderForAdmin",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/cart-items/{cartItemIds}": {
+            "delete": {
+                "tags": [
+                    "Carts Management REST API"
+                ],
+                "summary": "API Delete a CartItem",
+                "operationId": "deleteCartItems",
+                "parameters": [
+                    {
+                        "name": "cartItemIds",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GlobalResponseDTONoPaginatedMetaBlankData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AddressRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "province": {
+                        "type": "string"
+                    },
+                    "provinceCode": {
+                        "type": "string"
+                    },
+                    "district": {
+                        "type": "string"
+                    },
+                    "districtCode": {
+                        "type": "string"
+                    },
+                    "ward": {
+                        "type": "string"
+                    },
+                    "wardCode": {
+                        "type": "string"
+                    },
+                    "detail": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UpdateUserInfoRequest": {
+                "type": "object",
+                "properties": {
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "avatar": {
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "phoneNumber": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BlankData": {
+                "type": "object"
+            },
+            "GlobalResponseDTONoPaginatedMetaBlankData": {
+                "type": "object",
+                "properties": {
+                    "meta": {
+                        "$ref": "#/components/schemas/NoPaginatedMeta"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/BlankData"
+                    }
+                }
+            },
+            "NoPaginatedMeta": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "SUCCESS",
+                            "ERROR"
+                        ]
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "FeedbackRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "alias": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "rating": {
+                        "type": "string",
+                        "format": "byte"
+                    }
+                }
+            },
+            "CartItemRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "quantity": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "UpdateProductRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                }
+            },
+            "AddOrderForUserRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "subTotal": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "tax": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "paymentMethod": {
+                        "type": "string",
+                        "enum": [
+                            "COD",
+                            "ONLINE"
+                        ]
+                    },
+                    "orderWeight": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "address": {
+                        "$ref": "#/components/schemas/Address"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "NEW",
+                            "CANCELLED",
+                            "PROCESSING",
+                            "PACKAGED",
+                            "PICKED",
+                            "SHIPPING",
+                            "DELIVERED",
+                            "RETURNED",
+                            "PAID",
+                            "REFUNDED"
+                        ]
+                    },
+                    "orderDetailRequestDTOList": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderDetailRequestDTO"
+                        }
+                    }
+                }
+            },
+            "Address": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "province": {
+                        "type": "string"
+                    },
+                    "provinceCode": {
+                        "type": "string"
+                    },
+                    "district": {
+                        "type": "string"
+                    },
+                    "districtCode": {
+                        "type": "string"
+                    },
+                    "ward": {
+                        "type": "string"
+                    },
+                    "wardCode": {
+                        "type": "string"
+                    },
+                    "detail": {
+                        "type": "string"
+                    },
+                    "whenCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "ModifyOrderForUserRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "orderId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "addOrderForUserRequestDTO": {
+                        "$ref": "#/components/schemas/AddOrderForUserRequestDTO"
+                    }
+                }
+            },
+            "OrderDetailRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "quantity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "productId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "AddOrderForAdminRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "userId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "shippingCost": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "subTotal": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "tax": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "total": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "paymentMethod": {
+                        "type": "string",
+                        "enum": [
+                            "COD",
+                            "ONLINE"
+                        ]
+                    },
+                    "payTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "orderTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "deliverTime": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "orderWeight": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "address": {
+                        "$ref": "#/components/schemas/Address"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "NEW",
+                            "CANCELLED",
+                            "PROCESSING",
+                            "PACKAGED",
+                            "PICKED",
+                            "SHIPPING",
+                            "DELIVERED",
+                            "RETURNED",
+                            "PAID",
+                            "REFUNDED"
+                        ]
+                    },
+                    "orderDetailRequestDTOList": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderDetailRequestDTO"
+                        }
+                    }
+                }
+            },
+            "ModifyOrderForAdminRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "orderId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "addOrderForAdminRequestDTO": {
+                        "$ref": "#/components/schemas/AddOrderForAdminRequestDTO"
+                    }
+                }
+            },
+            "AddUserRequestDTO": {
+                "required": [
+                    "email"
+                ],
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "maxLength": 2147483647,
+                        "minLength": 4,
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "confirmPassword": {
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "phoneNumber": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BriefUserResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "type": "string",
+                        "enum": [
+                            "MALE",
+                            "FEMALE",
+                            "OTHER"
+                        ]
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "avatarImageUrl": {
+                        "type": "string"
+                    },
+                    "phoneNumber": {
+                        "type": "string"
+                    }
+                }
+            },
+            "GlobalResponseDTONoPaginatedMetaBriefUserResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "meta": {
+                        "$ref": "#/components/schemas/NoPaginatedMeta"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/BriefUserResponseDTO"
+                    }
+                }
+            },
+            "AddProductRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                }
+            },
+            "BriefProductResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "oldPrice": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "newPrice": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "display": {
+                        "type": "string"
+                    },
+                    "processor": {
+                        "type": "string"
+                    },
+                    "card": {
+                        "type": "string"
+                    },
+                    "battery": {
+                        "type": "string"
+                    },
+                    "weight": {
+                        "type": "string"
+                    },
+                    "discountPercent": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "ram": {
+                        "type": "string"
+                    },
+                    "storage": {
+                        "type": "string"
+                    },
+                    "mainImageUrl": {
+                        "type": "string"
+                    },
+                    "totalSold": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "averageRating": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "feedbacksCount": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "GlobalResponseDTONoPaginatedMetaBriefProductResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "meta": {
+                        "$ref": "#/components/schemas/NoPaginatedMeta"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/BriefProductResponseDTO"
+                    }
+                }
+            },
+            "AuthData": {
+                "type": "object",
+                "properties": {
+                    "refreshToken": {
+                        "type": "string"
+                    },
+                    "accessToken": {
+                        "type": "string"
+                    },
+                    "loggedInUser": {
+                        "$ref": "#/components/schemas/FullUserResponseDTO"
+                    }
+                }
+            },
+            "FullUserResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "type": "string",
+                        "enum": [
+                            "MALE",
+                            "FEMALE",
+                            "OTHER"
+                        ]
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "avatarImageUrl": {
+                        "type": "string"
+                    },
+                    "phoneNumber": {
+                        "type": "string"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "whenCreated": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "lastLoggedIn": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "loggedIn": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "CUSTOMER",
+                            "STAFF",
+                            "MANAGER",
+                            "ADMINISTRATOR"
+                        ]
+                    },
+                    "authorities": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/GrantedAuthority"
+                        }
+                    }
+                }
+            },
+            "GlobalResponseDTONoPaginatedMetaAuthData": {
+                "type": "object",
+                "properties": {
+                    "meta": {
+                        "$ref": "#/components/schemas/NoPaginatedMeta"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/AuthData"
+                    }
+                }
+            },
+            "GrantedAuthority": {
+                "type": "object",
+                "properties": {
+                    "authority": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RefreshTokenRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "refreshToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AuthenticationRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UpdateUserPasswordRequest": {
+                "type": "object",
+                "properties": {
+                    "oldPassword": {
+                        "type": "string"
+                    },
+                    "newPassword": {
+                        "type": "string"
+                    },
+                    "confirmNewPassword": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ListIdsRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                }
+            },
+            "GlobalResponseDTONoPaginatedMetaFullUserResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "meta": {
+                        "$ref": "#/components/schemas/NoPaginatedMeta"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/FullUserResponseDTO"
+                    }
+                }
+            },
+            "GlobalResponseDTOPaginatedMetaListBriefUserResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginatedMeta"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BriefUserResponseDTO"
+                        }
+                    }
+                }
+            },
+            "PaginatedMeta": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "SUCCESS",
+                            "ERROR"
+                        ]
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/Pagination"
+                    }
+                }
+            },
+            "Pagination": {
+                "type": "object",
+                "properties": {
+                    "keyword": {
+                        "type": "string"
+                    },
+                    "pageIndex": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "pageSize": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalItems": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "totalPages": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "BrandInFullProductResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "FullProductResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "oldPrice": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "currentPrice": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "discountPercent": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "remaining": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "processor": {
+                        "type": "string"
+                    },
+                    "cores": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "threads": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "frequency": {
+                        "type": "string"
+                    },
+                    "boostFrequency": {
+                        "type": "string"
+                    },
+                    "cacheCapacity": {
+                        "type": "string"
+                    },
+                    "memoryCapacity": {
+                        "type": "string"
+                    },
+                    "memoryType": {
+                        "type": "string"
+                    },
+                    "memoryBus": {
+                        "type": "string"
+                    },
+                    "maxMemoryCapacity": {
+                        "type": "string"
+                    },
+                    "storage": {
+                        "type": "string"
+                    },
+                    "displaySize": {
+                        "type": "string"
+                    },
+                    "resolution": {
+                        "type": "string"
+                    },
+                    "refreshRate": {
+                        "type": "string"
+                    },
+                    "colorGamut": {
+                        "type": "string"
+                    },
+                    "panelType": {
+                        "type": "string"
+                    },
+                    "touchScreen": {
+                        "type": "string"
+                    },
+                    "graphicsCard": {
+                        "type": "string"
+                    },
+                    "soundTechnology": {
+                        "type": "string"
+                    },
+                    "wirelessConnectivity": {
+                        "type": "string"
+                    },
+                    "sdCard": {
+                        "type": "string"
+                    },
+                    "webcam": {
+                        "type": "string"
+                    },
+                    "coolingFan": {
+                        "type": "string"
+                    },
+                    "miscFeature": {
+                        "type": "string"
+                    },
+                    "backlitKeyboard": {
+                        "type": "string"
+                    },
+                    "dimensionWeight": {
+                        "type": "string"
+                    },
+                    "material": {
+                        "type": "string"
+                    },
+                    "batteryCapacity": {
+                        "type": "string"
+                    },
+                    "chargerCapacity": {
+                        "type": "string"
+                    },
+                    "os": {
+                        "type": "string"
+                    },
+                    "launchDate": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "averageRating": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "feedbacksCount": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalSold": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "brand": {
+                        "$ref": "#/components/schemas/BrandInFullProductResponseDTO"
+                    },
+                    "article": {
+                        "type": "string"
+                    },
+                    "images": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ImageDTO"
+                        }
+                    },
+                    "similarProducts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SimilarProduct"
+                        }
+                    }
+                }
+            },
+            "GlobalResponseDTONoPaginatedMetaFullProductResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "meta": {
+                        "$ref": "#/components/schemas/NoPaginatedMeta"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/FullProductResponseDTO"
+                    }
+                }
+            },
+            "ImageDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "url": {
+                        "type": "string"
+                    }
+                }
+            },
+            "SimilarProduct": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "productUrl": {
+                        "type": "string"
+                    },
+                    "productName": {
+                        "type": "string"
+                    },
+                    "productImageUrl": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "string"
+                    }
+                }
+            },
+            "GlobalResponseDTOPaginatedMetaListBriefProductResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginatedMeta"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BriefProductResponseDTO"
+                        }
+                    }
+                }
+            },
+            "CseImage": {
+                "type": "object",
+                "properties": {
+                    "src": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Item": {
+                "type": "object",
+                "properties": {
+                    "link": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "pagemap": {
+                        "$ref": "#/components/schemas/PageMap"
+                    },
+                    "price": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PageMap": {
+                "type": "object",
+                "properties": {
+                    "cse_image": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CseImage"
+                        }
+                    }
+                }
+            },
+            "SearchResult": {
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Item"
+                        }
+                    }
+                }
+            },
+            "BriefCartItemResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "product": {
+                        "$ref": "#/components/schemas/ProductInCartItemResponseDTO"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "GlobalResponseDTOPaginatedMetaListBriefCartItemResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginatedMeta"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BriefCartItemResponseDTO"
+                        }
+                    }
+                }
+            },
+            "ProductInCartItemResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "mainImageUrl": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "oldPrice": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "currentPrice": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                }
+            },
+            "PaginationRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "keyword": {
+                        "type": "string"
+                    },
+                    "index": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "direction": {
+                        "type": "string"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "fields": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

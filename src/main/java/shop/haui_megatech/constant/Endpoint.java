@@ -100,6 +100,7 @@ public class Endpoint {
             public static final String UPDATED_ONE_FOR_ADMIN = PREFIX + ADMIN + "/updatedOne";
             public static final String DELETE_ONE_ORDER      = PREFIX + DELETED + "/{orderId}";
             public static final String GET_LATEST_ORDERS     = PREFIX + "/latest";
+            public static final String GET_QR                = PREFIX + "/getQr/{orderId}";
         }
 
         public static final class Auth {

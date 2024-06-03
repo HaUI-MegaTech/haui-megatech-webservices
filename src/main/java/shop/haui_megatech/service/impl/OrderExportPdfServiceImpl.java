@@ -127,7 +127,8 @@ public class OrderExportPdfServiceImpl {
 
     public void export(QrOrderItemResponseDTO qrcode, Order order, HttpServletResponse response)
             throws DocumentException, IOException, JSONException, WriterException {
-        String content = "http://192.168.0.101:8080/api/v1/orders/admin/detail/" + order.getId();
+//        String content = "http://192.168.0.101:8080/api/v1/orders/admin/detail/" + order.getId();
+        String content = "http://27.79.130.203/api/v1/orders/admin/detail/" + order.getId();
         String folder = "qrcode/QrForAPIOrderDetail";
         String name = "Id" + order.getId() + "-OrderDetail";
         QRCodeGeneratorUtil.generateQRCode(content, folder, name, response.getOutputStream());
@@ -219,7 +220,7 @@ public class OrderExportPdfServiceImpl {
         for (int i = 0; i < order.getOrderDetails().size(); i++) {
             billTable.addCell(getBillRowCell(String.valueOf(i + 1)));
             billTable.addCell(getBillRowCell(order.getOrderDetails().get(i).getProduct().getId().toString()));
-            billTable.addCell(getBillRowCell(order.getOrderDetails().get(i).getProduct().getName().toString()));
+            billTable.addCell(getBillRowCell(order.getOrderDetails().get(i).getProduct().getName()));
             billTable.addCell(getBillRowCell(format.format(order.getOrderDetails().get(i).getPrice())));
             billTable.addCell(getBillRowCell(order.getOrderDetails().get(i).getQuantity().toString()));
             billTable.addCell(getBillRowCell(format.format(order.getOrderDetails().get(i).getPrice()

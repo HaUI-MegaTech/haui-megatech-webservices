@@ -22,8 +22,7 @@ import shop.haui_megatech.service.OrderService;
 import shop.haui_megatech.utility.AuthenticationUtil;
 import shop.haui_megatech.utility.MessageSourceUtil;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -257,5 +256,56 @@ public class OrderServiceImpl implements OrderService {
                 .data(orderMapper.orderToOrderBase(order))
                 .build();
 
+    }
+    public GlobalResponseDTO<NoPaginatedMeta, Map<String, List<Object>>> statisticByMonth(int month, int year){
+        List<StatisticByMonthResponseDTO> res = orderRepository.statisticByMonth(month, year);
+
+        List<String> dates = new ArrayList<>();
+        List<Double> prices = new ArrayList<>();
+
+        for(StatisticByMonthResponseDTO item : res){
+            dates.add(item.dates());
+            prices.add(item.prices());
+        }
+
+        Map<String, List<Object>> response = new HashMap<>();
+        response.put("dates", new ArrayList<>(dates));
+        response.put("prices", new ArrayList<>(prices));
+
+        return GlobalResponseDTO
+                .<NoPaginatedMeta ,Map<String, List<Object>>>builder()
+                .meta(NoPaginatedMeta.builder()
+                                    .status(Status.SUCCESS)
+                                    .message("Statistic By Month success")
+                                    .build()
+                                    )
+                .data(response)
+                .build();
+    }
+
+    @Override
+    public GlobalResponseDTO<NoPaginatedMeta, Map<String, List<Object>>>  statisticByAdminRegion(int year) {
+        List<StatisticByAdminRegionResponse> res = orderRepository.statisticByAdminRegion(year);
+
+        List<String> categories = new ArrayList<>();
+        List<Double> data = new ArrayList<>();
+        for(StatisticByAdminRegionResponse item : res){
+            categories.add(item.adminRegionName());
+            data.add(item.prices());
+        }
+
+        Map<String, List<Object>> response = new HashMap<>();
+        response.put("categories", new ArrayList<>(categories));
+        response.put("prices", new ArrayList<>(data));
+
+        return GlobalResponseDTO
+                .<NoPaginatedMeta, Map<String, List<Object>>>builder()
+                .meta(NoPaginatedMeta.builder()
+                        .status(Status.SUCCESS)
+                        .message("Statistic By Administrative Region success")
+                        .build()
+                )
+                .data(response)
+                .build();
     }
 }

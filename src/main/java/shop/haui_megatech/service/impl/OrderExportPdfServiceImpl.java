@@ -9,7 +9,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
 import org.json.JSONException;
-import shop.haui_megatech.domain.dto.order.QrOrderItemResponseDTO;
 import shop.haui_megatech.domain.entity.Order;
 import shop.haui_megatech.utility.QRCodeGeneratorUtil;
 
@@ -131,8 +130,8 @@ public class OrderExportPdfServiceImpl {
             throws DocumentException, IOException, JSONException, WriterException {
         // String content = "http://192.168.0.101:8080/api/v1/orders/admin/detail/" +
         // order.getId();
-        String content = "http://27.79.130.203/api/v1/orders/admin/detail/" + order.getId();
-        String folder = "qrcode/QrForAPIOrderDetail";
+        String content = "http://27.79.130.203:8080/api/v1/orders/admin/detail/" + order.getId();
+        String folder = "QrForAPIOrderDetail";
         String name = "Id" + order.getId() + "-OrderDetail";
         QRCodeGeneratorUtil.generateQRCode(content, folder, name, response.getOutputStream());
 
@@ -158,7 +157,7 @@ public class OrderExportPdfServiceImpl {
 
         PdfPTable headerTable = new PdfPTable(2);
         headerTable.setWidthPercentage(100);
-        headerTable.setWidths(new float[] { 4, 1 });
+        headerTable.setWidths(new float[]{4, 1});
 
         PdfPCell cell1 = new PdfPCell(image, true);
         cell1.setBorder(0);
@@ -210,7 +209,7 @@ public class OrderExportPdfServiceImpl {
 
         PdfPTable billTable = new PdfPTable(6); // one page contains 15 records
         billTable.setWidthPercentage(100);
-        billTable.setWidths(new float[] { 1, 2, 3, 2, 1, 2 });
+        billTable.setWidths(new float[]{1, 2, 3, 2, 1, 2});
         billTable.setSpacingBefore(30.0f);
         billTable.addCell(getBillHeaderCell("Index"));
         billTable.addCell(getBillHeaderCell("Product Id"));
@@ -227,7 +226,7 @@ public class OrderExportPdfServiceImpl {
             billTable.addCell(getBillRowCell(format.format(order.getOrderDetails().get(i).getPrice())));
             billTable.addCell(getBillRowCell(order.getOrderDetails().get(i).getQuantity().toString()));
             billTable.addCell(getBillRowCell(format.format(order.getOrderDetails().get(i).getPrice()
-                    * order.getOrderDetails().get(i).getQuantity())));
+                                                           * order.getOrderDetails().get(i).getQuantity())));
         }
         System.out.println(order.getOrderDetails().size());
         if (order.getOrderDetails().size() < 10) {
@@ -272,7 +271,7 @@ public class OrderExportPdfServiceImpl {
         describer.addCell(getdescCell(" "));
         describer.addCell(getdescCell(
                 "Goods once sold will not be taken back or exchanged || Subject to product justification || Product damage no one responsible || "
-                        + " Service only at concarned authorized service centers"));
+                + " Service only at concarned authorized service centers"));
 
         document.open();// PDF document opened........
 

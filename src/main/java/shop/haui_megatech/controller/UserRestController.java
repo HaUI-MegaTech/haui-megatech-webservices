@@ -106,8 +106,9 @@ public class UserRestController {
     @PutMapping(Endpoint.V1.User.UPDATE_INFO)
     public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> updateInfoUser(
             @PathVariable Integer userId,
-            @ModelAttribute UpdateUserInfoRequest request
+            @RequestBody UpdateUserInfoRequest request
     ) {
+        System.out.println("Im here");
         return ResponseEntity.status(HttpStatus.OK).body(userService.updateInfoUser(userId, request));
     }
 

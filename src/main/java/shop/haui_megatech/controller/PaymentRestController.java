@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.domain.dto.payment.CreatePaymentRequestDTO;
@@ -20,7 +19,7 @@ import java.io.IOException;
 public class PaymentRestController {
     private final PaymentService paymentService;
 
-    @PostMapping(Endpoint.V1.Payment.CREATE)
+    @GetMapping(Endpoint.V1.Payment.CREATE)
     public ResponseEntity<?> createPayment(
             HttpServletRequest httpServletRequest,
             @ParameterObject CreatePaymentRequestDTO request

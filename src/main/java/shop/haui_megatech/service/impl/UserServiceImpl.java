@@ -95,6 +95,7 @@ public class UserServiceImpl implements UserService {
                                     .password(passwordEncoder.encode(request.password()))
                                     .firstName(request.firstName())
                                     .lastName(request.lastName())
+                                    .email(request.email())
                                     .role(Role.CUSTOMER)
                                     .build()))
                 )
@@ -173,15 +174,15 @@ public class UserServiceImpl implements UserService {
 
         if (request.firstName() != null) foundUser.setFirstName(request.firstName());
         if (request.lastName() != null) foundUser.setLastName(request.lastName());
-        if (request.avatar() != null) {
-            String avatarImageUrl;
-            try {
-                avatarImageUrl = fileUploadService.uploadFile(request.avatar());
-            } catch (IOException e) {
-                throw new RuntimeException(ErrorMessage.User.UPDATE_INFO);
-            }
-            foundUser.setAvatarImageUrl(avatarImageUrl);
-        }
+//        if (request.avatar() != null) {
+//            String avatarImageUrl;
+//            try {
+//                avatarImageUrl = fileUploadService.uploadFile(request.avatar());
+//            } catch (IOException e) {
+//                throw new RuntimeException(ErrorMessage.User.UPDATE_INFO);
+//            }
+//            foundUser.setAvatarImageUrl(avatarImageUrl);
+//        }
         if (request.email() != null) foundUser.setEmail(request.email());
         if (request.phoneNumber() != null) foundUser.setPhoneNumber(request.phoneNumber());
         foundUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));

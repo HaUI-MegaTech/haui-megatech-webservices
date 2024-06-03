@@ -20,10 +20,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleBlankUsernameException(AbsentRequiredFieldException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
                                                         .meta(NoPaginatedMeta
-                                                                .builder()
-                                                                .status(Status.ERROR)
-                                                                .message(messageSourceUtil.getMessage(ex.getMessage()))
-                                                                .build()
+                                                                      .builder()
+                                                                      .status(Status.ERROR)
+                                                                      .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                                      .build()
                                                         )
                                                         .build());
     }
@@ -32,10 +32,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleBlankPasswordException(MismatchedConfirmPasswordException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
                                                         .meta(NoPaginatedMeta
-                                                                .builder()
-                                                                .status(Status.ERROR)
-                                                                .message(messageSourceUtil.getMessage(ex.getMessage()))
-                                                                .build()
+                                                                      .builder()
+                                                                      .status(Status.ERROR)
+                                                                      .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                                      .build()
                                                         )
                                                         .build());
     }
@@ -44,10 +44,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleNotFoundException(NotFoundException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
                                                         .meta(NoPaginatedMeta
-                                                                .builder()
-                                                                .status(Status.ERROR)
-                                                                .message(messageSourceUtil.getMessage(ex.getMessage()))
-                                                                .build()
+                                                                      .builder()
+                                                                      .status(Status.ERROR)
+                                                                      .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                                      .build()
                                                         )
                                                         .build());
     }
@@ -56,10 +56,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleWrongPasswordException(WrongPasswordException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
                                                         .meta(NoPaginatedMeta
-                                                                .builder()
-                                                                .status(Status.ERROR)
-                                                                .message(messageSourceUtil.getMessage(ex.getMessage()))
-                                                                .build()
+                                                                      .builder()
+                                                                      .status(Status.ERROR)
+                                                                      .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                                      .build()
                                                         )
                                                         .build());
     }
@@ -68,10 +68,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleInvalidRequestParamException(InvalidRequestParamException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
                                                         .meta(NoPaginatedMeta
-                                                                .builder()
-                                                                .status(Status.ERROR)
-                                                                .message(messageSourceUtil.getMessage(ex.getMessage()))
-                                                                .build()
+                                                                      .builder()
+                                                                      .status(Status.ERROR)
+                                                                      .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                                      .build()
                                                         )
                                                         .build());
     }
@@ -80,10 +80,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleNullRequestException(NullRequestException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
                                                         .meta(NoPaginatedMeta
-                                                                .builder()
-                                                                .status(Status.ERROR)
-                                                                .message(messageSourceUtil.getMessage(ex.getMessage()))
-                                                                .build()
+                                                                      .builder()
+                                                                      .status(Status.ERROR)
+                                                                      .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                                      .build()
                                                         )
                                                         .build());
     }
@@ -92,10 +92,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleDuplicateUsernameException(DuplicateUsernameException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
                                                         .meta(NoPaginatedMeta
-                                                                .builder()
-                                                                .status(Status.ERROR)
-                                                                .message(messageSourceUtil.getMessage(ex.getMessage()))
-                                                                .build()
+                                                                      .builder()
+                                                                      .status(Status.ERROR)
+                                                                      .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                                      .build()
                                                         )
                                                         .build());
     }
@@ -104,10 +104,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
                                                         .meta(NoPaginatedMeta
-                                                                .builder()
-                                                                .status(Status.ERROR)
-                                                                .message(messageSourceUtil.getMessage(ex.getMessage()))
-                                                                .build()
+                                                                      .builder()
+                                                                      .status(Status.ERROR)
+                                                                      .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                                      .build()
                                                         )
                                                         .build());
     }
@@ -116,10 +116,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleMalformedFileException(MalformedFileException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
                                                         .meta(NoPaginatedMeta
-                                                                .builder()
-                                                                .status(Status.ERROR)
-                                                                .message(messageSourceUtil.getMessage(ex.getMessage()))
-                                                                .build()
+                                                                      .builder()
+                                                                      .status(Status.ERROR)
+                                                                      .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                                      .build()
                                                         )
                                                         .build());
     }
@@ -128,11 +128,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleAppException(AppException ex) {
         return ResponseUtil.badRequest(GlobalResponseDTO.builder()
                                                         .meta(NoPaginatedMeta
-                                                                .builder()
-                                                                .status(Status.ERROR)
-                                                                .message(messageSourceUtil.getMessage(ex.getMessage()))
-                                                                .build()
+                                                                      .builder()
+                                                                      .status(Status.ERROR)
+                                                                      .message(messageSourceUtil.getMessage(ex.getMessage()))
+                                                                      .build()
                                                         )
                                                         .build());
     }
+    
 }

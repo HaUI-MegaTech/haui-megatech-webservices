@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
 import shop.haui_megatech.domain.dto.global.PaginationRequestDTO;
-import shop.haui_megatech.domain.dto.order.*;
+import shop.haui_megatech.domain.dto.order.AddOrderForAdminRequestDTO;
+import shop.haui_megatech.domain.dto.order.AddOrderForUserRequestDTO;
+import shop.haui_megatech.domain.dto.order.ModifyOrderForAdminRequestDTO;
+import shop.haui_megatech.domain.dto.order.ModifyOrderForUserRequestDTO;
 import shop.haui_megatech.domain.entity.Order;
 import shop.haui_megatech.job.AutoMailer;
 import shop.haui_megatech.repository.OrderRepository;
@@ -33,9 +36,9 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Tag(name = "Orders Management REST API")
 public class OrderRestController {
-    private final OrderService OrderService;
+    private final OrderService    OrderService;
     private final OrderRepository orderRepository;
-    private final AutoMailer autoMailer;
+    private final AutoMailer      autoMailer;
 
     @Operation(summary = "Get an list Orders for User")
     @ApiResponses(
@@ -162,6 +165,7 @@ public class OrderRestController {
     ) {
         return ResponseUtil.ok(OrderService.deleteOrderForAdmin(orderId));
     }
+
     @Operation(summary = "Get an QR of Order")
     @ApiResponses(
             value = {
@@ -177,16 +181,17 @@ public class OrderRestController {
         Order order = orderRepository.findById(orderId).get();
         //QrOrderItemResponseDTO qrorder = orderMapper.qrOrderItemResponseDto(order);
 
-        String contentQr = "http://192.168.0.102:8080/api/v1/orders/exportPdf/"+orderId;
+        String contentQr = "http://27.79.130.203:8080/api/v1/orders/exportPdf/" + orderId;
         //String nameQr = "QrCodeExprotPdf-"+ orderId +".png";
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String formattedTime = dateFormat.format(new Date());
 
-        String nameQr = "Id"+order.getId()+formattedTime+"-QrCodeExprotPdf";
+        String nameQr = "Id" + order.getId() + formattedTime + "-QrCodeExprotPdf";
         QRCodeGeneratorUtil.generateQRCode(contentQr, "QrForAPIExportPdf", nameQr, response.getOutputStream());
         response.getOutputStream().flush();
     }
+
     @Operation(summary = "Export PDF for Order")
     @ApiResponses(
             value = {
@@ -196,7 +201,7 @@ public class OrderRestController {
     )
     @GetMapping(Endpoint.V1.Order.EXPORT_PDF)
     public void exportToPdf(@PathVariable(name = "orderId") Integer orderId
-            ,HttpServletResponse response) throws DocumentException, IOException, JSONException, WriterException {
+            , HttpServletResponse response) throws DocumentException, IOException, JSONException, WriterException {
         response.setContentType("application/pdf");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
@@ -217,8 +222,9 @@ public class OrderRestController {
 
         String path = "src/main/resources/pdf/Order" + order.getId() + formattedTime + ".pdf";
         autoMailer.sendOrderPdf(order.getUser().getEmail(), path);
-        System.out.println("Send success to email "+order.getUser().getEmail());
+        System.out.println("Send success to email " + order.getUser().getEmail());
     }
+
     @Operation(summary = "Get statistic order by month")
     @ApiResponses(
             value = {
@@ -230,10 +236,11 @@ public class OrderRestController {
     public ResponseEntity<?> getStatisticByMonth(
 //            @RequestParam("month") int month,
 //            @RequestParam("year") int year
-            ) {
+    ) {
 
         return ResponseUtil.ok(OrderService.statisticByMonth(3, 2022));
     }
+
     @Operation(summary = "Get statistic order by administrative region")
     @ApiResponses(
             value = {

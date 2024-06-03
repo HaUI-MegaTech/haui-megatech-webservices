@@ -76,7 +76,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .firstName(request.firstName())
                         .lastName(request.lastName())
                         .email(request.email())
-                        .phoneNumber(request.phoneNumber())
+//                        .phoneNumber(request.phoneNumber())
                         .role(Role.CUSTOMER)
                         .build();
         User savedUser = userRepository.save(user);

@@ -57,7 +57,11 @@ public class SecurityConfiguration {
 
     private final List<String> ALLOWED_ORIGINS      = List.of(
             "http://localhost:3000",
-            "http://localhost:3001"
+            "http://localhost:3001",
+            "http://27.79.130.203:3000",
+            "http://27.79.130.203:3001",
+            "http://haui-megatech.shop:3000",
+            "http://haui-megatech.shop:3001"
     );
     private final List<String> ALLOWED_HTTP_METHODS = List.of(
             GET.toString(),
@@ -154,6 +158,8 @@ public class SecurityConfiguration {
                            .requestMatchers(GET, Endpoint.V1.Order.GET_LIST_FOR_ADMIN).hasAuthority(Authority.READ_ORDER.getName())
                            .requestMatchers(GET, Endpoint.V1.Order.GET_DETAIL_FOR_USER).hasAuthority(Authority.READ_ORDER.getName())
                            .requestMatchers(GET, Endpoint.V1.Order.GET_DETAIL_FOR_ADMIN).hasAuthority(Authority.READ_ORDER.getName())
+                           .requestMatchers(GET, Endpoint.V1.Order.GET_QR).permitAll()
+                           .requestMatchers(GET, Endpoint.V1.Order.EXPORT_PDF).permitAll()
 
                            // Payment
                            .requestMatchers(POST, Endpoint.V1.Payment.CREATE).hasAuthority(Authority.CREATE_PAYMENT.getName())

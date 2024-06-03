@@ -30,7 +30,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Query(
             "SELECT o FROM Order o " +
-            "WHERE CONCAT(o.paymentMethod) LIKE CONCAT('%', :keyword, '%')"
+            "WHERE CONCAT(o.paymentMethod, '') LIKE CONCAT('%', :keyword, '%')"
     )
     Page<Order> searchOrderForAdmin(String keyword, Pageable pageable);
 
@@ -56,14 +56,16 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     )
     List<StatisticByMonthResponseDTO> statisticByMonth(@Param("month") Integer month, @Param("year") Integer year);
 
-    @Query(value = "SELECT new shop.haui_megatech.domain.dto.order.StatisticByAdminRegionResponse(adre.name, SUM(o.subTotal)) " +
-            "FROM Order o " +
-            "JOIN Address ad ON o.address.id = ad.id " +
-            "JOIN Province p ON ad.provinceCode = p.code " +
-            "JOIN AdministrativeRegion adre ON p.administrativeRegion.id = adre.id " +
-            "WHERE YEAR(o.orderTime) = :year " +
-            "GROUP BY adre.id, adre.name " +
-            "ORDER BY SUM(o.subTotal) ASC")
+    @Query(
+            value = "SELECT new shop.haui_megatech.domain.dto.order.StatisticByAdminRegionResponse(adre.name, SUM(o.subTotal)) " +
+                    "FROM Order o " +
+                    "JOIN Address ad ON o.address.id = ad.id " +
+                    "JOIN Province p ON ad.provinceCode = p.code " +
+                    "JOIN AdministrativeRegion adre ON p.administrativeRegion.id = adre.id " +
+                    "WHERE YEAR(o.orderTime) = :year " +
+                    "GROUP BY adre.id, adre.name " +
+                    "ORDER BY SUM(o.subTotal) ASC"
+    )
     List<StatisticByAdminRegionResponse> statisticByAdminRegion(@Param("year") int year);
 
 }

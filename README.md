@@ -1,58 +1,81 @@
-# Cấu trúc thư mục dự án
+# Config khi chạy lần đầu
+
+Chạy script restore database tại đường dẫn: src/main/resources/sql/final_restore_script/sql
+
+Config lại property sau trong file application.properties:
+
+`spring.datasource.password=<your_local_mysql_password>`
+
+
+
+# Cấu trúc thư mục chính của dự án
 
 ```bash
-src
-├───main
-│   ├───java
-│   │   └───shop
-│   │       └───haui_megatech
-│   │           ├───annotation
-│   │           ├───configuration
-│   │           │   ├───cache
-│   │           │   ├───documentation
-│   │           │   ├───language
-│   │           │   └───security
-│   │           │       └───filter
-│   │           ├───constant
-│   │           ├───controller
-│   │           ├───domain
-│   │           │   ├───dto
-│   │           │   │   ├───authentication
-│   │           │   │   ├───brand
-│   │           │   │   ├───cart
-│   │           │   │   ├───common
-│   │           │   │   ├───image
-│   │           │   │   ├───direction
-│   │           │   │   ├───order_detail
-│   │           │   │   ├───pagination
-│   │           │   │   ├───product
-│   │           │   │   └───user
-│   │           │   ├───entity
-│   │           │   └───mapper
-│   │           │       └───impl
-│   │           ├───exception
-│   │           ├───job
-│   │           ├───log
-│   │           ├───repository
-│   │           ├───service
-│   │           │   ├───base
-│   │           │   └───impl
-│   │           ├───utility
-│   │           └───validator
-│   └───resources
-│       ├───i18n
-│       ├───META-INF
-│       ├───sql
-│       └───template
-└───test
-    └───java
-        └───shop
-            ├───hauimegatech
-            └───haui_megatech
-                ├───controller
-                ├───domain
-                │   └───mapper
-                └───direction
+├───src
+│   ├───main
+│   │   ├───java
+│   │   │   └───shop
+│   │   │       └───haui_megatech
+│   │   │           ├───annotation
+│   │   │           ├───configuration
+│   │   │           │   ├───documentation
+│   │   │           │   ├───language
+│   │   │           │   └───security
+│   │   │           │       └───filter
+│   │   │           ├───constant
+│   │   │           ├───controller
+│   │   │           ├───domain
+│   │   │           │   ├───dto
+│   │   │           │   │   ├───address
+│   │   │           │   │   ├───auth
+│   │   │           │   │   ├───brand
+│   │   │           │   │   ├───cart
+│   │   │           │   │   ├───common
+│   │   │           │   │   ├───feedback
+│   │   │           │   │   ├───global
+│   │   │           │   │   ├───home
+│   │   │           │   │   ├───invoice
+│   │   │           │   │   ├───log
+│   │   │           │   │   ├───order
+│   │   │           │   │   ├───order_detail
+│   │   │           │   │   ├───payment
+│   │   │           │   │   ├───product
+│   │   │           │   │   └───user
+│   │   │           │   ├───entity
+│   │   │           │   │   ├───enums
+│   │   │           │   │   └───location
+│   │   │           │   └───mapper
+│   │   │           │       └───impl
+│   │   │           ├───exception
+│   │   │           ├───job
+│   │   │           │   └───crawl
+│   │   │           ├───log
+│   │   │           ├───repository
+│   │   │           ├───service
+│   │   │           │   └───impl
+│   │   │           ├───utility
+│   │   │           └───validator
+│   │   └───resources
+│   │       ├───i18n
+│   │       ├───META-INF
+│   │       ├───pdf
+│   │       ├───qrcode
+│   │       │   ├───QrForAPIExportPdf
+│   │       │   └───QrForAPIOrderDetail
+│   │       ├───sql
+│   │       ├───static
+│   │       │   ├───images
+│   │       │   └───style
+│   │       └───templates
+│   └───test
+│       └───java
+│           └───shop
+│               ├───hauimegatech
+│               └───haui_megatech
+│                   ├───controller
+│                   ├───domain
+│                   │   └───mapper
+│                   └───order
 ```
 
 # Cấu trúc các thư mục:

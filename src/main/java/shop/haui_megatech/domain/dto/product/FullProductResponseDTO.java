@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 public record FullProductResponseDTO(
         Integer id,
+        String mainImageUrl,
         String name,
         Float oldPrice,
         Float currentPrice,

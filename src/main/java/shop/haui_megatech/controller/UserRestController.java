@@ -67,7 +67,7 @@ public class UserRestController {
     @Operation(summary = "Add a list of Users using Excel file")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "When has created successfully"),
+                    @ApiResponse(responseCode = "201", description = "When has created successfully"),
                     //@ApiResponse(responseCode = "400", description = "When send empty username or password request"),
                     //@ApiResponse(responseCode = "403", description = "When has not been authorized"),
                     //@ApiResponse(responseCode = "500", description = "Internal Server Error"),
@@ -84,7 +84,7 @@ public class UserRestController {
     @Operation(summary = "Add a list of Users using Csv file")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "When has created successfully"),
+                    @ApiResponse(responseCode = "201", description = "When has created successfully"),
                     //@ApiResponse(responseCode = "400", description = "When send empty username or password request"),
                     //@ApiResponse(responseCode = "403", description = "When has not been authorized"),
                     //@ApiResponse(responseCode = "500", description = "Internal Server Error"),

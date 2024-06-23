@@ -65,13 +65,13 @@ public class ProductServiceImpl implements ProductService {
         if (request.index() < 0)
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
         String[] fields = Arrays.stream(request.fields().split(","))
-                .map(String::trim)
-                .toArray(String[]::new);
+                                .map(String::trim)
+                                .toArray(String[]::new);
         Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
-                ? Sort.by(fields)
-                .ascending()
-                : Sort.by(fields)
-                .descending();
+                    ? Sort.by(fields)
+                          .ascending()
+                    : Sort.by(fields)
+                          .descending();
 
         Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
@@ -83,9 +83,9 @@ public class ProductServiceImpl implements ProductService {
             if (filter != null) {
                 if (filter.brandIds() != null) {
                     List<Integer> brandIds = Arrays.stream(filter.brandIds().split(","))
-                            .map(String::trim)
-                            .map(Integer::valueOf)
-                            .toList();
+                                                   .map(String::trim)
+                                                   .map(Integer::valueOf)
+                                                   .toList();
                     if (filter.minPrice() != null && filter.maxPrice() != null) {
                         for (String keyword : keywords) {
                             ++pageCount;
@@ -158,8 +158,8 @@ public class ProductServiceImpl implements ProductService {
                                     .build())
                             .build())
                     .data(products.parallelStream()
-                            .map(ProductMapper.INSTANCE::toBriefProductResponseDTO)
-                            .collect(Collectors.toList()))
+                                  .map(ProductMapper.INSTANCE::toBriefProductResponseDTO)
+                                  .collect(Collectors.toList()))
                     .build();
         }
 
@@ -169,9 +169,9 @@ public class ProductServiceImpl implements ProductService {
         if (filter != null) {
             if (filter.brandIds() != null) {
                 List<Integer> brandIds = Arrays.stream(filter.brandIds().split(","))
-                        .map(String::trim)
-                        .map(Integer::valueOf)
-                        .toList();
+                                               .map(String::trim)
+                                               .map(Integer::valueOf)
+                                               .toList();
                 if (filter.minPrice() != null && filter.maxPrice() != null) {
                     page = productRepository.filterActiveListByPriceAndBrandIds(
                             brandIds,
@@ -217,8 +217,8 @@ public class ProductServiceImpl implements ProductService {
 
                         .build())
                 .data(products.parallelStream()
-                        .map(ProductMapper.INSTANCE::toBriefProductResponseDTO)
-                        .collect(Collectors.toList()))
+                              .map(ProductMapper.INSTANCE::toBriefProductResponseDTO)
+                              .collect(Collectors.toList()))
                 .build();
     }
 
@@ -301,8 +301,150 @@ public class ProductServiceImpl implements ProductService {
 
         Product foundProduct = found.get();
 
-        if (request.name() != null) foundProduct.setName(request.name());
-        if (request.price() != null) foundProduct.setCurrentPrice(request.price());
+        if (request.getName() != null) {
+            foundProduct.setName(request.getName());
+        }
+
+        if (request.getOldPrice() != null) {
+            foundProduct.setOldPrice(request.getOldPrice());
+        }
+
+        if (request.getCurrentPrice() != null) {
+            foundProduct.setCurrentPrice(request.getCurrentPrice());
+        }
+
+        if (request.getDiscountPercent() != null) {
+            foundProduct.setDiscountPercent(request.getDiscountPercent());
+        }
+
+        if (request.getRemaining() != null) {
+            foundProduct.setRemaining(request.getRemaining());
+        }
+
+        if (request.getProcessor() != null) {
+            foundProduct.setProcessor(request.getProcessor());
+        }
+
+        if (request.getCores() != null) {
+            foundProduct.setCores(request.getCores());
+        }
+
+        if (request.getThreads() != null) {
+            foundProduct.setThreads(request.getThreads());
+        }
+
+        if (request.getFrequency() != null) {
+            foundProduct.setFrequency(request.getFrequency());
+        }
+
+        if (request.getBoostFrequency() != null) {
+            foundProduct.setBoostFrequency(request.getBoostFrequency());
+        }
+
+        if (request.getCacheCapacity() != null) {
+            foundProduct.setCacheCapacity(request.getCacheCapacity());
+        }
+
+        if (request.getMemoryCapacity() != null) {
+            foundProduct.setMemoryCapacity(request.getMemoryCapacity());
+        }
+
+        if (request.getMemoryType() != null) {
+            foundProduct.setMemoryType(request.getMemoryType());
+        }
+
+        if (request.getMemoryBus() != null) {
+            foundProduct.setMemoryBus(request.getMemoryBus());
+        }
+
+        if (request.getMaxMemoryCapacity() != null) {
+            foundProduct.setMaxMemoryCapacity(request.getMaxMemoryCapacity());
+        }
+
+        if (request.getStorage() != null) {
+            foundProduct.setStorage(request.getStorage());
+        }
+
+        if (request.getDisplaySize() != null) {
+            foundProduct.setDisplaySize(request.getDisplaySize());
+        }
+
+        if (request.getResolution() != null) {
+            foundProduct.setResolution(request.getResolution());
+        }
+
+        if (request.getRefreshRate() != null) {
+            foundProduct.setRefreshRate(request.getRefreshRate());
+        }
+
+        if (request.getColorGamut() != null) {
+            foundProduct.setColorGamut(request.getColorGamut());
+        }
+
+        if (request.getPanelType() != null) {
+            foundProduct.setPanelType(request.getPanelType());
+        }
+
+        if (request.getTouchScreen() != null) {
+            foundProduct.setTouchScreen(request.getTouchScreen());
+        }
+
+        if (request.getGraphicsCard() != null) {
+            foundProduct.setGraphicsCard(request.getGraphicsCard());
+        }
+
+        if (request.getSoundTechnology() != null) {
+            foundProduct.setSoundTechnology(request.getSoundTechnology());
+        }
+
+        if (request.getWirelessConnectivity() != null) {
+            foundProduct.setWirelessConnectivity(request.getWirelessConnectivity());
+        }
+
+        if (request.getSdCard() != null) {
+            foundProduct.setSdCard(request.getSdCard());
+        }
+
+        if (request.getWebcam() != null) {
+            foundProduct.setWebcam(request.getWebcam());
+        }
+
+        if (request.getCoolingFan() != null) {
+            foundProduct.setCoolingFan(request.getCoolingFan());
+        }
+
+        if (request.getMiscFeature() != null) {
+            foundProduct.setMiscFeature(request.getMiscFeature());
+        }
+
+        if (request.getBacklitKeyboard() != null) {
+            foundProduct.setBacklitKeyboard(request.getBacklitKeyboard());
+        }
+
+        if (request.getDimensionWeight() != null) {
+            foundProduct.setDimensionWeight(request.getDimensionWeight());
+        }
+
+        if (request.getMaterial() != null) {
+            foundProduct.setMaterial(request.getMaterial());
+        }
+
+        if (request.getBatteryCapacity() != null) {
+            foundProduct.setBatteryCapacity(request.getBatteryCapacity());
+        }
+
+        if (request.getChargerCapacity() != null) {
+            foundProduct.setChargerCapacity(request.getChargerCapacity());
+        }
+
+        if (request.getOs() != null) {
+            foundProduct.setOs(request.getOs());
+        }
+
+        if (request.getLaunchDate() != null) {
+            foundProduct.setLaunchDate(request.getLaunchDate());
+        }
+        
         productRepository.save(foundProduct);
 
         return GlobalResponseDTO
@@ -429,16 +571,16 @@ public class ProductServiceImpl implements ProductService {
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
-                ? Sort.by(request.fields())
-                .ascending()
-                : Sort.by(request.fields())
-                .descending();
+                    ? Sort.by(request.fields())
+                          .ascending()
+                    : Sort.by(request.fields())
+                          .descending();
 
         Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
         Page<Product> page = request.keyword() == null
-                ? productRepository.getHiddenProductsPage(pageable)
-                : productRepository.searchHiddenProductsPage(request.keyword(), pageable);
+                             ? productRepository.getHiddenProductsPage(pageable)
+                             : productRepository.searchHiddenProductsPage(request.keyword(), pageable);
 
         List<Product> products = page.getContent();
 
@@ -458,8 +600,8 @@ public class ProductServiceImpl implements ProductService {
                         .build()
                 )
                 .data(products.parallelStream()
-                        .map(ProductMapper.INSTANCE::toBriefProductResponseDTO)
-                        .collect(Collectors.toList()))
+                              .map(ProductMapper.INSTANCE::toBriefProductResponseDTO)
+                              .collect(Collectors.toList()))
                 .build();
     }
 
@@ -601,16 +743,16 @@ public class ProductServiceImpl implements ProductService {
             throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
 
         Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
-                ? Sort.by(request.fields())
-                .ascending()
-                : Sort.by(request.fields())
-                .descending();
+                    ? Sort.by(request.fields())
+                          .ascending()
+                    : Sort.by(request.fields())
+                          .descending();
 
         Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
         Page<Product> page = request.keyword() == null
-                ? productRepository.getDeletedProductsPage(pageable)
-                : productRepository.searchDeletedProductsPage(request.keyword(), pageable);
+                             ? productRepository.getDeletedProductsPage(pageable)
+                             : productRepository.searchDeletedProductsPage(request.keyword(), pageable);
 
         List<Product> products = page.getContent();
 
@@ -628,8 +770,8 @@ public class ProductServiceImpl implements ProductService {
                                 .build())
                         .build())
                 .data(products.parallelStream()
-                        .map(ProductMapper.INSTANCE::toBriefProductResponseDTO)
-                        .collect(Collectors.toList()))
+                              .map(ProductMapper.INSTANCE::toBriefProductResponseDTO)
+                              .collect(Collectors.toList()))
                 .build();
     }
 }

@@ -306,11 +306,11 @@ public class ProductServiceImpl implements ProductService {
         }
 
         if (request.getOldPrice() != null) {
-            foundProduct.setOldPrice(request.getOldPrice());
+            foundProduct.setOldPrice(Float.parseFloat(request.getOldPrice().replace(",", "")));
         }
 
         if (request.getCurrentPrice() != null) {
-            foundProduct.setCurrentPrice(request.getCurrentPrice());
+            foundProduct.setCurrentPrice(Float.parseFloat(request.getCurrentPrice().replace(",", "")));
         }
 
         if (request.getDiscountPercent() != null) {
@@ -444,7 +444,7 @@ public class ProductServiceImpl implements ProductService {
         if (request.getLaunchDate() != null) {
             foundProduct.setLaunchDate(request.getLaunchDate());
         }
-        
+
         productRepository.save(foundProduct);
 
         return GlobalResponseDTO

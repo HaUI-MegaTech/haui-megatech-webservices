@@ -166,6 +166,11 @@ public class Endpoint {
             public static final String GET_LIST_BY_YEAR  = PREFIX + "/yearly";
             public static final String GET_TOTAL         = PREFIX + "/total";
         }
+
+        public static final class Translate {
+            public static final String PREFIX                = V1.PREFIX + "/translate";
+            public static final String GET_LOCALIZED_CONTENT = PREFIX;
+        }
     }
 
 

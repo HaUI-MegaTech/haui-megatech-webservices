@@ -1,14 +1,21 @@
 package shop.haui_megatech.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import shop.haui_megatech.constant.ErrorMessage;
+import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessage;
 import shop.haui_megatech.domain.dto.brand.BrandResponseDTO;
 import shop.haui_megatech.domain.dto.brand.BrandStatisticResponseDTO;
 import shop.haui_megatech.domain.dto.global.*;
 import shop.haui_megatech.domain.entity.Brand;
+import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.domain.mapper.BrandMapper;
+import shop.haui_megatech.exception.InvalidRequestParamException;
 import shop.haui_megatech.exception.NotFoundException;
 import shop.haui_megatech.repository.BrandRepository;
 import shop.haui_megatech.service.BrandService;
@@ -45,9 +52,35 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public GlobalResponseDTO<PaginatedMeta, List<BrandResponseDTO>> getList(PaginationRequestDTO request) {
-        List<Brand> brands = brandRepository.findAll();
+        if (request.index() < 0)
+            throw new InvalidRequestParamException(ErrorMessage.Request.NEGATIVE_PAGE_INDEX);
+
+        Sort sort = request.direction().equals(PaginationConstant.DEFAULT_ORDER)
+                    ? Sort.by(request.fields())
+                          .ascending()
+                    : Sort.by(request.fields())
+                          .descending();
+
+        Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
+
+        Page<Brand> page = brandRepository.findAll(pageable);
+
+        List<Brand> brands = page.getContent();
         return GlobalResponseDTO
                 .<PaginatedMeta, List<BrandResponseDTO>>builder()
+                .meta(PaginatedMeta
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .pagination(Pagination
+                                .builder()
+                                .keyword(request.keyword())
+                                .pageIndex(request.index())
+                                .pageSize((short) page.getNumberOfElements())
+                                .totalItems(page.getTotalElements())
+                                .totalPages(page.getTotalPages())
+                                .build())
+                        .build()
+                )
                 .data(brands
                         .parallelStream()
                         .map(BrandMapper.INSTANCE::toBrandResponseDTO)

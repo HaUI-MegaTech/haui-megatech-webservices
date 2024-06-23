@@ -47,7 +47,6 @@ public class UserActivityLogger {
         String loggedOperation = operationByMethodName.get(joinPoint.getSignature().getName());
         if (loggedOperation != null
             && requestedUser != null
-            && result != null
             && result instanceof GlobalResponseDTO
         ) {
             activityLogRepository.save(

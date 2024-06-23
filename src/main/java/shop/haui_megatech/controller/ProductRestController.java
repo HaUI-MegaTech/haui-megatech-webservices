@@ -178,7 +178,8 @@ public class ProductRestController {
     @PutMapping(Endpoint.V1.Product.UPDATE_ONE)
     public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> updateOne(
             @PathVariable Integer productId,
-            @RequestBody UpdateProductRequestDTO request) {
+            @RequestBody UpdateProductRequestDTO request
+    ) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.updateOne(productId, request));
     }
 

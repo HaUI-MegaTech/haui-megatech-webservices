@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public class UpdateProductRequestDTO {
     private String  name;
-    private Float   oldPrice;
-    private Float   currentPrice;
+    private String  oldPrice;
+    private String  currentPrice;
     private Integer discountPercent;
     private Integer remaining;
     private String  processor;

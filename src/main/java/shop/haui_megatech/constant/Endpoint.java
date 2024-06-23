@@ -37,7 +37,10 @@ public class Endpoint {
             public static final String RESTORE_LIST        = PREFIX + RESTORE;
             public static final String HARD_DELETE_ONE     = PREFIX + HARD_DELETE + USER_ID;
             public static final String HARD_DELETE_LIST    = PREFIX + HARD_DELETE;
-            public static final String TOTAL_CUSTOMERS     = PREFIX + "/total-customers";
+            public static final String MY_INFO             = PREFIX + "/my-info";
+            public static final String UPDATE_MY_INFO      = PREFIX + "/update-info";
+
+            public static final String TOTAL_CUSTOMERS = PREFIX + "/total-customers";
         }
 
         public static final class CartItem {

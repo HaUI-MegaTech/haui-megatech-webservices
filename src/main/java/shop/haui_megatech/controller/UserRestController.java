@@ -1,5 +1,6 @@
 package shop.haui_megatech.controller;
 
+import com.itextpdf.text.Meta;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import shop.haui_megatech.annotation.RestApiV1;
 import shop.haui_megatech.constant.Endpoint;
@@ -17,6 +19,7 @@ import shop.haui_megatech.domain.dto.common.ImportDataRequestDTO;
 import shop.haui_megatech.domain.dto.common.ListIdsRequestDTO;
 import shop.haui_megatech.domain.dto.global.*;
 import shop.haui_megatech.domain.dto.user.*;
+import shop.haui_megatech.domain.entity.User;
 import shop.haui_megatech.service.UserService;
 
 import java.util.List;
@@ -104,7 +107,7 @@ public class UserRestController {
             }
     )
     @PutMapping(Endpoint.V1.User.UPDATE_INFO)
-    public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> updateInfoUser(
+    public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, FullUserResponseDTO>> updateInfoUser(
             @PathVariable Integer userId,
             @RequestBody UpdateUserInfoRequest request
     ) {
@@ -287,5 +290,18 @@ public class UserRestController {
             GlobalResponseDTO<PaginatedMeta, List<BriefUserResponseDTO>>
             > getDeletedList(@ParameterObject PaginationRequestDTO request) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getDeletedListUsers(request));
+    }
+
+    @PutMapping(Endpoint.V1.User.UPDATE_MY_INFO)
+    public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, FullUserResponseDTO>> updateMe(
+            @AuthenticationPrincipal User user,
+            @RequestBody UpdateUserInfoRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateInfoUser(user.getId(), request));
+    }
+
+    @GetMapping(Endpoint.V1.User.MY_INFO)
+    public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, FullUserResponseDTO>> getMe(@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getOneUser(user.getId()));
     }
 }

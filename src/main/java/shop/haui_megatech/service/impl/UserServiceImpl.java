@@ -1,13 +1,16 @@
 package shop.haui_megatech.service.impl;
 
+import com.itextpdf.text.Meta;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import shop.haui_megatech.constant.ErrorMessage;
 import shop.haui_megatech.constant.PaginationConstant;
 import shop.haui_megatech.constant.SuccessMessage;
@@ -38,10 +41,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
+    private final UserRepository    userRepository;
     private final MessageSourceUtil messageSourceUtil;
-    private final PasswordEncoder passwordEncoder;
-    private final AutoMailer autoMailer;
+    private final PasswordEncoder   passwordEncoder;
+    private final AutoMailer        autoMailer;
     private final FileUploadService fileUploadService;
 
     @Override
@@ -56,17 +59,17 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, FullUserResponseDTO>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(SuccessMessage.User.FOUND))
-                              .build())
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.FOUND))
+                        .build())
                 .data(UserMapper.INSTANCE.toUserFullResponseDTO(foundUser.get()))
                 .build();
     }
 
     @Override
     public GlobalResponseDTO<NoPaginatedMeta, BriefUserResponseDTO> addOneUser(
-            AddUserRequestDTO request
+            @RequestBody AddUserRequestDTO request
     ) {
         if (!RequestValidator.isBlankRequestParams(request.username()))
             throw new AbsentRequiredFieldException(ErrorMessage.Request.BLANK_USERNAME);
@@ -83,10 +86,10 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BriefUserResponseDTO>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(SuccessMessage.User.ADDED_ONE))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.ADDED_ONE))
+                        .build()
                 )
                 .data(UserMapper.INSTANCE.toBriefUserResponseDTO(
                         userRepository.save(
@@ -96,6 +99,7 @@ public class UserServiceImpl implements UserService {
                                     .firstName(request.firstName())
                                     .lastName(request.lastName())
                                     .email(request.email())
+                                    .phoneNumber(request.phoneNumber())
                                     .role(Role.CUSTOMER)
                                     .build()))
                 )
@@ -116,13 +120,13 @@ public class UserServiceImpl implements UserService {
             return GlobalResponseDTO
                     .<NoPaginatedMeta, BlankData>builder()
                     .meta(NoPaginatedMeta
-                                  .builder()
-                                  .status(Status.SUCCESS)
-                                  .message(messageSourceUtil.getMessage(
-                                          SuccessMessage.User.IMPORTED_LIST,
-                                          savedUsers.size()
-                                  ))
-                                  .build()
+                            .builder()
+                            .status(Status.SUCCESS)
+                            .message(messageSourceUtil.getMessage(
+                                    SuccessMessage.User.IMPORTED_LIST,
+                                    savedUsers.size()
+                            ))
+                            .build()
                     )
                     .build();
         } catch (IOException e) {
@@ -143,13 +147,13 @@ public class UserServiceImpl implements UserService {
             return GlobalResponseDTO
                     .<NoPaginatedMeta, BlankData>builder()
                     .meta(NoPaginatedMeta
-                                  .builder()
-                                  .status(Status.SUCCESS)
-                                  .message(messageSourceUtil.getMessage(
-                                          SuccessMessage.User.IMPORTED_LIST,
-                                          savedUsers.size()
-                                  ))
-                                  .build()
+                            .builder()
+                            .status(Status.SUCCESS)
+                            .message(messageSourceUtil.getMessage(
+                                    SuccessMessage.User.IMPORTED_LIST,
+                                    savedUsers.size()
+                            ))
+                            .build()
                     )
                     .build();
         } catch (IOException ex) {
@@ -158,7 +162,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GlobalResponseDTO<NoPaginatedMeta, BlankData> updateInfoUser(
+    public GlobalResponseDTO<NoPaginatedMeta, FullUserResponseDTO> updateInfoUser(
             Integer userId,
             UpdateUserInfoRequest request
     ) {
@@ -186,16 +190,17 @@ public class UserServiceImpl implements UserService {
         if (request.email() != null) foundUser.setEmail(request.email());
         if (request.phoneNumber() != null) foundUser.setPhoneNumber(request.phoneNumber());
         foundUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));
-        userRepository.save(foundUser);
+        User savedUser = userRepository.save(foundUser);
 
         return GlobalResponseDTO
-                .<NoPaginatedMeta, BlankData>builder()
+                .<NoPaginatedMeta, FullUserResponseDTO>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(SuccessMessage.User.INFO_UPDATED))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.INFO_UPDATED))
+                        .build()
                 )
+                .data(UserMapper.INSTANCE.toUserFullResponseDTO(savedUser))
                 .build();
     }
 
@@ -223,10 +228,10 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(SuccessMessage.User.PASSWORD_UPDATED))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.PASSWORD_UPDATED))
+                        .build()
                 )
                 .build();
     }
@@ -247,10 +252,10 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(SuccessMessage.User.SOFT_DELETED_ONE))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.SOFT_DELETED_ONE))
+                        .build()
                 )
                 .build();
     }
@@ -268,13 +273,13 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(
-                                      SuccessMessage.User.SOFT_DELETED_LIST,
-                                      foundUsers.size()
-                              ))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(
+                                SuccessMessage.User.SOFT_DELETED_LIST,
+                                foundUsers.size()
+                        ))
+                        .build()
                 )
                 .build();
     }
@@ -293,10 +298,10 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(SuccessMessage.User.HARD_DELETED_ONE))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.HARD_DELETED_ONE))
+                        .build()
                 )
                 .build();
     }
@@ -310,13 +315,13 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(
-                                      SuccessMessage.User.HARD_DELETED_LIST,
-                                      request.ids().size()
-                              ))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(
+                                SuccessMessage.User.HARD_DELETED_LIST,
+                                request.ids().size()
+                        ))
+                        .build()
                 )
                 .build();
     }
@@ -336,10 +341,10 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(SuccessMessage.User.RESTORED_ONE))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.User.RESTORED_ONE))
+                        .build()
                 )
                 .build();
     }
@@ -357,13 +362,13 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(
-                                      SuccessMessage.User.RESTORED_LIST,
-                                      foundUsers.size()
-                              ))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(
+                                SuccessMessage.User.RESTORED_LIST,
+                                foundUsers.size()
+                        ))
+                        .build()
                 )
                 .build();
     }
@@ -403,13 +408,13 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(
-                                      SuccessMessage.User.RESET_PASSWORD_ONE,
-                                      foundUser.getUsername()
-                              ))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(
+                                SuccessMessage.User.RESET_PASSWORD_ONE,
+                                foundUser.getUsername()
+                        ))
+                        .build()
                 )
                 .build();
     }
@@ -427,13 +432,13 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(
-                                      SuccessMessage.User.RESET_PASSWORD_LIST,
-                                      foundUsers.size()
-                              ))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(
+                                SuccessMessage.User.RESET_PASSWORD_LIST,
+                                foundUsers.size()
+                        ))
+                        .build()
                 )
                 .build();
     }
@@ -462,17 +467,18 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<PaginatedMeta, List<BriefUserResponseDTO>>builder()
                 .meta(PaginatedMeta
-                              .builder()
-                              .pagination(Pagination
-                                                  .builder()
-                                                  .keyword(request.keyword())
-                                                  .pageIndex(request.index())
-                                                  .pageSize((short) page.getNumberOfElements())
-                                                  .totalItems(page.getTotalElements())
-                                                  .totalPages(page.getTotalPages())
-                                                  .build()
-                              )
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .pagination(Pagination
+                                .builder()
+                                .keyword(request.keyword())
+                                .pageIndex(request.index())
+                                .pageSize((short) page.getNumberOfElements())
+                                .totalItems(page.getTotalElements())
+                                .totalPages(page.getTotalPages())
+                                .build()
+                        )
+                        .build()
                 )
                 .data(users.parallelStream()
                            .map(UserMapper.INSTANCE::toBriefUserResponseDTO)
@@ -504,19 +510,27 @@ public class UserServiceImpl implements UserService {
         return GlobalResponseDTO
                 .<PaginatedMeta, List<BriefUserResponseDTO>>builder()
                 .meta(PaginatedMeta
-                              .builder()
-                              .pagination(Pagination
-                                                  .builder()
-                                                  .keyword(request.keyword())
-                                                  .pageIndex(request.index())
-                                                  .pageSize((short) page.getNumberOfElements())
-                                                  .totalItems(page.getTotalElements())
-                                                  .totalPages(page.getTotalPages())
-                                                  .build())
-                              .build())
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .pagination(Pagination
+                                .builder()
+                                .keyword(request.keyword())
+                                .pageIndex(request.index())
+                                .pageSize((short) page.getNumberOfElements())
+                                .totalItems(page.getTotalElements())
+                                .totalPages(page.getTotalPages())
+                                .build())
+                        .build())
                 .data(users.parallelStream()
                            .map(UserMapper.INSTANCE::toBriefUserResponseDTO)
                            .collect(Collectors.toList()))
                 .build();
     }
+
+    public GlobalResponseDTO<Meta, FullUserResponseDTO> updateMyInfo(UpdateMyInfoRequest request) {
+
+        return null;
+    }
+
+
 }

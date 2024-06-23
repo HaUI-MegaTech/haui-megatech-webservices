@@ -2,8 +2,8 @@ package shop.haui_megatech.domain.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
-import org.springframework.security.core.GrantedAuthority;
 import shop.haui_megatech.constant.DatetimeFormat;
+import shop.haui_megatech.domain.entity.Address;
 import shop.haui_megatech.domain.entity.enums.Gender;
 import shop.haui_megatech.domain.entity.enums.Role;
 
@@ -43,6 +43,6 @@ public record FullUserResponseDTO(
         Date lastLoggedIn,
         Integer loggedIn,
         Role role,
-        List<GrantedAuthority> authorities
+        List<Address> addresses
 ) {
 }

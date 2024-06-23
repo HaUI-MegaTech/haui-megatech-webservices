@@ -27,7 +27,7 @@ public interface UserService {
 
 
     // Update info
-    GlobalResponseDTO<NoPaginatedMeta, BlankData> updateInfoUser(
+    GlobalResponseDTO<NoPaginatedMeta, FullUserResponseDTO> updateInfoUser(
             Integer userId,
             UpdateUserInfoRequest request
     );

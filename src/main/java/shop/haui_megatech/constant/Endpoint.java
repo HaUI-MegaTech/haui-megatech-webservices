@@ -32,11 +32,11 @@ public class Endpoint {
             public static final String RESET_PASSWORD_ONE  = PREFIX + "/reset-password" + USER_ID;
             public static final String RESET_PASSWORD_LIST = PREFIX + "/reset-password";
             public static final String SOFT_DELETE_ONE     = PREFIX + SOFT_DELETE + USER_ID;
-            public static final String SOFT_DELETE_LIST    = PREFIX + SOFT_DELETE;
+            public static final String SOFT_DELETE_LIST    = PREFIX + SOFT_DELETE + "/{userIds}";
             public static final String RESTORE_ONE         = PREFIX + RESTORE + USER_ID;
             public static final String RESTORE_LIST        = PREFIX + RESTORE;
             public static final String HARD_DELETE_ONE     = PREFIX + HARD_DELETE + USER_ID;
-            public static final String HARD_DELETE_LIST    = PREFIX + HARD_DELETE;
+            public static final String HARD_DELETE_LIST    = PREFIX + HARD_DELETE + "/{userIds}";
             public static final String MY_INFO             = PREFIX + "/my-info";
             public static final String UPDATE_MY_INFO      = PREFIX + "/update-info";
 

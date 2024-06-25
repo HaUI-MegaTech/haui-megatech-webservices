@@ -2,6 +2,7 @@ package shop.haui_megatech.domain.dto.user;
 
 import lombok.Builder;
 import shop.haui_megatech.domain.entity.enums.Gender;
+import shop.haui_megatech.domain.entity.enums.Role;
 
 @Builder
 public record BriefUserResponseDTO(
@@ -12,5 +13,6 @@ public record BriefUserResponseDTO(
         Gender gender,
         String email,
         String avatarImageUrl,
-        String phoneNumber
+        String phoneNumber,
+        Role role
 ) {}

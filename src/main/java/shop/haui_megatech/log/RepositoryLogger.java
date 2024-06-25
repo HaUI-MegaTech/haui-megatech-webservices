@@ -11,18 +11,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Slf4j
 public class RepositoryLogger {
-    @Value("${application.repository.query-limit-warning-ms:60}")
-    private int executionLimitMs;
-
-    @Around("execution(* shop.haui_megatech.repository.*.*(..))")
-    public Object logQueryTime(ProceedingJoinPoint joinPoint) throws Throwable {
-        long start = System.currentTimeMillis();
-        Object proceed = joinPoint.proceed();
-        long executionTime = System.currentTimeMillis() - start;
-        String message = joinPoint.getSignature() + " exec in " + executionTime + " ms";
-        if (executionTime >= executionLimitMs) {
-            log.warn("{} : SLOW QUERY", message);
-        }
-        return proceed;
-    }
+//    @Value("${application.repository.query-limit-warning-ms:60}")
+//    private int executionLimitMs;
+//
+//    @Around("execution(* shop.haui_megatech.repository.*.*(..))")
+//    public Object logQueryTime(ProceedingJoinPoint joinPoint) throws Throwable {
+//        long start = System.currentTimeMillis();
+//        Object proceed = joinPoint.proceed();
+//        long executionTime = System.currentTimeMillis() - start;
+//        String message = joinPoint.getSignature() + " exec in " + executionTime + " ms";
+//        if (executionTime >= executionLimitMs) {
+//            log.warn("{} : SLOW QUERY", message);
+//        }
+//        return proceed;
+//    }
 }

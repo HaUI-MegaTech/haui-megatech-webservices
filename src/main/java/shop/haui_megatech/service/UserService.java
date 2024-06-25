@@ -43,7 +43,7 @@ public interface UserService {
     // Soft delete
     GlobalResponseDTO<NoPaginatedMeta, BlankData> softDeleteOneUser(Integer userId);
 
-    GlobalResponseDTO<NoPaginatedMeta, BlankData> softDeleteListUsers(ListIdsRequestDTO request);
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> softDeleteListUsers(String userIds);
 
 
     // Hard delete

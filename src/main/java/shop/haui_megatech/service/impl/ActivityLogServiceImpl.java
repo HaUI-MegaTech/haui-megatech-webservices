@@ -37,7 +37,9 @@ public class ActivityLogServiceImpl implements ActivityLogService {
 
         Pageable pageable = PageRequest.of(request.index(), request.limit(), sort);
 
-        Page<ActivityLog> page = activityLogRepository.findAll(pageable);
+        Page<ActivityLog> page = request.keyword() == null
+                                 ? activityLogRepository.findAll(pageable)
+                                 : activityLogRepository.search(request.keyword(), pageable);
 
         List<ActivityLog> activityLogs = page.getContent();
 

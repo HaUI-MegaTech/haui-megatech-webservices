@@ -109,9 +109,8 @@ public class UserRestController {
     @PutMapping(Endpoint.V1.User.UPDATE_INFO)
     public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, FullUserResponseDTO>> updateInfoUser(
             @PathVariable Integer userId,
-            @RequestBody UpdateUserInfoRequest request
+            @ParameterObject UpdateUserInfoRequest request
     ) {
-        System.out.println("Im here");
         return ResponseEntity.status(HttpStatus.OK).body(userService.updateInfoUser(userId, request));
     }
 
@@ -135,20 +134,20 @@ public class UserRestController {
     }
 
 
-    @Operation(summary = "Temporarily delete a User by Id")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    //@ApiResponse(responseCode = "403", description = "Forbidden"),
-                    //@ApiResponse(responseCode = "404", description = "Not Found")
-            }
-    )
-    @PatchMapping(Endpoint.V1.User.SOFT_DELETE_ONE)
-    public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> softDeleteOneUser(
-            @PathVariable Integer userId
-    ) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.softDeleteOneUser(userId));
-    }
+//    @Operation(summary = "Temporarily delete a User by Id")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "OK"),
+//                    //@ApiResponse(responseCode = "403", description = "Forbidden"),
+//                    //@ApiResponse(responseCode = "404", description = "Not Found")
+//            }
+//    )
+//    @PatchMapping(Endpoint.V1.User.SOFT_DELETE_ONE)
+//    public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> softDeleteOneUser(
+//            @PathVariable String userIds
+//    ) {
+//        return ResponseEntity.status(HttpStatus.OK).body(userService.softDeleteOneUser(userId));
+//    }
 
 
     @Operation(summary = "Temporarily delete Users by a list of Id")
@@ -161,9 +160,9 @@ public class UserRestController {
     )
     @PatchMapping(Endpoint.V1.User.SOFT_DELETE_LIST)
     public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> softDeleteListUsers(
-            @RequestBody ListIdsRequestDTO request
+            @PathVariable String userIds
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.softDeleteListUsers(request));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.softDeleteListUsers(userIds));
     }
 
 
@@ -295,7 +294,7 @@ public class UserRestController {
     @PutMapping(Endpoint.V1.User.UPDATE_MY_INFO)
     public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, FullUserResponseDTO>> updateMe(
             @AuthenticationPrincipal User user,
-            @RequestBody UpdateUserInfoRequest request
+            @ModelAttribute UpdateUserInfoRequest request
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.updateInfoUser(user.getId(), request));
     }

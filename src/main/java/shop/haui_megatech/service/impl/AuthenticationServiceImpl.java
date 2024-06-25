@@ -85,10 +85,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, AuthData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(SuccessMessage.Auth.REGISTERED))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.Auth.REGISTERED))
+                        .build()
                 )
                 .data(AuthData.builder()
                               .accessToken(jwtToken)
@@ -100,7 +100,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public GlobalResponseDTO<NoPaginatedMeta, AuthData> authenticate(AuthenticationRequestDTO request, HttpServletRequest servletRequest) {
+    public GlobalResponseDTO<NoPaginatedMeta, AuthData> authenticate(
+            AuthenticationRequestDTO request,
+            HttpServletRequest servletRequest
+    ) {
         User user = userRepository.findActiveUserByUsername(request.username())
                                   .orElseThrow(() -> new NotFoundException(ErrorMessage.User.NOT_FOUND));
 
@@ -122,10 +125,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, AuthData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(SuccessMessage.Auth.AUTHENTICATED))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.Auth.AUTHENTICATED))
+                        .build()
                 )
                 .data(AuthData.builder()
                               .accessToken(jwtToken)
@@ -160,9 +163,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, AuthData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .build()
                 )
                 .data(AuthData.builder()
                               .accessToken(jwtToken)
@@ -193,10 +196,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
                 .meta(NoPaginatedMeta
-                              .builder()
-                              .status(Status.SUCCESS)
-                              .message(messageSourceUtil.getMessage(SuccessMessage.Auth.LOGGED_OUT))
-                              .build()
+                        .builder()
+                        .status(Status.SUCCESS)
+                        .message(messageSourceUtil.getMessage(SuccessMessage.Auth.LOGGED_OUT))
+                        .build()
                 )
                 .build();
     }

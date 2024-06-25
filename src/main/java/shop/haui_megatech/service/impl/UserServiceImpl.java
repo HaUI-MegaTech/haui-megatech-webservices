@@ -178,17 +178,18 @@ public class UserServiceImpl implements UserService {
 
         if (request.firstName() != null) foundUser.setFirstName(request.firstName());
         if (request.lastName() != null) foundUser.setLastName(request.lastName());
-//        if (request.avatar() != null) {
-//            String avatarImageUrl;
-//            try {
-//                avatarImageUrl = fileUploadService.uploadFile(request.avatar());
-//            } catch (IOException e) {
-//                throw new RuntimeException(ErrorMessage.User.UPDATE_INFO);
-//            }
-//            foundUser.setAvatarImageUrl(avatarImageUrl);
-//        }
+        if (request.avatar() != null) {
+            String avatarImageUrl;
+            try {
+                avatarImageUrl = fileUploadService.uploadFile(request.avatar());
+            } catch (IOException e) {
+                throw new RuntimeException(ErrorMessage.User.UPDATE_INFO);
+            }
+            foundUser.setAvatarImageUrl(avatarImageUrl);
+        }
         if (request.email() != null) foundUser.setEmail(request.email());
         if (request.phoneNumber() != null) foundUser.setPhoneNumber(request.phoneNumber());
+        if (request.role() != null) foundUser.setRole(Role.valueOf(request.role()));
         foundUser.setLastUpdated(new Date(Instant.now().toEpochMilli()));
         User savedUser = userRepository.save(foundUser);
 
@@ -262,9 +263,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public GlobalResponseDTO<NoPaginatedMeta, BlankData> softDeleteListUsers(
-            ListIdsRequestDTO request
+            String userIds
     ) {
-        List<User> foundUsers = userRepository.findAllById(request.ids());
+        List<Integer> ids = Arrays.stream(userIds.split(",")).map(Integer::valueOf).toList();
+        List<User> foundUsers = userRepository.findAllById(ids);
 
         foundUsers.parallelStream().forEach(item -> item.setDeleted(true));
 

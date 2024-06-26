@@ -166,20 +166,20 @@ public class UserRestController {
     }
 
 
-    @Operation(summary = "Permanently delete a User by Id")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    //@ApiResponse(responseCode = "403", description = "Forbidden"),
-                    //@ApiResponse(responseCode = "404", description = "Not Found")
-            }
-    )
-    @DeleteMapping(Endpoint.V1.User.HARD_DELETE_ONE)
-    public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> hardDeleteOneUser(
-            @PathVariable Integer userId
-    ) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.hardDeleteOneUser(userId));
-    }
+//    @Operation(summary = "Permanently delete a User by Id")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "OK"),
+//                    //@ApiResponse(responseCode = "403", description = "Forbidden"),
+//                    //@ApiResponse(responseCode = "404", description = "Not Found")
+//            }
+//    )
+//    @DeleteMapping(Endpoint.V1.User.HARD_DELETE_ONE)
+//    public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> hardDeleteOneUser(
+//            @PathVariable Integer userId
+//    ) {
+//        return ResponseEntity.status(HttpStatus.OK).body(userService.hardDeleteOneUser(userId));
+//    }
 
 
     @Operation(summary = "Permanently delete Users by a list of Id")
@@ -192,26 +192,26 @@ public class UserRestController {
     )
     @DeleteMapping(Endpoint.V1.User.HARD_DELETE_LIST)
     public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> hardDeleteListUsers(
-            @RequestBody ListIdsRequestDTO request
+            @PathVariable String userIds
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.hardDeleteListUsers(request));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.hardDeleteListUsers(userIds));
     }
 
 
-    @Operation(summary = "Restore a User from deleted Users by Id")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    //@ApiResponse(responseCode = "403", description = "Forbidden"),
-                    //@ApiResponse(responseCode = "404", description = "Not Found")
-            }
-    )
-    @PatchMapping(Endpoint.V1.User.RESTORE_ONE)
-    public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> restoreOneUser(
-            @PathVariable Integer userId
-    ) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.restoreOneUser(userId));
-    }
+//    @Operation(summary = "Restore a User from deleted Users by Id")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "OK"),
+//                    //@ApiResponse(responseCode = "403", description = "Forbidden"),
+//                    //@ApiResponse(responseCode = "404", description = "Not Found")
+//            }
+//    )
+//    @PatchMapping(Endpoint.V1.User.RESTORE_ONE)
+//    public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> restoreOneUser(
+//            @PathVariable Integer userId
+//    ) {
+//        return ResponseEntity.status(HttpStatus.OK).body(userService.restoreOneUser(userId));
+//    }
 
 
     @Operation(summary = "Restore Users from deleted Users by a list of Id")
@@ -224,26 +224,26 @@ public class UserRestController {
     )
     @PatchMapping(Endpoint.V1.User.RESTORE_LIST)
     public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> restoreListUsers(
-            @RequestBody ListIdsRequestDTO request
+            @PathVariable String userIds
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.restoreListUsers(request));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.restoreListUsers(userIds));
     }
 
 
-    @Operation(summary = "Reset User's password by Id")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    //@ApiResponse(responseCode = "403", description = "Forbidden"),
-                    //@ApiResponse(responseCode = "404", description = "Not Found")
-            }
-    )
-    @PatchMapping(Endpoint.V1.User.RESET_PASSWORD_ONE)
-    public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> resetPasswordOneUser(
-            @PathVariable Integer userId
-    ) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.resetPasswordOneUser(userId));
-    }
+//    @Operation(summary = "Reset User's password by Id")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "OK"),
+//                    //@ApiResponse(responseCode = "403", description = "Forbidden"),
+//                    //@ApiResponse(responseCode = "404", description = "Not Found")
+//            }
+//    )
+//    @PatchMapping(Endpoint.V1.User.RESET_PASSWORD_ONE)
+//    public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> resetPasswordOneUser(
+//            @PathVariable Integer userId
+//    ) {
+//        return ResponseEntity.status(HttpStatus.OK).body(userService.resetPasswordOneUser(userId));
+//    }
 
 
     @Operation(summary = "Reset Users' password by a list of Id")
@@ -256,9 +256,9 @@ public class UserRestController {
     )
     @PatchMapping(Endpoint.V1.User.RESET_PASSWORD_LIST)
     public ResponseEntity<GlobalResponseDTO<NoPaginatedMeta, BlankData>> resetPasswordListUsers(
-            @RequestBody ListIdsRequestDTO request
+            @PathVariable String userIds
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.resetPasswordListUsers(request));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.resetPasswordListUsers(userIds));
     }
 
 

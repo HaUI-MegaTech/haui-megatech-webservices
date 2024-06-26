@@ -49,17 +49,17 @@ public interface UserService {
     // Hard delete
     GlobalResponseDTO<NoPaginatedMeta, BlankData> hardDeleteOneUser(Integer id);
 
-    GlobalResponseDTO<NoPaginatedMeta, BlankData> hardDeleteListUsers(ListIdsRequestDTO request);
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> hardDeleteListUsers(String userIds);
 
 
     // Restore
     GlobalResponseDTO<NoPaginatedMeta, BlankData> restoreOneUser(Integer userId);
 
-    GlobalResponseDTO<NoPaginatedMeta, BlankData> restoreListUsers(ListIdsRequestDTO request);
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> restoreListUsers(String userIds);
 
 
     // Reset password
     GlobalResponseDTO<NoPaginatedMeta, BlankData> resetPasswordOneUser(Integer userId);
 
-    GlobalResponseDTO<NoPaginatedMeta, BlankData> resetPasswordListUsers(ListIdsRequestDTO request);
+    GlobalResponseDTO<NoPaginatedMeta, BlankData> resetPasswordListUsers(String userIds);
 }

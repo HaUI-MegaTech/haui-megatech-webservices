@@ -310,9 +310,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public GlobalResponseDTO<NoPaginatedMeta, BlankData> hardDeleteListUsers(
-            ListIdsRequestDTO request
+            String userIds
     ) {
-        userRepository.deleteAllById(request.ids());
+        List<Integer> ids = Arrays.stream(userIds.split(",")).map(Integer::valueOf).toList();
+        userRepository.deleteAllById(ids);
 
         return GlobalResponseDTO
                 .<NoPaginatedMeta, BlankData>builder()
@@ -321,7 +322,7 @@ public class UserServiceImpl implements UserService {
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(
                                 SuccessMessage.User.HARD_DELETED_LIST,
-                                request.ids().size()
+                                ids.size()
                         ))
                         .build()
                 )
@@ -353,9 +354,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public GlobalResponseDTO<NoPaginatedMeta, BlankData> restoreListUsers(
-            ListIdsRequestDTO request
+            String userIds
     ) {
-        List<User> foundUsers = userRepository.findAllById(request.ids());
+        List<Integer> ids = Arrays.stream(userIds.split(",")).map(Integer::valueOf).toList();
+        List<User> foundUsers = userRepository.findAllById(ids);
 
         foundUsers.parallelStream().forEach(item -> item.setDeleted(false));
 
@@ -423,11 +425,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public GlobalResponseDTO<NoPaginatedMeta, BlankData> resetPasswordListUsers(
-            ListIdsRequestDTO request
+            String userIds
     ) {
-        List<User> foundUsers = userRepository.findAllById(request.ids());
-
-        foundUsers.parallelStream().forEach(item -> {
+        List<Integer> ids = Arrays.stream(userIds.split(",")).map(Integer::valueOf).toList();
+        List<User> foundUsers = userRepository.findAllById(ids);
+        List<User> filteredUsers = foundUsers.stream().filter(item -> item.getEmail() != null && !item.getEmail().isBlank()).toList();
+        filteredUsers.parallelStream().forEach(item -> {
             this.resetPasswordOneUser(item.getId());
         });
 
@@ -438,7 +441,7 @@ public class UserServiceImpl implements UserService {
                         .status(Status.SUCCESS)
                         .message(messageSourceUtil.getMessage(
                                 SuccessMessage.User.RESET_PASSWORD_LIST,
-                                foundUsers.size()
+                                filteredUsers.size()
                         ))
                         .build()
                 )
